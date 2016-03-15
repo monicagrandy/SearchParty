@@ -1,9 +1,9 @@
 'use strict'
-
+const config = require('./config/config');
 const host = 'localhost';
 const port = 7474;
-const username = 'neo4j';
-const password = 'goatsintrees49'
+const username = config.neoUsername;
+const password = config.neoPassword;
 
 const cypher = require('cypher-stream')(`http://${username}:${password}@${host}:${port}`);
 
