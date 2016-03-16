@@ -10,7 +10,7 @@ import { Injectable, OnInit } from 'angular2/core';
       this.loadMap;
     }
   }
-})
+}) 
 
 
 //make map
