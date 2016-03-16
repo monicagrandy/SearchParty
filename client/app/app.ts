@@ -1,9 +1,8 @@
 import {App, IonicApp, Platform, MenuController} from 'ionic-angular';
 import {SignUp} from './pages/users/sign-up';
 import {LogIn} from './pages/users/log-in';
+import {TemplatePage} from './pages/templates/templates';
 import * as _ from 'underscore';
-
-
 
 @App({
   templateUrl: 'build/app.html',
@@ -24,7 +23,8 @@ class MyApp {
     // set our app's pages
     this.pages = [
       { title: 'Log In', component: LogIn },
-      { title: 'Create an account', component: SignUp }
+      { title: 'Create an account', component: SignUp },
+      { title: 'Hunts', component: TemplatePage }
     ];
   }
 
