@@ -18,6 +18,7 @@ export class TaskPage {
   selectedItem: any;
   locAddress: any;
   locChallenge: any
+  locName: any;
   tasks: ['bar', 'restaurant', 'bar', 'restaurant']
   constructor(private nav: NavController, navParams: NavParams, private taskService: TaskService) {
     // If we navigated to this page, we will have an item available as a nav param
@@ -44,6 +45,7 @@ export class TaskPage {
       let keyword = this.tasks.pop()
       this.taskService.postData(keyword)
         .then(result => {
+          this.name = result.name
           this.locAddress = result.address
           this.locChallenge = result.challenge
         })

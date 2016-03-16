@@ -5,12 +5,34 @@
   <ion-title>Current Task</ion-title>
 </ion-navbar>
 
-<ion-content>
- <div *ngIf="selectedItem" class="selection">
-    <b>{{selectedItem.title}}</b>
-    <ion-icon name="{{selectedItem.icon}}"></ion-icon>
-    <div>
-      You navigated here from <b>{{selectedItem.title}}</b>
+<ion-content class="has-header cards-bg">
+  
+  <ion-card class="adv-map" (click)="itemTapped($event, item)">
+    <div style="position: relative">
+      <ion-item>
+        <h2>{{name}}</h2>
+        <h2>{{adress}}</h2>
+      </ion-item>
+      <img src="{{item.image}}"> <!-- put map here -->
+      <button fab fab-right fab-top class="fab-map" (click)="itemTapped($event, item)">
+      </button>
     </div>
+    <ion-item>
+      <ion-icon subtle large item-left name='{{item.icon}}'></ion-icon>
+      <h3>{{challenge}}</h3>
+    </ion-item>
+    <ion-item actions>
+      <span item-left secondary class="item-bold">18 min</span>
+      <span item-left subtle>(2.6 mi)</span>
+      <button primary clear item-right (click)="itemTapped($event, item)">
+        <ion-icon name='navigate'></ion-icon>
+        Start
+      </button>
+    </ion-item>
+  </ion-card>
+
+ <div *ngIf="selectedItem" padding>
+    You navigated here from <b>{{selectedItem.title}}</b>
   </div>
-</ion-content>
+
+  </ion-content>

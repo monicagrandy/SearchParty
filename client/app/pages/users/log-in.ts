@@ -14,7 +14,8 @@ import 'rxjs/add/operator/map';
 export class LogIn {
 LOGIN_URL: string = "/signin"; //update this later
 SIGNUP_URL: string = "/signup";
-
+userLat: any;
+userLng: any;
   auth: AuthService;
   // When the page loads, we want the Login segment to be selected
   authType: string = "login";
@@ -35,33 +36,29 @@ SIGNUP_URL: string = "/signup";
 
   login(credentials) {
     navigator.geolocation.getCurrentPosition(position => {
-      let send = {
-        coords: "lat=" + position.coords.latitude + "&lng=" + position.coords.longitude,
-        credentials: credentials 
-      }
-    this.http.post(this.LOGIN_URL, JSON.stringify(send), { headers: this.contentHeader })
-      .map(res => res.json())
-      .subscribe(
-        data => this.authSuccess(data.id_token),
-        err => this.error = err
-      );
-  })
-}    
+      this.userLat = position.coords.latitude
+      this.userLng = position.coords.longitude
+      this.http.post(this.LOGIN_URL, JSON.stringify(credentials), { headers: this.contentHeader })
+        .map(res => res.json())
+        .subscribe(
+          data => this.authSuccess(data.id_token),
+          err => this.error = err
+        );
+    })
+  }    
 
   signup(credentials) {
     navigator.geolocation.getCurrentPosition(position => {
-      let send = {
-        coords: "lat=" + position.coords.latitude + "&lng=" + position.coords.longitude,
-        credentials: credentials 
-      }
-    this.http.post(this.SIGNUP_URL, JSON.stringify(send), { headers: this.contentHeader })
-      .map(res => res.json())
-      .subscribe(
-        data => this.authSuccess(data.id_token),
-        err => this.error = err
-      );
-    })  
-  }
+      this.userLat = position.coords.latitude
+      this.userLng = position.coords.longitude
+      this.http.post(this.SIGNUP_URL, JSON.stringify(credentials), { headers: this.contentHeader })
+        .map(res => res.json())
+        .subscribe(
+          data => this.authSuccess(data.id_token),
+          err => this.error = err
+        );
+      })  
+    }
 
   logout() {
     this.local.remove('id_token');
