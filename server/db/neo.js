@@ -34,15 +34,5 @@ module.exports = {
 
       transaction.commit();
     });
-  },
-
-  basicCypherStatement: (statement) => {
-    cypher(statement)
-    .on('data', (result) => {
-      return result;
-    })
-    .on('error', (error) => {
-      console.log(error);
-    })
   }
 }
