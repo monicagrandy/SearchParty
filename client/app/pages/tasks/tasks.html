@@ -10,10 +10,12 @@
   <ion-card class="adv-map">
     <div style="position: relative">
       <ion-item>
+        <!--set to local storage from server response-->
         <h2>{{name}}</h2>
         <h2>{{adress}}</h2>
       </ion-item>
-      <img src="{{item.image}}"> <!-- put google map here -->
+      <!-- put google map here -->
+      <img src="{{item.image}}"> 
     </div>
     <ion-item>
       <ion-icon subtle large item-left name='{{item.icon}}'></ion-icon>
@@ -21,9 +23,12 @@
     </ion-item>
     <ion-item actions>
       <!-- mark as complete -->
-      
-      <!-- go to next task -->
-      <button primary clear item-right (click)="getNewTask()">
+      <ion-item>
+        <ion-label>Stannis Baratheon</ion-label>
+        <ion-checkbox disabled="true" (click)="markComplete()"></ion-checkbox>
+      </ion-item>
+      <!-- go to next task only if user has marked it complete-->
+      <button primary clear item-right *ngIf="completeToggle" (click)="getNewTask()">
         Next Task
       </button>
     </ion-item>
@@ -33,4 +38,4 @@
     You navigated here from <b>{{selectedItem.title}}</b>
   </div> -->
 
-  </ion-content>
+</ion-content>

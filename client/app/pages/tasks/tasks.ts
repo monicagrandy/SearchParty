@@ -19,7 +19,9 @@ export class TaskPage {
   locAddress: any;
   locChallenge: any
   locName: any;
+  completeToggle = false
   tasks: ['bar', 'restaurant', 'bar', 'restaurant']
+  //maybe store all previous location names
   constructor(private nav: NavController, navParams: NavParams, private taskService: TaskService) {
     // If we navigated to this page, we will have an item available as a nav param
     this.selectedItem = navParams.get('item');
@@ -41,6 +43,7 @@ export class TaskPage {
 
   //this should be triggered when the next button is pushed
   getNewTask(){
+    //check if the mark complete button is checked
     if(this.tasks.length > 0){
       let keyword = this.tasks.pop()
       this.taskService.postData(keyword)
@@ -53,6 +56,17 @@ export class TaskPage {
     else {
       //user has completed the hunt
     }  
+  }
+
+  //use this to check if user is allowed to move on to the next task
+  markComplete(){
+    if(this.completeToggle === false){
+      this.completeToggle = true
+    }
+    else {
+      this.completeToggle = false
+    }
+    return this.completeToggle
   }
   
 }

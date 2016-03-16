@@ -13,6 +13,7 @@ import 'rxjs/add/operator/map';
   templateUrl: 'build/pages/users/log-in.html',
   directives: [FORM_DIRECTIVES]
 })
+
 export class LogIn {
 LOGIN_URL: string = '/signin'; //update this later
 SIGNUP_URL: string = '/signup';
@@ -43,7 +44,7 @@ userLng: any;
       this.http.post(this.LOGIN_URL, JSON.stringify(credentials), { headers: this.contentHeader })
         .map(res => res.json())
         .subscribe(
-          data => {this.authSuccess(data.id_token);
+          data => {this.authSuccess(token.data.id_token);
                   this.nav.push(TemplatePage)},
           err => this.error = err
         );
@@ -57,7 +58,7 @@ userLng: any;
       this.http.post(this.SIGNUP_URL, JSON.stringify(credentials), { headers: this.contentHeader })
         .map(res => res.json())
         .subscribe(
-          data => {this.authSuccess(data.id_token);
+          data => {this.authSuccess(token.data.id_token);
                    this.nav.push(TemplatePage)},
           err => this.error = err
         );
