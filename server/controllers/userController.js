@@ -3,10 +3,12 @@ const jwt = require('jwt-simple');
 const bcrypt = require('bcrypt-nodejs');
 const neo = require('../db/neo.js');
 const config = require('../db/config/config.js');
-const shortID = require('shortid');
+const shortid = require('shortid');
 
 module.exports = {
   signup: (req, res) => {
+    // console.log(req);
+    console.log(req.body);
     let password = req.body.password;
     //extract user info from request and assign to some object
     let generatedUserID = "u" + shortid.generate();
