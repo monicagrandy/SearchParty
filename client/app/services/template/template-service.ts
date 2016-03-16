@@ -8,9 +8,9 @@ export class TemplateService {
   constructor(private _http:Http) {}
   
   getData() {
-    console.log('called get req')
+    console.log('called get req');
     let httpGetPromise = new Promise((resolve, reject) => {
-      console.log('called get req')
+      console.log('inside get promise');
       this._http.get('/templates')
         .map(res => res.json())
         .subscribe(
@@ -31,9 +31,9 @@ export class TemplateService {
   postData(data) {
     let headers = new Headers();
     headers.append('Content-Type', 'application/x-www-form-urlencoded');
-    console.log('called get req')
+    console.log('called post req');
     let httpGetPromise = new Promise((resolve, reject) => {
-      console.log('called get req')
+      console.log('inside post promise');
       this._http.post('/tasks', data, {headers: headers})
         .map(res => res.json())
         .subscribe(
