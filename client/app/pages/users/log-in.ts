@@ -3,7 +3,7 @@ import {Page, Storage, LocalStorage} from 'ionic-angular';
 import {Http, Headers} from 'angular2/http';
 import {FORM_DIRECTIVES} from 'angular2/common';
 import {JwtHelper} from 'angular2-jwt';
-import {AuthService} from '../../services/auth/auth';
+import {AuthService} from '../../services/auth/auth-service';
 import 'rxjs/add/operator/map'; 
 
 
@@ -34,21 +34,33 @@ SIGNUP_URL: string = "/signup";
   }
 
   login(credentials) {
-    this.http.post(this.LOGIN_URL, JSON.stringify(credentials), { headers: this.contentHeader })
+    navigator.geolocation.getCurrentPosition(position => {
+      let send = {
+        coords: "lat=" + position.coords.latitude + "&lng=" + position.coords.longitude,
+        credentials: credentials 
+      }
+    this.http.post(this.LOGIN_URL, JSON.stringify(send), { headers: this.contentHeader })
       .map(res => res.json())
       .subscribe(
         data => this.authSuccess(data.id_token),
         err => this.error = err
       );
-  }
+  })
+}    
 
   signup(credentials) {
-    this.http.post(this.SIGNUP_URL, JSON.stringify(credentials), { headers: this.contentHeader })
+    navigator.geolocation.getCurrentPosition(position => {
+      let send = {
+        coords: "lat=" + position.coords.latitude + "&lng=" + position.coords.longitude,
+        credentials: credentials 
+      }
+    this.http.post(this.SIGNUP_URL, JSON.stringify(send), { headers: this.contentHeader })
       .map(res => res.json())
       .subscribe(
         data => this.authSuccess(data.id_token),
         err => this.error = err
       );
+    })  
   }
 
   logout() {
