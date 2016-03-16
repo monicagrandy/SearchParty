@@ -23,7 +23,7 @@ module.exports = {
         };
         //adding to the db happens here
         //TODO: Add cypher query syntax
-        let createUserQuery = `CREATE (${user.userID}:User { ${userProperties} })`
+        let createUserQuery = `CREATE (${user.userID}:User ${userProperties})`
         neo.runCypherStatementPromise(createUserQuery);
 
         let token = jwt.encode({username: username}, secret);
