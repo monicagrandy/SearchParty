@@ -1,16 +1,17 @@
 import {Page, NavController, NavParams} from 'ionic-angular';
 import {TaskPage} from '../tasks/tasks';
-
+import {TemplateService} from '../../services/template/template-service';
 
 @Page({
   templateUrl: 'build/pages/templates/templates.html',
+  providers: [TemplateService]
 })
 export class TemplatePage {
   selectedItem: any;
   testData: Array<{type: string, huntname: string, image: string, icon: string}>;
   items: Array<{title: string, image: string, huntname: string, icon: string}>;
 
-  constructor(private nav: NavController, navParams: NavParams) {
+  constructor(private nav: NavController, navParams: NavParams, private templateService: TemplateService) {
     // If we navigated to this page, we will have an item available as a nav param
     this.selectedItem = navParams.get('item');
     
@@ -36,8 +37,15 @@ export class TemplatePage {
 
   itemTapped(event, item) {
     console.log(item);
-    this.nav.push(TaskPage, {
-      item: item
-    });
+    this.templateService.postData(item.type)
+      .then(data => {
+        this.nav.push(TaskPage, {
+          item: data.task
+        });
+      })
+        .catch(error => console.log(error));
+    // this.nav.push(TaskPage, {
+    //   item: item
+    // });
   }
 }
