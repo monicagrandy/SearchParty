@@ -8,5 +8,4 @@ module.exports = (app, express) => {
 
   app.post('/signup', jsonParser, userController.signup);
   app.post('/signin', jsonParser, userController.signin);
-  app.post('/signout', jsonParser, userController.signout);
 }
