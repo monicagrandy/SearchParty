@@ -7,7 +7,7 @@ const shortID = require('shortid');
 
 module.exports = {
   signup: (req, res) => {
-    let password = req.body.credentials.password;
+    let password = req.body.password;
     //extract user info from request and assign to some object
     let generatedUserID = "u" + shortid.generate();
 
@@ -24,7 +24,7 @@ module.exports = {
         };
         //adding to the db happens here
         //TODO: Add cypher query syntax
-        let createUserQuery = `CREATE (${user.userID}:User ${userProperties})`
+        let createUserQuery = `CREATE (${user.userID}:User ${userProperties})`;
         neo.runCypherStatementPromise(createUserQuery);
 
         let token = jwt.encode({username: username}, config.secret);
