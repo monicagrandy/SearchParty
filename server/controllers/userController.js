@@ -2,13 +2,15 @@
 const jwt = require('jwt-simple');
 const bcrypt = require('bcrypt-nodejs');
 const neo = require('../db/neo.js');
-const secret = require('../db/config/config.js')
+const secret = require('../db/config/config.js');
+const shortID = require('shortid');
 
 module.exports = {
   signup: (req, res) => {
     let password = req.body.password;
     //extract user info from request and assign to some object
-    let genUserID = 'n5';
+    let generatedUserID = "u" + shortid.generate();
+    
     bcrypt.genSalt(10, (err, salt) => {
       bcrypt.hash(password, salt, null, (err, hash) => {
         let user = {
@@ -17,7 +19,7 @@ module.exports = {
           firstname: req.body.firstname,
           lastname: req.body.lastname,
           email: req.body.email,
-          userID: genUserID
+          userID: generatedUserID
         };
         //adding to the db happens here
         //TODO: Add cypher query syntax
