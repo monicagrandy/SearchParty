@@ -4,7 +4,7 @@ import {Http, Headers} from 'angular2/http';
 import {FORM_DIRECTIVES} from 'angular2/common';
 import {JwtHelper} from 'angular2-jwt';
 import {AuthService} from '../../services/auth/auth-service';
-import 'rxjs/add/operator/map'; 
+import 'rxjs/add/operator/map';
 
 
 @Page({
@@ -12,8 +12,8 @@ import 'rxjs/add/operator/map';
   directives: [FORM_DIRECTIVES]
 })
 export class LogIn {
-LOGIN_URL: string = "/signin"; //update this later
-SIGNUP_URL: string = "/signup";
+LOGIN_URL: string = "http:localhost:8000/signin"; //update this later
+SIGNUP_URL: string = "http:localhost:8000/signup";
 
   auth: AuthService;
   // When the page loads, we want the Login segment to be selected
@@ -23,7 +23,7 @@ SIGNUP_URL: string = "/signup";
   error: string;
   jwtHelper: JwtHelper = new JwtHelper();
   local: Storage = new Storage(LocalStorage);
-  user: string;  
+  user: string;
 
   constructor(private http: Http) {
     this.auth = AuthService;
@@ -37,7 +37,7 @@ SIGNUP_URL: string = "/signup";
     navigator.geolocation.getCurrentPosition(position => {
       let send = {
         coords: "lat=" + position.coords.latitude + "&lng=" + position.coords.longitude,
-        credentials: credentials 
+        credentials: credentials
       }
     this.http.post(this.LOGIN_URL, JSON.stringify(send), { headers: this.contentHeader })
       .map(res => res.json())
@@ -46,21 +46,22 @@ SIGNUP_URL: string = "/signup";
         err => this.error = err
       );
   })
-}    
+}
 
   signup(credentials) {
     navigator.geolocation.getCurrentPosition(position => {
       let send = {
         coords: "lat=" + position.coords.latitude + "&lng=" + position.coords.longitude,
-        credentials: credentials 
+        credentials: credentials
       }
-    this.http.post(this.SIGNUP_URL, JSON.stringify(send), { headers: this.contentHeader })
+      let test = "firstname="+credentials.firstname
+    this.http.post("http://localhost:8000/signup", JSON.stringify(send), { headers: this.contentHeader })
       .map(res => res.json())
       .subscribe(
         data => this.authSuccess(data.id_token),
         err => this.error = err
       );
-    })  
+    })
   }
 
   logout() {
