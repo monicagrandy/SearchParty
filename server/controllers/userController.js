@@ -10,7 +10,26 @@ module.export = {
     //extract user information
     let username = req.body.username;
     let password = req.body.password;
+    let checkUsernameQuery = //TODO fill in this cypher statement, want to return the entire userObject
 
+    //checking the database to see if the user exists
+    neo.runCypherStatementPromise(checkUsernameQuery).then(
+      //if the user exists
+      let userObject = data[0];
+      if(userObject.username) {
+        //then compare the password
+        bcrypt.compare(password, userObject.password, (err, result) => {
+          if(result) {
+            let token = jwt.encode({username: data[0].username}, secret);
+            res.send(token);
+          } else {
+            res.send("password is incorrect");
+          }
+        })
+      } else {
+        res.send("username does not exist");
+      }
+    )
     //check the database to see if the user exists
       //if they do, then we check the password, using bcrypt compare
         //if it is the correct password
