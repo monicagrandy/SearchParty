@@ -14,7 +14,7 @@ import 'rxjs/add/operator/map';
 })
 
 export class TaskPage {
-  title = "Current Task"
+  title = 'Current Task'
   selectedItem: any;
   locAddress: any;
   locChallenge: any
