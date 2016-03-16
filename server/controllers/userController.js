@@ -7,8 +7,6 @@ const shortid = require('shortid');
 
 module.exports = {
   signup: (req, res) => {
-    // console.log(req);
-    console.log(req.body);
     let password = req.body.password;
     //extract user info from request and assign to some object
     let generatedUserID = "u" + shortid.generate();
@@ -25,11 +23,14 @@ module.exports = {
           userID: generatedUserID
         };
         //adding to the db happens here
-        //TODO: Add cypher query syntax
-        let createUserQuery = `CREATE (${user.userID}:User ${userProperties})`;
+        //below is the actual query that I want to run
+        // let createUserQuery = `CREATE (${userProperties.userID}:User ${userProperties})`
+
+        //this is the query I am using for testing, not working
+        let createUserQuery = 'CREATE (user:User {firstname:"Ellie"})'
         neo.runCypherStatementPromise(createUserQuery);
 
-        let token = jwt.encode({username: username}, config.secret);
+        let token = jwt.encode({username: userProperties.username}, config.secret);
         res.send(token);
       })
     })
