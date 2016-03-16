@@ -27,6 +27,10 @@
       </button>
     </ion-item>
   </ion-card>
+
+  <div *ngIf="selectedItem" padding>
+    You navigated here from <b>{{selectedItem.title}}</b>
+  </div>
   
 
   <!--<ion-card class="adv-map" [name]="bar" (click)="itemTapped($event, name)">

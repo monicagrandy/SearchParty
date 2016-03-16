@@ -2,9 +2,9 @@ import {Page, NavController, NavParams} from 'ionic-angular';
 
 
 @Page({
-  templateUrl: 'build/pages/item-details/item-details.html'
+  templateUrl: 'build/pages/tasks/tasks.html'
 })
-export class ItemDetailsPage {
+export class TaskPage {
   selectedItem: any;
 
   constructor(private nav: NavController, navParams: NavParams) {

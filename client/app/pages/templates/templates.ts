@@ -32,26 +32,6 @@ export class TemplatePage {
         icon: hunt.icon
       });
     }
-  // <ion-card class="adv-map">
-  //   <div style="position: relative">
-  //     <img src="img/ramen.jpg" {{item.image}}>
-  //     <button secondary fab fab-right fab-top class="fab-map">
-  //       <ion-icon name='search'></ion-icon>
-  //     </button>
-  //   </div>
-  //   <ion-item>
-  //     <ion-icon subtle large item-left name='ios-egg' {{item.icon}}></ion-icon>
-  //     <h1>Ramen Hunt{{item.huntname}}</h1>
-  //   </ion-item>
-  //   <ion-item actions>
-  //     <span item-left secondary class="item-bold">26 min</span>
-  //     <span item-left subtle>(8.1 mi)</span>
-  //     <button secondary clear item-right>
-  //       <ion-icon name='navigate'></ion-icon>
-  //       Start
-  //     </button>
-  //   </ion-item>
-  // </ion-card>
   }
 
   itemTapped(event, item) {
