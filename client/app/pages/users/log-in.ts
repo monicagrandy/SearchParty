@@ -34,21 +34,33 @@ SIGNUP_URL: string = "/signup";
   }
 
   login(credentials) {
-    this.http.post(this.LOGIN_URL, JSON.stringify(credentials), { headers: this.contentHeader })
+    navigator.geolocation.getCurrentPosition(position => {
+      let send = {
+        coords: "lat=" + position.coords.latitude + "&lng=" + position.coords.longitude,
+        credentials: credentials 
+      }
+    this.http.post(this.LOGIN_URL, JSON.stringify(send), { headers: this.contentHeader })
       .map(res => res.json())
       .subscribe(
         data => this.authSuccess(data.id_token),
         err => this.error = err
       );
-  }
+  })
+}    
 
   signup(credentials) {
-    this.http.post(this.SIGNUP_URL, JSON.stringify(credentials), { headers: this.contentHeader })
+    navigator.geolocation.getCurrentPosition(position => {
+      let send = {
+        coords: "lat=" + position.coords.latitude + "&lng=" + position.coords.longitude,
+        credentials: credentials 
+      }
+    this.http.post(this.SIGNUP_URL, JSON.stringify(send), { headers: this.contentHeader })
       .map(res => res.json())
       .subscribe(
         data => this.authSuccess(data.id_token),
         err => this.error = err
       );
+    })  
   }
 
   logout() {
