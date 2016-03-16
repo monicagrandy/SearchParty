@@ -10,10 +10,10 @@ module.exports = {
     let password = req.body.password;
     //extract user info from request and assign to some object
     let generatedUserID = "u" + shortid.generate();
-    
+
     bcrypt.genSalt(10, (err, salt) => {
       bcrypt.hash(password, salt, null, (err, hash) => {
-        let user = {
+        let userProperties = {
           username: req.body.username,
           password: hash,
           firstname: req.body.firstname,
@@ -23,7 +23,7 @@ module.exports = {
         };
         //adding to the db happens here
         //TODO: Add cypher query syntax
-        let createUserQuery = `CREATE (${user.userID}:User { ${user} })`
+        let createUserQuery = `CREATE (${user.userID}:User { ${userProperties} })`
         neo.runCypherStatementPromise(createUserQuery);
 
         let token = jwt.encode({username: username}, secret);
@@ -37,7 +37,7 @@ module.exports = {
     //extract user information
     let username = req.body.username;
     let password = req.body.password;
-    let checkUsernameQuery = //TODO fill in this cypher statement, want to return the entire userObject
+    let checkUsernameQuery = `MATCH (n {username:${username}}) RETURN n`;
 
     //checking the database to see if the user exists
     neo.runCypherStatementPromise(checkUsernameQuery)
