@@ -1,4 +1,7 @@
 import {App, IonicApp, Platform, MenuController} from 'ionic-angular';
+import {Http} from 'angular2/http';
+import {provide} from 'angular2/core';
+import {AuthHttp, AuthConfig} from 'angular2-jwt';
 import {SignUp} from './pages/users/sign-up';
 import {LogIn} from './pages/users/log-in';
 import {TemplatePage} from './pages/templates/templates';
@@ -6,7 +9,15 @@ import * as _ from 'underscore';
 
 @App({
   templateUrl: 'build/app.html',
-  config: {} // http://ionicframework.com/docs/v2/api/config/Config/
+  config: {}, // http://ionicframework.com/docs/v2/api/config/Config/
+  providers: [
+    provide(AuthHttp, {
+      useFactory: (http) => {
+        return new AuthHttp(new AuthConfig, http);
+      },
+      deps: [Http]
+    })
+  ]
 })
 class MyApp {
   // make HelloIonicPage the root (or first) page
