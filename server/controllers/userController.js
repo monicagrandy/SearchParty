@@ -31,7 +31,7 @@ module.exports = {
         neo.runCypherStatementPromise(createUserQuery);
 
         let token = jwt.encode({username: userProperties.username}, config.secret);
-        res.send(token);
+        res.send({token: token});
       })
     })
     //use the props create syntax to pass information to db
@@ -41,11 +41,13 @@ module.exports = {
     //extract user information
     let username = req.body.username;
     let password = req.body.password;
-    let checkUsernameQuery = `MATCH (n {username:${username}}) RETURN n`;
-
-    //checking the database to see if the user exists
+    // let checkUsernameQuery = `MATCH (n {username:${username}}) RETURN n`;
+    let checkUsernameQuery = `MATCH (user:User{username:'${username}'}) RETURN user`;
+    ​
+    //checking the database to see if the user exists PROMISE CHAIN -- EVERY FUNCTION NEEDS TO BE A PROMISE
+    // ALWAYS INCLUDE CATCH FUNCTION
     neo.runCypherStatementPromise(checkUsernameQuery)
-    .then((err, data) => {
+    .then(return new Promise((resolve,reject) => {
       let userObject = data[0];
       //if the user exists
       if(userObject.username) {
@@ -55,18 +57,26 @@ module.exports = {
           if(result) {
             //assign a token and send back that token
             let token = jwt.encode({username: userObject.username}, config.secret);
-            res.send(token);
+            return resolve({token:token});
             //if it is not the correct password
-          } else {
-            //send back a string that says "incorrect password"
-            res.send("password is incorrect");
           }
+          //send back a string that says "incorrect password"
+          return reject({error:"password_incorrect"});
         })
-        //if the user does not exist
-      } else {
-        //send something that tells front end to redirect to sign up
-        res.send("username does not exist");
       }
-    });
+      //if the user does not exist
+      //send something that tells front end to redirect to sign up
+      return reject({error:"username_does_not_exist"})
+    }))
+    .then(sendData)
+    .catch(error)
+    ​
+    function sendData(data) {
+      return res.json(data);
+    }
+    ​
+    function error(error) {
+      res.status(400).send(data);
+    }
   }
 };
