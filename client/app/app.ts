@@ -2,7 +2,6 @@ import {App, IonicApp, Platform, MenuController} from 'ionic-angular';
 import {Http} from 'angular2/http';
 import {provide} from 'angular2/core';
 import {AuthHttp, AuthConfig} from 'angular2-jwt';
-import {SignUp} from './pages/users/sign-up';
 import {LogIn} from './pages/users/log-in';
 import {TemplatePage} from './pages/templates/templates';
 import * as _ from 'underscore';
@@ -34,7 +33,6 @@ class MyApp {
     // set our app's pages
     this.pages = [
       { title: 'Log In', component: LogIn },
-      { title: 'Create an account', component: SignUp },
       { title: 'Hunts', component: TemplatePage }
     ];
   }

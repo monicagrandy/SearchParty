@@ -5,9 +5,7 @@ import {Http, Headers} from 'angular2/http';
 import {FORM_DIRECTIVES} from 'angular2/common';
 import {JwtHelper} from 'angular2-jwt';
 import {AuthService} from '../../services/auth/auth-service';
-import 'rxjs/add/operator/map'; 
-
-
+import 'rxjs/add/operator/map';
 
 @Page({
   templateUrl: 'build/pages/users/log-in.html',
@@ -15,8 +13,8 @@ import 'rxjs/add/operator/map';
 })
 
 export class LogIn {
-LOGIN_URL: string = '/signin'; //update this later
-SIGNUP_URL: string = '/signup';
+LOGIN_URL: string = "http://localhost:8000/signin"; //update this later
+SIGNUP_URL: string = "http://localhost:8000/signup";
 userLat: any;
 userLng: any;
   auth: AuthService;
@@ -27,7 +25,7 @@ userLng: any;
   error: string;
   jwtHelper: JwtHelper = new JwtHelper();
   local: Storage = new Storage(LocalStorage);
-  user: string;  
+  user: string;
 
   constructor(private http: Http, private nav: NavController, navParams: NavParams) {
     this.auth = AuthService;
@@ -39,8 +37,8 @@ userLng: any;
 
   login(credentials) {
     navigator.geolocation.getCurrentPosition(position => {
-      this.userLat = position.coords.latitude
-      this.userLng = position.coords.longitude
+      this.local.set('userLat', position.coords.latitude)
+      this.local.set('userLng', position.coords.longitude)
       this.http.post(this.LOGIN_URL, JSON.stringify(credentials), { headers: this.contentHeader })
         .map(res => res.json())
         .subscribe(
@@ -53,7 +51,9 @@ userLng: any;
 
   signup(credentials) {
     navigator.geolocation.getCurrentPosition(position => {
-      this.userLat = position.coords.latitude
+      console.log(credentials)
+      this.local.set('userLat', position.coords.latitude)
+      this.local.set('userLng', position.coords.longitude)
       this.userLng = position.coords.longitude
       this.http.post(this.SIGNUP_URL, JSON.stringify(credentials), { headers: this.contentHeader })
         .map(res => res.json())
@@ -81,3 +81,4 @@ userLng: any;
   }
 
 }
+
