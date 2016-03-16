@@ -22,6 +22,6 @@
     "typescript": "1.8.7",
     "webpack": "1.12.14"
   },
-  "name": "myionic2project",
-  "description": "MyIonic2Project: An Ionic project"
+  "name": "SearchParty",
+  "description": "Search Party: Spontaneous Fun"
 }

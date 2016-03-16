@@ -13,7 +13,6 @@ import 'rxjs/add/operator/map';
   ]
 })
 
-
 export class TaskPage {
   title = "Current Task"
   selectedItem: any;

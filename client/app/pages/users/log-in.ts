@@ -3,7 +3,7 @@ import {Page, Storage, LocalStorage} from 'ionic-angular';
 import {Http, Headers} from 'angular2/http';
 import {FORM_DIRECTIVES} from 'angular2/common';
 import {JwtHelper} from 'angular2-jwt';
-import {AuthService} from '../../services/auth/auth';
+import {AuthService} from '../../services/auth/auth-service';
 import 'rxjs/add/operator/map'; 
 
 
