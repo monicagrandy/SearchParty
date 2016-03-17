@@ -45,7 +45,7 @@ module.exports = {
       request({url:apiURL, json:true}, (error, response, body) => {
          if(!error && response.statusCode === 200) {
             console.log(':::::::YELP API:::::::');
-            let yelpObjs = body.businesses;
+            let yelpResults = body.businesses;
             let yelpNames = (body.businesses).map((business) => business.name);
             let prevList = req.body.previousPlaces;
             console.log('yelpNames: ', yelpNames);
@@ -53,22 +53,29 @@ module.exports = {
             for(let i in yelpNames) {
                if(prevList.indexOf(yelpNames[i]) !== -1) {
                   console.log('::DUPLICATED DETECTED:: ' + yelpNames[i]);
-                  yelpObjs.splice(i, 1);
+                  yelpResults.splice(i, 1);
                   yelpNames.splice(i, 1);
                }
             }
-            console.log('filtered: ', yelpNames);
+            console.log('Yelp Filtered: ', yelpNames);
             taskCtrl.getTask(keyword)
               .then(tasks => {
                  console.log('::::::TASKS DB:::::::');
-                 console.log(tasks);
+                 let taskResults = tasks;
                  let taskList = tasks.map((task) => task.id);
                  let prevTasks = req.body.previousTasks;
                  console.log('taskList: ', taskList);
                  console.log('prevTasks: ', prevTasks);
-
-               res.json({businesses: yelpObjs,
-                        tasks: tasks});
+                 for(let i in taskList) {
+                    if(prevTasks.indexOf(taskList[i]) !== -1) {
+                       console.log('::DUPLICATED DETECTED:: ' + taskList[i]);
+                       taskResults.splice(i, 1);
+                       taskList.splice(i,1);
+                    }
+                 }
+                 console.log('Task Filtered: ', taskList);
+               res.json({businesses: yelpResults,
+                        tasks: taskResults});
               })
                .catch(error => {
                   console.log(error);
