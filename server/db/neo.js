@@ -1,9 +1,9 @@
 'use strict'
-const config = require('../server.js');
+const config = require('./config/config.js');
 const host = 'localhost';
 const port = 7474;
 const username = config.neoUsername;
-const password = config.neoPassword;
+const password = 'cleocatra1';
 
 const cypher = require('cypher-stream')(`http://${username}:${password}@${host}:${port}`);
 
@@ -19,10 +19,11 @@ module.exports = {
         }
       })
       .on('end', () => {
+        console.log("ended");
         return resolve(results);
       })
       .on('error', (error) => {
-        console.error('neo_api.runCypherStatementPromise line 56', error);
+        console.error('neo4j-error', JSON.stringify(error,null,2));
         return reject(error);
       });
 
