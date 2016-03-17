@@ -5,6 +5,7 @@ const oauthSig = require('oauth-signature');
 const apiConfig = require('../db/config/config.js');
 const request = require('request');
 const qs = require('querystring');
+const taskCtrl = require('./taskController.js');
 //Other users will have to go into the config/config.js and insert their own
 //credentials to access the Yelp API.
 
@@ -43,7 +44,16 @@ module.exports = {
       let apiURL = url + '?' + paramURL;
       request({url:apiURL, json:true}, (error, response, body) => {
          if(!error && response.statusCode === 200) {
-            res.json({businesses: body.businesses})
+            console.log(taskCtrl);
+            taskCtrl.getTask(keyword)
+              .then(tasks => {
+               res.json({businesses: body.businesses,
+                        tasks: tasks})
+              })
+               .catch(error => {
+                  console.log(error);
+               });
+
          } else {
             console.log('error', error);
             res.status(400).json(error);
