@@ -7,65 +7,88 @@ const shortid = require('shortid');
 
 module.exports = {
   signup: (req, res) => {
-    // console.log(req);
-    console.log(req.body);
+    console.log("credentials: ", req.body);
+    // var reqBody = req.body.credentials;
     let password = req.body.password;
+    // console.log(password);
     //extract user info from request and assign to some object
     let generatedUserID = "u" + shortid.generate();
+    let bcryptPromise = new Promise((resolve, reject) => {
+      bcrypt.genSalt(10, (err, salt) => {
+        bcrypt.hash(password, salt, null, (err, hash) => {
 
-    bcrypt.genSalt(10, (err, salt) => {
-      bcrypt.hash(password, salt, null, (err, hash) => {
-        //extract user info from request and assign to some object
-        let userProperties = {
-          username: req.body.username,
-          password: hash,
-          firstname: req.body.firstname,
-          lastname: req.body.lastname,
-          email: req.body.email,
-          userID: generatedUserID
-        };
-        //adding to the db happens here
-        //TODO: Add cypher query syntax
-        let createUserQuery = `CREATE (${user.userID}:User ${userProperties})`;
-        neo.runCypherStatementPromise(createUserQuery);
-
-        let token = jwt.encode({username: username}, config.secret);
-        res.send(token);
+          let userProperties = {
+            "props":{
+              "username": req.body.username,
+              "password": hash,
+              "firstname": req.body.firstname,
+              "lastname": req.body.lastname,
+              "email": req.body.email,
+              "userID": generatedUserID
+            }
+          };
+          console.log("line 30 ", userProperties)
+          resolve(userProperties);
+          reject(err)
+        })
       })
+    });
+    bcryptPromise.then(userProperties => {
+
+      console.log("userProps line 36", userProperties);
+      let createUserQuery = `CREATE (user:User{props}) RETURN user`;
+      neo.runCypherStatementPromise(createUserQuery, userProperties)
+      .then((data) => {
+        var data = data[0];
+        let token = jwt.encode({username: data.username}, config.secret);
+        res.send({token: token});
+      })
+    }).catch((error) => {
+      console.log(error);
     })
-    //use the props create syntax to pass information to db
   },
   signin: (req, res) => {
     //parse through the request
     //extract user information
     let username = req.body.username;
     let password = req.body.password;
-    let checkUsernameQuery = `MATCH (n {username:${username}}) RETURN n`;
+    // let checkUsernameQuery = `MATCH (n {username:${username}}) RETURN n`;
+    let checkUsernameQuery = `MATCH (user:User{username:"${username}"}) RETURN user`;
 
-    //checking the database to see if the user exists
+    //checking the database to see if the user exists PROMISE CHAIN -- EVERY FUNCTION NEEDS TO BE A PROMISE
+    // ALWAYS INCLUDE CATCH FUNCTION
     neo.runCypherStatementPromise(checkUsernameQuery)
-    .then((err, data) => {
-      let userObject = data[0];
-      //if the user exists
-      if(userObject.username) {
-        //then compare the password
-        bcrypt.compare(password, userObject.password, (err, result) => {
-          //if it is the correct password
-          if(result) {
-            //assign a token and send back that token
-            let token = jwt.encode({username: userObject.username}, config.secret);
-            res.send(token);
-            //if it is not the correct password
-          } else {
+    .then((data) => {
+      return new Promise((resolve,reject) => {
+        let userObject = data[0];
+        //if the user exists
+        if(userObject.username) {
+          //then compare the password
+          bcrypt.compare(password, userObject.password, (err, result) => {
+            //if it is the correct password
+            if(result) {
+              //assign a token and send back that token
+              let token = jwt.encode({username: userObject.username}, config.secret);
+              return resolve({token:token});
+              //if it is not the correct password
+            }
             //send back a string that says "incorrect password"
-            res.send("password is incorrect");
-          }
-        })
+            return reject({error:"password_incorrect"});
+          })
+        }
         //if the user does not exist
-      } else {
         //send something that tells front end to redirect to sign up
-        res.send("username does not exist");
+        return reject({error:"username_does_not_exist"})
+      })})
+      .then(sendData)
+      .catch(error)
+
+      function sendData(data) {
+        return res.json(data);
       }
-    });
-  }
-};
+
+      function error(error) {
+        res.status(400).send(data);
+      }
+    }
+  };
