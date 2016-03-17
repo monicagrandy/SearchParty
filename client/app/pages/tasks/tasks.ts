@@ -31,6 +31,7 @@ export class TaskPage {
   constructor(private nav: NavController, navParams: NavParams, private taskService: TaskService) {
     // If we navigated to this page, we will have an item available as a nav param
     this.selectedItem = navParams.get('item');
+    this.loadMap();
   }
 
   //store location address
@@ -46,7 +47,6 @@ export class TaskPage {
         this.locName = result.name
         this.locLat = result.lat
         this.locLng = result.lng
-        this.loadMap();
         //add map
       }) 
    }
@@ -86,6 +86,10 @@ export class TaskPage {
   }
 
   loadMap(){
+    navigator.geolocation.getCurrentPosition(position => {
+      //access local storage from log-in
+      this.locLat = position.coords.latitude
+      this.locLng = position.coords.longitude
       let options = { timeout: 10000, enableHighAccuracy: true}
       let latLng = new google.maps.LatLng(this.locLat, this.locLng);
       let mapOptions = {
@@ -95,6 +99,7 @@ export class TaskPage {
       }
       this.map = new google.maps.Map(document.getElementById('map'), mapOptions)
     }
+  })  
 
   //use this to check if user is allowed to move on to the next task
   markComplete(){
