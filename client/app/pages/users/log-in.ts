@@ -36,6 +36,7 @@ userLng: any;
   }
 
   login(credentials) {
+    console.log(credentials);
     navigator.geolocation.getCurrentPosition(position => {
       this.local.set('userLat', position.coords.latitude)
       this.local.set('userLng', position.coords.longitude)
@@ -43,14 +44,17 @@ userLng: any;
         .map(res => res.json())
         .subscribe(
           data => {
-                   console.log(data);
-                   if(data.error){
-                     console.log("incorrect username or password")
-                   }
-                   this.authSuccess(data.token);
-                   this.nav.push(TemplatePage);
-                  },
-          err => this.error = err
+            if(data) {
+              console.log(data);
+            }
+            this.authSuccess(data.token);
+                  this.nav.push(TemplatePage)
+                  console.log(data.token)
+                },
+          err => {
+            this.error = err;
+            console.log(this.error);
+          }
         );
     })
   }
