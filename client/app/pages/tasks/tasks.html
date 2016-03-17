@@ -12,9 +12,9 @@
       <ion-item>
         <!--set to local storage from server response-->
         <!--place name -->
-        <h2>Location Name</h2> 
+        <h2>{{locName}}</h2> 
         <!--place address-->
-        <h2>Location Address</h2> 
+        <h2>{{locAddress}}</h2> 
       </ion-item>
       <!-- put google map here -->
       <div id="map"></div>
@@ -23,7 +23,7 @@
       <ion-icon subtle large item-left name='ios-pint'></ion-icon>
       <!---challenge-->
       <h3>Current challenge</h3>
-      <p>challenge info goes here</p> 
+      <p>{{locChallenge}}</p> 
     </ion-item>
     <ion-item>
       <ion-label>Mark Complete</ion-label>
