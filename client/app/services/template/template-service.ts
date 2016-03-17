@@ -6,6 +6,8 @@ import 'rxjs/add/operator/map';
 @Injectable()
 export class TemplateService {
   constructor(private _http:Http) {}
+  TEMPLATES_URL: string = "http://localhost:8000/get_templates"; //update this later
+  TASKS_URL: string = "http://localhost:8000/get_tasks";
   
   // future use function
   getData() {
