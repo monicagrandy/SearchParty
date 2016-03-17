@@ -1,6 +1,6 @@
 'use strict'
 const config = require('./config/config.js');
-const host = 'localhost';
+const host = '159.203.239.26';
 const port = 7474;
 const username = config.neoUsername;
 const password = config.neoPassword;
