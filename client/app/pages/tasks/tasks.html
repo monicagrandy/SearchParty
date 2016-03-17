@@ -11,31 +11,27 @@
     <div style="position: relative">
       <ion-item>
         <!--set to local storage from server response-->
-        <h2>{{name}}</h2>
-        <h2>{{adress}}</h2>
+        <!--place name -->
+        <h2>Location Name</h2> 
+        <!--place address-->
+        <h2>Location Address</h2> 
       </ion-item>
       <!-- put google map here -->
       <div id="map"></div>
     </div>
     <ion-item>
-      <ion-icon subtle large item-left name='{{item.icon}}'></ion-icon>
-      <h3>{{challenge}}</h3>
+      <ion-icon subtle large item-left name='ios-pint'></ion-icon>
+      <!---challenge-->
+      <h3>Current challenge</h3>
+      <p>challenge info goes here</p> 
     </ion-item>
-    <ion-item actions>
-      <!-- mark as complete -->
-      <ion-item>
-        <ion-label>Stannis Baratheon</ion-label>
-        <ion-checkbox disabled="true" (click)="markComplete()"></ion-checkbox>
-      </ion-item>
-      <!-- go to next task only if user has marked it complete-->
-      <button primary clear item-right *ngIf="completeToggle" (click)="getNewTask()">
-        Next Task
-      </button>
+    <ion-item>
+      <ion-label>Mark Complete</ion-label>
+      <ion-checkbox secondary checked="false" (click)="markComplete()"></ion-checkbox>
     </ion-item>
+    <button primary clear item-right *ngIf="completeToggle" (click)="getNewTask()">  
+      Next Task
+    </button>
   </ion-card>
-
- <!-- <div *ngIf="selectedItem" padding>
-    You navigated here from <b>{{selectedItem.title}}</b>
-  </div> -->
 
 </ion-content>
