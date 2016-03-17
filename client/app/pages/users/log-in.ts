@@ -13,10 +13,10 @@ import 'rxjs/add/operator/map';
 })
 
 export class LogIn {
-LOGIN_URL: string = "http://localhost:8000/signin"; //update this later
-SIGNUP_URL: string = "http://localhost:8000/signup";
-userLat: any;
-userLng: any;
+  LOGIN_URL: string = "http://localhost:8000/signin"; //update this later
+  SIGNUP_URL: string = "http://localhost:8000/signup";
+  userLat: any;
+  userLng: any;
   auth: AuthService;
   // When the page loads, we want the Login segment to be selected
   authType: string = 'login';

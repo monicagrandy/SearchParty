@@ -1,4 +1,5 @@
 import {Page, NavController, NavParams, LocalStorage} from 'ionic-angular';
+import {Geolocation} from 'ionic-framework/ionic';
 import {TaskService} from '../../services/task-service/task-service';
 import {Http, Headers, ConnectionBackend, HTTP_PROVIDERS } from 'angular2/http';
 import {LogIn} from '../users/log-in';
@@ -16,6 +17,7 @@ import 'rxjs/add/operator/map';
 
 export class TaskPage {
   title = 'Current Task'
+  map = null
   selectedItem: any;
   locAddress: any;
   locChallenge: any;
@@ -55,6 +57,7 @@ export class TaskPage {
         let keyword = this.tasks.pop()
         //send the server a new keyword and the most recent geolocation of user
         let dataObj = {
+          name: this.locName,
           keyword: keyword,
           lat: position.coords.latitude,
           lng: position.coords.longitude
@@ -67,6 +70,8 @@ export class TaskPage {
           this.locChallenge = result.challenge
           this.locLat = result.lat
           this.locLng = result.lng
+          this.loadMap()
+
         })
       }
       else {
@@ -74,6 +79,17 @@ export class TaskPage {
       }
     })  
   }
+
+  loadMap(){
+      let options = { timeout: 10000, enableHighAccuracy: true}
+      let latLng = new google.maps.LatLng(this.logIn.local.get('userLat'), this.logIn.local.get('userLng'));
+      let mapOptions = {
+        center: latLng,
+        zoom: 15,
+        mapTypeId: google.maps.MapTypeId.ROADMAP
+      }
+      this.map = new google.maps.Map(document.getElementById('map'), mapOptions)
+    }
 
   //use this to check if user is allowed to move on to the next task
   markComplete(){
