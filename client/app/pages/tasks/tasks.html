@@ -27,7 +27,7 @@
     </ion-item>
     <ion-item>
       <ion-label>Mark Complete</ion-label>
-      <ion-checkbox secondary checked="false" (click)="markComplete()"></ion-checkbox>
+      <ion-checkbox secondary [checked]="completeToggle" (click)="markComplete()"></ion-checkbox>
     </ion-item>
     <button primary clear item-right *ngIf="completeToggle" (click)="getNewTask()">  
       Next Task

@@ -54,6 +54,7 @@ export class TaskPage {
   //this should be triggered when the next button is pushed
   getNewTask(){
     console.log("getting ready to send new task!")
+    this.markComplete() //move this down to success callback later
       //this.logIn.local.set('userLng', position.coords.longitude)
       console.log(this.tasks)     
       if(this.tasks.length > 0){
