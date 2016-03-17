@@ -1,6 +1,7 @@
 'use strict'
 const jsonParser = require('body-parser').json();
 const userController = require('../controllers/userController.js');
+const apiController = require('../controllers/apiController.js');
 // var path = require ('path');
 // app.use(express.static(path.join(__dirname + '.../public')));
 
@@ -12,6 +13,7 @@ module.exports = (app, express) => {
   // app.get('/', (req, res) => {
   //    res.render('index');
   // });
+  app.post('/tasks', jsonParser, apiController.yelpAPI);
   app.post('/signup', jsonParser, userController.signup);
   app.post('/signin', jsonParser, userController.signin);
 }

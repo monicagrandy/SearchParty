@@ -7,7 +7,7 @@ const shortid = require('shortid');
 
 module.exports = {
   signup: (req, res) => {
-    console.log("credentials: ", req.body);
+    // console.log("credentials: ", req.body);
     // var reqBody = req.body.credentials;
     let password = req.body.password;
     // console.log(password);
@@ -27,7 +27,7 @@ module.exports = {
               "userID": generatedUserID
             }
           };
-          console.log("line 30 ", userProperties)
+          // console.log("line 30 ", userProperties)
           resolve(userProperties);
           reject(err)
         })
@@ -35,7 +35,7 @@ module.exports = {
     });
     bcryptPromise.then(userProperties => {
 
-      console.log("userProps line 36", userProperties);
+      // console.log("userProps line 36", userProperties);
       let createUserQuery = `CREATE (user:User{props}) RETURN user`;
       neo.runCypherStatementPromise(createUserQuery, userProperties)
       .then((data) => {
@@ -62,7 +62,7 @@ module.exports = {
       return new Promise((resolve,reject) => {
         let userObject = data[0];
         //if the user exists
-        if(userObject.username) {
+        if(userObject) {
           //then compare the password
           bcrypt.compare(password, userObject.password, (err, result) => {
             //if it is the correct password
@@ -71,24 +71,28 @@ module.exports = {
               let token = jwt.encode({username: userObject.username}, config.secret);
               return resolve({token:token});
               //if it is not the correct password
+            } else {
+              return reject({error:"password_incorrect"});
             }
             //send back a string that says "incorrect password"
-            return reject({error:"password_incorrect"});
           })
         }
         //if the user does not exist
         //send something that tells front end to redirect to sign up
-        return reject({error:"username_does_not_exist"})
-      })})
-      .then(sendData)
-      .catch(error)
+        else {
+          return reject({error:"username_does_not_exist"})
+        }
+      })
+    })
+    .then(sendData)
+    .catch(error)
 
-      function sendData(data) {
-        return res.json(data);
-      }
-
-      function error(error) {
-        res.status(400).send(data);
-      }
+    function sendData(data) {
+      return res.json(data);
     }
-  };
+
+    function error(error) {
+      res.status(400).json(error);
+    }
+  }
+};
