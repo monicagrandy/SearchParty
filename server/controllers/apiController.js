@@ -22,12 +22,10 @@ module.exports = {
          for(var i = length; i > 0; --i) {
             randStr += chars[Math.round(Math.random() * (chars.length - 1))];
          }
-         // console.log('RandomString Generated: ' + randString(32, 0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ))
          return randStr;
       };
 
       let oauth = {
-         // location: 'Los+Angeles',  //Instead of serach by city, we hand it cll=lat, long
          term: keyword,
          limit: 10,
          ll: `${geolocation.latitude},${geolocation.longitude}`,
@@ -44,17 +42,12 @@ module.exports = {
       paramURL = paramURL.replace('%2C', ',');
       let apiURL = url + '?' + paramURL;
       request({url:apiURL, json:true}, (error, response, body) => {
-         console.log('error:', error);
-         // console.log('body:', body);
          if(!error && response.statusCode === 200) {
-            // console.log('body:', body);
-            console.log('allgood');
             res.json({businesses: body.businesses})
          } else {
             console.log('error', error);
             res.status(400).json(error);
          }
-
       });
    }
 };
