@@ -30,7 +30,7 @@ class MyApp {
   ) {
     this.initializeApp();
 
-    // set our app's pages
+    //set our app's pages
     this.pages = [
       { title: 'Log In', component: LogIn },
       { title: 'Hunts', component: TemplatePage }
