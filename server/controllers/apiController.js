@@ -44,9 +44,17 @@ module.exports = {
       let apiURL = url + '?' + paramURL;
       request({url:apiURL, json:true}, (error, response, body) => {
          if(!error && response.statusCode === 200) {
-            console.log(taskCtrl);
+            let names = (body.businesses).map((business) => business.name);
+            console.log('Names: ', names);
             taskCtrl.getTask(keyword)
               .then(tasks => {
+                 let yelpList = body.businesses;
+                 let taskList = tasks;
+                 let prevPlaces = req.body.previousPlaces;
+                 let prevTasks = req.body.previousTasks;
+
+
+
                res.json({businesses: body.businesses,
                         tasks: tasks})
               })
