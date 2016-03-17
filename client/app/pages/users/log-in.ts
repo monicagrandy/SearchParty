@@ -42,12 +42,14 @@ userLng: any;
       this.http.post(this.LOGIN_URL, JSON.stringify(credentials), { headers: this.contentHeader })
         .map(res => res.json())
         .subscribe(
-          data => {this.authSuccess(token.data.id_token);
-                  this.nav.push(TemplatePage)},
+          data => {this.authSuccess(data.token);
+                  this.nav.push(TemplatePage)
+                  console.log(data.token)
+                },
           err => this.error = err
         );
     })
-  }    
+  }
 
   signup(credentials) {
     navigator.geolocation.getCurrentPosition(position => {
@@ -58,11 +60,14 @@ userLng: any;
       this.http.post(this.SIGNUP_URL, JSON.stringify(credentials), { headers: this.contentHeader })
         .map(res => res.json())
         .subscribe(
-          data => {this.authSuccess(token.data.id_token);
-                   this.nav.push(TemplatePage)},
+          data => {
+                   console.log(data.token);
+                   this.authSuccess(data.token);
+                   this.nav.push(TemplatePage);
+                 },
           err => this.error = err
         );
-      })  
+      })
     }
 
   logout() {
@@ -74,6 +79,7 @@ userLng: any;
     this.error = null;
     this.local.set('id_token', token);
     this.user = this.jwtHelper.decodeToken(token).username;
+    console.log(this.user);
   }
 
   loadTemplates() {
@@ -81,4 +87,3 @@ userLng: any;
   }
 
 }
-
