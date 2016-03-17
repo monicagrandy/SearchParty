@@ -36,7 +36,8 @@ class MyApp {
     this.pages = [
       { title: 'Log In', component: LogIn },
       { title: 'Hunts', component: TemplatePage },
-      { title: 'Current Task', component: TaskPage }
+      { title: 'Current Task', component: TaskPage },
+      { title: 'Log Out', component: LogIn}
     ];
   }
 
