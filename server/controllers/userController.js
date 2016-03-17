@@ -7,9 +7,9 @@ const shortid = require('shortid');
 
 module.exports = {
   signup: (req, res) => {
-    // console.log("credientials: ", req.body.credentials);
-    var reqBody = req.body.credentials;
-    let password = reqBody.password;
+    console.log("credentials: ", req.body);
+    // var reqBody = req.body.credentials;
+    let password = req.body.password;
     // console.log(password);
     //extract user info from request and assign to some object
     let generatedUserID = "u" + shortid.generate();
@@ -19,21 +19,23 @@ module.exports = {
 
           let userProperties = {
             "props":{
-              "username": reqBody.username,
+              "username": req.body.username,
               "password": hash,
-              "firstname": reqBody.firstname,
-              "lastname": reqBody.lastname,
-              "email": reqBody.email,
+              "firstname": req.body.firstname,
+              "lastname": req.body.lastname,
+              "email": req.body.email,
               "userID": generatedUserID
             }
           };
+          console.log("line 30 ", userProperties)
           resolve(userProperties);
           reject(err)
         })
       })
     });
     bcryptPromise.then(userProperties => {
-      // console.log("userProps line 36", userProperties);
+
+      console.log("userProps line 36", userProperties);
       let createUserQuery = `CREATE (user:User{props}) RETURN user`;
       neo.runCypherStatementPromise(createUserQuery, userProperties)
       .then((data) => {
@@ -41,6 +43,8 @@ module.exports = {
         let token = jwt.encode({username: data.username}, config.secret);
         res.send({token: token});
       })
+    }).catch((error) => {
+      console.log(error);
     })
   },
   signin: (req, res) => {
