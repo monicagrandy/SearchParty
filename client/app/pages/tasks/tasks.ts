@@ -1,8 +1,8 @@
 import {Page, NavController, NavParams, LocalStorage} from 'ionic-angular';
-import {Geolocation} from 'ionic-framework/ionic';
+//import {Geolocation} from 'ionic-framework/ionic';
 import {TaskService} from '../../services/task-service/task-service';
 import {Http, Headers, ConnectionBackend, HTTP_PROVIDERS } from 'angular2/http';
-import {LogIn} from '../users/log-in';
+//import {LogIn} from '../users/log-in';
 import 'rxjs/add/operator/map';
 
 
@@ -11,7 +11,8 @@ import 'rxjs/add/operator/map';
   providers: [
     ConnectionBackend,
     HTTP_PROVIDERS,
-    TaskService
+    TaskService,
+    //LogIn
   ]
 })
 
@@ -27,7 +28,7 @@ export class TaskPage {
   completeToggle = false
   tasks: ['bar', 'restaurant', 'bar', 'restaurant']
   //maybe store all previous location names
-  constructor(private nav: NavController, navParams: NavParams, private taskService: TaskService, private logIn: LogIn) {
+  constructor(private nav: NavController, navParams: NavParams, private taskService: TaskService) {
     // If we navigated to this page, we will have an item available as a nav param
     this.selectedItem = navParams.get('item');
   }
@@ -43,6 +44,9 @@ export class TaskPage {
         this.locAddress = result.address
         this.locChallenge = result.challenge
         this.locName = result.name
+        this.locLat = result.lat
+        this.locLng = result.lng
+        this.loadMap();
         //add map
       }) 
    }
@@ -51,8 +55,9 @@ export class TaskPage {
   getNewTask(){
     navigator.geolocation.getCurrentPosition(position => {
       //access local storage from log-in
-      this.logIn.local.set('userLat', position.coords.latitude)
-      this.logIn.local.set('userLng', position.coords.longitude)     
+      this.locLat = position.coords.latitude
+      this.locLng = position.coords.longitude
+      //this.logIn.local.set('userLng', position.coords.longitude)     
       if(this.tasks.length > 0){
         let keyword = this.tasks.pop()
         //send the server a new keyword and the most recent geolocation of user
@@ -65,12 +70,12 @@ export class TaskPage {
         this.taskService.postData(keyword)
           .then(result => {
           //this is the data we get back from the server  
-          this.locName = result.name
-          this.locAddress = result.address
-          this.locChallenge = result.challenge
-          this.locLat = result.lat
-          this.locLng = result.lng
-          this.loadMap()
+          this.locName = result.name;
+          this.locAddress = result.address;
+          this.locChallenge = result.challenge;
+          this.locLat = result.lat;
+          this.locLng = result.lng;
+          this.loadMap();
 
         })
       }
@@ -82,7 +87,7 @@ export class TaskPage {
 
   loadMap(){
       let options = { timeout: 10000, enableHighAccuracy: true}
-      let latLng = new google.maps.LatLng(this.logIn.local.get('userLat'), this.logIn.local.get('userLng'));
+      let latLng = new google.maps.LatLng(this.locLat, this.locLng);
       let mapOptions = {
         center: latLng,
         zoom: 15,

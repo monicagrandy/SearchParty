@@ -4,6 +4,8 @@ import {provide} from 'angular2/core';
 import {AuthHttp, AuthConfig} from 'angular2-jwt';
 import {LogIn} from './pages/users/log-in';
 import {TemplatePage} from './pages/templates/templates';
+import {TaskPage} from './pages/tasks/tasks';
+
 import * as _ from 'underscore';
 
 @App({
@@ -33,7 +35,8 @@ class MyApp {
     //set our app's pages
     this.pages = [
       { title: 'Log In', component: LogIn },
-      { title: 'Hunts', component: TemplatePage }
+      { title: 'Hunts', component: TemplatePage },
+      { title: 'Current Task', component: TaskPage }
     ];
   }
 
