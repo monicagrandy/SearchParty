@@ -22,16 +22,21 @@
     <ion-item>
       <ion-icon subtle large item-left name='ios-pint'></ion-icon>
       <!---challenge-->
-      <h3>Current challenge</h3> 
+      <h3>Current challenge</h3>
+      <p>challenge info goes here</p> 
+    </ion-item>
+    <ion-item>
+      <ion-label>Mark Complete</ion-label>
+      <ion-checkbox secondary checked="false"></ion-checkbox>
     </ion-item>
     <ion-item actions>
       <!-- mark as complete -->
-      <ion-item>
+      <!-- <ion-item>
         <ion-label>Stannis Baratheon</ion-label>
-        <ion-checkbox disabled="true" (click)="markComplete()"></ion-checkbox>
-      </ion-item>
+        <ion-checkbox disabled="true"></ion-checkbox> <! (click)="markComplete()" -->
+      <!-- </ion-item>  -->
       <!-- go to next task only if user has marked it complete-->
-      <button primary clear item-right *ngIf="completeToggle" (click)="getNewTask()">
+      <button primary clear item-right> <!-- *ngIf="completeToggle" (click)="getNewTask()" -->
         Next Task
       </button>
     </ion-item>
