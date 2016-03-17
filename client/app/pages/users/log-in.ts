@@ -36,17 +36,25 @@ userLng: any;
   }
 
   login(credentials) {
+    console.log(credentials);
     navigator.geolocation.getCurrentPosition(position => {
       this.local.set('userLat', position.coords.latitude)
       this.local.set('userLng', position.coords.longitude)
       this.http.post(this.LOGIN_URL, JSON.stringify(credentials), { headers: this.contentHeader })
         .map(res => res.json())
         .subscribe(
-          data => {this.authSuccess(data.token);
+          data => {
+            if(data) {
+              console.log(data);
+            }
+            this.authSuccess(data.token);
                   this.nav.push(TemplatePage)
                   console.log(data.token)
                 },
-          err => this.error = err
+          err => {
+            this.error = err;
+            console.log(this.error);
+          }
         );
     })
   }
