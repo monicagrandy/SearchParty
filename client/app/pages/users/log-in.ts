@@ -1,31 +1,33 @@
 //import {Page} from 'ionic-angular';
-import {Page, Storage, LocalStorage} from 'ionic-angular';
+import {Page, Storage, LocalStorage, NavController, NavParams} from 'ionic-angular';
+import {TemplatePage} from '../templates/templates';
 import {Http, Headers} from 'angular2/http';
 import {FORM_DIRECTIVES} from 'angular2/common';
 import {JwtHelper} from 'angular2-jwt';
 import {AuthService} from '../../services/auth/auth-service';
 import 'rxjs/add/operator/map';
 
-
 @Page({
   templateUrl: 'build/pages/users/log-in.html',
   directives: [FORM_DIRECTIVES]
 })
-export class LogIn {
-LOGIN_URL: string = "http:localhost:8000/signin"; //update this later
-SIGNUP_URL: string = "http:localhost:8000/signup";
 
+export class LogIn {
+LOGIN_URL: string = "http://localhost:8000/signin"; //update this later
+SIGNUP_URL: string = "http://localhost:8000/signup";
+userLat: any;
+userLng: any;
   auth: AuthService;
   // When the page loads, we want the Login segment to be selected
-  authType: string = "login";
+  authType: string = 'login';
   // We need to set the content type for the server
-  contentHeader: Headers = new Headers({"Content-Type": "application/json"});
+  contentHeader: Headers = new Headers({'Content-Type': 'application/json'});
   error: string;
   jwtHelper: JwtHelper = new JwtHelper();
   local: Storage = new Storage(LocalStorage);
   user: string;
 
-  constructor(private http: Http) {
+  constructor(private http: Http, private nav: NavController, navParams: NavParams) {
     this.auth = AuthService;
     let token = this.local.get('id_token')._result;
     if(token) {
@@ -35,34 +37,33 @@ SIGNUP_URL: string = "http:localhost:8000/signup";
 
   login(credentials) {
     navigator.geolocation.getCurrentPosition(position => {
-      let send = {
-        coords: "lat=" + position.coords.latitude + "&lng=" + position.coords.longitude,
-        credentials: credentials
-      }
-    this.http.post(this.LOGIN_URL, JSON.stringify(send), { headers: this.contentHeader })
-      .map(res => res.json())
-      .subscribe(
-        data => this.authSuccess(data.id_token),
-        err => this.error = err
-      );
-  })
-}
+      this.local.set('userLat', position.coords.latitude)
+      this.local.set('userLng', position.coords.longitude)
+      this.http.post(this.LOGIN_URL, JSON.stringify(credentials), { headers: this.contentHeader })
+        .map(res => res.json())
+        .subscribe(
+          data => {this.authSuccess(token.data.id_token);
+                  this.nav.push(TemplatePage)},
+          err => this.error = err
+        );
+    })
+  }    
 
   signup(credentials) {
     navigator.geolocation.getCurrentPosition(position => {
-      let send = {
-        coords: "lat=" + position.coords.latitude + "&lng=" + position.coords.longitude,
-        credentials: credentials
-      }
-      let test = "firstname="+credentials.firstname
-    this.http.post("http://localhost:8000/signup", JSON.stringify(send), { headers: this.contentHeader })
-      .map(res => res.json())
-      .subscribe(
-        data => this.authSuccess(data.id_token),
-        err => this.error = err
-      );
-    })
-  }
+      console.log(credentials)
+      this.local.set('userLat', position.coords.latitude)
+      this.local.set('userLng', position.coords.longitude)
+      this.userLng = position.coords.longitude
+      this.http.post(this.SIGNUP_URL, JSON.stringify(credentials), { headers: this.contentHeader })
+        .map(res => res.json())
+        .subscribe(
+          data => {this.authSuccess(token.data.id_token);
+                   this.nav.push(TemplatePage)},
+          err => this.error = err
+        );
+      })  
+    }
 
   logout() {
     this.local.remove('id_token');
@@ -75,4 +76,9 @@ SIGNUP_URL: string = "http:localhost:8000/signup";
     this.user = this.jwtHelper.decodeToken(token).username;
   }
 
+  loadTemplates() {
+    this.nav.push(TemplatePage)
+  }
+
 }
+
