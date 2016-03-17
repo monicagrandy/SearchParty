@@ -44,22 +44,35 @@ module.exports = {
       let apiURL = url + '?' + paramURL;
       request({url:apiURL, json:true}, (error, response, body) => {
          if(!error && response.statusCode === 200) {
-            let names = (body.businesses).map((business) => business.name);
-            console.log('Names: ', names);
+            console.log(':::::::YELP API:::::::');
+            let yelpObjs = body.businesses;
+            let yelpNames = (body.businesses).map((business) => business.name);
+            let prevList = req.body.previousPlaces;
+            console.log('yelpNames: ', yelpNames);
+            console.log('prevList: ', prevList);
+            for(let i in yelpNames) {
+               if(prevList.indexOf(yelpNames[i]) !== -1) {
+                  console.log('::DUPLICATED DETECTED:: ' + yelpNames[i]);
+                  yelpObjs.splice(i, 1);
+                  yelpNames.splice(i, 1);
+               }
+            }
+            console.log('filtered: ', yelpNames);
             taskCtrl.getTask(keyword)
               .then(tasks => {
-                 let yelpList = body.businesses;
-                 let taskList = tasks;
-                 let prevPlaces = req.body.previousPlaces;
+                 console.log('::::::TASKS DB:::::::');
+                 console.log(tasks);
+                 let taskList = tasks.map((task) => task.id);
                  let prevTasks = req.body.previousTasks;
+                 console.log('taskList: ', taskList);
+                 console.log('prevTasks: ', prevTasks);
 
-
-
-               res.json({businesses: body.businesses,
-                        tasks: tasks})
+               res.json({businesses: yelpObjs,
+                        tasks: tasks});
               })
                .catch(error => {
                   console.log(error);
+                  res.status(400).json(error);
                });
 
          } else {
