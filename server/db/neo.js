@@ -3,7 +3,7 @@ const config = require('./config/config.js');
 const host = 'localhost';
 const port = 7474;
 const username = config.neoUsername;
-const password = 'cleocatra1';
+const password = config.neoPassword;
 
 const cypher = require('cypher-stream')(`http://${username}:${password}@${host}:${port}`);
 
