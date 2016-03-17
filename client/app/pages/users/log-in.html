@@ -21,29 +21,29 @@
 
       <div [ngSwitch]="authType">
         <form *ngSwitchWhen="'login'" #loginCreds="ngForm" (ngSubmit)="login(loginCreds.value)">
-          
+
           <ion-item>
             <ion-label>Username</ion-label>
             <ion-input type="text" ngControl="username"></ion-input>
           </ion-item>
-         
+
           <ion-item>
             <ion-label>Password</ion-label>
             <ion-input type="password" ngControl="password"></ion-input>
           </ion-item>
 
           <div padding>
-            <button block type="submit">Login</button>        
+            <button block type="submit">Login</button>
           </div>
 
         </form>
 
         <form *ngSwitchWhen="'signup'" #signupCreds="ngForm" (ngSubmit)="signup(signupCreds.value)">
-          
+
           <span class="name">
           <ion-item>
             <ion-label>First Name</ion-label>
-            <ion-input type="text" ngControl="fistname"></ion-input>
+            <ion-input type="text" ngControl="firstname"></ion-input>
           </ion-item>
           </span>
 
@@ -52,7 +52,7 @@
             <ion-label>Last Name</ion-label>
             <ion-input type="text" ngControl="lastname"></ion-input>
           </ion-item>
-          </span>   
+          </span>
           <br><br>
           <span class="name">
           <ion-item>
@@ -81,7 +81,7 @@
       </div>
 
       <div padding>
-        <p *ngIf="error" class="error">{{ error._body }}</p>  
+        <p *ngIf="error" class="error">{{ error._body }}</p>
       </div>
 
   </ion-content>
@@ -92,6 +92,6 @@
         <h1>Welcome, {{ user }}</h1>
         <button block (click)="logout()">New Hunt</button>
         <button block (click)="logout()">Logout</button>
-      </div>  
+      </div>
     </div>
   </ion-content>

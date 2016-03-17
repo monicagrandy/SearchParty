@@ -7,50 +7,41 @@ const shortid = require('shortid');
 
 module.exports = {
   signup: (req, res) => {
-    console.log("credientials: ", req.body.credentials);
+    // console.log("credientials: ", req.body.credentials);
     var reqBody = req.body.credentials;
     let password = reqBody.password;
     // console.log(password);
     //extract user info from request and assign to some object
     let generatedUserID = "u" + shortid.generate();
+    let bcryptPromise = new Promise((resolve, reject) => {
+      bcrypt.genSalt(10, (err, salt) => {
+        bcrypt.hash(password, salt, null, (err, hash) => {
 
-    bcrypt.genSalt(10, (err, salt) => {
-      bcrypt.hash(password, salt, null, (err, hash) => {
-        //extract user info from request and assign to some object
-        // let userProperties = {
-        //
-        //   "username": req.body.username,
-        //   "password": hash,
-        //   "firstname": req.body.firstname,
-        //   "lastname": req.body.lastname,
-        //   "email": req.body.email,
-        //   "userID": generatedUserID
-        // };
-        let userProperties = {
-          "props":{
-            "username": reqBody.username,
-            "password": hash,
-            "firstname": reqBody.firstname,
-            "lastname": reqBody.lastname,
-            "email": reqBody.email,
-            "userID": generatedUserID
-          }
-
-        };
-        let createUserQuery = `CREATE (user:User{props})`;
-        neo.runCypherStatementPromise(createUserQuery, userProperties);
-        let token = jwt.encode({username: userProperties.username}, config.secret);
+          let userProperties = {
+            "props":{
+              "username": reqBody.username,
+              "password": hash,
+              "firstname": reqBody.firstname,
+              "lastname": reqBody.lastname,
+              "email": reqBody.email,
+              "userID": generatedUserID
+            }
+          };
+          resolve(userProperties);
+          reject(err)
+        })
+      })
+    });
+    bcryptPromise.then(userProperties => {
+      // console.log("userProps line 36", userProperties);
+      let createUserQuery = `CREATE (user:User{props}) RETURN user`;
+      neo.runCypherStatementPromise(createUserQuery, userProperties)
+      .then((data) => {
+        var data = data[0];
+        let token = jwt.encode({username: data.username}, config.secret);
         res.send({token: token});
-        //adding to the db happens here
-        //below is the actual query that I want to run
-        // let createUserQuery = `CREATE (user:User${userProperties})`;
-        //this is the query I am using for testing, not working
-        // let createUserQuery = 'CREATE (user:User {firstname:"test2"})'
-        // console.log("userProperties ", userProperties);
-
       })
     })
-    //use the props create syntax to pass information to db
   },
   signin: (req, res) => {
     //parse through the request
