@@ -54,7 +54,6 @@ module.exports = {
     let password = req.body.password;
     // let checkUsernameQuery = `MATCH (n {username:${username}}) RETURN n`;
     let checkUsernameQuery = `MATCH (user:User{username:"${username}"}) RETURN user`;
-    console.log(checkUsernameQuery);
 
     //checking the database to see if the user exists PROMISE CHAIN -- EVERY FUNCTION NEEDS TO BE A PROMISE
     // ALWAYS INCLUDE CATCH FUNCTION
@@ -63,7 +62,7 @@ module.exports = {
       return new Promise((resolve,reject) => {
         let userObject = data[0];
         //if the user exists
-        if(userObject.username) {
+        if(userObject) {
           //then compare the password
           bcrypt.compare(password, userObject.password, (err, result) => {
             //if it is the correct password
