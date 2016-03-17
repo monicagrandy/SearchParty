@@ -22,12 +22,14 @@ export class TaskPage {
   local: LocalStorage
   selectedItem: any; 
   locAddress = "1240 3rd Street Promenade, Santa Monica, CA 90401"; //set this to whatever is in local storage
-  locChallenge = "Buy a stranger a shot"; //set this to whatever is in local storage
+  challenges = ['Buy a stranger a shot', 'Do a car bomb!', 'Buy a stranger a shot', 'Do a car bomb!', 'Buy a stranger a shot']
+  currChallenge = this.challenges[0];
+  //locChallenge = "Buy a stranger a shot"; //set this to whatever is in local storage
   locLat = 34.0173550 //set this to whatever is in local storage
   locLng = -118.4984360 //set this to whatever is in local storage
   locName = "Cabo Cantina" //set this to whatever is in local storage
   completeToggle = false
-  tasks = ['bar', 'restaurant', 'bar', 'restaurant']
+  tasks = ['bars', 'dive bars', 'sports bars', 'lounge', 'fast-food']
   //maybe store all previous location names
   constructor(private nav: NavController, navParams: NavParams, private taskService: TaskService) {
     // If we navigated to this page, we will have an item available as a nav param
@@ -37,19 +39,6 @@ export class TaskPage {
     setTimeout(()=>{ this.loadMap(this.locLat, this.locLng), 3000 })
   }
 
-  //this should be triggered on when a template is submitted and whenever the next button is pushed
-  // showTask(){
-  //   this.taskService.getData()
-  //     .then(result => {
-  //       this.locAddress = result.address
-  //       this.locChallenge = result.challenge
-  //       this.locName = result.name
-  //       this.locLat = result.lat
-  //       this.locLng = result.lng
-  //       //add map
-  //     }) 
-  //  }
-
   //this should be triggered when the next button is pushed
   getNewTask(){
     console.log("getting ready to send new task!")
@@ -57,17 +46,15 @@ export class TaskPage {
       //this.logIn.local.set('userLng', position.coords.longitude)
       console.log(this.tasks)     
       if(this.tasks.length > 0){
+        let keyword = this.tasks.pop()
         console.log(this.tasks)
         this.locName = "Britania Pub";
         this.locAddress = "318 Santa Monica Blvd, Santa Monica, CA 90401";
-        this.locChallenge = "Do a car bomb!";
+        this.currChallenge = this.challenges.shift()
         this.locLat = 34.015914;
         this.locLng = -118.4953900;
         this.markComplete();
         this.loadMap(this.locLat, this.locLng);
-
-
-        let keyword = this.tasks.pop()
         console.log(keyword)
         //send the server a new keyword and the most recent geolocation of user
         let dataObj = {
@@ -81,7 +68,7 @@ export class TaskPage {
           //this is the data we get back from the server  
           this.locName = result.name;
           this.locAddress = result.address;
-          this.locChallenge = result.challenge;
+          this.currChallenge = this.challenges.shift()
           this.locLat = result.lat;
           this.locLng = result.lng;
           this.markComplete();
