@@ -74,8 +74,11 @@ module.exports = {
                     }
                  }
                  console.log('Task Filtered: ', taskList);
-               res.json({businesses: yelpResults,
-                        tasks: taskResults});
+                 //TODO: Randomize chosen result:
+                 //THIS IS HARDCODED AND WILL NEED TO CHANGED LATER CAMERON JEEZ
+                 console.log(taskResults[0]);
+               res.json({businesses: yelpResults[0],
+                        tasks: taskResults[0]});
               })
                .catch(error => {
                   console.log(error);
