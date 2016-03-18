@@ -1,7 +1,6 @@
 'use strict'
 
 const neo = require('../db/neo.js');
-const config = require('../db/config/config.js');
 
 module.exports = {
   getTask: (keyword) => {
