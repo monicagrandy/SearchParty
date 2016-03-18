@@ -60,7 +60,8 @@ export class TaskPage {
           lat: this.locLat,
           lng: this.locLng
         }
-        this.taskService.postData(keyword)
+        this.taskService.postData(dataObj)
+          console.log("inside taskService.postData")
           .then(result => {
             console.log(result)
           //this is the data we get back from the server  

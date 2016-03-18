@@ -6,31 +6,13 @@ import 'rxjs/add/operator/map';
 @Injectable()
 export class TaskService {
   constructor(private _http:Http) {}
-  getData(){
-    console.log("called get req")
-    let httpGetPromise = new Promise((resolve, reject) => {
-      console.log("called get req")
-      this._http.get('/')
-        .map(res => res.json())
-        .subscribe(
-          data => {
-            console.log("data from promise: ", data)
-            resolve(data)
-          },
-          err => reject(err),
-          () => console.log('data recieved')
-          )
-        })
-    return httpGetPromise
-  }
 
   postData(data){
     let headers = new Headers();
     headers.append('Content-Type', 'application/x-www-form-urlencoded');
-    console.log("called get req")
     let httpGetPromise = new Promise((resolve, reject) => {
-      console.log("called get req")
-      this._http.post('/', data, {headers: headers})
+      this._http.post('http://localhost:8000/tasks', data, {headers: headers})
+        console.log(data)
         .map(res => res.json())
         .subscribe(
           data => {

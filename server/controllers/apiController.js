@@ -18,8 +18,9 @@ const oAuthToken = process.env.OAUTHTOKEN || apiConfig.oAuthToken;
 
 module.exports = {
    yelpAPI: (req, res) => {
+      console.log(req.body)
       let keyword = req.body.keyword;
-      let geolocation = req.body.geolocation;
+      let geolocation = req.body;
       let method = 'GET';
       let url = 'http://api.yelp.com/v2/search';
 
@@ -34,7 +35,7 @@ module.exports = {
       let oauth = {
          term: keyword,
          limit: 10,
-         ll: `${geolocation.latitude},${geolocation.longitude}`,
+         ll: `${geolocation.lat},${geolocation.lng}`,
          oauth_consumer_key: oAuthConsumerKey,
          oauth_token: oAuthToken,
          oauth_signature_method: "HMAC-SHA1",
