@@ -1,4 +1,4 @@
-<ion-navbar *navbar>
+<ion-navbar *ngIf="auth.authenticated()" *navbar>
   <button menuToggle>
     <ion-icon name="menu"></ion-icon>
   </button>

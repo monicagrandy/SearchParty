@@ -28,7 +28,10 @@ export class TaskPage {
   completeToggle = false
   tasks = ['bars', 'dive-bars', 'sports-bars', 'lounge', 'fast-food']
   previousPlaces = []
-  constructor(private nav: NavController, navParams: NavParams, private taskService: TaskService) {
+  contentHeader: Headers = new Headers({'Content-Type': 'application/json'});
+  TASKS_URL: string = "http://localhost:8000/tasks";
+
+  constructor(private http: Http, private nav: NavController, navParams: NavParams, private taskService: TaskService) {
     // If we navigated to this page, we will have an item available as a nav param
     //this.map = null;
     this.selectedItem = navParams.get('item');
@@ -60,25 +63,28 @@ export class TaskPage {
           lat: this.locLat,
           lng: this.locLng
         }
-        this.taskService.postData(dataObj)
-          console.log("inside taskService.postData")
-          .then(result => {
-            console.log(result)
-          //this is the data we get back from the server  
-          this.locName = result.businesses.name;
-          this.previousPlaces.push(this.locName)
-          this.locAddress = result.businesses.location.address;
-          this.currChallenge = result.tasks.content
-          this.locLat = result.businesses.coordinate.latitude;
-          this.locLng = result.businesses.coordinate.latitude;
-          this.markComplete();
-          this.loadMap(this.locLat, this.locLng);
-        })
-      }
+        console.log("reg data: ", dataObj)
+        console.log("stringified data: ", JSON.stringify(dataObj))
+        // let dataStr = "previousPlaces=" + this.previousPlaces + "&keyword=" + keyword + "&lat=" + this.locLat + "&lng=" + this.locLng
+          this.taskService.postData(JSON.stringify(dataObj))
+            console.log("inside taskService.postData")
+            .then(result => {
+            //this is the data we get back from the server  
+            this.locName = result.businesses.name;
+            this.previousPlaces.push(this.locName)
+            this.locAddress = result.businesses.location.address;
+            this.currChallenge = result.tasks.content
+            this.locLat = result.businesses.coordinate.latitude;
+            this.locLng = result.businesses.coordinate.latitude;
+            this.markComplete();
+            this.loadMap(this.locLat, this.locLng);
+          })
+        }
       else {
         console.log("no more tasks!")
     } 
   }
+
 
   loadMap(lat, long){
     let options = { timeout: 10000, enableHighAccuracy: true }

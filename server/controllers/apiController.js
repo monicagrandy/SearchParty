@@ -18,7 +18,7 @@ const oAuthToken = process.env.OAUTHTOKEN || apiConfig.oAuthToken;
 
 module.exports = {
    yelpAPI: (req, res) => {
-      console.log(req.body)
+      console.log("inside yelpAPIcontroller: ", req.body)
       let keyword = req.body.keyword;
       let geolocation = req.body;
       let method = 'GET';

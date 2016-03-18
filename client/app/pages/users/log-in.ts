@@ -5,6 +5,7 @@ import {Http, Headers} from 'angular2/http';
 import {FORM_DIRECTIVES} from 'angular2/common';
 import {JwtHelper} from 'angular2-jwt';
 import {AuthService} from '../../services/auth/auth-service';
+//import {MyApp} from '../../app'
 import 'rxjs/add/operator/map';
 
 @Page({
@@ -34,8 +35,13 @@ export class LogIn {
     }
   }
 
+  getCoords(){
+    navigator.geolocation
+  }
+
   login(credentials) {
     console.log(credentials);
+    console.log(JSON.stringify(credentials))
       this.http.post(this.LOGIN_URL, JSON.stringify(credentials), { headers: this.contentHeader })
         .map(res => res.json())
         .subscribe(
