@@ -6,13 +6,15 @@ import 'rxjs/add/operator/map';
 @Injectable()
 export class TemplateService {
   constructor(private _http:Http) {}
+  TEMPLATES_URL: string = "http://localhost:8000/templates"; //update this later
+  TASKS_URL: string = "http://localhost:8000/tasks";
   
   // future use function
   getData() {
     console.log('called get req');
     let httpGetPromise = new Promise((resolve, reject) => {
       console.log('inside get promise');
-      this._http.get('/templates')
+      this._http.get(this.TEMPLATES_URL)
         .map(res => res.json())
         .subscribe(
           data => {
@@ -35,7 +37,7 @@ export class TemplateService {
     console.log('called post req');
     let httpGetPromise = new Promise((resolve, reject) => {
       console.log('inside post promise');
-      this._http.post('/tasks', data, {headers: headers})
+      this._http.post(this.TASKS_URL, data, {headers: headers})
         .map(res => res.json())
         .subscribe(
           data => {
