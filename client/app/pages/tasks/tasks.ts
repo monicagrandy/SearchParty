@@ -1,6 +1,6 @@
 import {Page, NavController, NavParams, LocalStorage} from 'ionic-angular';
 import {TaskService} from '../../services/task-service/task-service';
-import {Http, Headers, ConnectionBackend, HTTP_PROVIDERS } from 'angular2/http';
+import { ConnectionBackend, HTTP_PROVIDERS } from 'angular2/http';
 import 'rxjs/add/operator/map';
 
 
@@ -9,8 +9,7 @@ import 'rxjs/add/operator/map';
   providers: [
     ConnectionBackend,
     HTTP_PROVIDERS,
-    TaskService,
-    //LogIn
+    TaskService
   ]
 })
 
@@ -22,20 +21,18 @@ export class TaskPage {
   locAddress = '1240 3rd Street Promenade, Santa Monica, CA 90401'; //set this to whatever is in local storage
   currChallenge = 'Buy a stranger a shot';
   //locChallenge = "Buy a stranger a shot"; //set this to whatever is in local storage
-  locLat = 34.0173550 //set this to whatever is in local storage
-  locLng = -118.4984360 //set this to whatever is in local storage
+  locLat = 34.0173550; //set this to whatever is in local storage
+  locLng = -118.4984360; //set this to whatever is in local storage
   locName = "Cabo Cantina" //set this to whatever is in local storage
-  completeToggle = false
-  tasks = ['bars', 'dive-bars', 'sports-bars', 'lounge', 'fast-food']
-  previousPlaces = []
-  contentHeader: Headers = new Headers({'Content-Type': 'application/json'});
-  TASKS_URL: string = "http://localhost:8000/tasks";
-
-  constructor(private http: Http, private nav: NavController, navParams: NavParams, private taskService: TaskService) {
+  completeToggle = false;
+  tasks = ['Bar', 'dive-bars', 'sports-bars', 'lounge', 'fast-food'];
+  previousPlaces = [];
+  previousTasks = [];
+  
+  constructor(private nav: NavController, navParams: NavParams, private _taskService: TaskService) {
     // If we navigated to this page, we will have an item available as a nav param
     //this.map = null;
     this.selectedItem = navParams.get('item');
-    console.log(this.locLat, this.locLng)
     setTimeout(()=>{ this.loadMap(this.locLat, this.locLng), 1000 })
   }
 
@@ -47,33 +44,36 @@ export class TaskPage {
       console.log(this.tasks)     
       if(this.tasks.length > 0){
         let keyword = this.tasks.shift()
-        console.log(this.tasks)
-        this.locName = "Britania Pub";
-        this.locAddress = "318 Santa Monica Blvd, Santa Monica, CA 90401";
-        this.currChallenge = "Do a car bomb!"
-        this.locLat = 34.015914;
-        this.locLng = -118.4953900;
-        this.markComplete();
-        this.loadMap(this.locLat, this.locLng);
-        console.log(keyword)
+        // console.log(this.tasks)
+        // this.locName = "Britania Pub";
+        // this.locAddress = "318 Santa Monica Blvd, Santa Monica, CA 90401";
+        // this.currChallenge = "Do a car bomb!"
+        // this.locLat = 34.015914;
+        // this.locLng = -118.4953900;
+        // this.markComplete();
+        // this.loadMap(this.locLat, this.locLng);
+        // console.log(keyword)
         //send the server a new keyword and the most recent geolocation of user
         let dataObj = {
           previousPlaces: this.previousPlaces,
+          previousTasks: this.previousTasks,
           keyword: keyword,
-          lat: this.locLat,
-          lng: this.locLng
+          geolocation: {
+            lat: this.locLat,
+            lng: this.locLng
+          }
         }
         console.log("reg data: ", dataObj)
         console.log("stringified data: ", JSON.stringify(dataObj))
         // let dataStr = "previousPlaces=" + this.previousPlaces + "&keyword=" + keyword + "&lat=" + this.locLat + "&lng=" + this.locLng
-          this.taskService.postData(JSON.stringify(dataObj))
-            console.log("inside taskService.postData")
+          this._taskService.postData(JSON.stringify(dataObj))
             .then(result => {
             //this is the data we get back from the server  
             this.locName = result.businesses.name;
             this.previousPlaces.push(this.locName)
             this.locAddress = result.businesses.location.address;
             this.currChallenge = result.tasks.content
+            this.previousTasks.push(this.currChallenge)
             this.locLat = result.businesses.coordinate.latitude;
             this.locLng = result.businesses.coordinate.latitude;
             this.markComplete();
