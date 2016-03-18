@@ -11,7 +11,7 @@ module.exports = (app, express) => {
   // app.set('view engine', 'ejs');
   // app.set('views', __dirname + '/yourViewDirectory');
   app.use(jsonParser);
-  // app.use('/', express.static(__dirname + '../../client/'));
+  app.use(express.static('./client/www'));
   // app.get('/', (req, res) => {
   //    res.render('index');
   // });
