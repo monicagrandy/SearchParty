@@ -36,7 +36,10 @@ export class LogIn {
   }
 
   getCoords(){
-    navigator.geolocation
+    navigator.geolocation.getCurrentPosition(position => {
+      localStorage.userLat = position.coords.latitude;
+      localStorage.userLng = position.coords.longitude;
+    })
   }
 
   login(credentials) {
@@ -50,6 +53,7 @@ export class LogIn {
               console.log(data);
             }
             this.authSuccess(data.token);
+            this.getCoords();
             this.loadTemplates();
             console.log('success');
                 },
@@ -67,6 +71,7 @@ export class LogIn {
           data => {
                    console.log(data.token);
                    this.authSuccess(data.token);
+                   this.getCoords();
                    this.loadTemplates();
                  },
           err => this.error = err

@@ -47,15 +47,15 @@ export class TaskPage {
       console.log(this.tasks)     
       if(this.tasks.length > 0){
         let keyword = this.tasks.shift()
-        // console.log(this.tasks)
-        // this.locName = "Britania Pub";
-        // this.locAddress = "318 Santa Monica Blvd, Santa Monica, CA 90401";
-        // this.currChallenge = "Do a car bomb!"
-        // this.locLat = 34.015914;
-        // this.locLng = -118.4953900;
-        // this.markComplete();
-        // this.loadMap(this.locLat, this.locLng);
-        // console.log(keyword)
+        console.log(this.tasks)
+        this.locName = "Britania Pub";
+        this.locAddress = "318 Santa Monica Blvd, Santa Monica, CA 90401";
+        this.currChallenge = "Do a car bomb!"
+        this.locLat = 34.015914;
+        this.locLng = -118.4953900;
+        this.markComplete();
+        this.loadMap(this.locLat, this.locLng);
+        console.log(keyword)
         //send the server a new keyword and the most recent geolocation of user
         let dataObj = {
           previousPlaces: this.previousPlaces,
@@ -106,7 +106,6 @@ export class TaskPage {
   }  
 
   addInfoWindow(marker, content){
-    console.log("marker : ", marker);
     console.log(content);
     let infoWindow = new google.maps.InfoWindow({
       content: content
