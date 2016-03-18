@@ -13,10 +13,8 @@ import 'rxjs/add/operator/map';
 })
 
 export class LogIn {
-  LOGIN_URL: string = "http://localhost:8000/signin"; //update this later
-  SIGNUP_URL: string = "http://localhost:8000/signup";
-  userLat: any;
-  userLng: any;
+  LOGIN_URL: string = 'http://localhost:8000/signin'; //update this later
+  SIGNUP_URL: string = 'http://localhost:8000/signup';
   auth: AuthService;
   // When the page loads, we want the Login segment to be selected
   authType: string = 'login';
@@ -30,6 +28,7 @@ export class LogIn {
   constructor(private http: Http, private nav: NavController, navParams: NavParams) {
     this.auth = AuthService;
     let token = this.local.get('id_token')._result;
+    //let token = sessionStorage.id_token 
     if(token) {
       this.user = this.jwtHelper.decodeToken(token).username;
     }
@@ -37,9 +36,6 @@ export class LogIn {
 
   login(credentials) {
     console.log(credentials);
-    navigator.geolocation.getCurrentPosition(position => {
-      this.local.set('userLat', position.coords.latitude)
-      this.local.set('userLng', position.coords.longitude)
       this.http.post(this.LOGIN_URL, JSON.stringify(credentials), { headers: this.contentHeader })
         .map(res => res.json())
         .subscribe(
@@ -56,15 +52,10 @@ export class LogIn {
             console.log(this.error);
           }
         );
-    })
-  }
+    }
 
   signup(credentials) {
-    navigator.geolocation.getCurrentPosition(position => {
-      console.log(credentials)
-      this.local.set('userLat', position.coords.latitude)
-      this.local.set('userLng', position.coords.longitude)
-      this.http.post(this.SIGNUP_URL, JSON.stringify(credentials), { headers: this.contentHeader })
+     this.http.post(this.SIGNUP_URL, JSON.stringify(credentials), { headers: this.contentHeader })
         .map(res => res.json())
         .subscribe(
           data => {
@@ -74,16 +65,17 @@ export class LogIn {
                  },
           err => this.error = err
         );
-      })
     }
 
   logout() {
+    //localStorage.id_token = null;
     this.local.remove('id_token');
     this.user = null;
   }
 
   authSuccess(token) {
     this.error = null;
+    //localStorage.id_token = token
     this.local.set('id_token', token);
     this.user = this.jwtHelper.decodeToken(token).username;
     console.log(this.user);

@@ -14,7 +14,7 @@ export class TemplatePage {
   constructor(private nav: NavController, navParams: NavParams, private templateService: TemplateService) {
     // If we navigated to this page, we will have an item available as a nav param
     this.selectedItem = navParams.get('item');
-    
+    localStorage.test = 'hi'
     this.testData = [
       {type: 'bar', huntname: 'Bar Hunt', image: 'img/bar.jpg', icon: 'ios-pint'},
       {type: 'beach', huntname: 'Beach Hunt', image: 'img/beach.jpg', icon: 'ios-water'},
