@@ -5,6 +5,7 @@ import 'rxjs/add/operator/map';  // we need to import this now
 @Injectable()
 export class TaskService {
   constructor(private _http:Http) {}
+<<<<<<< HEAD
   TASKS_URL: string = 'http://localhost:8000/tasks';
   contentHeader: Headers = new Headers({'Content-Type': 'application/json'});
   // postData(data){
@@ -24,6 +25,9 @@ export class TaskService {
   //       })
   //   return httpGetPromise
   // } 
+=======
+  TASKS_URL: string = process.env.TASKSURL || 'http://localhost:8000/tasks';
+>>>>>>> e0a9321a1374c5c29dae3123da40e33838d112d3
 
    postData(data) {
     console.log("called post req")

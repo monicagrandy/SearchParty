@@ -1,4 +1,4 @@
-import {Page, NavController, NavParams} from 'ionic-angular';
+import {Page, NavController, NavParams, LocalStorage, Storage} from 'ionic-angular';
 import {TaskPage} from '../tasks/tasks';
 import {TemplateService} from '../../services/template/template-service';
 
@@ -10,18 +10,30 @@ export class TemplatePage {
   selectedItem: any;
   testData: Array<{type: string, huntname: string, image: string, icon: string}>;
   items: Array<{title: string, image: string, huntname: string, icon: string}>;
+  local: Storage = new Storage(LocalStorage);
+  userLng: number;
+  userLat: number;
+  userInfo: {};
+  geolocation: {};
 
   constructor(private nav: NavController, navParams: NavParams, private templateService: TemplateService) {
     // If we navigated to this page, we will have an item available as a nav param
     this.selectedItem = navParams.get('item');
-    localStorage.test = 'hi'
+    
+    if (navigator.geolocation) {
+      navigator.geolocation.watchPosition((position => {
+        this.local.set('userLat', position.coords.latitude);
+        this.local.set('userLng', position.coords.longitude);
+      }), (error => console.log(error)), {})
+    }
+
     this.testData = [
-      {type: 'bar', huntname: 'Bar Hunt', image: 'img/bar.jpg', icon: 'ios-pint'},
-      {type: 'beach', huntname: 'Beach Hunt', image: 'img/beach.jpg', icon: 'ios-water'},
-      {type: 'brunch', huntname: 'Brunch Hunt', image: 'img/brunch.jpg', icon: 'ios-restaurant'},
-      {type: 'coffee', huntname: 'Coffee Hunt', image: 'img/coffee.jpg', icon: 'cafe'},
-      {type: 'park', huntname: 'Park Hunt', image: 'img/park.jpg', icon: 'leaf'},
-      {type: 'ramen', huntname: 'Ramen Hunt', image: 'img/ramen.jpg', icon: 'ios-egg'}
+      {type: 'Bar', huntname: 'Bar Hunt', image: 'img/bar.jpg', icon: 'ios-pint'},
+      {type: 'Beach', huntname: 'Beach Hunt', image: 'img/beach.jpg', icon: 'ios-water'},
+      {type: 'Brunch', huntname: 'Brunch Hunt', image: 'img/brunch.jpg', icon: 'ios-restaurant'},
+      {type: 'Coffee', huntname: 'Coffee Hunt', image: 'img/coffee.jpg', icon: 'cafe'},
+      {type: 'Park', huntname: 'Park Hunt', image: 'img/park.jpg', icon: 'leaf'},
+      {type: 'Ramen', huntname: 'Ramen Hunt', image: 'img/ramen.jpg', icon: 'ios-egg'}
       ];
 
     this.items = [];
@@ -36,16 +48,20 @@ export class TemplatePage {
   }
 
   itemTapped(event, item) {
-    console.log(item);
-    this.templateService.postData(item.type)
+    console.log('sending item.type... ', item);
+    this.userInfo = localStorage;
+    console.log('sending userInfo... ', this.userInfo);
+    // this.geolocation.longitude = this.userInfo.userLng;
+    // console.log(this.geolocation);
+    this.templateService.postData(item.title, this.userInfo)
       .then(data => {
         this.nav.push(TaskPage, {
           item: data.task
         });
       })
         .catch(error => console.log(error));
-    // this.nav.push(TaskPage, {
-    //   item: item
-    // });
+    this.nav.push(TaskPage, {
+      item: item
+    });
   }
 }
