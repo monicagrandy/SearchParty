@@ -48,8 +48,8 @@ export class LogIn {
               console.log(data);
             }
             this.authSuccess(data.token);
-                  this.nav.push(TemplatePage)
-                  console.log(data.token)
+            this.loadTemplates();
+            console.log('success');
                 },
           err => {
             this.error = err;
@@ -70,7 +70,7 @@ export class LogIn {
           data => {
                    console.log(data.token);
                    this.authSuccess(data.token);
-                   this.nav.push(TemplatePage);
+                   this.loadTemplates();
                  },
           err => this.error = err
         );
@@ -90,7 +90,7 @@ export class LogIn {
   }
 
   loadTemplates() {
-    this.nav.push(TemplatePage)
+    this.nav.setRoot(TemplatePage);
   }
 
 }
