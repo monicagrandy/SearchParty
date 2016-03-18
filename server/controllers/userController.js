@@ -11,6 +11,7 @@ const secret = process.env.JWTSECRET || config.secret;
 
 module.exports = {
   signup: (req, res) => {
+    console.log(req.body);
     // console.log("credentials: ", req.body);
     // var reqBody = req.body.credentials;
     let password = req.body.password;
