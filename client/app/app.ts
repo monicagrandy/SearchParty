@@ -66,16 +66,21 @@ class MyApp {
   }
 
   setPages(){
-    if(this.auth.authenticated()){
-      this.pages = [
+    // if(this.auth.authenticated()){
+    //   this.pages = [
+    //   { title: 'Hunts', component: TemplatePage },
+    //   { title: 'Current Task', component: TaskPage },
+    //   { title: 'Log Out', component: LogIn}
+    //   ];
+    // }
+    // else {[
+    //   { title: 'Log In', component: LogIn }
+    // ]}
+          this.pages = [
       { title: 'Hunts', component: TemplatePage },
       { title: 'Current Task', component: TaskPage },
       { title: 'Log Out', component: LogIn}
       ];
-    }
-    else {[
-      { title: 'Log In', component: LogIn }
-    ]}
   }
 
   openPage(page) {

@@ -18,9 +18,9 @@ const oAuthToken = process.env.OAUTHTOKEN || apiConfig.oAuthToken;
 
 module.exports = {
    yelpAPI: (req, res) => {
-      console.log(req.body)
+      console.log('this is the req.body in apicontroller ', req.body);
       let keyword = req.body.keyword;
-      let geolocation = req.body;
+      let geolocation = req.body.geolocation;
       let method = 'GET';
       let url = 'http://api.yelp.com/v2/search';
 
@@ -49,6 +49,7 @@ module.exports = {
       paramURL = paramURL.replace('%2C', ',');
       let apiURL = url + '?' + paramURL;
       request({url:apiURL, json:true}, (error, response, body) => {
+        console.log('response.body from Yelp ', response.body);
          if(!error && response.statusCode === 200) {
             console.log(':::::::YELP API:::::::');
             let yelpResults = body.businesses;
@@ -67,6 +68,7 @@ module.exports = {
             taskCtrl.getTask(keyword)
               .then(tasks => {
                  console.log('::::::TASKS DB:::::::');
+                 console.log("THESE ARE THE TASKS ", tasks);
                  let taskResults = tasks;
                  let taskList = tasks.map((task) => task.id);
                  let prevTasks = req.body.previousTasks;
@@ -83,8 +85,10 @@ module.exports = {
                  //TODO: Randomize chosen result:
                  //THIS IS HARDCODED AND WILL NEED TO CHANGED LATER CAMERON JEEZ
                  console.log(taskResults[0]);
-               res.json({businesses: yelpResults[0],
-                        tasks: taskResults[0]});
+                 res.json({
+                   businesses: yelpResults[0],
+                   tasks: taskResults[0]
+                  });
               })
                .catch(error => {
                   console.log(error);

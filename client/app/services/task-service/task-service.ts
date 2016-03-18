@@ -6,7 +6,7 @@ import 'rxjs/add/operator/map';
 @Injectable()
 export class TaskService {
   constructor(private _http:Http) {}
-  TASKS_URL: string = "http://localhost:8000/tasks";
+  TASKS_URL: string = process.env.TASKSURL || 'http://localhost:8000/tasks';
 
   postData(data){
     let headers = new Headers();
