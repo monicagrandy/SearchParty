@@ -62,7 +62,7 @@ export class TaskPage {
           .then(result => { 
             this.locName = result.businesses.name;
             this.previousPlaces.push(result.businesses)
-            this.locAddress = result.businesses.location.address;
+            this.locAddress = result.businesses.location.display_address[0] + ', ' + result.businesses.location.display_address[2];
             this.currChallenge = result.tasks.content
             this.previousTasks.push(this.currChallenge)
             this.locLat = result.businesses.location.coordinate.latitude;
