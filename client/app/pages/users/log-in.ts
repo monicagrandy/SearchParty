@@ -81,6 +81,8 @@ export class LogIn {
   logout() {
     //localStorage.id_token = null;
     this.local.remove('id_token');
+    this.local.remove('userLat');
+    this.local.remove('userLng');
     this.user = null;
   }
 
