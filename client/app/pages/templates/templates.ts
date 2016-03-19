@@ -56,12 +56,18 @@ export class TemplatePage {
     this.templateService.postData(item.title, this.userInfo)
       .then(data => {
         this.nav.push(TaskPage, {
-          item: data.task
+          locAddress: data.businesses.location.display_address[0] + ', ' + data.businesses.location.display_address[2],
+          currChallenge: data.tasks.content,
+          locLat: data.businesses.location.coordinate.latitude,
+          locLng: data.businesses.location.coordinate.longitude,
+          locName: data.businesses.name,
+          previousPlaces: [data.businesses],
+          previousTasks: [data.tasks]
         });
       })
         .catch(error => console.log(error));
-    this.nav.push(TaskPage, {
-      item: item
-    });
+    // this.nav.push(TaskPage, {
+    //   item: item
+    // });
   }
 }
