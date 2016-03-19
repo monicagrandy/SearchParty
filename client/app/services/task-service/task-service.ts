@@ -1,16 +1,19 @@
 import {Injectable} from 'angular2/core';
 import {Http, Headers} from 'angular2/http';
-import { ConnectionBackend, HTTP_PROVIDERS } from 'angular2/http';
-import 'rxjs/add/operator/map';
+import 'rxjs/add/operator/map';  // we need to import this now
 
 @Injectable()
 export class TaskService {
   constructor(private _http:Http) {}
-  getData(){
-    console.log("called get req")
-    let httpGetPromise = new Promise((resolve, reject) => {
-      console.log("called get req")
-      this._http.get('/')
+  TASKS_URL: string = process.env.TASKSURL || 'http://localhost:8000/tasks';
+  contentHeader: Headers = new Headers({'Content-Type': 'application/json'});
+  
+   postData(data) {
+    console.log("called post req")
+
+    let httpPromise = new Promise((resolve, reject) => {
+      console.log("inside promise")
+      this._http.post(this.TASKS_URL, data, {headers: this.contentHeader})
         .map(res => res.json())
         .subscribe(
           data => {
@@ -18,58 +21,14 @@ export class TaskService {
             resolve(data)
           },
           err => reject(err),
-          () => console.log('data recieved')
+          () => console.log('data recieved')  
           )
         })
-    return httpGetPromise
-  }
-
-  postData(data){
-    let headers = new Headers();
-    headers.append('Content-Type', 'application/x-www-form-urlencoded');
-    console.log("called get req")
-    let httpGetPromise = new Promise((resolve, reject) => {
-      console.log("called get req")
-      this._http.post('/', data, {headers: headers})
-        .map(res => res.json())
-        .subscribe(
-          data => {
-            console.log("data from promise: ", data)
-            resolve(data)
-          },
-          err => reject(err),
-          () => console.log('data recieved')
-          )
-        })
-    return httpGetPromise
-  }
-}  
-
-
-
-
-// @Injectable()
-// export class MyService {
-//   constructor(private _http:Http) {}
-//   getData(data) {
-//     let headers = new Headers();
-//     headers.append('Content-Type', 'application/x-www-form-urlencoded');
-//     console.log("called post req")
-
-//     let httpPromise = new Promise((resolve, reject) => {
-//       console.log("inside promise")
-//       this._http.post('/api', data, {headers: headers})
-//         .map(res => res.json())
-//         .subscribe(
-//           data => {
-//             console.log("data from promise: ", data)
-//             resolve(data)
-//           },
-//           err => reject(err),
-//           () => console.log('data recieved')  
-//           )
-//         })
     
-//     return httpPromise
-//   }
-// }
+    return httpPromise
+  }
+}
+
+
+}
+

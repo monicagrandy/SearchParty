@@ -12,9 +12,11 @@
       <ion-item>
         <!--set to local storage from server response-->
         <!--place name -->
-        <h2>Location Name</h2> 
+        <h2>{{locName}}</h2> 
         <!--place address-->
-        <h2>Location Address</h2> 
+        <h2>{{locAddress}}</h2>
+        <!-- <ion-item class="item-text-wrap" *ngIf="locAddress" target="_blank" src="https://www.google.com/maps/dir/{{locLat + ',' + locLong}}/{{locAddress}}">{{locAddress}}
+        </ion-item> -->
       </ion-item>
       <!-- put google map here -->
       <div id="map"></div>
@@ -23,11 +25,11 @@
       <ion-icon subtle large item-left name='ios-pint'></ion-icon>
       <!---challenge-->
       <h3>Current challenge</h3>
-      <p>challenge info goes here</p> 
+      <p>{{currChallenge}}</p> 
     </ion-item>
     <ion-item>
       <ion-label>Mark Complete</ion-label>
-      <ion-checkbox secondary checked="false" (click)="markComplete()"></ion-checkbox>
+      <ion-checkbox secondary [checked]="completeToggle" (click)="markComplete()"></ion-checkbox>
     </ion-item>
     <button primary clear item-right *ngIf="completeToggle" (click)="getNewTask()">  
       Next Task

@@ -10,7 +10,7 @@
   <ion-card class="adv-map" *ngFor="#item of items" (click)="itemTapped($event, item)">
     <div style="position: relative">
       <img src="{{item.image}}">
-      <button fab fab-right fab-top class="fab-map" (click)="itemTapped($event, item)">
+      <button fab fab-right fab-top class="fab-map">
         <ion-icon name='search'></ion-icon>
       </button>
     </div>
@@ -21,7 +21,7 @@
     <ion-item actions>
       <span item-left secondary class="item-bold">18 min</span>
       <span item-left subtle>(2.6 mi)</span>
-      <button primary clear item-right (click)="itemTapped($event, item)">
+      <button primary clear item-right>
         <ion-icon name='navigate'></ion-icon>
         Start
       </button>

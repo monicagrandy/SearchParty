@@ -1,8 +1,6 @@
 import {Page, NavController, NavParams, LocalStorage} from 'ionic-angular';
-//import {Geolocation} from 'ionic-framework/ionic';
 import {TaskService} from '../../services/task-service/task-service';
-import {Http, Headers, ConnectionBackend, HTTP_PROVIDERS } from 'angular2/http';
-//import {LogIn} from '../users/log-in';
+import { ConnectionBackend, HTTP_PROVIDERS } from 'angular2/http';
 import 'rxjs/add/operator/map';
 
 
@@ -11,107 +9,95 @@ import 'rxjs/add/operator/map';
   providers: [
     ConnectionBackend,
     HTTP_PROVIDERS,
-    TaskService,
-    //LogIn
+    TaskService
   ]
 })
 
 export class TaskPage {
   title = 'Current Task'
-  map = null
-  selectedItem: any;
-  locAddress: any;
-  locChallenge: any;
-  locLat: number;
-  locLng: number;
-  locName: any;
-  completeToggle = false
-  tasks = ['bar', 'restaurant', 'bar', 'restaurant']
-  //maybe store all previous location names
-  constructor(private nav: NavController, navParams: NavParams, private taskService: TaskService) {
+  map = null;
+  local: LocalStorage
+  locAddress: string; //set this to whatever is in local storage
+  currChallenge: string;
+  //locChallenge = "Buy a stranger a shot"; //set this to whatever is in local storage
+  locLat: any; //set this to whatever is in local storage
+  locLng: any; //set this to whatever is in local storage
+  locName: string; //set this to whatever is in local storage
+  completeToggle = false;
+  keywords = ['Bar', 'Bar', 'Bar', 'Bar', 'Bar', 'Bar','Bar','Bar', 'Bar', 'Bar'];
+  previousPlaces: any;
+  previousTasks: any;
+  
+  constructor(private nav: NavController, navParams: NavParams, private _taskService: TaskService) {
     // If we navigated to this page, we will have an item available as a nav param
-    this.selectedItem = navParams.get('item');
-    this.loadMap();
+    //this.map = null;
+    this.locAddress = navParams.get('locAddress');
+    this.currChallenge = navParams.get('currChallenge');
+    this.locLat = navParams.get('locLat');
+    this.locLng = navParams.get('locLng');
+    this.locName = navParams.get('locName');
+    this.previousPlaces = navParams.get('previousPlaces');
+    this.previousTasks = navParams.get('previousTasks');
+    setTimeout(()=>{ this.loadMap(this.locLat, this.locLng), 1000 })
   }
-
-  //store location address
-  //store location map
-  //store challenge
-
-  //this should be triggered on when a template is submitted and whenever the next button is pushed
-  showTask(){
-    this.taskService.getData()
-      .then(result => {
-        this.locAddress = result.address
-        this.locChallenge = result.challenge
-        this.locName = result.name
-        this.locLat = result.lat
-        this.locLng = result.lng
-        //add map
-      }) 
-   }
 
   //this should be triggered when the next button is pushed
   getNewTask(){
     console.log("getting ready to send new task!")
+      //move this down to success callback later
       //this.logIn.local.set('userLng', position.coords.longitude)
-      console.log(this.tasks)     
-      if(this.tasks.length > 0){
-        let keyword = this.tasks.pop()
-        console.log(keyword)
-        //send the server a new keyword and the most recent geolocation of user
+      console.log(this.keywords)     
+      if(this.keywords.length > 0){
+        let keyword = this.keywords.shift()
         let dataObj = {
-          name: this.locName,
+          previousPlaces: this.previousPlaces,
+          previousTasks: this.previousTasks,
           keyword: keyword,
-          lat: this.locLat,
-          lng: this.locLng
+          geolocation: {
+            lat: this.locLat,
+            lng: this.locLng
+          }
         }
-        this.taskService.postData(keyword)
-          .then(result => {
-          //this is the data we get back from the server  
-          this.locName = result.name;
-          this.locAddress = result.address;
-          this.locChallenge = result.challenge;
-          this.locLat = result.lat;
-          this.locLng = result.lng;
-          this.markComplete();
-          this.loadMap();
-        })
-      }
+        this._taskService.postData(JSON.stringify(dataObj))
+          .then(result => { 
+            this.locName = result.businesses.name;
+            this.previousPlaces.push(result.businesses)
+            this.locAddress = result.businesses.location.display_address[0] + ', ' + result.businesses.location.display_address[2];
+            this.currChallenge = result.tasks.content
+            this.previousTasks.push(this.currChallenge)
+            this.locLat = result.businesses.location.coordinate.latitude;
+            this.locLng = result.businesses.location.coordinate.longitude;
+            this.markComplete();
+            this.loadMap(this.locLat, this.locLng);
+          })
+        }
       else {
         console.log("no more tasks!")
     } 
   }
 
-  loadMap(){
-    navigator.geolocation.getCurrentPosition(position => {
-      //access local storage from log-in
-      this.locLat = position.coords.latitude
-      this.locLng = position.coords.longitude
-      let options = { timeout: 10000, enableHighAccuracy: true}
-      let latLng = new google.maps.LatLng(this.locLat, this.locLng);
-      let mapOptions = {
-        center: latLng,
-        zoom: 15,
-        mapTypeId: google.maps.MapTypeId.ROADMAP
-      }
-      this.map = new google.maps.Map(document.getElementById('map'), mapOptions)
-      let pin = new google.maps.Marker({
-        map: this.map,
-        animation: google.maps.Animation.DROP,
-        position: latLng
-      });
-      let info = `
-          <h4>Location Name</h4>
-          <p>Location Address</p>
-        `
-      this.addInfoWindow(pin, info)  
-    })
-  }
+
+  loadMap(lat, long){
+    let options = { timeout: 10000, enableHighAccuracy: true }
+    let latLng = new google.maps.LatLng(lat, long);
+    let mapOptions = {
+      center: latLng,
+      zoom: 15,
+      mapTypeId: google.maps.MapTypeId.ROADMAP
+    }
+    this.map = new google.maps.Map(document.getElementById('map'), mapOptions)
+    let pin = new google.maps.Marker({
+      map: this.map,
+      animation: google.maps.Animation.DROP,
+      position: latLng
+    });
+    let info = '<h4>' + this.locName + '</h4><p>' + this.locAddress + '</p>'
+      
+    this.addInfoWindow(pin, info)  
+  }  
 
   addInfoWindow(marker, content){
-    console.log('addInfoWindow is called! ', marker, content);
-
+    console.log(content);
     let infoWindow = new google.maps.InfoWindow({
       content: content
     });

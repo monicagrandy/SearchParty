@@ -2,6 +2,7 @@ import {App, IonicApp, Platform, MenuController} from 'ionic-angular';
 import {Http} from 'angular2/http';
 import {provide} from 'angular2/core';
 import {AuthHttp, AuthConfig} from 'angular2-jwt';
+import {AuthService} from './services/auth/auth-service';
 import {LogIn} from './pages/users/log-in';
 import {TemplatePage} from './pages/templates/templates';
 import {TaskPage} from './pages/tasks/tasks';
@@ -20,11 +21,12 @@ import * as _ from 'underscore';
     })
   ]
 })
-class MyApp {
+export class MyApp {
   // make HelloIonicPage the root (or first) page
   rootPage: any = LogIn;
   pages: Array<{title: string, component: any}>;
-
+  auth: AuthService;
+  logout: LogIn;
   constructor(
     private app: IonicApp,
     private platform: Platform,
@@ -32,17 +34,21 @@ class MyApp {
   ) {
     this.initializeApp();
 
+    this.auth = AuthService
+
     //set our app's pages
+    
     this.pages = [
-      { title: 'Log In', component: LogIn },
       { title: 'Hunts', component: TemplatePage },
       { title: 'Current Task', component: TaskPage },
       { title: 'Log Out', component: LogIn}
     ];
+
   }
 
   initializeApp() {
     this.platform.ready().then(() => {
+    
       // The platform is now ready. Note: if this callback fails to fire, follow
       // the Troubleshooting guide for a number of possible solutions:
       //
@@ -60,9 +66,14 @@ class MyApp {
     });
   }
 
+
   openPage(page) {
     // close the menu when clicking a link from the menu
     this.menu.close();
+    //this.setPages();
+    if(page.title === 'Log Out'){
+      localStorage.removeItem('id_token'); 
+    }
     // navigate to the new page if it is not the current page
     let nav = this.app.getComponent('nav');
     nav.setRoot(page.component);

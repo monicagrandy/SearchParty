@@ -2,11 +2,16 @@
 const jwt = require('jwt-simple');
 const bcrypt = require('bcrypt-nodejs');
 const neo = require('../db/neo.js');
-const config = require('../db/config/config.js');
 const shortid = require('shortid');
+if(!process.env.JWTSECRET) {
+  var config = require('../db/config/config.js');
+}
+
+const secret = process.env.JWTSECRET || config.secret;
 
 module.exports = {
   signup: (req, res) => {
+    console.log(req.body);
     // console.log("credentials: ", req.body);
     // var reqBody = req.body.credentials;
     let password = req.body.password;
@@ -40,7 +45,7 @@ module.exports = {
       neo.runCypherStatementPromise(createUserQuery, userProperties)
       .then((data) => {
         var data = data[0];
-        let token = jwt.encode({username: data.username}, config.secret);
+        let token = jwt.encode({username: data.username}, secret);
         res.send({token: token});
       })
     }).catch((error) => {
@@ -68,7 +73,7 @@ module.exports = {
             //if it is the correct password
             if(result) {
               //assign a token and send back that token
-              let token = jwt.encode({username: userObject.username}, config.secret);
+              let token = jwt.encode({username: userObject.username}, secret);
               return resolve({token:token});
               //if it is not the correct password
             } else {

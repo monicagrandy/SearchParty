@@ -1,18 +1,24 @@
 import {Injectable} from 'angular2/core';
+import {LocalStorage} from 'ionic-angular';
 import {Http, Headers} from 'angular2/http';
 import {ConnectionBackend, HTTP_PROVIDERS} from 'angular2/http';
 import 'rxjs/add/operator/map';
 
 @Injectable()
 export class TemplateService {
-  constructor(private _http:Http) {}
+  TEMPLATES_URL: string = process.env.TEMPLATESURL || 'http://localhost:8000/templates'; //update this later
+  TASKS_URL: string = process.env.TASKSURL || 'http://localhost:8000/tasks';
+  keyword: string;
+  contentHeader: Headers = new Headers({'Content-Type': 'application/json'});
   
+  constructor(private _http:Http) {}
+
   // future use function
   getData() {
     console.log('called get req');
     let httpGetPromise = new Promise((resolve, reject) => {
       console.log('inside get promise');
-      this._http.get('/templates')
+      this._http.get(this.TEMPLATES_URL)
         .map(res => res.json())
         .subscribe(
           data => {
@@ -29,13 +35,25 @@ export class TemplateService {
     return httpGetPromise;
   }
 
-  postData(data) {
-    let headers = new Headers();
-    headers.append('Content-Type', 'application/x-www-form-urlencoded');
+  postData(data, userInfo) {
     console.log('called post req');
     let httpGetPromise = new Promise((resolve, reject) => {
       console.log('inside post promise');
-      this._http.post('/tasks', data, {headers: headers})
+      console.log('THIS IS THE DATA shold be keyword', data)
+      console.log("THIS IS THE USER LOCATION IN TEMPLATE SERVICE ", userInfo);
+      
+      let dataToSend = {
+        keyword: data,
+        geolocation:  {
+          lat: userInfo.userLat,
+          lng: userInfo.userLng
+        },
+        previousPlaces: [],
+        previousTasks: []
+      };
+      
+      console.log("THIS IS THE COMBO DATA BEFORE SENT ", dataToSend);
+      this._http.post(this.TASKS_URL, JSON.stringify(dataToSend), {headers: this.contentHeader})
         .map(res => res.json())
         .subscribe(
           data => {

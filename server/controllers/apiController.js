@@ -2,21 +2,27 @@
 
 const oauth = require('oauth');
 const oauthSig = require('oauth-signature');
-const apiConfig = require('../db/config/config.js');
 const request = require('request');
 const qs = require('querystring');
 const taskCtrl = require('./taskController.js');
 //Other users will have to go into the config/config.js and insert their own
 //credentials to access the Yelp API.
+if(!process.env.OAUTHTOKEN) {
+  var apiConfig = require('../db/config/config.js');
+}
+
+const consumerSecret = process.env.YELPCONSUMERSECRET || apiConfig.yelpConsumerSecret;
+const tokenSecret = process.env.YELPTOKENSECRET || apiConfig.yelpTokenSecret;
+const oAuthConsumerKey = process.env.OAUTHCONSUMERKEY || apiConfig.oAuthConsumerKey;
+const oAuthToken = process.env.OAUTHTOKEN || apiConfig.oAuthToken;
 
 module.exports = {
    yelpAPI: (req, res) => {
+      console.log("inside yelpAPIcontroller: ", req.body)
       let keyword = req.body.keyword;
       let geolocation = req.body.geolocation;
       let method = 'GET';
       let url = 'http://api.yelp.com/v2/search';
-      let consumerSecret = "Z1qCGN-gHzLjwkcSYfwlYJG1t_E";
-      let tokenSecret = "oaGzxknyDi80Cu_rSJlDWR1BwSs";
 
       const randomString = (length, chars) => {
          let randStr = '';
@@ -29,9 +35,9 @@ module.exports = {
       let oauth = {
          term: keyword,
          limit: 10,
-         ll: `${geolocation.latitude},${geolocation.longitude}`,
-         oauth_consumer_key: "AgSeqsEmmShlC46CY65RrA",
-         oauth_token: "AnJaHtuYvW22lW_u-K_fMx666UzBO_FF",
+         ll: `${geolocation.lat},${geolocation.lng}`,
+         oauth_consumer_key: oAuthConsumerKey,
+         oauth_token: oAuthToken,
          oauth_signature_method: "HMAC-SHA1",
          oauth_timestamp: new Date().getTime(),
          oauth_nonce: randomString(32, '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ'),
@@ -43,6 +49,7 @@ module.exports = {
       paramURL = paramURL.replace('%2C', ',');
       let apiURL = url + '?' + paramURL;
       request({url:apiURL, json:true}, (error, response, body) => {
+        console.log('response.body from Yelp ', response.body);
          if(!error && response.statusCode === 200) {
             console.log(':::::::YELP API:::::::');
             let yelpResults = body.businesses;
@@ -61,6 +68,7 @@ module.exports = {
             taskCtrl.getTask(keyword)
               .then(tasks => {
                  console.log('::::::TASKS DB:::::::');
+                 console.log("THESE ARE THE TASKS ", tasks);
                  let taskResults = tasks;
                  let taskList = tasks.map((task) => task.id);
                  let prevTasks = req.body.previousTasks;
@@ -77,8 +85,10 @@ module.exports = {
                  //TODO: Randomize chosen result:
                  //THIS IS HARDCODED AND WILL NEED TO CHANGED LATER CAMERON JEEZ
                  console.log(taskResults[0]);
-               res.json({businesses: yelpResults[0],
-                        tasks: taskResults[0]});
+                 res.json({
+                   businesses: yelpResults[0],
+                   tasks: taskResults[0]
+                  });
               })
                .catch(error => {
                   console.log(error);

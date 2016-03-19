@@ -4,7 +4,8 @@
   "description": "Party is the search.",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "postinstall": "bash ./post_install.sh"
   },
   "repository": {
     "type": "git",
