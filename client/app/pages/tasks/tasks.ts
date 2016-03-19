@@ -17,22 +17,27 @@ export class TaskPage {
   title = 'Current Task'
   map = null;
   local: LocalStorage
-  selectedItem: any; 
-  locAddress = '1240 3rd Street Promenade, Santa Monica, CA 90401'; //set this to whatever is in local storage
-  currChallenge = 'Buy a stranger a shot';
+  locAddress: string; //set this to whatever is in local storage
+  currChallenge: string;
   //locChallenge = "Buy a stranger a shot"; //set this to whatever is in local storage
-  locLat = 34.0173550; //set this to whatever is in local storage
-  locLng = -118.4984360; //set this to whatever is in local storage
-  locName = "Cabo Cantina" //set this to whatever is in local storage
+  locLat: any; //set this to whatever is in local storage
+  locLng: any; //set this to whatever is in local storage
+  locName: string; //set this to whatever is in local storage
   completeToggle = false;
-  tasks = ['Bar', 'dive-bars', 'sports-bars', 'lounge', 'fast-food'];
-  previousPlaces = [];
-  previousTasks = [];
+  keywords = ['Bar', 'Bar', 'Bar', 'Bar', 'Bar', 'Bar','Bar','Bar', 'Bar', 'Bar'];
+  previousPlaces: any;
+  previousTasks: any;
   
   constructor(private nav: NavController, navParams: NavParams, private _taskService: TaskService) {
     // If we navigated to this page, we will have an item available as a nav param
     //this.map = null;
-    this.selectedItem = navParams.get('item');
+    this.locAddress = navParams.get('locAddress');
+    this.currChallenge = navParams.get('currChallenge');
+    this.locLat = navParams.get('locLat');
+    this.locLng = navParams.get('locLng');
+    this.locName = navParams.get('locName');
+    this.previousPlaces = navParams.get('previousPlaces');
+    this.previousTasks = navParams.get('previousTasks');
     setTimeout(()=>{ this.loadMap(this.locLat, this.locLng), 1000 })
   }
 
@@ -41,19 +46,9 @@ export class TaskPage {
     console.log("getting ready to send new task!")
       //move this down to success callback later
       //this.logIn.local.set('userLng', position.coords.longitude)
-      console.log(this.tasks)     
-      if(this.tasks.length > 0){
-        let keyword = this.tasks.shift()
-        // console.log(this.tasks)
-        // this.locName = "Britania Pub";
-        // this.locAddress = "318 Santa Monica Blvd, Santa Monica, CA 90401";
-        // this.currChallenge = "Do a car bomb!"
-        // this.locLat = 34.015914;
-        // this.locLng = -118.4953900;
-        // this.markComplete();
-        // this.loadMap(this.locLat, this.locLng);
-        // console.log(keyword)
-        //send the server a new keyword and the most recent geolocation of user
+      console.log(this.keywords)     
+      if(this.keywords.length > 0){
+        let keyword = this.keywords.shift()
         let dataObj = {
           previousPlaces: this.previousPlaces,
           previousTasks: this.previousTasks,
@@ -63,19 +58,15 @@ export class TaskPage {
             lng: this.locLng
           }
         }
-        console.log("reg data: ", dataObj)
-        console.log("stringified data: ", JSON.stringify(dataObj))
-        // let dataStr = "previousPlaces=" + this.previousPlaces + "&keyword=" + keyword + "&lat=" + this.locLat + "&lng=" + this.locLng
-          this._taskService.postData(JSON.stringify(dataObj))
-            .then(result => {
-            //this is the data we get back from the server  
+        this._taskService.postData(JSON.stringify(dataObj))
+          .then(result => { 
             this.locName = result.businesses.name;
-            this.previousPlaces.push(this.locName)
+            this.previousPlaces.push(result.businesses)
             this.locAddress = result.businesses.location.address;
             this.currChallenge = result.tasks.content
             this.previousTasks.push(this.currChallenge)
-            this.locLat = result.businesses.coordinate.latitude;
-            this.locLng = result.businesses.coordinate.latitude;
+            this.locLat = result.businesses.location.coordinate.latitude;
+            this.locLng = result.businesses.location.coordinate.longitude;
             this.markComplete();
             this.loadMap(this.locLat, this.locLng);
           })

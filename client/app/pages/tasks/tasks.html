@@ -14,7 +14,9 @@
         <!--place name -->
         <h2>{{locName}}</h2> 
         <!--place address-->
-        <h2>{{locAddress}}</h2> 
+        <h2>{{locAddress}}</h2>
+        <!-- <ion-item class="item-text-wrap" *ngIf="locAddress" target="_blank" src="https://www.google.com/maps/dir/{{locLat + ',' + locLong}}/{{locAddress}}">{{locAddress}}
+        </ion-item> -->
       </ion-item>
       <!-- put google map here -->
       <div id="map"></div>
