@@ -5,6 +5,7 @@ import {Http, Headers} from 'angular2/http';
 import {FORM_DIRECTIVES} from 'angular2/common';
 import {JwtHelper} from 'angular2-jwt';
 import {AuthService} from '../../services/auth/auth-service';
+//import {MyApp} from '../../app'
 import 'rxjs/add/operator/map';
 
 @Page({
@@ -34,8 +35,16 @@ export class LogIn {
     }
   }
 
+  getCoords(){
+    navigator.geolocation.getCurrentPosition(position => {
+      localStorage.userLat = position.coords.latitude;
+      localStorage.userLng = position.coords.longitude;
+    })
+  }
+
   login(credentials) {
     console.log(credentials);
+    console.log(JSON.stringify(credentials))
       this.http.post(this.LOGIN_URL, JSON.stringify(credentials), { headers: this.contentHeader })
         .map(res => res.json())
         .subscribe(
@@ -44,6 +53,7 @@ export class LogIn {
               console.log(data);
             }
             this.authSuccess(data.token);
+            this.getCoords();
             this.loadTemplates();
             console.log('success');
                 },
@@ -61,6 +71,7 @@ export class LogIn {
           data => {
                    console.log(data.token);
                    this.authSuccess(data.token);
+                   this.getCoords();
                    this.loadTemplates();
                  },
           err => this.error = err

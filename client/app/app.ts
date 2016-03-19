@@ -21,7 +21,7 @@ import * as _ from 'underscore';
     })
   ]
 })
-class MyApp {
+export class MyApp {
   // make HelloIonicPage the root (or first) page
   rootPage: any = LogIn;
   pages: Array<{title: string, component: any}>;
@@ -36,18 +36,19 @@ class MyApp {
 
     this.auth = AuthService
 
-    this.setPages()
     //set our app's pages
-    // this.pages = [
-    //   { title: 'Log In', component: LogIn },
-    //   { title: 'Hunts', component: TemplatePage },
-    //   { title: 'Current Task', component: TaskPage },
-    //   { title: 'Log Out', component: LogIn}
-    // ];
+    
+    this.pages = [
+      { title: 'Hunts', component: TemplatePage },
+      { title: 'Current Task', component: TaskPage },
+      { title: 'Log Out', component: LogIn}
+    ];
+
   }
 
   initializeApp() {
     this.platform.ready().then(() => {
+    
       // The platform is now ready. Note: if this callback fails to fire, follow
       // the Troubleshooting guide for a number of possible solutions:
       //
@@ -65,27 +66,11 @@ class MyApp {
     });
   }
 
-  setPages(){
-    // if(this.auth.authenticated()){
-    //   this.pages = [
-    //   { title: 'Hunts', component: TemplatePage },
-    //   { title: 'Current Task', component: TaskPage },
-    //   { title: 'Log Out', component: LogIn}
-    //   ];
-    // }
-    // else {[
-    //   { title: 'Log In', component: LogIn }
-    // ]}
-          this.pages = [
-      { title: 'Hunts', component: TemplatePage },
-      { title: 'Current Task', component: TaskPage },
-      { title: 'Log Out', component: LogIn}
-      ];
-  }
 
   openPage(page) {
     // close the menu when clicking a link from the menu
     this.menu.close();
+    //this.setPages();
     if(page.title === 'Log Out'){
       localStorage.removeItem('id_token'); 
     }
