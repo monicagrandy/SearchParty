@@ -48,23 +48,22 @@ module.exports = {
       let paramURL = qs.stringify(oauth);
       paramURL = paramURL.replace('%2C', ',');
       let apiURL = url + '?' + paramURL;
+
+
       request({url:apiURL, json:true}, (error, response, body) => {
-        console.log('response.body from Yelp ', response.body);
          if(!error && response.statusCode === 200) {
-            console.log(':::::::YELP API:::::::');
+            console.log('_____________YELP API________________');
             let yelpResults = body.businesses;
             let yelpNames = (body.businesses).map((business) => business.name);
             let prevList = req.body.previousPlaces;
-            console.log('yelpNames: ', yelpNames);
-            console.log('prevList: ', prevList);
-            for(let i in yelpNames) {
-               if(prevList.indexOf(yelpNames[i]) !== -1) {
-                  console.log('::DUPLICATED DETECTED:: ' + yelpNames[i]);
-                  yelpResults.splice(i, 1);
-                  yelpNames.splice(i, 1);
+            for(let i in prevList) {
+               if(yelpNames.indexOf(prevList[i].name) !== -1) {
+                  console.log(':::::::::DUPLICATED DETECTED::::::::: ' + prevList[i].name);
+                  yelpResults.splice(0, 1);
+                  yelpNames.splice(0, 1);
                }
             }
-            console.log('Yelp Filtered: ', yelpNames);
+            // console.log('Yelp Filtered: ', yelpNames);
             taskCtrl.getTask(keyword)
               .then(tasks => {
                  console.log('::::::TASKS DB:::::::');
