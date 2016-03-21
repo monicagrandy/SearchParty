@@ -36,6 +36,10 @@
             <button block type="submit">Login</button>
           </div>
 
+          <!-- <div padding>
+            <p *ngIf="error" class="error">Invalid credentials, please try again</p>
+          </div> -->
+
         </form>
 
         <form *ngSwitchWhen="'signup'" #signupCreds="ngForm" (ngSubmit)="signup(signupCreds.value)">
@@ -77,16 +81,17 @@
             <button block type="submit">Signup</button>
           </div>
 
+          <!-- <div padding>
+            <p *ngIf="error" class="error">User already exists! Please try again</p>
+          </div> -->
+
         </form>
       </div>
 
       <div padding>
-        <p *ngIf="error" class="error">{{ error._body }}</p>
+        <p *ngIf="error" class="error">Please try again</p>
       </div>
 
   </ion-content>
 
-  <!-- <ion-content>
-    <div *ngIf="auth.authenticated()">
-
-  </ion-content> -->
+  
