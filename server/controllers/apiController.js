@@ -57,10 +57,11 @@ module.exports = {
             let yelpNames = (body.businesses).map((business) => business.name);
             let prevList = req.body.previousPlaces;
             for(let i in prevList) {
-               if(yelpNames.indexOf(prevList[i].name) !== -1) {
+               var nameFound = yelpNames.indexOf(prevList[i].name);
+               if(nameFound !== -1) {
                   console.log(':::::::::DUPLICATED DETECTED::::::::: ' + prevList[i].name);
-                  yelpResults.splice(0, 1);
-                  yelpNames.splice(0, 1);
+                  yelpResults.splice(nameFound, 1);
+                  yelpNames.splice(nameFound, 1);
                }
             }
             // console.log('Yelp Filtered: ', yelpNames);
