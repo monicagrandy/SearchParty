@@ -5,6 +5,7 @@ import {Http, Headers} from 'angular2/http';
 import {FORM_DIRECTIVES} from 'angular2/common';
 import {JwtHelper} from 'angular2-jwt';
 import {AuthService} from '../../services/auth/auth-service';
+//import {MyApp} from '../../app'
 import 'rxjs/add/operator/map';
 
 @Page({
@@ -15,8 +16,7 @@ import 'rxjs/add/operator/map';
 export class LogIn {
   LOGIN_URL: string = process.env.SIGNINURL || 'http://localhost:8000/signin'; //update this later
   SIGNUP_URL: string = process.env.SIGNUPURL || 'http://localhost:8000/signup';
-  userLat: any;
-  userLng: any;
+
   auth: AuthService;
   // When the page loads, we want the Login segment to be selected
   authType: string = 'login';
@@ -30,16 +30,22 @@ export class LogIn {
   constructor(private http: Http, private nav: NavController, navParams: NavParams) {
     this.auth = AuthService;
     let token = this.local.get('id_token')._result;
+    //let token = sessionStorage.id_token
     if(token) {
       this.user = this.jwtHelper.decodeToken(token).username;
     }
   }
 
+  getCoords(){
+    navigator.geolocation.getCurrentPosition(position => {
+      localStorage.userLat = position.coords.latitude;
+      localStorage.userLng = position.coords.longitude;
+    })
+  }
+
   login(credentials) {
     console.log(credentials);
-    navigator.geolocation.getCurrentPosition(position => {
-      this.local.set('userLat', position.coords.latitude)
-      this.local.set('userLng', position.coords.longitude)
+    console.log(JSON.stringify(credentials))
       this.http.post(this.LOGIN_URL, JSON.stringify(credentials), { headers: this.contentHeader })
         .map(res => res.json())
         .subscribe(
@@ -48,6 +54,7 @@ export class LogIn {
               console.log(data);
             }
             this.authSuccess(data.token);
+            this.getCoords();
             this.loadTemplates();
             console.log('success');
                 },
@@ -56,34 +63,33 @@ export class LogIn {
             console.log(this.error);
           }
         );
-    })
-  }
+    }
 
   signup(credentials) {
-    navigator.geolocation.getCurrentPosition(position => {
-      console.log(credentials)
-      this.local.set('userLat', position.coords.latitude)
-      this.local.set('userLng', position.coords.longitude)
-      this.http.post(this.SIGNUP_URL, JSON.stringify(credentials), { headers: this.contentHeader })
+     this.http.post(this.SIGNUP_URL, JSON.stringify(credentials), { headers: this.contentHeader })
         .map(res => res.json())
         .subscribe(
           data => {
                    console.log(data.token);
                    this.authSuccess(data.token);
+                   this.getCoords();
                    this.loadTemplates();
                  },
           err => this.error = err
         );
-      })
     }
 
   logout() {
+    //localStorage.id_token = null;
     this.local.remove('id_token');
+    this.local.remove('userLat');
+    this.local.remove('userLng');
     this.user = null;
   }
 
   authSuccess(token) {
     this.error = null;
+    //localStorage.id_token = token
     this.local.set('id_token', token);
     this.user = this.jwtHelper.decodeToken(token).username;
     console.log(this.user);

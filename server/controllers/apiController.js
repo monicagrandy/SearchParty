@@ -18,6 +18,7 @@ const oAuthToken = process.env.OAUTHTOKEN || apiConfig.oAuthToken;
 
 module.exports = {
    yelpAPI: (req, res) => {
+      console.log("inside yelpAPIcontroller: ", req.body)
       let keyword = req.body.keyword;
       let geolocation = req.body.geolocation;
       let method = 'GET';
@@ -34,7 +35,7 @@ module.exports = {
       let oauth = {
          term: keyword,
          limit: 10,
-         ll: `${geolocation.latitude},${geolocation.longitude}`,
+         ll: `${geolocation.lat},${geolocation.lng}`,
          oauth_consumer_key: oAuthConsumerKey,
          oauth_token: oAuthToken,
          oauth_signature_method: "HMAC-SHA1",
@@ -47,25 +48,27 @@ module.exports = {
       let paramURL = qs.stringify(oauth);
       paramURL = paramURL.replace('%2C', ',');
       let apiURL = url + '?' + paramURL;
+
+
       request({url:apiURL, json:true}, (error, response, body) => {
          if(!error && response.statusCode === 200) {
-            console.log(':::::::YELP API:::::::');
+            console.log('_____________YELP API________________');
             let yelpResults = body.businesses;
             let yelpNames = (body.businesses).map((business) => business.name);
             let prevList = req.body.previousPlaces;
-            console.log('yelpNames: ', yelpNames);
-            console.log('prevList: ', prevList);
-            for(let i in yelpNames) {
-               if(prevList.indexOf(yelpNames[i]) !== -1) {
-                  console.log('::DUPLICATED DETECTED:: ' + yelpNames[i]);
-                  yelpResults.splice(i, 1);
-                  yelpNames.splice(i, 1);
+            for(let i in prevList) {
+               var nameFound = yelpNames.indexOf(prevList[i].name);
+               if(nameFound !== -1) {
+                  console.log(':::::::::DUPLICATED DETECTED::::::::: ' + prevList[i].name);
+                  yelpResults.splice(nameFound, 1);
+                  yelpNames.splice(nameFound, 1);
                }
             }
-            console.log('Yelp Filtered: ', yelpNames);
+            // console.log('Yelp Filtered: ', yelpNames);
             taskCtrl.getTask(keyword)
               .then(tasks => {
                  console.log('::::::TASKS DB:::::::');
+                 console.log("THESE ARE THE TASKS ", tasks);
                  let taskResults = tasks;
                  let taskList = tasks.map((task) => task.id);
                  let prevTasks = req.body.previousTasks;
@@ -82,8 +85,10 @@ module.exports = {
                  //TODO: Randomize chosen result:
                  //THIS IS HARDCODED AND WILL NEED TO CHANGED LATER CAMERON JEEZ
                  console.log(taskResults[0]);
-               res.json({businesses: yelpResults[0],
-                        tasks: taskResults[0]});
+                 res.json({
+                   businesses: yelpResults[0],
+                   tasks: taskResults[0]
+                  });
               })
                .catch(error => {
                   console.log(error);
