@@ -27,7 +27,7 @@ export class TaskPage {
   keywords = ['Bar', 'Bar', 'Bar', 'Bar', 'Bar', 'Bar','Bar','Bar', 'Bar', 'Bar'];
   previousPlaces: any;
   previousTasks: any;
-  
+
   constructor(private nav: NavController, navParams: NavParams, private _taskService: TaskService) {
     // If we navigated to this page, we will have an item available as a nav param
     //this.map = null;
@@ -46,7 +46,7 @@ export class TaskPage {
     console.log("getting ready to send new task!")
       //move this down to success callback later
       //this.logIn.local.set('userLng', position.coords.longitude)
-      console.log(this.keywords)     
+      console.log(this.keywords)
       if(this.keywords.length > 0){
         let keyword = this.keywords.shift()
         let dataObj = {
@@ -59,7 +59,7 @@ export class TaskPage {
           }
         }
         this._taskService.postData(JSON.stringify(dataObj))
-          .then(result => { 
+          .then(result => {
             this.locName = result.businesses.name;
             this.previousPlaces.push(result.businesses)
             this.locAddress = result.businesses.location.display_address[0] + ', ' + result.businesses.location.display_address[2];
@@ -73,7 +73,7 @@ export class TaskPage {
         }
       else {
         console.log("no more tasks!")
-    } 
+    }
   }
 
 
@@ -92,9 +92,9 @@ export class TaskPage {
       position: latLng
     });
     let info = '<h4>' + this.locName + '</h4><p>' + this.locAddress + '</p>'
-      
-    this.addInfoWindow(pin, info)  
-  }  
+
+    this.addInfoWindow(pin, info)
+  }
 
   addInfoWindow(marker, content){
     console.log(content);
@@ -105,7 +105,7 @@ export class TaskPage {
     google.maps.event.addListener(marker, 'click', function(){
       infoWindow.open(this.map, marker);
     });
-  }  
+  }
 
   //use this to check if user is allowed to move on to the next task
   markComplete(){
@@ -118,5 +118,5 @@ export class TaskPage {
     }
     return this.completeToggle
   }
-  
+
 }

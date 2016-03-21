@@ -57,38 +57,38 @@ module.exports = {
             let yelpNames = (body.businesses).map((business) => business.name);
             let prevList = req.body.previousPlaces;
             for(let i in prevList) {
-               var nameFound = yelpNames.indexOf(prevList[i].name);
+               let nameFound = yelpNames.indexOf(prevList[i].name);
                if(nameFound !== -1) {
                   console.log(':::::::::DUPLICATED DETECTED::::::::: ' + prevList[i].name + ' @ ' + nameFound);
                   yelpResults.splice(nameFound, 1);
                   yelpNames.splice(nameFound, 1);
-                  console.log(yelpNames);
+                  // console.log(yelpNames);
                }
             }
             // console.log('Yelp Filtered: ', yelpNames);
             taskCtrl.getTask(keyword)
               .then(tasks => {
-                 console.log('::::::TASKS DB:::::::');
+                 console.log('_____________TASKS DB_____________');
                //   console.log("THESE ARE THE TASKS ", tasks);
                  let taskResults = tasks;
-                 let taskList = tasks.map((task) => task.id);
+                 let taskList = tasks.map((task) => task.content);
                  let prevTasks = req.body.previousTasks;
-               //   console.log('taskList: ', taskList);
-               //   console.log('prevTasks: ', prevTasks);
-                 for(let i in taskList) {
-                    if(prevTasks.indexOf(taskList[i]) !== -1) {
-                       console.log('::DUPLICATED DETECTED:: ' + taskList[i]);
-                       taskResults.splice(i, 1);
-                       taskList.splice(i,1);
+                 console.log('taskList: ', taskList);
+                 console.log('prevTasks: ', prevTasks);
+
+                 for(let i in prevTasks) {
+                    let taskFound = taskList.indexOf(prevTasks[i]);
+                    if(taskFound !== -1) {
+                       console.log('::DUPLICATED DETECTED:: ' + prevTasks[i]);
+                       taskResults.splice(taskFound, 1);
+                       taskList.splice(taskFound, 1);
                     }
                  }
                  console.log('Task Filtered: ', taskList);
                  const randomChoice = (max) => {
                     return Math.floor(Math.random() * max);
                  }
-                 //TODO: Randomize chosen result:
-                 //THIS IS HARDCODED AND WILL NEED TO CHANGED LATER CAMERON JEEZ
-                 console.log(taskResults[0]);
+               //   console.log(taskResults[0]);
                  res.json({
                    businesses: yelpResults[randomChoice(yelpResults.length)],
                    tasks: taskResults[0]

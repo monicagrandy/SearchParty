@@ -4,7 +4,7 @@ const neo = require('../db/neo.js');
 
 module.exports = {
   getTask: (keyword) => {
-    console.log('inside getTask controller with keyword ', keyword);
+   //  console.log('inside getTask controller with keyword ', keyword);
     let checkKeywordQuery = `MATCH (t:Task)
     MATCH (c:Category{title:"${keyword}"})
     WHERE (c)-[:CONTAINS]->(t)
