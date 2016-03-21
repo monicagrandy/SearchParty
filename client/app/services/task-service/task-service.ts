@@ -12,7 +12,7 @@ export class TaskService {
     console.log("called post req")
 
     let httpPromise = new Promise((resolve, reject) => {
-      console.log("inside promise")
+      console.log(data)
       this._http.post(this.TASKS_URL, data, {headers: this.contentHeader})
         .map(res => res.json())
         .subscribe(
