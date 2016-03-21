@@ -62,10 +62,9 @@ module.exports = {
                   console.log(':::::::::DUPLICATED DETECTED::::::::: ' + prevList[i].name + ' @ ' + nameFound);
                   yelpResults.splice(nameFound, 1);
                   yelpNames.splice(nameFound, 1);
-                  // console.log(yelpNames);
                }
             }
-            // console.log('Yelp Filtered: ', yelpNames);
+            
             taskCtrl.getTask(keyword)
               .then(tasks => {
                  console.log('_____________TASKS DB_____________');
