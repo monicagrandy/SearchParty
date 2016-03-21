@@ -18,7 +18,7 @@ const oAuthToken = process.env.OAUTHTOKEN || apiConfig.oAuthToken;
 
 module.exports = {
    yelpAPI: (req, res) => {
-      console.log("inside yelpAPIcontroller: ", req.body)
+      // console.log("inside yelpAPIcontroller: ", req.body)
       let keyword = req.body.keyword;
       let geolocation = req.body.geolocation;
       let method = 'GET';
@@ -59,21 +59,22 @@ module.exports = {
             for(let i in prevList) {
                var nameFound = yelpNames.indexOf(prevList[i].name);
                if(nameFound !== -1) {
-                  console.log(':::::::::DUPLICATED DETECTED::::::::: ' + prevList[i].name);
+                  console.log(':::::::::DUPLICATED DETECTED::::::::: ' + prevList[i].name + ' @ ' + nameFound);
                   yelpResults.splice(nameFound, 1);
                   yelpNames.splice(nameFound, 1);
+                  console.log(yelpNames);
                }
             }
             // console.log('Yelp Filtered: ', yelpNames);
             taskCtrl.getTask(keyword)
               .then(tasks => {
                  console.log('::::::TASKS DB:::::::');
-                 console.log("THESE ARE THE TASKS ", tasks);
+               //   console.log("THESE ARE THE TASKS ", tasks);
                  let taskResults = tasks;
                  let taskList = tasks.map((task) => task.id);
                  let prevTasks = req.body.previousTasks;
-                 console.log('taskList: ', taskList);
-                 console.log('prevTasks: ', prevTasks);
+               //   console.log('taskList: ', taskList);
+               //   console.log('prevTasks: ', prevTasks);
                  for(let i in taskList) {
                     if(prevTasks.indexOf(taskList[i]) !== -1) {
                        console.log('::DUPLICATED DETECTED:: ' + taskList[i]);
@@ -82,11 +83,14 @@ module.exports = {
                     }
                  }
                  console.log('Task Filtered: ', taskList);
+                 const randomChoice = (max) => {
+                    return Math.floor(Math.random() * max);
+                 }
                  //TODO: Randomize chosen result:
                  //THIS IS HARDCODED AND WILL NEED TO CHANGED LATER CAMERON JEEZ
                  console.log(taskResults[0]);
                  res.json({
-                   businesses: yelpResults[0],
+                   businesses: yelpResults[randomChoice(yelpResults.length)],
                    tasks: taskResults[0]
                   });
               })
