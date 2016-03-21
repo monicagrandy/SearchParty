@@ -6,7 +6,7 @@ const apiController = require('../controllers/apiController.js');
 // app.use(express.static(path.join(__dirname + '.../public')));
 
 module.exports = (app, express) => {
-  app.use(express.static('./client/www'));
+  // app.use(express.static('./client/www'));
 
   // app.set('view engine', 'ejs');
   // app.set('views', __dirname + '/yourViewDirectory');
