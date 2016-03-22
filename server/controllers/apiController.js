@@ -27,7 +27,7 @@ module.exports = {
       let keyword = req.body.keyword;
       let geolocation = req.body.geolocation;
       let method = 'GET';
-      let limit = 1;
+      let limit = 10;
       let url = 'http://api.yelp.com/v2/search';
 
       const randomString = (length, chars) => {
