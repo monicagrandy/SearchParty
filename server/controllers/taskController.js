@@ -4,27 +4,20 @@ const neo = require('../db/neo.js');
 
 module.exports = {
   getTask: (keyword) => {
-    console.log('inside getTask controller with keyword ', keyword);
     let checkKeywordQuery = `MATCH (t:Task)
     MATCH (c:Category{title:"${keyword}"})
     WHERE (c)-[:CONTAINS]->(t)
     RETURN t ORDER BY rand() LIMIT 10`;
-    console.log('THIS IS THE CYPHER QUERY TO GET A TASK ', checkKeywordQuery);
+    console.log('CYPHER QUERY >>> ', checkKeywordQuery);
 
     let getTaskPromise = new Promise((resolve, reject) => {
       neo.runCypherStatementPromise(checkKeywordQuery)
       .then((data) => {
-        console.log(data);
-        // return new Promise((resolve, reject) => {
-        console.log(data);
-        let tasks = data;
-        if(tasks) {
-          return resolve(tasks);
-        } else {
-          return reject({error: 'keyword doesnt exist'});
-        }
-
-        // })
+         if(data) {
+            return resolve(data);
+         } else {
+            return reject({error: 'keyword doesnt exist'});
+         }
       })
       .catch(error => {
         console.log(error);
