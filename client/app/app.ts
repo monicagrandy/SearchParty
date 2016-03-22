@@ -6,6 +6,7 @@ import {AuthService} from './services/auth/auth-service';
 import {LogIn} from './pages/users/log-in';
 import {TemplatePage} from './pages/templates/templates';
 import {TaskPage} from './pages/tasks/tasks';
+import {ProfilePage} from './pages/profile/profile';
 
 import * as _ from 'underscore';
 
@@ -30,7 +31,8 @@ export class MyApp {
   constructor(
     private app: IonicApp,
     private platform: Platform,
-    private menu: MenuController
+    private menu: MenuController,
+    //private location: Location
   ) {
     this.initializeApp();
 
@@ -40,7 +42,8 @@ export class MyApp {
     
     this.pages = [
       { title: 'Hunts', component: TemplatePage },
-      { title: 'Current Task', component: TaskPage },
+      { title: 'Current Task', component: TaskPage},
+      { title: 'My Profile', component: ProfilePage},
       { title: 'Log Out', component: LogIn}
     ];
 
@@ -67,7 +70,7 @@ export class MyApp {
   }
 
 
-  openPage(page) {
+  openPage(page) { 
     // close the menu when clicking a link from the menu
     this.menu.close();
     //this.setPages();
@@ -75,6 +78,8 @@ export class MyApp {
       localStorage.removeItem('id_token');
       localStorage.removeItem('userLat');
       localStorage.removeItem('userLng');
+      location.reload();
+
     }
     // navigate to the new page if it is not the current page
     let nav = this.app.getComponent('nav');
