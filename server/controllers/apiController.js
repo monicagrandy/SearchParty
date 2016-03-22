@@ -8,7 +8,7 @@ const taskCtrl = require('./taskController.js');
 //Other users will have to go into the config/config.js and insert their own
 //credentials to access the Yelp API.
 if(!process.env.OAUTHTOKEN) {
-  var apiConfig = require('../db/config/config.js');
+  let apiConfig = require('../db/config/config.js');
 }
 
 const consumerSecret = process.env.YELPCONSUMERSECRET || apiConfig.yelpConsumerSecret;
@@ -59,12 +59,12 @@ module.exports = {
             for(let i in prevList) {
                let nameFound = yelpNames.indexOf(prevList[i].name);
                if(nameFound !== -1) {
-                  console.log(':::::::::DUPLICATED DETECTED::::::::: ' + prevList[i].name + ' @ ' + nameFound);
+                  console.log(':::::::::DUPLICATE DETECTED::::::::: ' + prevList[i].name + ' @ ' + nameFound);
                   yelpResults.splice(nameFound, 1);
                   yelpNames.splice(nameFound, 1);
                }
             }
-            
+
             taskCtrl.getTask(keyword)
               .then(tasks => {
                  console.log('_____________TASKS DB_____________');
@@ -78,7 +78,7 @@ module.exports = {
                  for(let i in prevTasks) {
                     let taskFound = taskList.indexOf(prevTasks[i]);
                     if(taskFound !== -1) {
-                       console.log('::DUPLICATED DETECTED:: ' + prevTasks[i]);
+                       console.log(':::::::::DUPLICATE DETECTED::::::::: ' + prevTasks[i]);
                        taskResults.splice(taskFound, 1);
                        taskList.splice(taskFound, 1);
                     }
