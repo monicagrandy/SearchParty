@@ -36,25 +36,22 @@ export class LogIn {
   }
 
   getCoords(){
-    navigator.geolocation.getCurrentPosition(position => {
-      localStorage.userLat = position.coords.latitude;
-      localStorage.userLng = position.coords.longitude;
-    })
+    navigator.geolocation.getCurrentPosition(position => {  
+        this.local.set('userLat', position.coords.latitude)
+        this.local.set('userLng', position.coords.longitude)
+      })  
   }
 
   login(credentials) {
-    console.log(credentials);
-    console.log(JSON.stringify(credentials))
+    //console.log(credentials);
+    //console.log(JSON.stringify(credentials))
       this.http.post(this.LOGIN_URL, JSON.stringify(credentials), { headers: this.contentHeader })
         .map(res => res.json())
         .subscribe(
           data => {
-            if(data) {
-              console.log(data);
-            }
-            this.authSuccess(data.token);
-            this.getCoords();
+            this.getCoords()
             this.loadTemplates();
+            this.authSuccess(data.token);
             console.log('success');
                 },
           err => {
@@ -69,9 +66,8 @@ export class LogIn {
         .map(res => res.json())
         .subscribe(
           data => {
-                   console.log(data.token);
-                   this.authSuccess(data.token);
                    this.getCoords();
+                   this.authSuccess(data.token);
                    this.loadTemplates();
                  },
           err => this.error = err
@@ -95,7 +91,7 @@ export class LogIn {
   }
 
   loadTemplates() {
-    this.nav.setRoot(TemplatePage);
+    this.nav.setRoot(TemplatePage)
   }
 
 }

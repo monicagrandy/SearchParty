@@ -30,7 +30,8 @@ export class MyApp {
   constructor(
     private app: IonicApp,
     private platform: Platform,
-    private menu: MenuController
+    private menu: MenuController,
+    //private location: Location
   ) {
     this.initializeApp();
 
@@ -75,6 +76,8 @@ export class MyApp {
       localStorage.removeItem('id_token');
       localStorage.removeItem('userLat');
       localStorage.removeItem('userLng');
+      location.reload();
+
     }
     // navigate to the new page if it is not the current page
     let nav = this.app.getComponent('nav');
