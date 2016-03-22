@@ -10,7 +10,7 @@ module.exports = {
     //also being sent the user token
     //create a random hunt id on the backend
     //send back entire hunt with tasks and places
-    let userName = jwt.decode({username: username}, config.secret);
+    //let userName = jwt.decode({username: username}, config.secret);
     let huntID = "h" + shortid();
     let previousPlaces = req.body.businesses;
     let previousTasks = req.body.previousTasks;
@@ -26,7 +26,7 @@ module.exports = {
 
       neo.runCypherStatementPromise(addTaskToHuntQuery, createHuntParams)
       .then((data) => {
-          res.send()
+
       }).catch((error) => {
         console.log(error);
       })

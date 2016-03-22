@@ -97,7 +97,6 @@ module.exports = {
                   console.log(error);
                   res.status(400).json(error);
                });
-
          } else {
             console.log('error', error);
             res.status(400).json(error);
