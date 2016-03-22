@@ -6,6 +6,7 @@ import {AuthService} from './services/auth/auth-service';
 import {LogIn} from './pages/users/log-in';
 import {TemplatePage} from './pages/templates/templates';
 import {TaskPage} from './pages/tasks/tasks';
+import {ProfilePage} from './pages/profile/profile';
 
 import * as _ from 'underscore';
 
@@ -41,7 +42,8 @@ export class MyApp {
     
     this.pages = [
       { title: 'Hunts', component: TemplatePage },
-      { title: 'Current Task', component: TaskPage },
+      { title: 'Current Task', component: TaskPage},
+      { title: 'My Profile', component: ProfilePage},
       { title: 'Log Out', component: LogIn}
     ];
 
