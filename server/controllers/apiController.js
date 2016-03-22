@@ -51,6 +51,9 @@ module.exports = {
 
 
       request({url:apiURL, json:true}, (error, response, body) => {
+        console.log(body);
+        console.log(error);
+
          if(!error && response.statusCode === 200) {
             console.log('_____________YELP API________________');
             let yelpResults = body.businesses;

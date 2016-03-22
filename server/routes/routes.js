@@ -2,6 +2,7 @@
 const jsonParser = require('body-parser').json();
 const userController = require('../controllers/userController.js');
 const apiController = require('../controllers/apiController.js');
+const huntController = require('../controllers/huntController.js');
 // var path = require ('path');
 // app.use(express.static(path.join(__dirname + '.../public')));
 
@@ -18,4 +19,5 @@ module.exports = (app, express) => {
   app.post('/tasks', jsonParser, apiController.yelpAPI);
   app.post('/signup', jsonParser, userController.signup);
   app.post('/signin', jsonParser, userController.signin);
+  app.post('/completed', jsonParser, huntController.postCompletedTasksToDB)
 }
