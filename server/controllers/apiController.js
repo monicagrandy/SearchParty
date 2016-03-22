@@ -22,11 +22,12 @@ const oAuthConsumerKey = process.env.OAUTHCONSUMERKEY || apiConfig.oAuthConsumer
 const oAuthToken = process.env.OAUTHTOKEN || apiConfig.oAuthToken;
 
 module.exports = {
-   yelpAPI: (req, res) => {
+   yelpAPI: (req) => {
       console.log('inside yelpAPI');
       let keyword = req.body.keyword;
       let geolocation = req.body.geolocation;
       let method = 'GET';
+      let limit = 1;
       let url = 'http://api.yelp.com/v2/search';
 
       const randomString = (length, chars) => {
@@ -39,7 +40,7 @@ module.exports = {
 
       let oauth = {
          term: keyword,
-         limit: 10,
+         limit: limit,
          ll: `${geolocation.lat},${geolocation.lng}`,
          oauth_consumer_key: oAuthConsumerKey,
          oauth_token: oAuthToken,
@@ -54,19 +55,16 @@ module.exports = {
       paramURL = paramURL.replace('%2C', ',');
       let apiURL = url + '?' + paramURL;
 
-
-      request({url:apiURL, json:true}, (error, response, body) => {
-         if(!error && response.statusCode === 200) {
-            //Might throw error (json obj);
-            console.log('200');
-            console.log(res);
-            return res.response.body;
-         } else {
-            console.log('error', error);
-            res.status(400).json(error);
-         }
-      });
-
+      return new Promise((resolve, reject) => {
+         request({url:apiURL, json:true}, (error, response) => {
+            console.log('error: ', error);
+            if(!error && response.statusCode === 200){
+               return resolve(response.body);
+            } else {
+               return reject({error: error});
+            }
+         })
+      })
    }
 };
    //       if(!error && response.statusCode === 200) {
