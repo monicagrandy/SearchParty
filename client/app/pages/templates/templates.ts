@@ -62,7 +62,7 @@ export class TemplatePage {
     // console.log(this.geolocation);
     this.templateService.postData(item.title, this.userInfo)
       .then(data => {
-        this.nav.push(TaskPage, {
+        this.nav.setRoot(TaskPage, {
           locAddress: data.businesses.location.display_address[0] + ', ' + data.businesses.location.display_address[2],
           currChallenge: data.tasks.content,
           locLat: data.businesses.location.coordinate.latitude,
