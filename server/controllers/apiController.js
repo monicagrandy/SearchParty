@@ -23,6 +23,7 @@ const oAuthToken = process.env.OAUTHTOKEN || apiConfig.oAuthToken;
 
 module.exports = {
    yelpAPI: (req, res) => {
+      console.log('inside yelpAPI');
       let keyword = req.body.keyword;
       let geolocation = req.body.geolocation;
       let method = 'GET';
@@ -56,56 +57,68 @@ module.exports = {
 
       request({url:apiURL, json:true}, (error, response, body) => {
          if(!error && response.statusCode === 200) {
-            console.log('_____________YELP API________________');
-            let yelpResults = body.businesses;
-            let yelpNames = (body.businesses).map((business) => business.name);
-            let prevList = req.body.previousPlaces;
-            for(let i in prevList) {
-               let nameFound = yelpNames.indexOf(prevList[i].name);
-               if(nameFound !== -1) {
-                  console.log(':::::::::DUPLICATE DETECTED::::::::: ' + prevList[i].name + ' @ ' + nameFound);
-                  yelpResults.splice(nameFound, 1);
-                  yelpNames.splice(nameFound, 1);
-               }
-            }
-
-            taskCtrl.getTask(keyword)
-              .then(tasks => {
-                 console.log('_____________TASKS DB_____________');
-               //   console.log("THESE ARE THE TASKS ", tasks);
-                 let taskResults = tasks;
-                 let taskList = tasks.map((task) => task.content);
-                 let prevTasks = req.body.previousTasks;
-                 console.log('taskList: ', taskList);
-                 console.log('prevTasks: ', prevTasks);
-
-                 for(let i in prevTasks) {
-                    let taskFound = taskList.indexOf(prevTasks[i]);
-                    if(taskFound !== -1) {
-                       console.log(':::::::::DUPLICATE DETECTED::::::::: ' + prevTasks[i]);
-                       taskResults.splice(taskFound, 1);
-                       taskList.splice(taskFound, 1);
-                    }
-                 }
-                 console.log('Task Filtered: ', taskList);
-                 const randomChoice = (max) => {
-                    return Math.floor(Math.random() * max);
-                 }
-               //   console.log(taskResults[0]);
-                 res.json({
-                   businesses: yelpResults[randomChoice(yelpResults.length)],
-                   tasks: taskResults[0]
-                  });
-              })
-               .catch(error => {
-                  console.log(error);
-                  res.status(400).json(error);
-               });
-
+            //Might throw error (json obj);
+            console.log('200');
+            console.log(res);
+            return res.response.body;
          } else {
             console.log('error', error);
             res.status(400).json(error);
          }
       });
+
    }
 };
+   //       if(!error && response.statusCode === 200) {
+   //          console.log('_____________YELP API________________');
+   //          let yelpResults = body.businesses;
+   //          let yelpNames = (body.businesses).map((business) => business.name);
+   //          let prevList = req.body.previousPlaces;
+   //          for(let i in prevList) {
+   //             let nameFound = yelpNames.indexOf(prevList[i].name);
+   //             if(nameFound !== -1) {
+   //                console.log(':::::::::DUPLICATE DETECTED::::::::: ' + prevList[i].name + ' @ ' + nameFound);
+   //                yelpResults.splice(nameFound, 1);
+   //                yelpNames.splice(nameFound, 1);
+   //             }
+   //          }
+   //
+   //          taskCtrl.getTask(keyword)
+   //            .then(tasks => {
+   //               console.log('_____________TASKS DB_____________');
+   //               let taskResults = tasks;
+   //               let taskList = tasks.map((task) => task.content);
+   //               let prevTasks = req.body.previousTasks;
+   //               console.log('taskList: ', taskList);
+   //               console.log('prevTasks: ', prevTasks);
+   //
+   //               for(let i in prevTasks) {
+   //                  let taskFound = taskList.indexOf(prevTasks[i]);
+   //                  if(taskFound !== -1) {
+   //                     console.log(':::::::::DUPLICATE DETECTED::::::::: ' + prevTasks[i]);
+   //                     taskResults.splice(taskFound, 1);
+   //                     taskList.splice(taskFound, 1);
+   //                  }
+   //               }
+   //               console.log('Task Filtered: ', taskList);
+   //               const randomChoice = (max) => {
+   //                  return Math.floor(Math.random() * max);
+   //               }
+   //             //   console.log(taskResults[0]);
+   //               res.json({
+   //                 businesses: yelpResults[randomChoice(yelpResults.length)],
+   //                 tasks: taskResults[0]
+   //                });
+   //            })
+   //             .catch(error => {
+   //                console.log(error);
+   //                res.status(400).json(error);
+   //             });
+   //
+   //       } else {
+   //          console.log('error', error);
+   //          res.status(400).json(error);
+   //       }
+   //    });
+   // }
+// };
