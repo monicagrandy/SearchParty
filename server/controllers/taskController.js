@@ -14,17 +14,11 @@ module.exports = {
     let getTaskPromise = new Promise((resolve, reject) => {
       neo.runCypherStatementPromise(checkKeywordQuery)
       .then((data) => {
-      //   console.log(data);
-        // return new Promise((resolve, reject) => {
-      //   console.log(data);
-        let tasks = data;
-        if(tasks) {
-          return resolve(tasks);
-        } else {
-          return reject({error: 'keyword doesnt exist'});
-        }
-
-        // })
+         if(data) {
+            return resolve(data);
+         } else {
+            return reject({error: 'keyword doesnt exist'});
+         }
       })
       .catch(error => {
         console.log(error);
