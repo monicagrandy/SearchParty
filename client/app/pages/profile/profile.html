@@ -7,6 +7,7 @@
 
 <ion-content>
   <h2>Your Friends</h2>
+  <h4 *ngIf="!friends">You have no friends!</h4>
   <ion-list>
     <button ion-item *ngFor="#friend of friends" (click)="seeFriends($event, friend)">
       <ion-icon name="{{friend.icon}}" item-left></ion-icon>
@@ -21,6 +22,7 @@
 <ion-content>
   <ion-list>
     <h2>Your Hunts</h2>
+    <h4 *ngIf="!hunts">You have no hunts!</h4>
     <button ion-item *ngFor="#hunt of hunts" (click)="itemTapped($event, hunt)">
       <ion-icon name="{{hunt.icon}}" item-left></ion-icon>
       {{hunt.title}}

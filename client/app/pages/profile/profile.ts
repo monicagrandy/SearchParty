@@ -1,10 +1,10 @@
 import {Page, NavController, NavParams, LocalStorage, Storage} from 'ionic-angular';
 import {TaskPage} from '../tasks/tasks';
-import {TemplateService} from '../../services/template/template-service';
+import {ProfileService} from '../../services/profile/profile-service';
 
 @Page({
   templateUrl: 'build/pages/profile/profile.html',
-  providers: [TemplateService]
+  providers: [ProfileService]
 })
 export class ProfilePage {
   selectedItem: any;
@@ -16,35 +16,8 @@ export class ProfilePage {
   userInfo: {};
   geolocation: {};
 
-  constructor(private nav: NavController, navParams: NavParams, private templateService: TemplateService) {
-    // If we navigated to this page, we will have an item available as a nav param
-    this.selectedItem = navParams.get('item');
+  constructor(private nav: NavController, navParams: NavParams, private profileService: ProfileService) {
     
-    if (navigator.geolocation) {
-      navigator.geolocation.watchPosition((position => {
-        this.local.set('userLat', position.coords.latitude);
-        this.local.set('userLng', position.coords.longitude);
-      }), (error => console.log(error)), {})
-    }
-
-    this.testData = [
-      {type: 'Bar', huntname: 'Bar Hunt', image: 'img/bar.jpg', icon: 'ios-pint'},
-      {type: 'Beach', huntname: 'Beach Hunt', image: 'img/beach.jpg', icon: 'ios-water'},
-      {type: 'Brunch', huntname: 'Brunch Hunt', image: 'img/brunch.jpg', icon: 'ios-restaurant'},
-      {type: 'Coffee', huntname: 'Coffee Hunt', image: 'img/coffee.jpg', icon: 'cafe'},
-      {type: 'Park', huntname: 'Park Hunt', image: 'img/park.jpg', icon: 'leaf'},
-      {type: 'Ramen', huntname: 'Ramen Hunt', image: 'img/ramen.jpg', icon: 'ios-egg'}
-      ];
-
-    this.items = [];
-    for (let hunt of this.testData) {
-      this.items.push({
-        title: hunt.type,
-        image: hunt.image,
-        huntname: hunt.huntname,
-        icon: hunt.icon
-      });
-    }
   }
 
   itemTapped(event, item) {
