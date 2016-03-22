@@ -68,7 +68,7 @@ export class MyApp {
   }
 
 
-  openPage(page) {
+  openPage(page) { 
     // close the menu when clicking a link from the menu
     this.menu.close();
     //this.setPages();
