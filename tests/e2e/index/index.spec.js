@@ -1,10 +1,8 @@
-describe('hello-protractor', function () {
-   var ptor = protractor.getInstance();
-
-   describe('index', function() {
-      it('should display the correct title', function () {
-         ptor.get('/signup');
-         expect(ptor.getTitle()).toBe('signup');
-      });
-   })
+// const protractor = require('protractor');
+// console.log(protractor);
+describe('Search Party Login', function () {
+   it('should have a title', function() {
+      browser.get('http://localhost:8000');
+      expect(browser.getTitle()).toEqual('login');
+   });
 })
