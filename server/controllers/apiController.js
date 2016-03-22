@@ -5,11 +5,16 @@ const oauthSig = require('oauth-signature');
 const request = require('request');
 const qs = require('querystring');
 const taskCtrl = require('./taskController.js');
+const apiConfig = require('../db/config/config.js');
+
 //Other users will have to go into the config/config.js and insert their own
 //credentials to access the Yelp API.
-if(!process.env.OAUTHTOKEN) {
-  let apiConfig = require('../db/config/config.js');
-}
+
+//I don't think that this is necassary; by default, the first option is chosen
+//if it's a truthy value; else, the second is chosen. Added above.
+// if(!process.env.OAUTHTOKEN) {
+//   let apiConfig = require('../db/config/config.js');
+// }
 
 const consumerSecret = process.env.YELPCONSUMERSECRET || apiConfig.yelpConsumerSecret;
 const tokenSecret = process.env.YELPTOKENSECRET || apiConfig.yelpTokenSecret;
