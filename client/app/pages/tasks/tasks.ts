@@ -19,7 +19,6 @@ export class TaskPage {
   local: LocalStorage
   locAddress: string; //set this to whatever is in local storage
   currChallenge: string;
-  //locChallenge = "Buy a stranger a shot"; //set this to whatever is in local storage
   locLat: any; //set this to whatever is in local storage
   locLng: any; //set this to whatever is in local storage
   locName: string; //set this to whatever is in local storage
@@ -38,7 +37,8 @@ export class TaskPage {
     this.locName = navParams.get('locName');
     this.previousPlaces = navParams.get('previousPlaces');
     this.previousTasks = navParams.get('previousTasks');
-    setTimeout(()=>{ this.loadMap(this.locLat, this.locLng), 1000 })
+    setTimeout(()=>{ this.loadMap(this.locLat, this.locLng), 2000 })
+
   }
 
   //this should be triggered when the next button is pushed
@@ -52,6 +52,7 @@ export class TaskPage {
         let dataObj = {
           previousPlaces: this.previousPlaces,
           previousTasks: this.previousTasks,
+
           keyword: keyword,
           geolocation: {
             lat: this.locLat,
@@ -61,10 +62,10 @@ export class TaskPage {
         this._taskService.postData(JSON.stringify(dataObj))
           .then(result => { 
             this.locName = result.businesses.name;
+            this.currChallenge = result.tasks.content
             this.previousPlaces.push(result.businesses)
             this.locAddress = result.businesses.location.display_address[0] + ', ' + result.businesses.location.display_address[2];
-            this.currChallenge = result.tasks.content
-            this.previousTasks.push(this.currChallenge)
+            this.previousTasks.push(result.tasks)
             this.locLat = result.businesses.location.coordinate.latitude;
             this.locLng = result.businesses.location.coordinate.longitude;
             this.markComplete();
@@ -73,7 +74,13 @@ export class TaskPage {
         }
       else {
         console.log("no more tasks!")
+        console.log(this.previousTasks)
+        console.log(this.previousPlaces)
     } 
+  }
+
+  searchComplete(){
+    
   }
 
 

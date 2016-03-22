@@ -41,6 +41,7 @@ export class TemplateService {
       console.log('inside post promise');
       console.log('THIS IS THE DATA shold be keyword', data)
       console.log("THIS IS THE USER LOCATION IN TEMPLATE SERVICE ", userInfo);
+      let currentTime = new Date();
       
       let dataToSend = {
         keyword: data,
@@ -49,7 +50,8 @@ export class TemplateService {
           lng: userInfo.userLng
         },
         previousPlaces: [],
-        previousTasks: []
+        previousTasks: [],
+        date: currentTime
       };
       
       console.log("THIS IS THE COMBO DATA BEFORE SENT ", dataToSend);
