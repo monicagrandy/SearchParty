@@ -19,8 +19,6 @@ export class TaskPage {
   local: LocalStorage
   locAddress: string; //set this to whatever is in local storage
   currChallenge: string;
-  contentLoading = true;
-  loadingImg: any;
   locLat: any; //set this to whatever is in local storage
   locLng: any; //set this to whatever is in local storage
   locName: string; //set this to whatever is in local storage
@@ -32,7 +30,6 @@ export class TaskPage {
   constructor(private nav: NavController, navParams: NavParams, private _taskService: TaskService) {
     // If we navigated to this page, we will have an item available as a nav param
     //this.map = null;
-    this.loadingImg = 'img/poi.gif';
     this.locAddress = navParams.get('locAddress');
     this.currChallenge = navParams.get('currChallenge');
     this.locLat = navParams.get('locLat');
@@ -77,7 +74,13 @@ export class TaskPage {
         }
       else {
         console.log("no more tasks!")
+        console.log(this.previousTasks)
+        console.log(this.previousPlaces)
     } 
+  }
+
+  searchComplete(){
+    
   }
 
 

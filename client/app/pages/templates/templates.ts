@@ -11,7 +11,8 @@ export class TemplatePage {
   testData: Array<{type: string, huntname: string, image: string, icon: string}>;
   items: Array<{title: string, image: string, huntname: string, icon: string}>;
   local: Storage = new Storage(LocalStorage);
-  loadComplete: boolean;
+  loadComplete = false;
+  loadingImg: any;
   userLng: number;
   userLat: number;
   userInfo: {};
@@ -21,13 +22,17 @@ export class TemplatePage {
     // If we navigated to this page, we will have an item available as a nav param
     this.selectedItem = navParams.get('item');
     
+    this.loadingImg = 'img/poi.gif'
+
     if (navigator.geolocation) {
+      console.log(this.loadComplete)
       navigator.geolocation.watchPosition((position => {
         this.local.set('userLat', position.coords.latitude);
         this.local.set('userLng', position.coords.longitude);
-        this.loadComplete = true;
+        setTimeout(()=>{this.loadComplete = true; console.log(this.loadComplete)}, 1000);
       }), (error => console.log(error)), {})
     }
+
 
     this.testData = [
       {type: 'Bar', huntname: 'Bar Hunt', image: 'img/bar.jpg', icon: 'ios-pint'},
@@ -72,5 +77,6 @@ export class TemplatePage {
     //   item: item
     // });
   }
+
 
 }
