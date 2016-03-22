@@ -4,12 +4,11 @@ const neo = require('../db/neo.js');
 
 module.exports = {
   getTask: (keyword) => {
-   //  console.log('inside getTask controller with keyword ', keyword);
     let checkKeywordQuery = `MATCH (t:Task)
     MATCH (c:Category{title:"${keyword}"})
     WHERE (c)-[:CONTAINS]->(t)
     RETURN t ORDER BY rand() LIMIT 10`;
-    console.log('THIS IS THE CYPHER QUERY TO GET A TASK ', checkKeywordQuery);
+    console.log('CYPHER QUERY >>> ', checkKeywordQuery);
 
     let getTaskPromise = new Promise((resolve, reject) => {
       neo.runCypherStatementPromise(checkKeywordQuery)
