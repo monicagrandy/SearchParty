@@ -5,9 +5,15 @@
   <ion-title>Hunts</ion-title>
 </ion-navbar>
 
-<ion-content class="has-header cards-bg">
-  
+
+<ion-content *ngIf="!loadComplete"> 
+  <img src="{{loadingImg}}">
+</ion-content>
+
+<ion-content *ngIf="loadComplete" class="has-header cards-bg">
+
   <ion-card class="adv-map" *ngFor="#item of items" (click)="itemTapped($event, item)">
+  
     <div style="position: relative">
       <img src="{{item.image}}">
       <button fab fab-right fab-top class="fab-map">
