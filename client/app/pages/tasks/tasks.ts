@@ -1,6 +1,7 @@
 import {Page, NavController, NavParams, LocalStorage} from 'ionic-angular';
 import {TaskService} from '../../services/task-service/task-service';
 import { ConnectionBackend, HTTP_PROVIDERS } from 'angular2/http';
+import {JwtHelper} from 'angular2-jwt';
 import 'rxjs/add/operator/map';
 
 
@@ -24,12 +25,25 @@ export class TaskPage {
   locName: string; //set this to whatever is in local storage
   completeToggle = false;
   keywords = ['Bar', 'Bar', 'Bar', 'Bar', 'Bar', 'Bar','Bar','Bar', 'Bar', 'Bar'];
+  tasksLeft: any;
+  endHunt: boolean;
+  startTime: any;
+  endTime: any;
+  user: string;
+  jwtHelper: JwtHelper = new JwtHelper();
+  token: any;
   previousPlaces: any;
   previousTasks: any;
   
   constructor(private nav: NavController, navParams: NavParams, private _taskService: TaskService) {
     // If we navigated to this page, we will have an item available as a nav param
     //this.map = null;
+    this.tasksLeft = true
+    console.log(localStorage.id_token)
+    this.token = localStorage.id_token
+    if(this.token) {
+      this.user = this.jwtHelper.decodeToken(this.token).username;
+    }
     this.locAddress = navParams.get('locAddress');
     this.currChallenge = navParams.get('currChallenge');
     this.locLat = navParams.get('locLat');
@@ -43,7 +57,8 @@ export class TaskPage {
 
   //this should be triggered when the next button is pushed
   getNewTask(){
-    console.log("getting ready to send new task!")
+    let mapId = 'map'
+    console.log('getting ready to send new task!')
       //move this down to success callback later
       //this.logIn.local.set('userLng', position.coords.longitude)
       console.log(this.keywords)     
@@ -52,7 +67,6 @@ export class TaskPage {
         let dataObj = {
           previousPlaces: this.previousPlaces,
           previousTasks: this.previousTasks,
-
           keyword: keyword,
           geolocation: {
             lat: this.locLat,
@@ -73,17 +87,21 @@ export class TaskPage {
           })
         }
       else {
-        console.log("no more tasks!")
+        console.log('no more tasks!')
         console.log(this.previousTasks)
         console.log(this.previousPlaces)
         this.searchComplete();
+        this.tasksLeft = false;
     } 
   }
 
   searchComplete(){
+    this.endTime = new Date().toLocaleTimeString()
+    this.startTime = localStorage.startTime
     let finalLat = this.previousPlaces[10].location.coordinate.latitude
     let finalLng = this.previousPlaces[10].location.coordinate.longitude
-    this.loadMap(finalLat, finalLng, 10)
+    this.loadMap(finalLat, finalLng, 12)
+    let points = []
     for(let i = 0; i < this.previousPlaces.length; i++){
       let currLat = this.previousPlaces[i].location.coordinate.latitude
       let currLng = this.previousPlaces[i].location.coordinate.longitude
@@ -91,12 +109,19 @@ export class TaskPage {
       let currChallenge = this.previousTasks[i].content
       console.log(currChallenge)
       let currPos = new google.maps.LatLng(currLat, currLng);
-      let info = '<h4>' + name || " "  + '</h4><p>' + currChallenge  + '</p>'
+      let info = '<h4>' + currChallenge + '</h4><p>' + name  + '</p>'
+      points.push(new google.maps.LatLng(currLat, currLng))
       this.addMarker(currPos, info);
     }
+    let flightPath = new google.maps.Polyline({
+      map: this.map,  
+      path: points,
+      strokeColor: "#FF0000",
+      strokeOpacity: 1.0,
+      strokeWeight: 2
+    });
   }
-
-
+ 
   loadMap(lat, long, zoom){
     let options = { timeout: 10000, enableHighAccuracy: true }
     let latLng = new google.maps.LatLng(lat, long);
