@@ -37,7 +37,7 @@ export class TaskPage {
     this.locName = navParams.get('locName');
     this.previousPlaces = navParams.get('previousPlaces');
     this.previousTasks = navParams.get('previousTasks');
-    setTimeout(()=>{ this.loadMap(this.locLat, this.locLng), 2000 })
+    setTimeout(()=>{ this.loadMap(this.locLat, this.locLng, 15), 2000 })
 
   }
 
@@ -69,38 +69,54 @@ export class TaskPage {
             this.locLat = result.businesses.location.coordinate.latitude;
             this.locLng = result.businesses.location.coordinate.longitude;
             this.markComplete();
-            this.loadMap(this.locLat, this.locLng);
+            this.loadMap(this.locLat, this.locLng, 15);
           })
         }
       else {
         console.log("no more tasks!")
         console.log(this.previousTasks)
         console.log(this.previousPlaces)
+        this.searchComplete();
     } 
   }
 
   searchComplete(){
-    
+    let finalLat = this.previousPlaces[10].location.coordinate.latitude
+    let finalLng = this.previousPlaces[10].location.coordinate.longitude
+    this.loadMap(finalLat, finalLng, 10)
+    for(let i = 0; i < this.previousPlaces.length; i++){
+      let currLat = this.previousPlaces[i].location.coordinate.latitude
+      let currLng = this.previousPlaces[i].location.coordinate.longitude
+      let name = this.previousPlaces[i].name
+      let currChallenge = this.previousTasks[i].content
+      console.log(currChallenge)
+      let currPos = new google.maps.LatLng(currLat, currLng);
+      let info = '<h4>' + name || " "  + '</h4><p>' + currChallenge  + '</p>'
+      this.addMarker(currPos, info);
+    }
   }
 
 
-  loadMap(lat, long){
+  loadMap(lat, long, zoom){
     let options = { timeout: 10000, enableHighAccuracy: true }
     let latLng = new google.maps.LatLng(lat, long);
     let mapOptions = {
       center: latLng,
-      zoom: 15,
+      zoom: zoom,
       mapTypeId: google.maps.MapTypeId.ROADMAP
     }
     this.map = new google.maps.Map(document.getElementById('map'), mapOptions)
+    this.addMarker(latLng)
+    }
+
+  addMarker(coords, content) {  
     let pin = new google.maps.Marker({
       map: this.map,
       animation: google.maps.Animation.DROP,
-      position: latLng
+      position: coords
     });
-    let info = '<h4>' + this.locName + '</h4><p>' + this.locAddress + '</p>'
-      
-    this.addInfoWindow(pin, info)  
+    let info = content || '<h4>' + this.locName + '</h4><p>' + this.locAddress  + '</p>'
+    this.addInfoWindow(pin, info)
   }  
 
   addInfoWindow(marker, content){
