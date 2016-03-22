@@ -6,8 +6,11 @@
 </ion-navbar>
 
 <ion-content class="has-header cards-bg">
-  
+
+<img src="{{loadingImg}}" *ngIf="!loadComplete">
+
   <ion-card class="adv-map" *ngFor="#item of items" (click)="itemTapped($event, item)">
+  
     <div style="position: relative">
       <img src="{{item.image}}">
       <button fab fab-right fab-top class="fab-map">

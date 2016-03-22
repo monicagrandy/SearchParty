@@ -11,6 +11,7 @@ export class TemplatePage {
   testData: Array<{type: string, huntname: string, image: string, icon: string}>;
   items: Array<{title: string, image: string, huntname: string, icon: string}>;
   local: Storage = new Storage(LocalStorage);
+  loadComplete: boolean;
   userLng: number;
   userLat: number;
   userInfo: {};
@@ -24,6 +25,7 @@ export class TemplatePage {
       navigator.geolocation.watchPosition((position => {
         this.local.set('userLat', position.coords.latitude);
         this.local.set('userLng', position.coords.longitude);
+        this.loadComplete = true;
       }), (error => console.log(error)), {})
     }
 
@@ -70,4 +72,5 @@ export class TemplatePage {
     //   item: item
     // });
   }
+
 }
