@@ -2,6 +2,7 @@ import {Page, NavController, NavParams, LocalStorage} from 'ionic-angular';
 import {TaskService} from '../../services/task-service/task-service';
 import { ConnectionBackend, HTTP_PROVIDERS } from 'angular2/http';
 import {JwtHelper} from 'angular2-jwt';
+import {TemplatePage} from '../templates/templates';
 import 'rxjs/add/operator/map';
 
 
@@ -35,12 +36,15 @@ export class TaskPage {
   previousPlaces: any;
   previousTasks: any;
   finalDist: any;
+  TASKS_URL: string = process.env.TASKSURL || 'http://localhost:8000/tasks';
+  FEEDBACK_URL: string = process.env.FEEDBACKURL || 'http://localhost:8000/feedback';
+  feedback: string;
   
   constructor(private nav: NavController, navParams: NavParams, private _taskService: TaskService) {
     // If we navigated to this page, we will have an item available as a nav param
     //this.map = null;
     this.tasksLeft = true
-    console.log(localStorage.id_token)
+    //console.log(localStorage.id_token)
     this.token = localStorage.id_token
     if(this.token) {
       this.user = this.jwtHelper.decodeToken(this.token).username;
@@ -58,10 +62,7 @@ export class TaskPage {
 
   //this should be triggered when the next button is pushed
   getNewTask(){
-    let mapId = 'map'
     console.log('getting ready to send new task!')
-      //move this down to success callback later
-      //this.logIn.local.set('userLng', position.coords.longitude)
       console.log(this.keywords)     
       if(this.keywords.length > 0){
         let keyword = this.keywords.shift()
@@ -74,7 +75,7 @@ export class TaskPage {
             lng: this.locLng
           }
         }
-        this._taskService.postData(JSON.stringify(dataObj))
+        this._taskService.postData(JSON.stringify(dataObj), this.TASKS_URL)
           .then(result => { 
             this.locName = result.businesses.name;
             this.currChallenge = result.tasks.content
@@ -128,16 +129,26 @@ export class TaskPage {
     this.calcDistance()
   }
 
-  userFeedback(){
-    let dataObj = {
-          previousPlaces: this.previousPlaces,
-          previousTasks: this.previousTasks,
-          geolocation: {
-            lat: this.locLat,
-            lng: this.locLng
-          }
+  sendFeedback(val){
+    if(val === 1){
+      console.log('sending good feedback!')
+      this.feedback = "good"
+    }
+    if(val === 2){
+      console.log('sending bad feedback!')
+      this.feedback = "bad"
+    }
+    let userFeedback = {
+          user: this.user,
+          feedback: this.feedback
+    }
+    this._taskService.postData(JSON.stringify(userFeedback), this.FEEDBACK_URL)
+      .then(result => {
+        this.nav.setRoot(TemplatePage)
+        console.log(result)
+      })
   }
-
+    
   calcDistance(){
     let latLng0 = new google.maps.LatLng(this.previousPlaces[0].location.coordinate.latitude, this.previousPlaces[0].location.coordinate.longitude);
     let latLng1 = new google.maps.LatLng(this.previousPlaces[1].location.coordinate.latitude, this.previousPlaces[1].location.coordinate.longitude);

@@ -44,12 +44,12 @@
         <h2>How was your hunt?</h2>
       </ion-list-header>
       <ion-item>
-        <button class="goodReview">
+        <button id="goodReview" (click)="sendFeedback(1)">
           <ion-icon name="thumbs-up"></ion-icon>
         </button>
       </ion-item>
       <ion-item>  
-        <button class="badReview">
+        <button id="badReview" (click)="sendFeedback(2)">
           <ion-icon name="thumbs-down"></ion-icon>
         </button>
       </ion-item>
