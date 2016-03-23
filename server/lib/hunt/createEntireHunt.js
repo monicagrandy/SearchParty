@@ -9,7 +9,11 @@ const random = require('../util/randomSelect.js');
 
 module.exports = {
   createHunt: (keyword, previousPlaces, previousTasks, huntID) => {
-    yelpAPICall.yelpPlacesBasedOnKeyword(keyword)
+    
+    let randomTask;
+    let randomPlace;
+
+    return yelpAPICall.yelpPlacesBasedOnKeyword(keyword)
     .then(places => {
       let filteredPlaces = filter.filterResults(previousPlaces, places);
       randomPlace = filteredPlaces[random.randomNumberGen(filteredPlaces.length)];
@@ -17,12 +21,22 @@ module.exports = {
         let filteredTasks = filter.filterResults(previousTasks, tasks);
         randomTask = filteredTasks[random.randomNumberGen(filteredTasks.length)];
         addHuntData.addTaskAndLocationToHunt(randomTask, randomPlace, huntID);
-        res.json({
-          buisnesses: randomPlace,
-          tasks: randomTask,
-          huntID: huntID
+
+        return new Promise((resolve, reject) => {
+          if(tasks) {
+            resolve({
+              buisnesses: randomPlace,
+              tasks: randomTask,
+              huntID: huntID
+            });
+          } else {
+            reject({error: "could not create hunt"});
+          }
         })
       })
+    })
+    .catch(error => {
+      console.error(error);
     })
   }
 
