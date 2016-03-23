@@ -20,14 +20,16 @@ module.exports = {
     if(!huntID) {
       createNewHunt.initializeHunt(username)
       .then(hunt => {
-        makeHunt.createHunt(keyword, previousPlaces, previousTasks, hunt.id)
+        console.log("inside initalieHunt", hunt);
+        makeHunt.createHunt(keyword, previousPlaces, previousTasks, hunt, geolocation)
         .then(resultsObj => {
+          // console.log("create hunt done promising", resultsObj);
           res.json(resultsObj);
         })
       })
         .catch(error => console.error(error));
     } else {
-      makeHunt.createHunt(keyword, previousPlaces, previousTasks, hunt.id)
+      makeHunt.createHunt(keyword, previousPlaces, previousTasks, huntID, geolocation)
         .then(resultsObj => {
           res.json(resultsObj);
         })

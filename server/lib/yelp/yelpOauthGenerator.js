@@ -36,6 +36,7 @@ module.exports = {
     let paramURL = qs.stringify(oauth);
     paramURL = paramURL.replace('%2C', ',');
     let apiURL = url + '?' + paramURL;
+    console.log("api url inside oauth generator", apiURL);
     return apiURL;
   }
 }
