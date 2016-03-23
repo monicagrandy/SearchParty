@@ -2,6 +2,7 @@
 
 const neo = require('../db/neo.js');
 const shortid = require('shortid');
+const neo4jPromise = require('../neo4j/neo4jQueryPromiseReturn.js');
 
 module.exports = {
   initializeHunt: username => {
@@ -9,24 +10,12 @@ module.exports = {
     let huntID = "h" + shortid();
     let chatID = "c" + shortid();
     let huntStartTime = new Date();
-    
+
     let initializeHuntQuery = `CREATE (hunt:Hunt{id:"${huntID}", starttime:"${huntStartTime}"}),
     CREATE(chat:Chatroom{id:"${chatID}"})
     MATCH (user:User{username:"${username}"})
     CREATE (user)-[:PARTICIPATED_IN]->(hunt)-[:HAS_CHAT]->(chat)`;
 
-    return neo.runCypherStatementPromise(initializeHuntQuery)
-    .then(data => {
-      return new Promise((resolve, reject) => {
-        if(data) {
-          return resolve(data);
-        } else {
-          return reject({error: "creation of hunt failed"});
-        }
-      });
-    })
-    .catch(error => {
-      console.error('cypher Query Error', JSON.stringify(error,null,2));
-    });
+    return neo4jPromise.databaseQueryPromise(initializeHuntQuery);
   }
 }

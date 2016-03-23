@@ -3,13 +3,9 @@
 const neo = require('../db/neo.js');
 
 module.exports = {
-  get10TasksBasedOnKeyword: keyword => {
-    //returns an array of 10 tasks based on the input keyword
-    let checkKeywordQuery =
-    `MATCH (:Category{title:"${keyword}"})-[:CONTAINS]->(t:Task)
-    RETURN t ORDER BY rand() LIMIT 10`;
 
-    return neo.runCypherStatementPromise(checkKeywordQuery)
+  databaseQueryPromise: query => {
+    return neo.runCypherStatementPromise(query)
     .then(data => {
       return new Promise((resolve, reject) => {
         if(data) {
