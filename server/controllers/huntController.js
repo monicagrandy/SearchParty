@@ -4,7 +4,7 @@ const neo = require('../db/neo.js');
 const shortid = require('shortid');
 const jwt = require('jwt-simple');
 const config = require('../config/config.js');
-const createNewHunt = require('../lib/hunt/createNewHunt.js');
+const createNewHunt = require('../lib/hunt/createNewHuntID.js');
 const addHuntData = require('../lib/hunt/addTaskAndLocationToHunt.js');
 const taskLookup = require('../lib/hunt/getKeyWordTasksFromDB.js');
 const yelpAPICall = require('../lib/yelp/yelpAPICall.js');
@@ -22,7 +22,7 @@ module.exports = {
     let randomTask;
     let randomPlace;
 
-    if(huntID) {
+    if(!huntID) {
       createNewHunt.initializeHunt(username)
       .then(hunt => {
         huntID = hunt.id;
