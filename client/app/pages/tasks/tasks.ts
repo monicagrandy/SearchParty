@@ -35,6 +35,7 @@ export class TaskPage {
   token: any;
   previousPlaces: any;
   previousTasks: any;
+  huntID: any;
   finalDist: any;
   TASKS_URL: string = process.env.TASKSURL || 'http://localhost:8000/tasks';
   FEEDBACK_URL: string = process.env.FEEDBACKURL || 'http://localhost:8000/feedback';
@@ -51,6 +52,7 @@ export class TaskPage {
       this.user = this.jwtHelper.decodeToken(this.token).username;
     }
     this.locAddress = navParams.get('locAddress');
+    this.huntID = navParams.get('huntID');
     this.currChallenge = navParams.get('currChallenge');
     this.locLat = navParams.get('locLat');
     this.locLng = navParams.get('locLng');
@@ -72,6 +74,7 @@ export class TaskPage {
           previousPlaces: this.previousPlaces,
           previousTasks: this.previousTasks,
           keyword: keyword,
+          token: localStorage.id_token,
           geolocation: {
             lat: this.locLat,
             lng: this.locLng
@@ -144,7 +147,7 @@ export class TaskPage {
       this.feedback = "bad"
     }
     let userFeedback = {
-          user: this.user,
+          token: localStorage.id_token,
           feedback: this.feedback
     }
     this._taskService.postData(JSON.stringify(userFeedback), this.FEEDBACK_URL)
