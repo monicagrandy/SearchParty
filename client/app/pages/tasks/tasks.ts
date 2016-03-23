@@ -98,10 +98,12 @@ export class TaskPage {
 
   searchComplete(){
     this.endTime = new Date().toLocaleTimeString()
+    localStorage.endTime = this.endTime
     this.startTime = localStorage.startTime
     let finalLat = this.previousPlaces[10].location.coordinate.latitude
     let finalLng = this.previousPlaces[10].location.coordinate.longitude
     this.loadMap(finalLat, finalLng, 12)
+    let bounds = new google.maps.LatLngBounds();
     let points = []
     for(let i = 0; i < this.previousPlaces.length; i++){
       let currLat = this.previousPlaces[i].location.coordinate.latitude
@@ -113,6 +115,8 @@ export class TaskPage {
       let info = '<h4>' + currChallenge + '</h4><p>' + name  + '</p>'
       points.push(new google.maps.LatLng(currLat, currLng))
       this.addMarker(currPos, info);
+      bounds.extend(currPos);
+      this.map.fitBounds(bounds);
     }
     let flightPath = new google.maps.Polyline({
       map: this.map,  
@@ -122,6 +126,16 @@ export class TaskPage {
       strokeWeight: 2
     });
     this.calcDistance()
+  }
+
+  userFeedback(){
+    let dataObj = {
+          previousPlaces: this.previousPlaces,
+          previousTasks: this.previousTasks,
+          geolocation: {
+            lat: this.locLat,
+            lng: this.locLng
+          }
   }
 
   calcDistance(){
@@ -157,10 +171,10 @@ export class TaskPage {
       center: latLng,
       zoom: zoom,
       mapTypeId: google.maps.MapTypeId.ROADMAP
-    }
+    }  
     this.map = new google.maps.Map(document.getElementById('map'), mapOptions)
     this.addMarker(latLng)
-    }
+  }
 
   addMarker(coords, content) {  
     let pin = new google.maps.Marker({
