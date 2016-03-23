@@ -38,4 +38,23 @@
       Next Task
     </button>
   </ion-card>
+
+  <ion-card *ngIf="!tasksLeft">
+    <ion-list>
+      <ion-list-header>
+        <h2>How was your hunt?</h2>
+      </ion-list-header>
+      <ion-item>
+        <button class="goodReview">
+          <ion-icon name="thumbs-up"></ion-icon>
+        </button>
+      </ion-item>
+      <ion-item>  
+        <button class="badReview">
+          <ion-icon name="thumbs-down"></ion-icon>
+        </button>
+      </ion-item>
+    </ion-list>  
+  </ion-card>
+
 </ion-content>
