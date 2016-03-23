@@ -8,9 +8,9 @@ module.exports = {
   addTaskAndLocationToHunt: (task, location, huntID) => {
     let taskID = task.id;
     let locationProps = {
-      "props": location;
+      "props": location
     };
-    
+
     const insertTaskAndLocationToHuntQuery =
     `MATCH (hunt:Hunt{id:${huntID}}), (task:Task{id:${taskID}})
     CREATE (location:Place{props})
