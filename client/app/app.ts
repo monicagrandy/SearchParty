@@ -79,6 +79,7 @@ export class MyApp {
       localStorage.removeItem('userLat');
       localStorage.removeItem('userLng');
       localStorage.removeItem('startTime');
+      localStorage.removeItem('endTime');
       location.reload();
 
     }
