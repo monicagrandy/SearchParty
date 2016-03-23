@@ -12,10 +12,11 @@ module.exports = {
     let chatID = "c" + shortid();
     let huntStartTime = new Date();
 
-    const initializeHuntQuery = 
+    const initializeHuntQuery =
     `CREATE (hunt:Hunt{id:"${huntID}", starttime:"${huntStartTime}"}), (chat:Chatroom{id:"${chatID}"})
     MATCH (user:User{username:"${username}"})
-    CREATE (user)-[:PARTICIPATED_IN]->(hunt)-[:HAS_CHAT]->(chat)`;
+    CREATE (user)-[:PARTICIPATED_IN]->(hunt)-[:HAS_CHAT]->(chat)
+    RETURN hunt`;
 
     return neo4jPromise.databaseQueryPromise(initializeHuntQuery);
   }

@@ -2,6 +2,7 @@
 
 const config = require('../config/config.js');
 const oAuth = require('./yelpOauthGenerator.js');
+const request = require('request');
 
 module.exports = {
   yelpPlacesBasedOnKeyword: (keyword, geolocation) => {
@@ -16,6 +17,6 @@ module.exports = {
           return reject({error: error});
         }
       })
-    })    
+    })
   }
 }

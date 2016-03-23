@@ -2,33 +2,62 @@
 
 const neo = require('../db/neo.js');
 const shortid = require('shortid');
-const config = require('../db/config/config.js');
 const jwt = require('jwt-simple');
+const config = require('../config/config.js');
+const createNewHunt = require('../lib/hunt/createNewHunt.js');
+const addHuntData = require('../lib/hunt/addTaskAndLocationToHunt.js');
+const taskLookup = require('../lib/hunt/getKeyWordTasksFromDB.js');
+const yelpAPICall = require('../lib/yelp/yelpAPICall.js');
+const filter = require('../lib/util/filterResults.js');
+const random = require('../lib/util/randomSelect.js');
 
 module.exports = {
-  postCompletedTasksToDB: (req, res) => {
-    //also being sent the user token
-    //create a random hunt id on the backend
-    //send back entire hunt with tasks and places
-    //let userName = jwt.decode({username: username}, config.secret);
-    let huntID = "h" + shortid();
-    let previousPlaces = req.body.businesses;
+  huntMaker: (req, res) => {
+    let keyword = req.body.keyword;
+    let geolocation = req.body.geolocation;
+    let username = jwt.decode({username: req.body.token}, config.secret);
+    let huntID = req.body.huntID || null;
+    let previousPlaces = req.body.previousPlaces;
     let previousTasks = req.body.previousTasks;
+    let randomTask;
+    let randomPlace;
 
-    let createHuntParams = {
-      "businessProperties": previousPlaces,
-      "taskProperties": previousTasks
-    };
-
-    let addTaskToHuntQuery = `MATCH (u:User{userName:"${userName}"}) CREATE (u)-[:PARTICIPATED_IN]->(:Hunt{id:"${huntID}"})-[r:INCLUDES]->(:Task{taskProperties})-[:OCCURRED_AT]->(:Place{businessProperties}) RETURN u`;
-
-    // let addTaskToHuntQuery = `CREATE (:Hunt${huntID})-[r:INCLUDES]->(:Task{id:${taskID}}) RETURN r`;
-
-      neo.runCypherStatementPromise(addTaskToHuntQuery, createHuntParams)
-      .then((data) => {
-
-      }).catch((error) => {
-        console.log(error);
+    if(huntID) {
+      createNewHunt.initializeHunt(username)
+      .then(hunt => {
+        huntID = hunt.id;
+        yelpAPICall.yelpPlacesBasedOnKeyword(keyword)
+        .then(places => {
+          let filteredPlaces = filter.filterResults(previousPlaces, places);
+          randomPlace = filteredPlaces[random.randomNumberGen(filteredPlaces.length)];
+          taskLookup.getTask(tasks => {
+            let filteredTasks = filter.filterResults(previousTasks, tasks);
+            randomTask = filteredTasks[random.randomNumberGen(filteredTasks.length)];
+            addHuntData.addTaskAndLocationToHunt(randomTask, randomPlace, huntID);
+            res.json({
+              buisnesses: randomPlace,
+              tasks: randomTask,
+              huntID: huntID
+            })
+          })
+        })
       })
+    } else {
+      yelpAPICall.yelpPlacesBasedOnKeyword(keyword)
+      .then(places => {
+        let filteredPlaces = filter.filterResults(previousPlaces, places);
+        randomPlace = filteredPlaces[random.randomNumberGen(filteredPlaces.length)];
+        taskLookup.getTask(tasks => {
+          let filteredTasks = filter.filterResults(previousTasks, tasks);
+          randomTask = filteredTasks[random.randomNumberGen(filteredTasks.length)];
+          addHuntData.addTaskAndLocationToHunt(randomTask, randomPlace, huntID);
+          res.json({
+            buisnesses: randomPlace,
+            tasks: randomTask,
+            huntID: huntID
+          })
+        })
+      })
+    }
   }
 }
