@@ -1,6 +1,8 @@
 import {Page, NavController, NavParams, LocalStorage} from 'ionic-angular';
 import {TaskService} from '../../services/task-service/task-service';
 import { ConnectionBackend, HTTP_PROVIDERS } from 'angular2/http';
+import {JwtHelper} from 'angular2-jwt';
+import {TemplatePage} from '../templates/templates';
 import 'rxjs/add/operator/map';
 
 
@@ -24,12 +26,30 @@ export class TaskPage {
   locName: string; //set this to whatever is in local storage
   completeToggle = false;
   keywords = ['Bar', 'Bar', 'Bar', 'Bar', 'Bar', 'Bar','Bar','Bar', 'Bar', 'Bar'];
+  tasksLeft: any;
+  endHunt: boolean;
+  startTime: any;
+  endTime: any;
+  user: string;
+  jwtHelper: JwtHelper = new JwtHelper();
+  token: any;
   previousPlaces: any;
   previousTasks: any;
-  
+  finalDist: any;
+  TASKS_URL: string = process.env.TASKSURL || 'http://localhost:8000/tasks';
+  FEEDBACK_URL: string = process.env.FEEDBACKURL || 'http://localhost:8000/feedback';
+  feedback: string;
+
+
   constructor(private nav: NavController, navParams: NavParams, private _taskService: TaskService) {
     // If we navigated to this page, we will have an item available as a nav param
     //this.map = null;
+    this.tasksLeft = true
+    //console.log(localStorage.id_token)
+    this.token = localStorage.id_token
+    if(this.token) {
+      this.user = this.jwtHelper.decodeToken(this.token).username;
+    }
     this.locAddress = navParams.get('locAddress');
     this.currChallenge = navParams.get('currChallenge');
     this.locLat = navParams.get('locLat');
@@ -37,30 +57,30 @@ export class TaskPage {
     this.locName = navParams.get('locName');
     this.previousPlaces = navParams.get('previousPlaces');
     this.previousTasks = navParams.get('previousTasks');
-    setTimeout(()=>{ this.loadMap(this.locLat, this.locLng), 2000 })
+    setTimeout(()=>{ this.loadMap(this.locLat, this.locLng, 15), 2000 })
 
   }
 
   //this should be triggered when the next button is pushed
   getNewTask(){
-    console.log("getting ready to send new task!")
-      //move this down to success callback later
-      //this.logIn.local.set('userLng', position.coords.longitude)
-      console.log(this.keywords)     
+    console.log('getting ready to send new task!')
+      console.log(this.keywords)
+
       if(this.keywords.length > 0){
         let keyword = this.keywords.shift()
         let dataObj = {
           previousPlaces: this.previousPlaces,
           previousTasks: this.previousTasks,
-
           keyword: keyword,
           geolocation: {
             lat: this.locLat,
             lng: this.locLng
           }
         }
-        this._taskService.postData(JSON.stringify(dataObj))
-          .then(result => { 
+
+        this._taskService.postData(JSON.stringify(dataObj), this.TASKS_URL)
+          .then(result => {
+
             this.locName = result.businesses.name;
             this.currChallenge = result.tasks.content
             this.previousPlaces.push(result.businesses)
@@ -69,39 +89,119 @@ export class TaskPage {
             this.locLat = result.businesses.location.coordinate.latitude;
             this.locLng = result.businesses.location.coordinate.longitude;
             this.markComplete();
-            this.loadMap(this.locLat, this.locLng);
+            this.loadMap(this.locLat, this.locLng, 15);
           })
         }
       else {
-        console.log("no more tasks!")
+        console.log('no more tasks!')
         console.log(this.previousTasks)
         console.log(this.previousPlaces)
-    } 
+        this.searchComplete();
+        this.tasksLeft = false;
+    }
   }
 
   searchComplete(){
-    
+    this.endTime = new Date().toLocaleTimeString()
+    localStorage.endTime = this.endTime
+    this.startTime = localStorage.startTime
+    let finalLat = this.previousPlaces[10].location.coordinate.latitude
+    let finalLng = this.previousPlaces[10].location.coordinate.longitude
+    this.loadMap(finalLat, finalLng, 12)
+    let bounds = new google.maps.LatLngBounds();
+    let points = []
+    for(let i = 0; i < this.previousPlaces.length; i++){
+      let currLat = this.previousPlaces[i].location.coordinate.latitude
+      let currLng = this.previousPlaces[i].location.coordinate.longitude
+      let name = this.previousPlaces[i].name
+      let currChallenge = this.previousTasks[i].content
+      console.log(currChallenge)
+      let currPos = new google.maps.LatLng(currLat, currLng);
+      let info = '<h4>' + currChallenge + '</h4><p>' + name  + '</p>'
+      points.push(new google.maps.LatLng(currLat, currLng))
+      this.addMarker(currPos, info);
+      bounds.extend(currPos);
+      this.map.fitBounds(bounds);
+    }
+    let flightPath = new google.maps.Polyline({
+      map: this.map,
+      path: points,
+      strokeColor: "#FF0000",
+      strokeOpacity: 1.0,
+      strokeWeight: 2
+    });
+    this.calcDistance()
+
   }
 
+  sendFeedback(val){
+    if(val === 1){
+      console.log('sending good feedback!')
+      this.feedback = "good"
+    }
+    if(val === 2){
+      console.log('sending bad feedback!')
+      this.feedback = "bad"
+    }
+    let userFeedback = {
+          user: this.user,
+          feedback: this.feedback
+    }
+    this._taskService.postData(JSON.stringify(userFeedback), this.FEEDBACK_URL)
+      .then(result => {
+        this.nav.setRoot(TemplatePage)
+        console.log(result)
+      })
+  }
 
-  loadMap(lat, long){
+  calcDistance(){
+    let latLng0 = new google.maps.LatLng(this.previousPlaces[0].location.coordinate.latitude, this.previousPlaces[0].location.coordinate.longitude);
+    let latLng1 = new google.maps.LatLng(this.previousPlaces[1].location.coordinate.latitude, this.previousPlaces[1].location.coordinate.longitude);
+    let latLng2 = new google.maps.LatLng(this.previousPlaces[2].location.coordinate.latitude, this.previousPlaces[2].location.coordinate.longitude);
+    let latLng3 = new google.maps.LatLng(this.previousPlaces[3].location.coordinate.latitude, this.previousPlaces[3].location.coordinate.longitude);
+    let latLng4 = new google.maps.LatLng(this.previousPlaces[4].location.coordinate.latitude, this.previousPlaces[4].location.coordinate.longitude);
+    let latLng5 = new google.maps.LatLng(this.previousPlaces[5].location.coordinate.latitude, this.previousPlaces[5].location.coordinate.longitude);
+    let latLng6 = new google.maps.LatLng(this.previousPlaces[6].location.coordinate.latitude, this.previousPlaces[6].location.coordinate.longitude);
+    let latLng7 = new google.maps.LatLng(this.previousPlaces[7].location.coordinate.latitude, this.previousPlaces[7].location.coordinate.longitude);
+    let latLng8 = new google.maps.LatLng(this.previousPlaces[8].location.coordinate.latitude, this.previousPlaces[8].location.coordinate.longitude);
+    let latLng9 = new google.maps.LatLng(this.previousPlaces[9].location.coordinate.latitude, this.previousPlaces[9].location.coordinate.longitude);
+    let latLng10 = new google.maps.LatLng(this.previousPlaces[10].location.coordinate.latitude, this.previousPlaces[10].location.coordinate.longitude);
+    let dist0 = google.maps.geometry.spherical.computeDistanceBetween (latLng0, latLng1);
+    let dist1 = google.maps.geometry.spherical.computeDistanceBetween (latLng1, latLng2);
+    let dist2 = google.maps.geometry.spherical.computeDistanceBetween (latLng3, latLng4);
+    let dist3 = google.maps.geometry.spherical.computeDistanceBetween (latLng4, latLng5);
+    let dist4 = google.maps.geometry.spherical.computeDistanceBetween (latLng5, latLng6);
+    let dist5 = google.maps.geometry.spherical.computeDistanceBetween (latLng6, latLng7);
+    let dist6 = google.maps.geometry.spherical.computeDistanceBetween (latLng7, latLng8);
+    let dist7 = google.maps.geometry.spherical.computeDistanceBetween (latLng8, latLng9);
+    let dist8 = google.maps.geometry.spherical.computeDistanceBetween (latLng9, latLng10);
+    let sum = dist0+dist1+dist2+dist3+dist4+dist5+dist6+dist7+dist8
+    this.finalDist = (sum * 0.000621371).toPrecision(3)
+    return this.finalDist
+  }
+
+  loadMap(lat, long, zoom){
     let options = { timeout: 10000, enableHighAccuracy: true }
     let latLng = new google.maps.LatLng(lat, long);
     let mapOptions = {
       center: latLng,
-      zoom: 15,
+      zoom: zoom,
       mapTypeId: google.maps.MapTypeId.ROADMAP
     }
     this.map = new google.maps.Map(document.getElementById('map'), mapOptions)
+    this.addMarker(latLng)
+  }
+
+  addMarker(coords, content) {
     let pin = new google.maps.Marker({
       map: this.map,
       animation: google.maps.Animation.DROP,
-      position: latLng
+      position: coords
     });
-    let info = '<h4>' + this.locName + '</h4><p>' + this.locAddress + '</p>'
-      
-    this.addInfoWindow(pin, info)  
-  }  
+
+    let info = content || '<h4>' + this.locName + '</h4><p>' + this.locAddress  + '</p>'
+    this.addInfoWindow(pin, info)
+  }
 
   addInfoWindow(marker, content){
     console.log(content);
@@ -112,7 +212,7 @@ export class TaskPage {
     google.maps.event.addListener(marker, 'click', function(){
       infoWindow.open(this.map, marker);
     });
-  }  
+  }
 
   //use this to check if user is allowed to move on to the next task
   markComplete(){
@@ -125,5 +225,5 @@ export class TaskPage {
     }
     return this.completeToggle
   }
-  
+
 }

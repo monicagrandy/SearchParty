@@ -16,6 +16,7 @@ import 'rxjs/add/operator/map';
 export class LogIn {
   LOGIN_URL: string = process.env.SIGNINURL || 'http://localhost:8000/signin'; //update this later
   SIGNUP_URL: string = process.env.SIGNUPURL || 'http://localhost:8000/signup';
+
   auth: AuthService;
   // When the page loads, we want the Login segment to be selected
   authType: string = 'login';
@@ -29,7 +30,7 @@ export class LogIn {
   constructor(private http: Http, private nav: NavController, navParams: NavParams) {
     this.auth = AuthService;
     let token = this.local.get('id_token')._result;
-    //let token = sessionStorage.id_token 
+    //let token = sessionStorage.id_token
     if(token) {
       this.user = this.jwtHelper.decodeToken(token).username;
     }
