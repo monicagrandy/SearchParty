@@ -11,7 +11,7 @@ export class TemplatePage {
   testData: Array<{type: string, huntname: string, image: string, icon: string}>;
   items: Array<{title: string, image: string, huntname: string, icon: string}>;
   local: Storage = new Storage(LocalStorage);
-  loadComplete = false;
+  loadComplete: boolean;
   loadingImg: any;
   userLng: number;
   userLat: number;
@@ -23,8 +23,9 @@ export class TemplatePage {
     this.selectedItem = navParams.get('item');
     
     this.loadingImg = 'img/poi.gif'
-
+    
     if (navigator.geolocation) {
+      this.loadComplete = false
       console.log(this.loadComplete)
       navigator.geolocation.watchPosition((position => {
         this.local.set('userLat', position.coords.latitude);
@@ -57,6 +58,7 @@ export class TemplatePage {
   itemTapped(event, item) {
     console.log('sending item.type... ', item);
     this.userInfo = localStorage;
+    localStorage.startTime = new Date().toLocaleTimeString()
     console.log('sending userInfo... ', this.userInfo);
     // this.geolocation.longitude = this.userInfo.userLng;
     // console.log(this.geolocation);
@@ -69,7 +71,7 @@ export class TemplatePage {
           locLng: data.businesses.location.coordinate.longitude,
           locName: data.businesses.name,
           previousPlaces: [data.businesses],
-          previousTasks: [data.tasks]
+          previousTasks: [data.tasks],
         });
       })
         .catch(error => console.log(error));
