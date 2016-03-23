@@ -7,8 +7,9 @@ module.exports = {
 
   addTaskAndLocationToHunt: (task, location, huntID) => {
 
-    let insertTaskAndLocationToHuntQuery = ``;
+    const insertTaskAndLocationToHuntQuery =
+    ``;
+
     return neo4jPromise.databaseQueryPromise(insertTaskAndLocationToHuntQuery);
   }
-
 }

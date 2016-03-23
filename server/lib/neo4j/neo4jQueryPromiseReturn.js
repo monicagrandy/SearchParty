@@ -9,7 +9,7 @@ module.exports = {
     .then(data => {
       return new Promise((resolve, reject) => {
         if(data) {
-          return resolve(data);
+          return resolve(data[0]);
         } else {
           return reject({error: 'keyword doesnt exist'});
         }
