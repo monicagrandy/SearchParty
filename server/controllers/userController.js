@@ -4,7 +4,7 @@ const bcrypt = require('bcrypt-nodejs');
 const neo = require('../db/neo.js');
 const shortid = require('shortid');
 if(!process.env.JWTSECRET) {
-  var config = require('../db/config/config.js');
+  var config = require('../config/config.js');
 }
 
 const secret = process.env.JWTSECRET || config.secret;

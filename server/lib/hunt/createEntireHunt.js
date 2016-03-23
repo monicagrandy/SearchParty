@@ -1,7 +1,7 @@
 'use strict'
 
 const createNewHunt = require('./createNewHuntID.js');
-const addHuntData = require('./addTaskAndLocationToHunt.js');
+const addHuntData = require('./addTasksAndLocationsToHunt.js');
 const taskLookup = require('./getKeyWordTasksFromDB.js');
 const yelpAPICall = require('../yelp/yelpAPICall.js');
 const filter = require('../util/filterResults.js');
@@ -9,7 +9,7 @@ const random = require('../util/randomSelect.js');
 
 module.exports = {
   createHunt: (keyword, previousPlaces, previousTasks, huntID) => {
-    
+
     let randomTask;
     let randomPlace;
 

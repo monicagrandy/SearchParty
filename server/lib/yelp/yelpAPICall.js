@@ -1,6 +1,6 @@
 'use strict'
 
-const config = require('../config/config.js');
+const config = require('../../config/config.js');
 const oAuth = require('./yelpOauthGenerator.js');
 const request = require('request');
 

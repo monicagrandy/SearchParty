@@ -1,6 +1,6 @@
 'use strict'
 
-const apiConfig = require('../config/config.js');
+const apiConfig = require('../../config/config.js');
 const oauth = require('oauth');
 const oauthSig = require('oauth-signature');
 const qs = require('querystring');

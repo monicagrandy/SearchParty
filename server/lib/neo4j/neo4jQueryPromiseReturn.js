@@ -1,6 +1,6 @@
 'use strict'
 
-const neo = require('../db/neo.js');
+const neo = require('../../db/neo.js');
 
 module.exports = {
 

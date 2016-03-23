@@ -1,6 +1,6 @@
 'use strict'
 
-const neo = require('../db/neo.js');
+const neo = require('../../db/neo.js');
 const neo4jPromise = require('../neo4j/neo4jQueryPromiseReturn.js');
 
 module.exports = {
