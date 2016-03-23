@@ -23,7 +23,8 @@ module.exports = {
         console.log("inside initalieHunt", hunt);
         makeHunt.createHunt(keyword, previousPlaces, previousTasks, hunt, geolocation)
         .then(resultsObj => {
-          // console.log("create hunt done promising", resultsObj);
+          console.log("end of making hunt");
+          console.log("create hunt done promising", resultsObj);
           res.json(resultsObj);
         })
       })

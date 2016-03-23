@@ -23,25 +23,31 @@ module.exports = {
       // console.log("filtered Places from YELP", filteredPlaces);
       randomPlace = filteredPlaces[random.randomNumberGen(filteredPlaces.length)];
       console.log("random place object", randomPlace);
-      taskLookup.getTask(keyword)
+      return taskLookup.getTask(keyword)
       .then(tasks => {
         console.log("inside create entire hunt", tasks);
         let filteredTasks = filter.filterExisitingResults(previousTasks, tasks);
         console.log("filtered Tasks", filteredTasks);
         randomTask = filteredTasks[random.randomNumberGen(filteredTasks.length)];
-        addHuntData.addTaskAndLocationToHunt(randomTask, randomPlace, huntID);
+        return addHuntData.addTaskAndLocationToHunt(randomTask, randomPlace, huntID)
 
-        return new Promise((resolve, reject) => {
-          if(tasks) {
-            resolve({
-              buisnesses: randomPlace,
-              tasks: randomTask,
-              huntID: huntID
-            });
-          } else {
-            reject({error: "could not create hunt"});
-          }
+        .then(data => {
+          console.log("data at the end of the promised land", data);
+          return new Promise((resolve, reject) => {
+            if(data) {
+              let objectToSend = {
+                buisnesses: randomPlace,
+                tasks: randomTask,
+                huntID: huntID
+              };
+              console.log("object to send", objectToSend);
+              resolve(objectToSend);
+            } else {
+              reject({error: "could not create hunt"});
+            }
+          })
         })
+
       })
     })
     .catch(error => {
