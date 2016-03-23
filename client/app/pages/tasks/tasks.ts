@@ -39,7 +39,8 @@ export class TaskPage {
   TASKS_URL: string = process.env.TASKSURL || 'http://localhost:8000/tasks';
   FEEDBACK_URL: string = process.env.FEEDBACKURL || 'http://localhost:8000/feedback';
   feedback: string;
-  
+
+
   constructor(private nav: NavController, navParams: NavParams, private _taskService: TaskService) {
     // If we navigated to this page, we will have an item available as a nav param
     //this.map = null;
@@ -63,7 +64,8 @@ export class TaskPage {
   //this should be triggered when the next button is pushed
   getNewTask(){
     console.log('getting ready to send new task!')
-      console.log(this.keywords)     
+      console.log(this.keywords)
+
       if(this.keywords.length > 0){
         let keyword = this.keywords.shift()
         let dataObj = {
@@ -75,8 +77,10 @@ export class TaskPage {
             lng: this.locLng
           }
         }
+
         this._taskService.postData(JSON.stringify(dataObj), this.TASKS_URL)
-          .then(result => { 
+          .then(result => {
+
             this.locName = result.businesses.name;
             this.currChallenge = result.tasks.content
             this.previousPlaces.push(result.businesses)
@@ -94,7 +98,7 @@ export class TaskPage {
         console.log(this.previousPlaces)
         this.searchComplete();
         this.tasksLeft = false;
-    } 
+    }
   }
 
   searchComplete(){
@@ -120,13 +124,14 @@ export class TaskPage {
       this.map.fitBounds(bounds);
     }
     let flightPath = new google.maps.Polyline({
-      map: this.map,  
+      map: this.map,
       path: points,
       strokeColor: "#FF0000",
       strokeOpacity: 1.0,
       strokeWeight: 2
     });
     this.calcDistance()
+
   }
 
   sendFeedback(val){
@@ -148,7 +153,7 @@ export class TaskPage {
         console.log(result)
       })
   }
-    
+
   calcDistance(){
     let latLng0 = new google.maps.LatLng(this.previousPlaces[0].location.coordinate.latitude, this.previousPlaces[0].location.coordinate.longitude);
     let latLng1 = new google.maps.LatLng(this.previousPlaces[1].location.coordinate.latitude, this.previousPlaces[1].location.coordinate.longitude);
@@ -174,7 +179,7 @@ export class TaskPage {
     this.finalDist = (sum * 0.000621371).toPrecision(3)
     return this.finalDist
   }
- 
+
   loadMap(lat, long, zoom){
     let options = { timeout: 10000, enableHighAccuracy: true }
     let latLng = new google.maps.LatLng(lat, long);
@@ -182,20 +187,21 @@ export class TaskPage {
       center: latLng,
       zoom: zoom,
       mapTypeId: google.maps.MapTypeId.ROADMAP
-    }  
+    }
     this.map = new google.maps.Map(document.getElementById('map'), mapOptions)
     this.addMarker(latLng)
   }
 
-  addMarker(coords, content) {  
+  addMarker(coords, content) {
     let pin = new google.maps.Marker({
       map: this.map,
       animation: google.maps.Animation.DROP,
       position: coords
     });
+
     let info = content || '<h4>' + this.locName + '</h4><p>' + this.locAddress  + '</p>'
     this.addInfoWindow(pin, info)
-  }  
+  }
 
   addInfoWindow(marker, content){
     console.log(content);
@@ -206,7 +212,7 @@ export class TaskPage {
     google.maps.event.addListener(marker, 'click', function(){
       infoWindow.open(this.map, marker);
     });
-  }  
+  }
 
   //use this to check if user is allowed to move on to the next task
   markComplete(){
@@ -219,5 +225,5 @@ export class TaskPage {
     }
     return this.completeToggle
   }
-  
+
 }
