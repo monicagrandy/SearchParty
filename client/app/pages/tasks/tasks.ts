@@ -34,6 +34,7 @@ export class TaskPage {
   token: any;
   previousPlaces: any;
   previousTasks: any;
+  finalDist: any;
   
   constructor(private nav: NavController, navParams: NavParams, private _taskService: TaskService) {
     // If we navigated to this page, we will have an item available as a nav param
@@ -120,6 +121,33 @@ export class TaskPage {
       strokeOpacity: 1.0,
       strokeWeight: 2
     });
+    this.calcDistance()
+  }
+
+  calcDistance(){
+    let latLng0 = new google.maps.LatLng(this.previousPlaces[0].location.coordinate.latitude, this.previousPlaces[0].location.coordinate.longitude);
+    let latLng1 = new google.maps.LatLng(this.previousPlaces[1].location.coordinate.latitude, this.previousPlaces[1].location.coordinate.longitude);
+    let latLng2 = new google.maps.LatLng(this.previousPlaces[2].location.coordinate.latitude, this.previousPlaces[2].location.coordinate.longitude);
+    let latLng3 = new google.maps.LatLng(this.previousPlaces[3].location.coordinate.latitude, this.previousPlaces[3].location.coordinate.longitude);
+    let latLng4 = new google.maps.LatLng(this.previousPlaces[4].location.coordinate.latitude, this.previousPlaces[4].location.coordinate.longitude);
+    let latLng5 = new google.maps.LatLng(this.previousPlaces[5].location.coordinate.latitude, this.previousPlaces[5].location.coordinate.longitude);
+    let latLng6 = new google.maps.LatLng(this.previousPlaces[6].location.coordinate.latitude, this.previousPlaces[6].location.coordinate.longitude);
+    let latLng7 = new google.maps.LatLng(this.previousPlaces[7].location.coordinate.latitude, this.previousPlaces[7].location.coordinate.longitude);
+    let latLng8 = new google.maps.LatLng(this.previousPlaces[8].location.coordinate.latitude, this.previousPlaces[8].location.coordinate.longitude);
+    let latLng9 = new google.maps.LatLng(this.previousPlaces[9].location.coordinate.latitude, this.previousPlaces[9].location.coordinate.longitude);
+    let latLng10 = new google.maps.LatLng(this.previousPlaces[10].location.coordinate.latitude, this.previousPlaces[10].location.coordinate.longitude);
+    let dist0 = google.maps.geometry.spherical.computeDistanceBetween (latLng0, latLng1);
+    let dist1 = google.maps.geometry.spherical.computeDistanceBetween (latLng1, latLng2);
+    let dist2 = google.maps.geometry.spherical.computeDistanceBetween (latLng3, latLng4);
+    let dist3 = google.maps.geometry.spherical.computeDistanceBetween (latLng4, latLng5);
+    let dist4 = google.maps.geometry.spherical.computeDistanceBetween (latLng5, latLng6);
+    let dist5 = google.maps.geometry.spherical.computeDistanceBetween (latLng6, latLng7);
+    let dist6 = google.maps.geometry.spherical.computeDistanceBetween (latLng7, latLng8);
+    let dist7 = google.maps.geometry.spherical.computeDistanceBetween (latLng8, latLng9);
+    let dist8 = google.maps.geometry.spherical.computeDistanceBetween (latLng9, latLng10);
+    let sum = dist0+dist1+dist2+dist3+dist4+dist5+dist6+dist7+dist8
+    this.finalDist = (sum * 0.000621371).toPrecision(3)
+    return this.finalDist
   }
  
   loadMap(lat, long, zoom){

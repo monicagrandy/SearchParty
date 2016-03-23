@@ -14,8 +14,7 @@
         <h2>{{locAddress}}</h2>
       </ion-item>
       <ion-item *ngIf="!tasksLeft">
-        <h2>You completed {{previousTasks.length}} tasks</h2> 
-        <!-- <h2>{{locAddress}}</h2> -->
+        <h2>You completed <strong>{{previousTasks.length}}</strong> tasks and travelled <strong>{{finalDist}}</strong> miles</h2>
       </ion-item>
       <div id="map"></div>
     </div>
