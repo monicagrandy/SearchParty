@@ -78,6 +78,7 @@ export class MyApp {
       localStorage.removeItem('id_token');
       localStorage.removeItem('userLat');
       localStorage.removeItem('userLng');
+      localStorage.removeItem('startTime');
       location.reload();
 
     }
