@@ -101,9 +101,9 @@ export class TaskPage {
           this.loadMap(this.locLat, this.locLng, 15);
         });
     } else {
-      console.log('no more tasks!')
-      console.log(this.previousTasks)
-      console.log(this.previousPlaces)
+      console.log('no more tasks!');
+      console.log(this.previousTasks);
+      console.log(this.previousPlaces);
       this.tasksLeft = false;
       this.searchComplete();
     }
@@ -143,23 +143,26 @@ export class TaskPage {
   }
 
   sendFeedback(val){
-    if(val === 1){
-      console.log('sending good feedback!')
-      this.feedback = "good"
+    if (val === 1) {
+      console.log('sending good feedback!');
+      this.feedback = "good";
     }
-    if(val === 2){
-      console.log('sending bad feedback!')
-      this.feedback = "bad"
+    
+    if (val === 2) {
+      console.log('sending bad feedback!');
+      this.feedback = "bad";
     }
+    
     let userFeedback = {
           token: localStorage.id_token,
           feedback: this.feedback
-    }
+    };
+    
     this._taskService.postData(JSON.stringify(userFeedback), this.FEEDBACK_URL)
       .then(result => {
-        this.nav.setRoot(TemplatePage)
-        console.log(result)
-      })
+        this.nav.setRoot(TemplatePage);
+        console.log(result);
+      });
   }
 
   calcDistance(){
@@ -187,15 +190,15 @@ export class TaskPage {
   }
 
   loadMap(lat, long, zoom){
-    let options = { timeout: 10000, enableHighAccuracy: true }
+    let options = { timeout: 10000, enableHighAccuracy: true };
     let latLng = new google.maps.LatLng(lat, long);
     let mapOptions = {
       center: latLng,
       zoom: zoom,
       mapTypeId: google.maps.MapTypeId.ROADMAP
-    }
-    this.map = new google.maps.Map(document.getElementById('map'), mapOptions)
-    this.addMarker(latLng)
+    };
+    this.map = new google.maps.Map(document.getElementById('map'), mapOptions);
+    this.addMarker(latLng);
   }
 
   addMarker(coords, content) {
@@ -205,8 +208,8 @@ export class TaskPage {
       position: coords
     });
 
-    let info = content || '<h4>' + this.locName + '</h4><p>' + this.locAddress  + '</p>'
-    this.addInfoWindow(pin, info)
+    let info = content || '<h4>' + this.locName + '</h4><p>' + this.locAddress  + '</p>';
+    this.addInfoWindow(pin, info);
   }
 
   addInfoWindow(marker, content){
@@ -222,14 +225,13 @@ export class TaskPage {
 
   //use this to check if user is allowed to move on to the next task
   markComplete(){
-    console.log(this.completeToggle)
-    if(this.completeToggle === false){
-      this.completeToggle = true
+    console.log(this.completeToggle);
+    if (this.completeToggle === false) {
+      this.completeToggle = true;
+    } else {
+      this.completeToggle = false;
     }
-    else {
-      this.completeToggle = false
-    }
-    return this.completeToggle
+    return this.completeToggle;
   }
 
 }
