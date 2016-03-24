@@ -20,7 +20,7 @@ module.exports = {
     const insertTaskAndLocationToHuntQuery =
     `MATCH (hunt:Hunt{id:"${huntID}"}), (task:Task{id:${taskID}})
     CREATE (location:Place{name:"${smallerLocation.name}", id:"${smallerLocation.id}", lat:"${smallerLocation.lat}", lng:"${smallerLocation.lng}", address:"${smallerLocation.address}"})
-    CREATE (hunt)-[:INCLUDES]->(task)-[:OCCURRED_AT]->(location)
+    CREATE (hunt)-[:OCCURRED_AT]->(location)-[:INCLUDES]->(task)
     RETURN hunt`;
 
     return neo4jPromise.databaseQueryPromise(insertTaskAndLocationToHuntQuery);
