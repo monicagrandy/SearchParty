@@ -155,6 +155,9 @@ export class TaskPage {
     
     let userFeedback = {
           token: localStorage.id_token,
+          huntID: this.huntID,
+          endTime: localStorage.endTime,
+          distance: this.finalDist,
           feedback: this.feedback
     };
     
