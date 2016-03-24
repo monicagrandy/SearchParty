@@ -25,7 +25,7 @@ export class TaskPage {
   locLng: any; //set this to whatever is in local storage
   locName: string; //set this to whatever is in local storage
   completeToggle = false;
-  keywords = ['Bar', 'Bar', 'Bar', 'Bar', 'Bar', 'Bar','Bar','Bar', 'Bar', 'Bar'];
+  keywords = ['Bar', 'Bar', 'Bar', 'Bar', 'Bar', 'Bar','Bar','Bar', 'Bar'];
   tasksLeft: any;
   endHunt: boolean;
   startTime: any;
@@ -99,17 +99,18 @@ export class TaskPage {
         console.log('no more tasks!')
         console.log(this.previousTasks)
         console.log(this.previousPlaces)
-        this.searchComplete();
         this.tasksLeft = false;
+        this.searchComplete();
     }
   }
 
   searchComplete(){
+    console.log(this.previousTasks)
     this.endTime = new Date().toLocaleTimeString()
     localStorage.endTime = this.endTime
     this.startTime = localStorage.startTime
-    let finalLat = this.previousPlaces[10].location.coordinate.latitude
-    let finalLng = this.previousPlaces[10].location.coordinate.longitude
+    let finalLat = this.previousPlaces[9].location.coordinate.latitude
+    let finalLng = this.previousPlaces[9].location.coordinate.longitude
     this.loadMap(finalLat, finalLng, 12)
     let bounds = new google.maps.LatLngBounds();
     let points = []
@@ -118,7 +119,6 @@ export class TaskPage {
       let currLng = this.previousPlaces[i].location.coordinate.longitude
       let name = this.previousPlaces[i].name
       let currChallenge = this.previousTasks[i].content
-      console.log(currChallenge)
       let currPos = new google.maps.LatLng(currLat, currLng);
       let info = '<h4>' + currChallenge + '</h4><p>' + name  + '</p>'
       points.push(new google.maps.LatLng(currLat, currLng))
@@ -168,7 +168,6 @@ export class TaskPage {
     let latLng7 = new google.maps.LatLng(this.previousPlaces[7].location.coordinate.latitude, this.previousPlaces[7].location.coordinate.longitude);
     let latLng8 = new google.maps.LatLng(this.previousPlaces[8].location.coordinate.latitude, this.previousPlaces[8].location.coordinate.longitude);
     let latLng9 = new google.maps.LatLng(this.previousPlaces[9].location.coordinate.latitude, this.previousPlaces[9].location.coordinate.longitude);
-    let latLng10 = new google.maps.LatLng(this.previousPlaces[10].location.coordinate.latitude, this.previousPlaces[10].location.coordinate.longitude);
     let dist0 = google.maps.geometry.spherical.computeDistanceBetween (latLng0, latLng1);
     let dist1 = google.maps.geometry.spherical.computeDistanceBetween (latLng1, latLng2);
     let dist2 = google.maps.geometry.spherical.computeDistanceBetween (latLng3, latLng4);
@@ -177,8 +176,7 @@ export class TaskPage {
     let dist5 = google.maps.geometry.spherical.computeDistanceBetween (latLng6, latLng7);
     let dist6 = google.maps.geometry.spherical.computeDistanceBetween (latLng7, latLng8);
     let dist7 = google.maps.geometry.spherical.computeDistanceBetween (latLng8, latLng9);
-    let dist8 = google.maps.geometry.spherical.computeDistanceBetween (latLng9, latLng10);
-    let sum = dist0+dist1+dist2+dist3+dist4+dist5+dist6+dist7+dist8
+    let sum = dist0+dist1+dist2+dist3+dist4+dist5+dist6+dist7
     this.finalDist = (sum * 0.000621371).toPrecision(3)
     return this.finalDist
   }
