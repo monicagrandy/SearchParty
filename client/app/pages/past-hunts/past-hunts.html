@@ -1,0 +1,28 @@
+<ion-navbar *navbar>
+  <button menuToggle>
+    <ion-icon name="menu"></ion-icon>
+  </button>
+  <ion-title>Past {{hunt.id}} Hunt</ion-title>
+</ion-navbar>
+
+<ion-content class="has-header cards-bg">
+  <ion-card class="adv-map">
+    <div style="position: relative">
+      <ion-item>
+        <h2>You completed <strong>{{previousTasks.length}}</strong> tasks and travelled <strong>{{finalDist}}</strong> miles</h2>
+      </ion-item>
+      <div id="map"></div>
+    </div>
+    <!--<ion-item *ngIf="tasksLeft">
+      <ion-icon subtle large item-left name='ios-pint'></ion-icon>
+      <h3>Current challenge</h3>
+      <p>{{currChallenge}}</p> 
+    </ion-item>-->
+    <!--<ion-item *ngIf="!tasksLeft">
+      <h3>You started this hunt at:</h3>
+        <p>{{startTime}}</p> 
+      <h3>and ended at:</h3>
+        <p>{{endTime}}</p> 
+    </ion-item>-->
+  </ion-card>
+</ion-content>
