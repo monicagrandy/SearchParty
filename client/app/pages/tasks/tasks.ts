@@ -83,7 +83,6 @@ export class TaskPage {
 
         this._taskService.postData(JSON.stringify(dataObj), this.TASKS_URL)
           .then(result => {
-
             this.locName = result.businesses.name;
             this.currChallenge = result.tasks.content
             this.previousPlaces.push(result.businesses)
@@ -148,6 +147,9 @@ export class TaskPage {
     }
     let userFeedback = {
           token: localStorage.id_token,
+          huntID: this.huntID,
+          endTime: localStorage.endTime,
+          distance: this.finalDist,
           feedback: this.feedback
     }
     this._taskService.postData(JSON.stringify(userFeedback), this.FEEDBACK_URL)
