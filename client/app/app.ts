@@ -27,25 +27,28 @@ export class MyApp {
   // make HelloIonicPage the root (or first) page
   rootPage: any = LogIn;
   pages: Array<{title: string, component: any}>;
-  auth: AuthService;
+  unauthPages: Array<{title: string, component: any}>;
   logout: LogIn;
   constructor(
     private app: IonicApp,
     private platform: Platform,
-    private menu: MenuController
+    private menu: MenuController,
+    private auth: AuthService
     //private location: Location
   ) {
     this.initializeApp();
-
-    this.auth = AuthService
 
     //set our app's pages
     
     this.pages = [
       { title: 'Hunts', component: TemplatePage },
-      { title: 'Current Task', component: TaskPage},
-      { title: 'My Profile', component: ProfilePage},
-      { title: 'Log Out', component: LogIn}
+      { title: 'My Profile', component: ProfilePage },
+      { title: 'Log Out', component: LogIn }
+    ];
+    
+    // unauthenticated pages
+    this.unauthPages = [
+      { title: 'Log In', component: LogIn }
     ];
 
   }
@@ -69,9 +72,6 @@ export class MyApp {
       // StatusBar.setStyle(StatusBar.LIGHT_CONTENT)
     });
   }
-  
-  auth
-
 
   openPage(page) { 
     // close the menu when clicking a link from the menu
@@ -88,6 +88,6 @@ export class MyApp {
     }
     // navigate to the new page if it is not the current page
     let nav = this.app.getComponent('nav');
-      nav.setRoot(page.component);
+      nav.push(page.component);
   }
 }
