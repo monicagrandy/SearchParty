@@ -19,7 +19,7 @@ module.exports = {
 
     const insertTaskAndLocationToHuntQuery =
     `MATCH (hunt:Hunt{huntID:"${huntID}"}), (task:Task{id:${taskID}})
-    CREATE (location:Place{name:"${smallerLocation.name}", id:"${smallerLocation.id}", lat:"${smallerLocation.lat}", lng:"${smallerLocation.lng}", address:"${smallerLocation.address}"})
+    CREATE (location:Place{name:"${smallerLocation.name}", placeID:"${smallerLocation.id}", lat:"${smallerLocation.lat}", lng:"${smallerLocation.lng}", address:"${smallerLocation.address}"})
     CREATE (hunt)-[:OCCURRED_AT]->(location)-[:INCLUDES]->(task)
     RETURN hunt`;
 
