@@ -22,17 +22,23 @@ export class TemplatePage {
     // If we navigated to this page, we will have an item available as a nav param
     this.selectedItem = navParams.get('item');
     
-    this.loadingImg = 'img/poi.gif'
-    
-    if (navigator.geolocation) {
-      this.loadComplete = false
-      console.log(this.loadComplete)
+    this.loadingImg = 'img/poi.gif';
+
+    if (localStorage.userLat && localStorage.userLng) {
+      this.userLat = localStorage.userLat;
+      this.userLng = localStorage.userLng;
+    } else { 
+      if (navigator.geolocation) {
+      console.log("getting geolocation")
       navigator.geolocation.watchPosition((position => {
+        this.userLat = position.coords.latitude;
+        this.userLng = position.coords.longitude;
         this.local.set('userLat', position.coords.latitude);
         this.local.set('userLng', position.coords.longitude);
-        setTimeout(()=>{this.loadComplete = true; console.log(this.loadComplete)}, 1000);
       }), (error => console.log(error)), {})
     }
+   } 
+
 
 
     this.testData = [
@@ -60,26 +66,20 @@ export class TemplatePage {
     this.userInfo = localStorage;
     localStorage.startTime = new Date().toLocaleTimeString()
     console.log('sending userInfo... ', this.userInfo);
-    // this.geolocation.longitude = this.userInfo.userLng;
-    // console.log(this.geolocation);
     this.templateService.postData(item.title, this.userInfo)
       .then(data => {
-        console.log(data)
         this.nav.setRoot(TaskPage, {
           locAddress: data.businesses.location.display_address[0] + ', ' + data.businesses.location.display_address[2],
+          huntID: data.huntID,
           currChallenge: data.tasks.content,
           locLat: data.businesses.location.coordinate.latitude,
           locLng: data.businesses.location.coordinate.longitude,
           locName: data.businesses.name,
           previousPlaces: [data.businesses],
-          previousTasks: [data.tasks],
-          huntID: data.huntID
+          previousTasks: [data.tasks]
         });
       })
         .catch(error => console.log(error));
-    // this.nav.push(TaskPage, {
-    //   item: item
-    // });
   }
 
 

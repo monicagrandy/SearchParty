@@ -8,26 +8,23 @@ export class TaskService {
   contentHeader: Headers = new Headers({'Content-Type': 'application/json'});
   
    postData(data, url) {
-    console.log("called post req")
+    console.log("called post req");
 
     let httpPromise = new Promise((resolve, reject) => {
-      console.log(data)
+      console.log(data);
       this._http.post(url, data, {headers: this.contentHeader})
         .map(res => res.json())
         .subscribe(
           data => {
-            console.log("data from promise: ", data)
-            resolve(data)
+            console.log("data from promise: ", data);
+            resolve(data);
           },
           err => reject(err),
           () => console.log('data recieved')  
           )
         })
     
-    return httpPromise
+    return httpPromise;
   }
-}
-
-
 }
 
