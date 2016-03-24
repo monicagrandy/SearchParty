@@ -7,7 +7,7 @@ exports.config = {
           },
           specs: [
                    // We are going to make this file in a minute
-                'e2e/spec.js'
+                'client/e2e/spec.js'
           ],
           baseUrl: 'http://localhost:8000/',
           jasmineNodeOpts: {
