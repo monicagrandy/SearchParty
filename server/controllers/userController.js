@@ -3,6 +3,8 @@ const jwt = require('jwt-simple');
 const bcrypt = require('bcrypt-nodejs');
 const neo = require('../db/neo.js');
 const shortid = require('shortid');
+const userInfo = require('../lib/user/showUserHuntsAndInfo.js');
+
 if(!process.env.JWTSECRET) {
   var config = require('../config/config.js');
 }
@@ -99,5 +101,12 @@ module.exports = {
     function error(error) {
       res.status(400).json(error);
     }
+  },
+  getUserInfo: (req, res) => {
+    let username = jwt.decode(req.body.token, config.secret).username;
+    userInfo.giveAllUserHuntData(username)
+    .then(userObject => {
+      res.json(userObject);
+    })
   }
 };
