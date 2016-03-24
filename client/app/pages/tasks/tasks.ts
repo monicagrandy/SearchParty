@@ -45,12 +45,14 @@ export class TaskPage {
   constructor(private nav: NavController, navParams: NavParams, private _taskService: TaskService) {
     // If we navigated to this page, we will have an item available as a nav param
     //this.map = null;
-    this.tasksLeft = true
+    this.tasksLeft = true;
     //console.log(localStorage.id_token)
-    this.token = localStorage.id_token
-    if(this.token) {
+    this.token = localStorage.id_token;
+    
+    if (this.token) {
       this.user = this.jwtHelper.decodeToken(this.token).username;
     }
+    
     this.locAddress = navParams.get('locAddress');
     this.huntID = navParams.get('huntID');
     this.currChallenge = navParams.get('currChallenge');
@@ -60,47 +62,50 @@ export class TaskPage {
     this.previousPlaces = navParams.get('previousPlaces');
     this.previousTasks = navParams.get('previousTasks');
     setTimeout(()=>{ this.loadMap(this.locLat, this.locLng, 15), 2000 })
-
   }
 
   //this should be triggered when the next button is pushed
   getNewTask(){
     console.log('getting ready to send new task!')
-      console.log(this.keywords)
+    console.log(this.keywords);
+    console.log('this is the huntID in the tasks! ');
+    console.log(this.huntID);
 
-      if(this.keywords.length > 0){
-        let keyword = this.keywords.shift()
-        let dataObj = {
-          previousPlaces: this.previousPlaces,
-          previousTasks: this.previousTasks,
-          keyword: keyword,
-          token: localStorage.id_token,
-          geolocation: {
-            lat: this.locLat,
-            lng: this.locLng
-          }
+    if (this.keywords.length > 0) {
+      let keyword = this.keywords.shift();
+      
+      console.log('this is the huntID before it is sent! ', this.huntID);
+      
+      let dataObj = {
+        previousPlaces: this.previousPlaces,
+        previousTasks: this.previousTasks,
+        keyword: keyword,
+        token: localStorage.id_token,
+        huntID: this.huntID,
+        geolocation: {
+          lat: this.locLat,
+          lng: this.locLng
         }
+      };
 
-        this._taskService.postData(JSON.stringify(dataObj), this.TASKS_URL)
-          .then(result => {
-
-            this.locName = result.businesses.name;
-            this.currChallenge = result.tasks.content
-            this.previousPlaces.push(result.businesses)
-            this.locAddress = result.businesses.location.display_address[0] + ', ' + result.businesses.location.display_address[2];
-            this.previousTasks.push(result.tasks)
-            this.locLat = result.businesses.location.coordinate.latitude;
-            this.locLng = result.businesses.location.coordinate.longitude;
-            this.markComplete();
-            this.loadMap(this.locLat, this.locLng, 15);
-          })
-        }
-      else {
-        console.log('no more tasks!')
-        console.log(this.previousTasks)
-        console.log(this.previousPlaces)
-        this.tasksLeft = false;
-        this.searchComplete();
+      this._taskService.postData(JSON.stringify(dataObj), this.TASKS_URL)
+        .then(result => {
+          this.locName = result.businesses.name;
+          this.currChallenge = result.tasks.content
+          this.previousPlaces.push(result.businesses)
+          this.locAddress = result.businesses.location.display_address[0] + ', ' + result.businesses.location.display_address[2];
+          this.previousTasks.push(result.tasks)
+          this.locLat = result.businesses.location.coordinate.latitude;
+          this.locLng = result.businesses.location.coordinate.longitude;
+          this.markComplete();
+          this.loadMap(this.locLat, this.locLng, 15);
+        });
+    } else {
+      console.log('no more tasks!')
+      console.log(this.previousTasks)
+      console.log(this.previousPlaces)
+      this.tasksLeft = false;
+      this.searchComplete();
     }
   }
 
