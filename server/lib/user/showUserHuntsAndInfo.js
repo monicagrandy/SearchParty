@@ -9,7 +9,7 @@ module.exports = {
 
     return neo4jPromise.databaseQueryPromise(returnAllUserInfoQuery)
     .then(allUserData => {
-      // console.log("++All userData", allUserData);
+      console.log("++All userData", allUserData);
       var prettyUserObject = userFormat.createPrettyUserObject(allUserData);
       return new Promise((resolve, reject) => {
         resolve(prettyUserObject);
