@@ -39,10 +39,13 @@ module.exports = {
     }
    },
    feedback: (req, res) => {
-      let token = req.body.token;
+      let username = jwt.decode(req.body.token, config.secret).username;
       let feedback = req.body.feedback;
       let hundID = req.body.huntID;
-      return createFeedback()
+      let endtime = req.body.endtime;
+      let distance = req.body.distance;
+
+      createFeedback.initializeFeedback(username, feedback, huntID, endtime, distance);
       .then(res => {
          return res.statusCode;
       })
