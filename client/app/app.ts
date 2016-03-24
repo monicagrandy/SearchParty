@@ -80,6 +80,11 @@ export class MyApp {
       localStorage.removeItem('userLng');
       localStorage.removeItem('startTime');
       localStorage.removeItem('endTime');
+      localStorage.removeItem('locAddress');
+      localStorage.removeItem('locLat');
+      localStorage.removeItem('locLng');
+      localStorage.removeItem('locName');
+      localStorage.removeItem('currChallenge');
       location.reload();
 
     }
