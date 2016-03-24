@@ -21,7 +21,7 @@ module.exports = {
       createNewHunt.initializeHunt(username)
       .then(hunt => {
         console.log("inside initalieHunt", hunt);
-        makeHunt.createHunt(keyword, previousPlaces, previousTasks, hunt, geolocation)
+        makeHunt.createHunt(keyword, previousPlaces, previousTasks, hunt[0].id, geolocation)
         .then(resultsObj => {
           console.log("end of making hunt");
           console.log("create hunt done promising", resultsObj);
