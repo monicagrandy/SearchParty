@@ -1,5 +1,7 @@
 import {Page, NavController, NavParams, LocalStorage, Storage} from 'ionic-angular';
 import {ProfileService} from '../../services/profile/profile-service';
+import {AuthService} from '../../services/auth/auth-service';
+
 
 @Page({
   templateUrl: 'build/pages/profile/profile.html',
@@ -11,7 +13,7 @@ export class ProfilePage {
   // friends: Array<{username: string, profile_image: string}>;
   // hunts: Array<{type: string, huntname: string, image: string, icon: string}>;
 
-  constructor(private nav: NavController, navParams: NavParams, private profileService: ProfileService) {
+  constructor(private nav: NavController, navParams: NavParams, private profileService: ProfileService, private auth: AuthService) {
     let token = this.local.get('id_token')._result;
     this.profileService.getProfile(token)
       .then(data => {
