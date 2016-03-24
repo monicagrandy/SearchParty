@@ -16,12 +16,12 @@ module.exports = {
     let previousPlaces = req.body.previousPlaces;
     let previousTasks = req.body.previousTasks;
     let huntData;
-
+    console.log("+++++before if/else statement", huntID);
     if(!huntID) {
       createNewHunt.initializeHunt(username)
       .then(hunt => {
         console.log("inside initalieHunt", hunt);
-        makeHunt.createHunt(keyword, previousPlaces, previousTasks, hunt[0].id, geolocation)
+        makeHunt.createHunt(keyword, previousPlaces, previousTasks, hunt[0].huntID, geolocation)
         .then(resultsObj => {
           console.log("end of making hunt");
           console.log("create hunt done promising", resultsObj);
