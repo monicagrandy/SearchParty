@@ -16,7 +16,7 @@ module.exports = {
     let previousPlaces = req.body.previousPlaces;
     let previousTasks = req.body.previousTasks;
     let huntData;
-
+    console.log("+++++before if/else statement", huntID);
     if(!huntID) {
       createNewHunt.initializeHunt(username)
       .then(hunt => {
