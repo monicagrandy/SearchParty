@@ -75,6 +75,7 @@ export class TaskPage {
           previousTasks: this.previousTasks,
           keyword: keyword,
           token: localStorage.id_token,
+          huntID: this.huntID,
           geolocation: {
             lat: this.locLat,
             lng: this.locLng
