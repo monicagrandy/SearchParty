@@ -12,4 +12,5 @@ module.exports = (app, express) => {
   app.post('/tasks', jsonParser, huntController.huntMaker);
   app.post('/signup', jsonParser, userController.signup);
   app.post('/signin', jsonParser, userController.signin);
+  // app.post('/userProfile', jsonParser, userController.showUserData);
 }

@@ -8,13 +8,13 @@ const filter = require('../util/filterResults.js');
 const random = require('../util/randomSelect.js');
 
 module.exports = {
-  createHunt: (keyword, previousPlaces, previousTasks, hunt, geolocation) => {
+  createHunt: (keyword, previousPlaces, previousTasks, huntID, geolocation) => {
 
     let randomTask;
     let randomPlace;
-    let huntID = hunt[0].id
+    // let huntID = hunt[0].id
     console.log("this is the huntid from hunt controller", huntID);
-    console.log("this is the hunt inside create entire hunt", hunt[0]);
+    // console.log("this is the hunt inside create entire hunt", hunt[0]);
 
     return yelpAPICall.yelpPlacesBasedOnKeyword(keyword, geolocation)
     .then(places => {
@@ -36,7 +36,7 @@ module.exports = {
           return new Promise((resolve, reject) => {
             if(data) {
               let objectToSend = {
-                buisnesses: randomPlace,
+                businesses: randomPlace,
                 tasks: randomTask,
                 huntID: huntID
               };
