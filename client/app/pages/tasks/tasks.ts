@@ -91,10 +91,10 @@ export class TaskPage {
       this._taskService.postData(JSON.stringify(dataObj), this.TASKS_URL)
         .then(result => {
           this.locName = result.businesses.name;
-          this.currChallenge = result.tasks.content
-          this.previousPlaces.push(result.businesses)
+          this.currChallenge = result.tasks.content;
+          this.previousPlaces.push(result.businesses);
           this.locAddress = result.businesses.location.display_address[0] + ', ' + result.businesses.location.display_address[2];
-          this.previousTasks.push(result.tasks)
+          this.previousTasks.push(result.tasks);
           this.locLat = result.businesses.location.coordinate.latitude;
           this.locLng = result.businesses.location.coordinate.longitude;
           this.markComplete();
