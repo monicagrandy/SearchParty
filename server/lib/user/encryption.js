@@ -11,17 +11,13 @@ module.exports = {
         bcrypt.hash(password, salt, null, (err, hash) => {
           userData.props.password = hash;
           console.log("hashed password?: ", userData.props.password);
-        };
-        resolve(userProperties);
-        reject(err)
-      })
-    })
-  })
-},
+          resolve(userData);
+          reject(err);
+        });
+      });
+    });
+  },
 
-passwordDecrypt: userData => {
-  return new Promise((resolve, reject) => {
+  passwordDecrypt: userData => {}
 
-  })
-}
-}
+};

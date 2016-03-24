@@ -16,23 +16,22 @@ module.exports = {
 
 
     return userVerify.userExists(userProperties)
-    .then()
+    .then(newUser => {
+      return encryption.passwordEncrypt(userData)
+      .then(userEncryptedProperties => {
+        console.log("these are the userprops going into the db: ", userEncryptedProperties);
+        return neo4jPromise.databaseQueryPromise(createUserQuery, userEncryptedProperties)
+        .then(userData => {
+          console.log("this was just put into the db: ", userData);
+          return new Promise((resolve, reject) => {
 
-
-    return encryption.passwordEncrypt(userData)
-    .then(userProperties => {
-      console.log("these are the userprops going into the db: ", userProperties);
-      return neo4jPromise.databaseQueryPromise(createUserQuery, userProperties)
-      .then(userData => {
-        console.log("this was just put into the db: ", userData);
-        resolve(userData);
+          })
+        })
       })
     })
+  },
 
+  signin: (username, password) => {
 
-},
-
-signin: (username, password) => {
-
-}
+  }
 }
