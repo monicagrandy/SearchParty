@@ -22,17 +22,23 @@ export class TemplatePage {
     // If we navigated to this page, we will have an item available as a nav param
     this.selectedItem = navParams.get('item');
     
-    this.loadingImg = 'img/poi.gif'
-    
-    if (navigator.geolocation) {
-      this.loadComplete = false
-      console.log(this.loadComplete)
+    this.loadingImg = 'img/poi.gif';
+
+    if (localStorage.userLat && localStorage.userLng) {
+      this.userLat = localStorage.userLat;
+      this.userLng = localStorage.userLng;
+    } else { 
+      if (navigator.geolocation) {
+      console.log("getting geolocation")
       navigator.geolocation.watchPosition((position => {
+        this.userLat = position.coords.latitude;
+        this.userLng = position.coords.longitude;
         this.local.set('userLat', position.coords.latitude);
         this.local.set('userLng', position.coords.longitude);
-        setTimeout(()=>{this.loadComplete = true; console.log(this.loadComplete)}, 1000);
       }), (error => console.log(error)), {})
     }
+   } 
+
 
 
     this.testData = [

@@ -6,11 +6,11 @@
 </ion-navbar>
 
 
-<ion-content *ngIf="!loadComplete"> 
+<ion-content *ngIf="!userLat && !userLng"> 
   <img src="{{loadingImg}}">
 </ion-content>
 
-<ion-content *ngIf="loadComplete" class="has-header cards-bg">
+<ion-content class="has-header cards-bg" *ngIf="userLat && userLng" >
 
   <ion-card class="adv-map" *ngFor="#item of items" (click)="itemTapped($event, item)">
   
