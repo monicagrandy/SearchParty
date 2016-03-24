@@ -9,17 +9,19 @@ import {AuthService} from '../../services/auth/auth-service';
 })
 export class ProfilePage {
   local: Storage = new Storage(LocalStorage);
+  hunts: any;
   // sample types for hunts and friends
   // friends: Array<{username: string, profile_image: string}>;
   // hunts: Array<{type: string, huntname: string, image: string, icon: string}>;
 
   constructor(private nav: NavController, navParams: NavParams, private profileService: ProfileService, private auth: AuthService) {
     let token = this.local.get('id_token')._result;
+    console.log('this is the token before it is sent', token);
     this.profileService.getProfile(token)
       .then(data => {
-        console.log(data);
+        console.log(data.hunts);
         // this.friends = data.friends;
-        // this.hunts = data.hunts;
+        this.hunts = data.hunts;
       })
         .catch(error => console.log(error));
   }

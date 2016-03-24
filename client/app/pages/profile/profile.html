@@ -1,25 +1,26 @@
-<!--<ion-navbar *navbar>
+<ion-navbar *navbar>
   <button menuToggle>
     <ion-icon name="menu"></ion-icon>
   </button>
   <ion-title>My Profile</ion-title>
 </ion-navbar>
 
-<ion-content>
+<!--<ion-content>
   <h2>Your Friends</h2>
   <h4 *ngIf="!friends">You have no friends!</h4>
   <ion-list>
     <button ion-item *ngFor="#friend of friends" (click)="seeFriends($event, friend)">
-      <ion-icon name="{{friend.icon}}" item-left></ion-icon>
+      <ion-icon name="contact" item-left></ion-icon>
       {{friend.name}}
       <div class="item-note" item-right>
         {{friend.note}}
       </div>
     </button>
   </ion-list>
-</ion-content>
+</ion-content>-->
 
-<ion-content>
+
+<!--<ion-content>
   <ion-list>
     <h2>Your Hunts</h2>
     <h4 *ngIf="!hunts">You have no hunts!</h4>
@@ -33,7 +34,40 @@
   </ion-list>
 </ion-content>-->
 
-  <ion-navbar *navbar>
+<ion-content>
+  <ion-card>
+    <ion-card-header>
+      Your Friends
+    </ion-card-header>
+    <ion-list *ngIf="friends">
+      <button ion-item *ngFor="#friend of friends" (click)="itemTapped($event, hunt)">
+        <ion-icon name="contact" item-left></ion-icon>
+        {{friend.name}}
+      </button>
+    </ion-list>
+    <ion-list *ngIf="!friends">
+      <p ion-item>
+        You have no friends, so go make some!
+      </p> 
+    </ion-list>
+  </ion-card>
+
+  <ion-card>
+    <ion-card-header>
+      Your Hunts
+    </ion-card-header>
+    <ion-list>
+      <button ion-item *ngFor="#hunt of hunts" (click)="itemTapped($event, hunt)">
+        <ion-icon name="search" item-left></ion-icon>
+        {{hunt.stats.huntID}}
+      </button>
+    </ion-list>
+  </ion-card>
+</ion-content>
+
+
+
+  <!--<ion-navbar *navbar>
     <ion-title>Profile</ion-title>
   </ion-navbar>
 
@@ -59,4 +93,4 @@
     
     <button block (click)="auth.logout()">Logout</button>
     
-  </ion-content>
+  </ion-content>-->
