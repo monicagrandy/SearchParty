@@ -41,16 +41,17 @@ module.exports = {
    },
 
    feedback: (req, res) => {
-      console.log(req.body);
+      console.log('FEEDBACK: ',req.body);
       let username = jwt.decode(req.body.token, config.secret).username;
       let feedback = req.body.feedback;
-      let hundID = req.body.huntID;
-      let endtime = req.body.endtime;
+      let huntID = req.body.huntID;
+      let endtime = req.body.endTime;
       let distance = req.body.distance;
 
       createFeedback.initializeFeedback(username, feedback, huntID, endtime, distance)
-      .then(res => {
-         console.log('Response from DB: ', res);
+      .then(feedbackHunt => {
+         console.log('Response from DB: ', feedbackHunt);
+
       })
       .catch(error => {
          console.log('Error with creating feedback: ', error);
