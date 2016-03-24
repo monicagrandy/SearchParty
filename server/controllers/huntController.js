@@ -6,6 +6,7 @@ const jwt = require('jwt-simple');
 const config = require('../config/config.js');
 const makeHunt = require('../lib/hunt/createEntireHunt.js');
 const createNewHunt = require('../lib/hunt/createNewHuntID.js');
+const createFeedback = require('../lib/hunt/createFeedback.js');
 
 module.exports = {
   huntMaker: (req, res) => {
@@ -36,5 +37,17 @@ module.exports = {
         })
           .catch(error => console.error(error));
     }
-  }
+   },
+   feedback: (req, res) => {
+      let token = req.body.token;
+      let feedback = req.body.feedback;
+      let hundID = req.body.huntID;
+      return createFeedback()
+      .then(res => {
+         return res.statusCode;
+      })
+      .catch(error => {
+         console.log('Error with creating feedback: ', error);
+      });
+   }
 }

@@ -8,6 +8,7 @@ module.exports = (app, express) => {
   app.use(jsonParser);
   app.use(express.static('./client/www'));
 
+  app.post('/feedback', jsonParser, huntController.feedback);
   app.post('/tasks', jsonParser, huntController.huntMaker);
   app.post('/signup', jsonParser, userController.signup);
   app.post('/signin', jsonParser, userController.signin);
