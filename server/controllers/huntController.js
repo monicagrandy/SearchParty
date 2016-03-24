@@ -39,8 +39,9 @@ module.exports = {
           .catch(error => console.error(error));
     }
    },
-   
+
    feedback: (req, res) => {
+      console.log(req.body);
       let username = jwt.decode(req.body.token, config.secret).username;
       let feedback = req.body.feedback;
       let hundID = req.body.huntID;
