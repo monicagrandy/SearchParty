@@ -2,9 +2,9 @@
 const jwt = require('jwt-simple');
 const bcrypt = require('bcrypt-nodejs');
 const neo = require('../db/neo.js');
-const shortid = require('shortid');
-const userInfo = require('../lib/user/showUserHuntsAndInfo.js');
 
+const userInfo = require('../lib/user/showUserHuntsAndInfo.js');
+const userAuth = require('../lib/user/signUpAndSignIn.js')
 if(!process.env.JWTSECRET) {
   var config = require('../config/config.js');
 }
