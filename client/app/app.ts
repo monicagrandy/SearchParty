@@ -31,7 +31,7 @@ export class MyApp {
   constructor(
     private app: IonicApp,
     private platform: Platform,
-    private menu: MenuController,
+    private menu: MenuController
     //private location: Location
   ) {
     this.initializeApp();
