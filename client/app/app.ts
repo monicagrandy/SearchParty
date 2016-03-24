@@ -19,7 +19,8 @@ import * as _ from 'underscore';
         return new AuthHttp(new AuthConfig, http);
       },
       deps: [Http]
-    })
+    }),
+    AuthService
   ]
 })
 export class MyApp {
@@ -68,6 +69,8 @@ export class MyApp {
       // StatusBar.setStyle(StatusBar.LIGHT_CONTENT)
     });
   }
+  
+  auth
 
 
   openPage(page) { 
