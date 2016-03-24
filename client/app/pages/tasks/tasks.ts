@@ -53,14 +53,22 @@ export class TaskPage {
       this.user = this.jwtHelper.decodeToken(this.token).username;
     }
     
-    this.locAddress = navParams.get('locAddress');
-    this.huntID = navParams.get('huntID');
-    this.currChallenge = navParams.get('currChallenge');
-    this.locLat = navParams.get('locLat');
-    this.locLng = navParams.get('locLng');
-    this.locName = navParams.get('locName');
+    localStorage.locAddress = localStorage.locAddress || navParams.get('locAddress');
+    this.locAddress = localStorage.locAddress
+    localStorage.huntID = localStorage.huntID || navParams.get('huntID');
+    this.huntID = localStorage.huntID
+    localStorage.currChallenge = localStorage.currChallenge || navParams.get('currChallenge');
+    this.currChallenge = localStorage.currChallenge;
+    localStorage.locLat = localStorage.locLat || navParams.get('locLat');
+    this.locLat = localStorage.locLat
+    localStorage.locLng = localStorage.locLng || navParams.get('locLng');
+    this.locLng = localStorage.locLng
+    localStorage.locName = localStorage.locName || navParams.get('locName');
+    this.locName = localStorage.locName
     this.previousPlaces = navParams.get('previousPlaces');
+    //localStorage.previousPlaces = navParams.get('previousPlaces');
     this.previousTasks = navParams.get('previousTasks');
+    //localStorage.previousTasks = navParams.get('previousTasks');
     setTimeout(()=>{ this.loadMap(this.locLat, this.locLng, 15), 2000 })
   }
 
@@ -90,13 +98,18 @@ export class TaskPage {
 
       this._taskService.postData(JSON.stringify(dataObj), this.TASKS_URL)
         .then(result => {
-          this.locName = result.businesses.name;
-          this.currChallenge = result.tasks.content
+          localStorage.locName = result.businesses.name;
+          this.locName = localStorage.locName
+          localStorage.currChallenge = result.tasks.content
+          this.currChallenge = localStorage.currChallenge
           this.previousPlaces.push(result.businesses)
-          this.locAddress = result.businesses.location.display_address[0] + ', ' + result.businesses.location.display_address[2];
-          this.previousTasks.push(result.tasks)
-          this.locLat = result.businesses.location.coordinate.latitude;
-          this.locLng = result.businesses.location.coordinate.longitude;
+          localStorage.locAddress = result.businesses.location.display_address[0] + ', ' + result.businesses.location.display_address[2];
+          this.locAddress = localStorage.locAddress
+          this.previousTasks.push(result.tasks) 
+          localStorage.locLat = result.businesses.location.coordinate.latitude;
+          this.locLat = localStorage.locLat
+          localStorage.locLng = result.businesses.location.coordinate.longitude;
+          this.locLng = localStorage.locLng
           this.markComplete();
           this.loadMap(this.locLat, this.locLng, 15);
         });
@@ -110,6 +123,8 @@ export class TaskPage {
   }
 
   searchComplete(){
+    localStorage.previousPlaces = this.previousPlaces
+    localStorage.previousTasks = this.previousTasks
     console.log(this.previousTasks)
     this.endTime = new Date().toLocaleTimeString()
     localStorage.endTime = this.endTime
