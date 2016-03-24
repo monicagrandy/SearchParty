@@ -64,6 +64,7 @@ export class TemplatePage {
     // console.log(this.geolocation);
     this.templateService.postData(item.title, this.userInfo)
       .then(data => {
+        console.log(data)
         this.nav.setRoot(TaskPage, {
           locAddress: data.businesses.location.display_address[0] + ', ' + data.businesses.location.display_address[2],
           currChallenge: data.tasks.content,
@@ -72,6 +73,7 @@ export class TemplatePage {
           locName: data.businesses.name,
           previousPlaces: [data.businesses],
           previousTasks: [data.tasks],
+          huntID: data.huntID
         });
       })
         .catch(error => console.log(error));

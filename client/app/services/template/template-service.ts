@@ -49,6 +49,7 @@ export class TemplateService {
           lat: userInfo.userLat,
           lng: userInfo.userLng
         },
+        token: userInfo.id_token,
         previousPlaces: [],
         previousTasks: [],
         date: currentTime
