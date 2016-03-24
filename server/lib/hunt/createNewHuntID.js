@@ -11,7 +11,7 @@ module.exports = {
     let huntID = "h" + shortid();
     let chatID = "c" + shortid();
     let huntStartTime = new Date();
-
+//TODO: add extra hunt parameters, such as end time and distance traveled, leave blank for now
     const initializeHuntQuery =
     `MATCH (user:User{username:"${username}"})
 CREATE (user)-[:PARTICIPATED_IN]->(hunt:Hunt{huntID:"${huntID}", starttime:"${huntStartTime}"})-[:HAS_CHAT]->(:Chatroom{chatID:"${chatID}"}) RETURN hunt`;
