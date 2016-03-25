@@ -3,7 +3,7 @@
 
 const neo4jPromise = require('../neo4j/neo4jQueryPromiseReturn.js');
 const encryption = require('./encryption.js');
-const userVerify = require('./checkIfUserExistsPromise.js');
+const userVerify = require('./checkUserPromise.js');
 const userFormatter = require('./formatUserDataForDB.js');
 
 module.exports = {
@@ -32,7 +32,27 @@ module.exports = {
     })
   },
 
-  signin: (username, password) => {
-
+  verifyExistingUserCreds: (username, passwordFromRequest) => {
+    //query database for user info based on username
+    //return the user information
+    //use bcrypt compare to check password
+    let checkUsernameQuery = `MATCH (user:User{username:"${username}"}) RETURN user`;
+    return neo4jPromise.databaseQueryPromise(checkUsernameQuery)
+    .then(userData => {
+      console.log("entire user object in verify", userData);
+      console.log("user password", userData[0].password);
+      let passwordFromDB = userData[0].password
+      return encryption.passwordDecrypt(passwordFromRequest, passwordFromDB)
+      .then(match => {
+        return new Promise((resolve, reject) => {
+          console.log(match);
+          if(match) {
+            resolve(userData[0]);
+          } else {
+            reject({error: "password_incorrect"});
+          }
+        })
+      })
+    })
   }
 }
