@@ -18,7 +18,16 @@ module.exports = {
     })
   },
 
-  passwordDecrypt: userData => {
-    return new Promise((resolve, reject) => {})
+
+  passwordDecrypt: (passwordFromRequest, passwordFromDB) => {
+    return new Promise((resolve, reject) => {
+      console.log("request pw", passwordFromRequest)
+      console.log("db pw", passwordFromDB)
+      bcrypt.compare(passwordFromRequest, passwordFromDB, (err, result) => {
+        console.log("signin compare passwords", result);
+        resolve(result);
+        reject(err);
+      })
+    })
   }
 }

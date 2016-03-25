@@ -9,10 +9,10 @@ module.exports = {
     .then(existingUserObject => {
       console.log("does the user exist? If so then here they are: ", existingUserObject);
       return new Promise((resolve, reject) => {
-        if(existingUserObject) {
+        if(existingUserObject.length > 0) {
           reject({error: "username already exists, be more original"});
         } else {
-          resolve(userData.props);
+          resolve(userData);
         }
       })
     })
