@@ -40,7 +40,7 @@
       Your Friends
     </ion-card-header>
     <ion-list *ngIf="friends">
-      <button ion-item *ngFor="#friend of friends" (click)="itemTapped($event, hunt)">
+      <button ion-item *ngFor="#friend of friends" (click)="friendTapped($event, hunt)">
         <ion-icon name="contact" item-left></ion-icon>
         {{friend.name}}
       </button>
@@ -57,7 +57,7 @@
       Your Hunts
     </ion-card-header>
     <ion-list>
-      <button ion-item *ngFor="#hunt of hunts" (click)="itemTapped($event, hunt)">
+      <button ion-item *ngFor="#hunt of hunts" (click)="huntTapped($event, hunt)">
         <ion-icon name="search" item-left></ion-icon>
         {{hunt.stats.huntID}}
       </button>

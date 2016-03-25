@@ -1,9 +1,6 @@
 import { Injectable } from 'angular2/core';
-import { TaskPage } from '../../pages/tasks/tasks';
-//import google-maps
 
 
-//set injectable
 @Injectable()
   export class GoogleMapService {
     finalDist: any;
@@ -78,14 +75,14 @@ import { TaskPage } from '../../pages/tasks/tasks';
     
     finalMapMaker(previousPlaces, previousTasks) {
       let finalMapMakerPromise = new Promise((resolve, reject) => {
-        let finalLat = previousPlaces[previousPlaces.length - 1].location.coordinate.latitude;
-        let finalLng = previousPlaces[previousPlaces.length - 1].location.coordinate.longitude;
+        let finalLat = previousPlaces[previousPlaces.length - 1].location.coordinate.latitude || previousPlaces[previousPlaces.length - 1].lat;
+        let finalLng = previousPlaces[previousPlaces.length - 1].location.coordinate.longitude || previousPlaces[previousPlaces.length - 1].lng;
         this.loadMap(finalLat, finalLng, 12, null, this.map);
         let bounds = new google.maps.LatLngBounds();
         let points = [];
         for (let i = 0; i < previousPlaces.length; i++) {
-          let currLat = previousPlaces[i].location.coordinate.latitude;
-          let currLng = previousPlaces[i].location.coordinate.longitude;
+          let currLat = previousPlaces[i].location.coordinate.latitude || previousPlaces[i].lat;
+          let currLng = previousPlaces[i].location.coordinate.longitude || previousPlaces[i].lng;
           let name = previousPlaces[i].name;
           let currChallenge = previousTasks[i].content;
           let currPos = new google.maps.LatLng(currLat, currLng);

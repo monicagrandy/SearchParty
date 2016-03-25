@@ -1,7 +1,7 @@
 import {Page, NavController, NavParams, LocalStorage, Storage} from 'ionic-angular';
 import {ProfileService} from '../../services/profile/profile-service';
 import {AuthService} from '../../services/auth/auth-service';
-
+import {PastHuntsPage} from '../past-hunts/past-hunts';
 
 @Page({
   templateUrl: 'build/pages/profile/profile.html',
@@ -31,14 +31,9 @@ export class ProfilePage {
   }
 
   huntTapped(event, hunt) {
-    // this.nav.push(TaskPage, {
-    //   locAddress: data.businesses.location.display_address[0] + ', ' + data.businesses.location.display_address[2],
-    //   currChallenge: data.tasks.content,
-    //   locLat: data.businesses.location.coordinate.latitude,
-    //   locLng: data.businesses.location.coordinate.longitude,
-    //   locName: data.businesses.name,
-    //   previousPlaces: [data.businesses],
-    //   previousTasks: [data.tasks]
-    // });
+    this.nav.push(PastHuntsPage, {
+      previousHuntTasksAndLocations: hunt.tasks,
+      huntID: hunt.stats.huntID
+    });
   }
 }
