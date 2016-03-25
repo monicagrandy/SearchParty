@@ -7,6 +7,18 @@ module.exports = {
     var newHuntIndexes = [];
     var prettyObj = {"hunts": []};
 
+    for(var z = 0; z < huntArray.length; z++) {
+      var currObj = huntArray[z];
+      for(var key in currObj) {
+        if(key === "address") {
+          currObj.location = {};
+          currObj.location.coordinate = {};
+          currObj.location.coordinate.latitude = currObj.lat;
+          currObj.location.coordinate.longitude = currObj.lng;
+        }
+      }
+    }
+
     for(var i = 0; i < huntArray.length; i++) {
         var currObject = huntArray[i];
         for(var key in currObject) {
