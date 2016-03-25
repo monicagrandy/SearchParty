@@ -5,6 +5,8 @@ const neo = require('../db/neo.js');
 
 const userInfo = require('../lib/user/showUserHuntsAndInfo.js');
 const userAuth = require('../lib/user/signUpAndSignIn.js')
+const friends = require('../lib/user/friends.js');
+
 if(!process.env.JWTSECRET) {
   var config = require('../config/config.js');
 }
@@ -48,5 +50,15 @@ module.exports = {
     .then(userObject => {
       res.json(userObject);
     })
+    .catch(error);
+  },
+  addUserToFriendsList: (req, res) => {
+    let mainFriendUsername = jwt.decode(req.body.token, config.secret).username;
+    let addFriendUsername = req.body.friendusername;
+    friends.addFriendToDBPromise(mainFriendUsername, addFriendUsername)
+    .then(addedFriend => {
+      res.json(addedFriend);
+    })
+    .catch(error);
   }
 };
