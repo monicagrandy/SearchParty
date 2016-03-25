@@ -12,7 +12,7 @@ module.exports = {
           userData.props.password = hash;
           console.log("hashed password?: ", userData.props.password);
         });
-        resolve(userProperties);
+        resolve(userData);
         reject(err)
       })
     })

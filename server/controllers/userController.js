@@ -38,7 +38,7 @@ module.exports = {
       console.log("signin function userData", userData);
       if(userData) {
         let token = jwt.encode({username: userData.username}, secret);
-        console.log(token);
+        console.log('token:',token);
         res.json({token: token});
       }
     })
