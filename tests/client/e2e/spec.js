@@ -72,7 +72,9 @@ describe('Search Party Login', () => {
       element(by.css('form ion-item div ion-input [ngcontrol="password"]')).sendKeys('cam');
       element(by.css('form button')).click();
       browser.sleep(5000);
-      expect(element(by.css('.login div p')).isPresent()).toEqual(true);
+
+      //fix
+      expect(element(by.css('p .error')).isPresent()).toEqual(true);
    });
 
    it('should select login tab with no issues', () => {
@@ -81,7 +83,7 @@ describe('Search Party Login', () => {
    });
 
    it('should select login button with no issues', () => {
-      element(by.css('ion-segment-button[value="signup"]')).click();
+      element(by.css('ion-segment-button[value="login"]')).click();
       expect(element(by.css('form ion-item div ion-input [ngcontrol="username"]')).isPresent()).toEqual(true);
       expect(element(by.css('form ion-item div ion-input [ngcontrol="password"]')).isPresent()).toEqual(true);
 
@@ -91,12 +93,10 @@ describe('Search Party Login', () => {
       element(by.css('form ion-item div ion-input [ngcontrol="username"]')).sendKeys('cam');
       element(by.css('form ion-item div ion-input [ngcontrol="password"]')).sendKeys('cam');
       element(by.css('.login div form')).submit();
-      browser.sleep(7000);
+      browser.sleep(5000);
       expect(browser.getTitle()).toEqual('Hunts');
    });
-
-
-
+   
 });
 
 
