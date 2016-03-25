@@ -35,7 +35,7 @@ import { TaskPage } from '../../pages/tasks/tasks';
       return this.finalDist;
     }
 
-    loadMap(lat, long, zoom, content){
+    loadMap(lat, long, zoom, content, map){
       let loadMapPromise = new Promise((resolve, reject) => {
         let options = { timeout: 10000, enableHighAccuracy: true };
         let latLng = new google.maps.LatLng(lat, long);
@@ -44,16 +44,19 @@ import { TaskPage } from '../../pages/tasks/tasks';
           zoom: zoom,
           mapTypeId: google.maps.MapTypeId.ROADMAP
         };
+        this.map = map
         this.map = new google.maps.Map(document.getElementById('map'), mapOptions);
-        this.addMarker(latLng, content);
+        if (content !== null) {
+          this.addMarker(latLng, content, this.map);
+        }
         resolve(this.map);
       });
       return loadMapPromise;
     }
 
-    addMarker(coords, content) {
+    addMarker(coords, content, map) {
       let pin = new google.maps.Marker({
-        map: this.map,
+        map: map,
         animation: google.maps.Animation.DROP,
         position: coords
       });
@@ -71,5 +74,36 @@ import { TaskPage } from '../../pages/tasks/tasks';
       google.maps.event.addListener(marker, 'click', function(){
         infoWindow.open(this.map, marker);
       });
+    }
+    
+    finalMapMaker(previousPlaces, previousTasks) {
+      let finalMapMakerPromise = new Promise((resolve, reject) => {
+        let finalLat = previousPlaces[previousPlaces.length - 1].location.coordinate.latitude;
+        let finalLng = previousPlaces[previousPlaces.length - 1].location.coordinate.longitude;
+        this.loadMap(finalLat, finalLng, 12, null, this.map);
+        let bounds = new google.maps.LatLngBounds();
+        let points = [];
+        for (let i = 0; i < previousPlaces.length; i++) {
+          let currLat = previousPlaces[i].location.coordinate.latitude;
+          let currLng = previousPlaces[i].location.coordinate.longitude;
+          let name = previousPlaces[i].name;
+          let currChallenge = previousTasks[i].content;
+          let currPos = new google.maps.LatLng(currLat, currLng);
+          let info = '<h4>' + currChallenge + '</h4><p>' + name  + '</p>';
+          points.push(new google.maps.LatLng(currLat, currLng));
+          this.addMarker(currPos, info, this.map);
+          bounds.extend(currPos);
+          this.map.fitBounds(bounds);
+        }
+        let flightPath = new google.maps.Polyline({
+          map: this.map,
+          path: points,
+          strokeColor: "#FF0000",
+          strokeOpacity: 1.0,
+          strokeWeight: 2
+        }); 
+        resolve(flightPath);
+      });
+      return finalMapMakerPromise;
     }
   }
