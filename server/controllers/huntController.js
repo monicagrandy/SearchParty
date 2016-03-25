@@ -51,7 +51,7 @@ module.exports = {
       createFeedback.initializeFeedback(username, feedback, huntID, endtime, distance)
       .then(feedbackHunt => {
          console.log('Response from DB: ', feedbackHunt);
-
+         res.json(feedbackHunt)
       })
       .catch(error => {
          console.log('Error with creating feedback: ', error);
