@@ -1,6 +1,6 @@
 import {Page, NavController, NavParams, LocalStorage} from 'ionic-angular';
-import {TaskService} from '../../services/task-service/task-service';
-import {GoogleMapService} from '../../services/task-service/map-service';
+import {TaskService} from '../../services/task/task-service';
+import {GoogleMapService} from '../../services/map/map-service';
 import {ConnectionBackend, HTTP_PROVIDERS} from 'angular2/http';
 import {JwtHelper} from 'angular2-jwt';
 import {TemplatePage} from '../templates/templates';
