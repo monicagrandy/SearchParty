@@ -35,14 +35,18 @@ import { Injectable } from 'angular2/core';
     loadMap(lat, long, zoom, content, map){
       let loadMapPromise = new Promise((resolve, reject) => {
         let options = { timeout: 10000, enableHighAccuracy: true };
+        console.log('this is the type of lat ', typeof lat);
         let latLng = new google.maps.LatLng(lat, long);
+        console.log('this is the latLng ', latLng);
         let mapOptions = {
           center: latLng,
           zoom: zoom,
           mapTypeId: google.maps.MapTypeId.ROADMAP
         };
-        this.map = map
+        console.log('this is the map passed in ', map);
+        this.map = map;
         this.map = new google.maps.Map(document.getElementById('map'), mapOptions);
+        console.log('this is loadMap\'s map ', this.map);
         if (content !== null) {
           this.addMarker(latLng, content, this.map);
         }
@@ -75,31 +79,70 @@ import { Injectable } from 'angular2/core';
     
     finalMapMaker(previousPlaces, previousTasks) {
       let finalMapMakerPromise = new Promise((resolve, reject) => {
-        let finalLat = previousPlaces[previousPlaces.length - 1].location.coordinate.latitude || previousPlaces[previousPlaces.length - 1].lat;
-        let finalLng = previousPlaces[previousPlaces.length - 1].location.coordinate.longitude || previousPlaces[previousPlaces.length - 1].lng;
-        this.loadMap(finalLat, finalLng, 12, null, this.map);
-        let bounds = new google.maps.LatLngBounds();
-        let points = [];
-        for (let i = 0; i < previousPlaces.length; i++) {
-          let currLat = previousPlaces[i].location.coordinate.latitude || previousPlaces[i].lat;
-          let currLng = previousPlaces[i].location.coordinate.longitude || previousPlaces[i].lng;
-          let name = previousPlaces[i].name;
-          let currChallenge = previousTasks[i].content;
-          let currPos = new google.maps.LatLng(currLat, currLng);
-          let info = '<h4>' + currChallenge + '</h4><p>' + name  + '</p>';
-          points.push(new google.maps.LatLng(currLat, currLng));
-          this.addMarker(currPos, info, this.map);
-          bounds.extend(currPos);
-          this.map.fitBounds(bounds);
-        }
-        let flightPath = new google.maps.Polyline({
-          map: this.map,
-          path: points,
-          strokeColor: "#FF0000",
-          strokeOpacity: 1.0,
-          strokeWeight: 2
-        }); 
-        resolve(flightPath);
+        console.log('this is the previousPlaces ', previousPlaces);
+        console.log('this is the previousTasks ', previousTasks);
+        let finalLat = parseFloat(previousPlaces[previousPlaces.length - 1].location.coordinate.latitude);
+        let finalLng = parseFloat(previousPlaces[previousPlaces.length - 1].location.coordinate.longitude);
+        console.log('this is the finalLat ', typeof finalLat);
+        console.log('this is the finalLng ', typeof finalLng);
+        this.loadMap(finalLat, finalLng, 12, null, this.map)
+          .then(map => {
+            console.log('this is the map ', map);
+            let bounds = new google.maps.LatLngBounds();
+            let points = [];
+            for (let i = 0; i < previousPlaces.length; i++) {
+              console.log(' this is i ', i);
+              let currLat = previousPlaces[i].location.coordinate.latitude;
+              let currLng = previousPlaces[i].location.coordinate.longitude;
+              let name = previousPlaces[i].name;
+              let currChallenge = previousTasks[i].content;
+              let currPos = new google.maps.LatLng(currLat, currLng);
+              let info = '<h4>' + currChallenge + '</h4><p>' + name  + '</p>';
+              points.push(new google.maps.LatLng(currLat, currLng));
+              this.addMarker(currPos, info, this.map);
+              console.log('finished adding marker ', points);
+              bounds.extend(currPos);
+              this.map.fitBounds(bounds);
+              console.log('this is the map ', this.map);
+            }
+            // console.log('this is the map ', this.map);
+            let flightPath = new google.maps.Polyline({
+              map: this.map,
+              path: points,
+              strokeColor: "#FF0000",
+              strokeOpacity: 1.0,
+              strokeWeight: 2
+            });
+            console.log('this is the flightpath ', flightPath);
+            resolve(flightPath); 
+          });
+        // let bounds = new google.maps.LatLngBounds();
+        // let points = [];
+        // for (let i = 0; i < previousPlaces.length; i++) {
+        //   console.log(' this is i ', i);
+        //   let currLat = previousPlaces[i].location.coordinate.latitude;
+        //   let currLng = previousPlaces[i].location.coordinate.longitude;
+        //   let name = previousPlaces[i].name;
+        //   let currChallenge = previousTasks[i].content;
+        //   let currPos = new google.maps.LatLng(currLat, currLng);
+        //   let info = '<h4>' + currChallenge + '</h4><p>' + name  + '</p>';
+        //   points.push(new google.maps.LatLng(currLat, currLng));
+        //   this.addMarker(currPos, info, this.map);
+        //   console.log('finished adding marker ', points);
+        //   bounds.extend(currPos);
+        //   this.map.fitBounds(bounds);
+        //   console.log('this is the map ', this.map);
+        // }
+        // // console.log('this is the map ', this.map);
+        // let flightPath = new google.maps.Polyline({
+        //   map: this.map,
+        //   path: points,
+        //   strokeColor: "#FF0000",
+        //   strokeOpacity: 1.0,
+        //   strokeWeight: 2
+        // }); 
+        // console.log('this is the flightpath ', flightPath);
+        // resolve(flightPath);
       });
       return finalMapMakerPromise;
     }

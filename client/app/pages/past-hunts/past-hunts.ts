@@ -28,14 +28,17 @@ export class PastHuntsPage {
     console.log('this is the previousHuntTasksAndLocations ', this.previousHuntTasksAndLocations);
     this.previousPlaces = this.previousHuntTasksAndLocations.map(hunt => hunt.place);
     this.previousTasks = this.previousHuntTasksAndLocations.map(hunt => hunt.task);
-    // this.googleMaps.finalMapMaker(this.previousPlaces, this.previousTasks)
-    //   .then(data => {
-    //     let flightpath = data;
-    //   });
-      
-    // this.finalDist = this.googleMaps.calcDistance(this.previousPlaces);
     console.log('this is the previous places mapped ', this.previousPlaces);
     console.log('this is the previous tasks mapped ', this.previousTasks);
+    
+    setTimeout(()=>{ 
+      this.googleMaps.finalMapMaker(this.previousPlaces, this.previousTasks)
+        .then(data => {
+          console.log(data);
+          let flightPath = data;
+        }), 2000 });
+    
+    this.finalDist = this.googleMaps.calcDistance(this.previousPlaces);
   }
   
 }
