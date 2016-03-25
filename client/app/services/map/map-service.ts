@@ -12,7 +12,7 @@ import { Injectable } from 'angular2/core';
       let coordArray = [];
       let distArray = [];
       for (let i = 0; i < previousPlaces.length; i++) {
-        coordArray.push(new google.maps.LatLng(previousPlaces[i].location.coordinate.latitude, previousPlaces[i].location.coordinate.longitude);
+        coordArray.push(new google.maps.LatLng(previousPlaces[i].location.coordinate.latitude, previousPlaces[i].location.coordinate.longitude));
       }
       for (let j = 0; j < coordArray.length -1; j++) {
         distArray.push(google.maps.geometry.spherical.computeDistanceBetween(coordArray[j], coordArray[j+1]));
