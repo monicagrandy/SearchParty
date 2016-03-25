@@ -1,12 +1,10 @@
 import {Page, NavController, NavParams} from 'ionic-angular';
-import {GoogleMapService} from '../../services/task-service/map-service';
-import {TaskService} from '../../services/task-service/task-service';
+import {GoogleMapService} from '../../services/map/map-service';
 
 @Page({
   templateUrl: 'build/pages/past-hunts/past-hunts.html',
   providers: [
-    GoogleMapService,
-    TaskService
+    GoogleMapService
   ]
 })
 export class PastHuntsPage {
@@ -17,12 +15,7 @@ export class PastHuntsPage {
   finalDist: any;
   previousHuntTasksAndLocations: any;
 
-  constructor(
-    private nav: NavController, 
-    navParams: NavParams, 
-    private googleMaps: GoogleMapService, 
-    private taskService: TaskService
-    ){
+  constructor(private nav: NavController, navParams: NavParams, private googleMaps: GoogleMapService) {
     this.huntID = navParams.get('huntID');
     this.previousHuntTasksAndLocations = navParams.get('previousHuntTasksAndLocations');
     console.log('this is the previousHuntTasksAndLocations ', this.previousHuntTasksAndLocations);
