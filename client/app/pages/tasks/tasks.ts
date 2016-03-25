@@ -1,6 +1,7 @@
 import {Page, NavController, NavParams, LocalStorage} from 'ionic-angular';
 import {TaskService} from '../../services/task-service/task-service';
-import { ConnectionBackend, HTTP_PROVIDERS } from 'angular2/http';
+import {GoogleMapService} from '../../services/task-service/map-service';
+import {ConnectionBackend, HTTP_PROVIDERS} from 'angular2/http';
 import {JwtHelper} from 'angular2-jwt';
 import {TemplatePage} from '../templates/templates';
 import 'rxjs/add/operator/map';
@@ -11,14 +12,15 @@ import 'rxjs/add/operator/map';
   providers: [
     ConnectionBackend,
     HTTP_PROVIDERS,
-    TaskService
+    TaskService,
+    GoogleMapService
   ]
 })
 
 export class TaskPage {
-  title = 'Current Task'
+  title = 'Current Task';
   map = null;
-  local: LocalStorage
+  local: LocalStorage;
   locAddress: string; //set this to whatever is in local storage
   currChallenge: string;
   locLat: any; //set this to whatever is in local storage
@@ -41,8 +43,7 @@ export class TaskPage {
   FEEDBACK_URL: string = process.env.FEEDBACKURL || 'http://localhost:8000/feedback';
   feedback: string;
 
-
-  constructor(private nav: NavController, navParams: NavParams, private _taskService: TaskService) {
+  constructor(private nav: NavController, navParams: NavParams, private _taskService: TaskService, private googleMaps: GoogleMapService) {
     // If we navigated to this page, we will have an item available as a nav param
     //this.map = null;
     this.tasksLeft = true;
@@ -98,7 +99,8 @@ export class TaskPage {
           this.locLat = result.businesses.location.coordinate.latitude;
           this.locLng = result.businesses.location.coordinate.longitude;
           this.markComplete();
-          this.loadMap(this.locLat, this.locLng, 15);
+          let content = '<h4>' + this.locName + '</h4><p>' + this.locAddress  + '</p>';
+          this.map = this.googleMaps.loadMap(this.locLat, this.locLng, 15, content);
         });
     } else {
       console.log('no more tasks!');
@@ -110,23 +112,23 @@ export class TaskPage {
   }
 
   searchComplete(){
-    console.log(this.previousTasks)
-    this.endTime = new Date().toLocaleTimeString()
-    localStorage.endTime = this.endTime
-    this.startTime = localStorage.startTime
-    let finalLat = this.previousPlaces[9].location.coordinate.latitude
-    let finalLng = this.previousPlaces[9].location.coordinate.longitude
-    this.loadMap(finalLat, finalLng, 12)
+    console.log(this.previousTasks);
+    this.endTime = new Date().toLocaleTimeString();
+    localStorage.endTime = this.endTime;
+    this.startTime = localStorage.startTime;
+    let finalLat = this.previousPlaces[9].location.coordinate.latitude;
+    let finalLng = this.previousPlaces[9].location.coordinate.longitude;
+    this.loadMap(finalLat, finalLng, 12);
     let bounds = new google.maps.LatLngBounds();
-    let points = []
+    let points = [];
     for(let i = 0; i < this.previousPlaces.length; i++){
-      let currLat = this.previousPlaces[i].location.coordinate.latitude
-      let currLng = this.previousPlaces[i].location.coordinate.longitude
-      let name = this.previousPlaces[i].name
-      let currChallenge = this.previousTasks[i].content
+      let currLat = this.previousPlaces[i].location.coordinate.latitude;
+      let currLng = this.previousPlaces[i].location.coordinate.longitude;
+      let name = this.previousPlaces[i].name;
+      let currChallenge = this.previousTasks[i].content;
       let currPos = new google.maps.LatLng(currLat, currLng);
-      let info = '<h4>' + currChallenge + '</h4><p>' + name  + '</p>'
-      points.push(new google.maps.LatLng(currLat, currLng))
+      let info = '<h4>' + currChallenge + '</h4><p>' + name  + '</p>';
+      points.push(new google.maps.LatLng(currLat, currLng));
       this.addMarker(currPos, info);
       bounds.extend(currPos);
       this.map.fitBounds(bounds);
@@ -138,7 +140,7 @@ export class TaskPage {
       strokeOpacity: 1.0,
       strokeWeight: 2
     });
-    this.calcDistance()
+    this.calcDistance();
 
   }
 
@@ -187,9 +189,9 @@ export class TaskPage {
     let dist5 = google.maps.geometry.spherical.computeDistanceBetween (latLng6, latLng7);
     let dist6 = google.maps.geometry.spherical.computeDistanceBetween (latLng7, latLng8);
     let dist7 = google.maps.geometry.spherical.computeDistanceBetween (latLng8, latLng9);
-    let sum = dist0+dist1+dist2+dist3+dist4+dist5+dist6+dist7
-    this.finalDist = (sum * 0.000621371).toPrecision(3)
-    return this.finalDist
+    let sum = dist0+dist1+dist2+dist3+dist4+dist5+dist6+dist7;
+    this.finalDist = (sum * 0.000621371).toPrecision(3);
+    return this.finalDist;
   }
 
   loadMap(lat, long, zoom){
