@@ -54,7 +54,7 @@ module.exports = {
   },
   addUserToFriendsList: (req, res) => {
     let mainFriendUsername = jwt.decode(req.body.token, config.secret).username;
-    let addFriendUsername = req.body.friendUsername;
+    let addFriendUsername = req.body.friendusername;
     friends.addFriendToDBPromise(mainFriendUsername, addFriendUsername)
     .then(addedFriend => {
       res.json(addedFriend);
