@@ -24,5 +24,9 @@
     "webpack": "1.12.14"
   },
   "name": "SearchParty",
-  "description": "Search Party: Spontaneous Fun"
+  "description": "Search Party: Spontaneous Fun",
+  "cordovaPlugins": [
+    "cordova-plugin-camera"
+  ],
+  "cordovaPlatforms": []
 }
