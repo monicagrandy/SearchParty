@@ -13,46 +13,21 @@ const secret = process.env.JWTSECRET || config.secret;
 
 module.exports = {
   signup: (req, res) => {
-    console.log(req.body);
-    // console.log("credentials: ", req.body);
-    // var reqBody = req.body.credentials;
-    let password = req.body.password;
-    // console.log(password);
-    //extract user info from request and assign to some object
-    let generatedUserID = "u" + shortid.generate();
-    let bcryptPromise = new Promise((resolve, reject) => {
-      bcrypt.genSalt(10, (err, salt) => {
-        bcrypt.hash(password, salt, null, (err, hash) => {
+    console.log("signup request body ", req.body);
 
-          let userProperties = {
-            "props":{
-              "username": req.body.username,
-              "password": hash,
-              "firstname": req.body.firstname,
-              "lastname": req.body.lastname,
-              "email": req.body.email,
-              "userID": generatedUserID
-            }
-          };
-          // console.log("line 30 ", userProperties)
-          resolve(userProperties);
-          reject(err)
-        })
-      })
-    });
-    bcryptPromise.then(userProperties => {
-
-      // console.log("userProps line 36", userProperties);
-      let createUserQuery = `CREATE (user:User{props}) RETURN user`;
-      neo.runCypherStatementPromise(createUserQuery, userProperties)
-      .then((data) => {
-        var data = data[0];
-        let token = jwt.encode({username: data.username}, secret);
-        res.send({token: token});
-      })
-    }).catch((error) => {
-      console.log(error);
+    userAuth.registerAndVerifyUser(req.body)
+    .then(userData => {
+      let token = jwt.encode({username: userData.username}, secret);
+      sendData({token: token});
     })
+    .catch(error);
+
+    function sendData(data) {
+      return res.json(data);
+    }
+    function error(error) {
+      res.status(400).json(error);
+    }
   },
   signin: (req, res) => {
     //parse through the request
