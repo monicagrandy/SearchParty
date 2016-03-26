@@ -9,7 +9,7 @@ exports.config = {
                    // We are going to make this file in a minute
                 'client/e2e/spec.js'
           ],
-          baseUrl: 'http://localhost:8000/',
+          baseUrl: 'http://localhost:8100/',
           jasmineNodeOpts: {
                   showColors: true,
                  defaultTimeoutInterval: 30000,
@@ -17,7 +17,7 @@ exports.config = {
           },
         allScriptsTimeout: 20000,
           onPrepare: function(){
-                browser.driver.get('http://localhost:8000');
+                browser.driver.get('http://localhost:8100');
         }
 };
 
