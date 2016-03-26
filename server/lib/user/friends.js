@@ -21,5 +21,21 @@ module.exports = {
         }
       })
     })
+  },
+
+  retrieveFriendsPromise: (username) => {
+    let retrieveFriendsQuery = `MATCH (user:User{username:"${username}"})-[r:FRIENDS_WITH]-() RETURN r`;
+
+    return neo4jPromise.databaseQueryPromise(retrieveFriendsQuery)
+    .then(friendsArray => {
+      console.log("these are the friends of the user ", friendsArray);
+      return new Promise((resolve, reject) => {
+        if(friendsArray) {
+          resolve(friendsArray);
+        } else {
+          reject({error: "could not retrieve friends"});
+        }
+      })
+    })
   }
 }
