@@ -24,8 +24,6 @@ for (let i = 0; i < chain.length; i++) {
   }
 }
 
-console.log(ca);
-
 const options = {
   ca: ca,
   key: fs.readFileSync('key.pem'),

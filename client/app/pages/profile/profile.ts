@@ -1,11 +1,13 @@
 import {Page, NavController, NavParams, LocalStorage, Storage} from 'ionic-angular';
 import {ProfileService} from '../../services/profile/profile-service';
 import {AuthService} from '../../services/auth/auth-service';
+import {FORM_DIRECTIVES} from 'angular2/common';
 import {PastHuntsPage} from '../past-hunts/past-hunts';
 
 @Page({
   templateUrl: 'build/pages/profile/profile.html',
-  providers: [ProfileService]
+  providers: [ProfileService],
+  directives: [FORM_DIRECTIVES]
 })
 export class ProfilePage {
   local: Storage = new Storage(LocalStorage);
