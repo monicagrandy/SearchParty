@@ -49,11 +49,11 @@ export class TaskPage {
     this.tasksLeft = true;
     //console.log(localStorage.id_token)
     this.token = localStorage.id_token;
-    
+
     if (this.token) {
       this.user = this.jwtHelper.decodeToken(this.token).username;
     }
-    
+
     this.locAddress = navParams.get('locAddress');
     this.huntID = navParams.get('huntID');
     this.currChallenge = navParams.get('currChallenge');
@@ -75,9 +75,9 @@ export class TaskPage {
 
     if (this.keywords.length > 0) {
       let keyword = this.keywords.shift();
-      
+
       console.log('this is the huntID before it is sent! ', this.huntID);
-      
+
       let dataObj = {
         previousPlaces: this.previousPlaces,
         previousTasks: this.previousTasks,
@@ -103,7 +103,7 @@ export class TaskPage {
           let content = '<h4>' + this.locName + '</h4><p>' + this.locAddress  + '</p>';
           this.map = this.googleMaps.loadMap(this.locLat, this.locLng, 15, content, this.map);
         });
-        
+
     } else {
       console.log('no more tasks!');
       console.log(this.previousTasks);
@@ -118,13 +118,24 @@ export class TaskPage {
     this.endTime = new Date().toLocaleTimeString();
     localStorage.endTime = this.endTime;
     this.startTime = localStorage.startTime;
-    
+
     this.googleMaps.finalMapMaker(this.previousPlaces, this.previousTasks)
       .then(data => {
         let flightPath = data;
       });
-      
+
     this.finalDist = this.googleMaps.calcDistance(this.previousPlaces);
+      else {
+        console.log("no more tasks!")
+    }
+        console.log(this.previousTasks)
+        console.log(this.previousPlaces)
+    }
+  }
+
+  searchComplete(){
+
+  }
 
   }
 
@@ -133,12 +144,12 @@ export class TaskPage {
       console.log('sending good feedback!');
       this.feedback = "good";
     }
-    
+
     if (val === 2) {
       console.log('sending bad feedback!');
       this.feedback = "bad";
     }
-    
+
     let userFeedback = {
           token: localStorage.id_token,
           huntID: this.huntID,
@@ -146,7 +157,7 @@ export class TaskPage {
           distance: this.finalDist,
           feedback: this.feedback
     };
-    
+
     this._taskService.postData(JSON.stringify(userFeedback), this.FEEDBACK_URL)
       .then(result => {
         this.nav.setRoot(TemplatePage);
