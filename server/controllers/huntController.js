@@ -56,5 +56,8 @@ module.exports = {
       .catch(error => {
          console.log('Error with creating feedback: ', error);
       });
+   },
+   chat: (req, res) => {
+
    }
 }
