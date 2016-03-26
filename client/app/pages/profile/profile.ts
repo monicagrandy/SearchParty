@@ -38,4 +38,8 @@ export class ProfilePage {
       huntID: hunt.stats.huntID
     });
   }
+  
+  addFriend(friend) {
+    console.log(friend);
+  }
 }
