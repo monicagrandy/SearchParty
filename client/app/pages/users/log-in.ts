@@ -14,8 +14,8 @@ import 'rxjs/add/operator/map';
 })
 
 export class LogIn {
-  LOGIN_URL: string = '/signin'; //update this later
-  SIGNUP_URL: string = '/signup';
+  LOGIN_URL: string = 'https://getsearchparty.com/signin'; //update this later
+  SIGNUP_URL: string = 'https://getsearchparty.com/signup';
   // When the page loads, we want the Login segment to be selected
   authType: string = 'login';
   // We need to set the content type for the server

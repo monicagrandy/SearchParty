@@ -34,7 +34,7 @@ module.exports = {
       console.log("signin function userData", userData);
       if(userData) {
         let token = jwt.encode({username: userData.username}, secret);
-        console.log(token);
+        console.log('token:',token);
         res.json({token: token});
       }
     })
@@ -56,5 +56,14 @@ module.exports = {
       res.json(addedFriend);
     })
     .catch(error);
+  },
+  retrieveUserFriends: (req, res) => {
+    let username = jwt.decode(req.body.token, config.secret).username;
+    friends.retrieveFriendsPromise(username)
+    .then(friendsArray => {
+      res.json(friendsArray);
+    })
+    .catch(error);
+
   }
 };
