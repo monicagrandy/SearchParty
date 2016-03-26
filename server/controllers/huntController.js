@@ -57,7 +57,15 @@ module.exports = {
          console.log('Error with creating feedback: ', error);
       });
    },
+   
    chat: (req, res) => {
-
+      let huntID = req.body.huntID;
+      retrieveChat.chatQuery(huntID, res)
+      .then(chatID => {
+         res.json(chatID);
+      })
+      .catch(error => {
+         console.log('Error with fetching chat from database');
+      });
    }
 }
