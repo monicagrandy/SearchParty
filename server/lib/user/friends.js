@@ -24,7 +24,7 @@ module.exports = {
   },
 
   retrieveFriendsPromise: (username) => {
-    let retrieveFriendsQuery = `MATCH (user:User{username:"${username}"})-[r:FRIENDS_WITH]-() RETURN r`;
+    let retrieveFriendsQuery = `MATCH (user:User{username:"${username}"})-[:FRIENDS_WITH]-(n) RETURN n`;
 
     return neo4jPromise.databaseQueryPromise(retrieveFriendsQuery)
     .then(friendsArray => {
