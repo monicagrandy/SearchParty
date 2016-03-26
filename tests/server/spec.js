@@ -54,22 +54,3 @@ describe('Server Response', () => {
    });
 
 });
-
-//Fix later. The callback from the server is never sent; it's just a console.log().
-// it('should return an error if a user tries to create a duplicate profile', (done) => {
-//     chai.request(server)
-//     .post('/signup')
-//     .send({
-//       "username": "monica1",
-//       "password": "monica123"
-//     })
-//    .end((err, res) => {
-//       res.body.should.be.a('object');
-//       expect(res).to.have.status(400);
-//       done();
-//    })
-//    // .catch((err) => {
-//    //    throw err;
-//    //    done();
-//    // })
-// });
