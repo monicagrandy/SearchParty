@@ -53,4 +53,17 @@ describe('Server Response', () => {
       });
    });
 
+   it('should return chat', (done) => {
+      chai.request(server)
+       .post('/chat')
+       .send({
+         "huntID": "h4J3JLp0pg",
+       })
+      .end((err, res) => {
+         res.body.should.be.a('array');
+         res.body[0].should.be.a('object');
+         expect(res.body[0].chatID).to.equal('c4Je2JIpATx');
+         done();
+      });
+   });
 });

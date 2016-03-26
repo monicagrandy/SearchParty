@@ -8,8 +8,7 @@ module.exports = (app, express) => {
   app.use(jsonParser);
   app.use(express.static('./client/www'));
 
-  app.get('/chatSystem', jsonParser, huntController.chat);
-
+  app.post('/chat', jsonParser, huntController.chat);
   app.post('/feedback', jsonParser, huntController.feedback);
   app.post('/tasks', jsonParser, huntController.huntMaker);
   app.post('/signup', jsonParser, userController.signup);
