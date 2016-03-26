@@ -44,8 +44,8 @@ export class TaskPage {
   platform: any;
   images: Array<{src: String}>;
   finalDist: any;
-  TASKS_URL: string = process.env.TASKSURL || 'http://localhost:8000/tasks';
-  FEEDBACK_URL: string = process.env.FEEDBACKURL || 'http://localhost:8000/feedback';
+  TASKS_URL: string = 'https://getsearchparty.com/tasks';
+  FEEDBACK_URL: string = 'https://getsearchparty.com/feedback';
   feedback: string;
 
 

@@ -10,6 +10,9 @@ import {ProfilePage} from './pages/profile/profile';
 
 import * as _ from 'underscore';
 
+// Avoid name not found warnings
+declare var Auth0Lock: any;
+
 @App({
   templateUrl: 'build/app.html',
   config: {}, // http://ionicframework.com/docs/v2/api/config/Config/
