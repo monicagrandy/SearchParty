@@ -15,4 +15,5 @@ module.exports = (app, express) => {
   app.post('/signin', jsonParser, userController.signin);
   app.post('/userProfile', jsonParser, userController.getUserInfo);
   app.post('/addFriend', jsonParser, userController.addUserToFriendsList);
+  app.post('/getFriends', jsonParser, userController.retrieveUserFriends);
 }

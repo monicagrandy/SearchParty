@@ -3,8 +3,6 @@ import {AuthHttp, JwtHelper, tokenNotExpired} from 'angular2-jwt';
 import {Injectable} from 'angular2/core';
 import {Observable} from 'rxjs/Rx';
 
-// Avoid name not found warnings
-declare var Auth0Lock: any;
 
 @Injectable()
 export class AuthService {

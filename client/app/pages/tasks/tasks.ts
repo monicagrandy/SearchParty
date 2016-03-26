@@ -1,11 +1,13 @@
-import {Page, NavController, NavParams, LocalStorage} from 'ionic-angular';
+import {Page, Platform, NavController, NavParams, LocalStorage} from 'ionic-angular';
 import {TaskService} from '../../services/task/task-service';
 import {GoogleMapService} from '../../services/map/map-service';
 import {ConnectionBackend, HTTP_PROVIDERS} from 'angular2/http';
 import {JwtHelper} from 'angular2-jwt';
+import {NgZone} from 'angular2/core';
 import {TemplatePage} from '../templates/templates';
 import 'rxjs/add/operator/map';
 
+declare var Camera:any;
 
 @Page({
   templateUrl: 'build/pages/tasks/tasks.html',
@@ -38,14 +40,23 @@ export class TaskPage {
   previousPlaces: any;
   previousTasks: any;
   huntID: any;
+  _zone: any;
+  platform: any;
+  images: Array<{src: String}>;
   finalDist: any;
-  TASKS_URL: string = process.env.TASKSURL || 'http://localhost:8000/tasks';
-  FEEDBACK_URL: string = process.env.FEEDBACKURL || 'http://localhost:8000/feedback';
+  TASKS_URL: string = 'https://getsearchparty.com/tasks';
+  FEEDBACK_URL: string = 'https://getsearchparty.com/feedback';
   feedback: string;
 
-  constructor(private nav: NavController, navParams: NavParams, private _taskService: TaskService, private googleMaps: GoogleMapService) {
+
+  constructor(platform: Platform, private nav: NavController, navParams: NavParams, private _taskService: TaskService, private googleMaps: GoogleMapService, _zone: NgZone) {
     // If we navigated to this page, we will have an item available as a nav param
     //this.map = null;
+    this._zone = _zone;
+    this.platform = platform;
+    this.images = [];
+
+
     this.tasksLeft = true;
     //console.log(localStorage.id_token)
     this.token = localStorage.id_token;
@@ -56,15 +67,40 @@ export class TaskPage {
 
     this.locAddress = navParams.get('locAddress');
     this.huntID = navParams.get('huntID');
-    this.currChallenge = navParams.get('currChallenge');
-    this.locLat = navParams.get('locLat');
-    this.locLng = navParams.get('locLng');
-    this.locName = navParams.get('locName');
+    this.currChallenge =  localStorage.currChallenge || navParams.get('currChallenge');
+    this.locLat = localStorage.locLat || navParams.get('locLat');
+    this.locLng = localStorage.locLng || navParams.get('locLng');
+    this.locName = localStorage.locName || navParams.get('locName');
     this.previousPlaces = navParams.get('previousPlaces');
     this.previousTasks = navParams.get('previousTasks');
     let content = '<h4>' + this.locName + '</h4><p>' + this.locAddress  + '</p>';
     setTimeout(()=>{ this.googleMaps.loadMap(this.locLat, this.locLng, 15, content, this.map).then(map => this.map = map), 2000 })
   }
+
+
+  takePhoto() {
+  this.platform.ready().then(() => {
+    let options = {
+      quality: 80,
+      destinationType: Camera.DestinationType.DATA_URL,
+      sourceType: Camera.PictureSourceType.CAMERA,
+      allowEdit: false,
+      encodingType: Camera.EncodingType.JPEG,
+      saveToPhotoAlbum: false
+    };
+    // https://github.com/apache/cordova-plugin-camera#module_camera.getPicture
+    navigator.camera.getPicture(
+      (data) => {
+        let image = "data:image/jpeg;base64," + data;
+         this._zone.run(()=> this.images.unshift({
+           src: image
+         }))
+      }, (error) => {
+        alert(error);
+      }, options
+    );
+  });
+}
 
   //this should be triggered when the next button is pushed
   getNewTask(){
