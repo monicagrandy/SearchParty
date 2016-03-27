@@ -33,9 +33,13 @@
       <ion-label>Mark Complete</ion-label>
       <ion-checkbox secondary [checked]="completeToggle" (click)="markComplete()"></ion-checkbox>
     </ion-item>
-    <button primary clear item-right (click)="takePhoto()">  
+    <button *ngIf="completeToggle" primary clear item-right (click)="takePic()">  
       Take Photo
     </button>
+    <div *ngIf="completeToggle">
+      <p>Img Here</p>
+      <img src="{{imgData}}">
+    </div>
     <button primary clear item-right *ngIf="completeToggle && tasksLeft" (click)="getNewTask()">  
       Next Task
     </button>
