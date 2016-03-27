@@ -56,5 +56,21 @@ module.exports = {
       res.json(addedFriend);
     })
     .catch(error);
-  }
+  },
+  retrieveUserFriends: (req, res) => {
+    let username = jwt.decode(req.body.token, config.secret).username;
+    friends.retrieveFriendsPromise(username)
+    .then(friendsArray => {
+      res.json(friendsArray);
+    })
+    .catch(error);
+  },
+  retrieveFriendHunt: (req, res) => {
+    let username = req.body.username;
+    userInfo.giveAllUserHuntData(username)
+    .then(userObject => {
+      res.json(userObject);
+    })
+    .catch(error);
+  },
 };
