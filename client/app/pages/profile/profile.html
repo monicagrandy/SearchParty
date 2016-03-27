@@ -19,7 +19,7 @@
       Your Friends
     </ion-card-header>
     <ion-list *ngIf="friends">
-      <button ion-item *ngFor="#friend of friends" (click)="friendTapped($event, hunt)">
+      <button ion-item *ngFor="#friend of friends" (click)="friendTapped($event, friend)">
         <ion-icon name="contact" item-left></ion-icon>
         {{friend.firstname}} {{friend.lastname}}
       </button>
