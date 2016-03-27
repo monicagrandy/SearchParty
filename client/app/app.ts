@@ -7,6 +7,9 @@ import {LogIn} from './pages/users/log-in';
 import {TemplatePage} from './pages/templates/templates';
 import {TaskPage} from './pages/tasks/tasks';
 import {ProfilePage} from './pages/profile/profile';
+import {enableProdMode} from 'angular2/core';
+
+enableProdMode();
 
 import * as _ from 'underscore';
 
