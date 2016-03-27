@@ -36,7 +36,27 @@ export class FriendService {
   }
   
   getFriends(userToken) {
+    console.log('called post req');
+    let dataToSend = { token: userToken };
     
+    let getFriendsPostPromise = new Promise((resolve, reject) => {
+      
+      this._http.post(this.GETFRIENDS_URL, JSON.stringify(dataToSend), {headers: this.contentHeader})
+        .map(res => res.json())
+        .subscribe(
+            data => {
+              console.log('data from promise: ', data);
+              resolve(data);
+          },
+            err => {
+              this.logError(err);
+              reject(err);
+          },
+            () => console.log('data recieved')
+          )
+    });
+    
+    return getFriendsPostPromise;
   }
   
   logError(err) {

@@ -21,7 +21,7 @@
     <ion-list *ngIf="friends">
       <button ion-item *ngFor="#friend of friends" (click)="friendTapped($event, hunt)">
         <ion-icon name="contact" item-left></ion-icon>
-        {{friend.name}}
+        {{friend.firstname}} {{friend.lastname}}
       </button>
     </ion-list>
     <ion-list *ngIf="!friends">
