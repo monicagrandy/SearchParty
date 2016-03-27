@@ -64,6 +64,13 @@ module.exports = {
       res.json(friendsArray);
     })
     .catch(error);
-
-  }
+  },
+  retrieveFriendHunt: (req, res) => {
+    let username = req.body.username;
+    userInfo.giveAllUserHuntData(username)
+    .then(userObject => {
+      res.json(userObject);
+    })
+    .catch(error);
+  },
 };
