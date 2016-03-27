@@ -7,6 +7,7 @@ import 'rxjs/add/operator/map';
 export class FriendService {
   ADDFRIEND_URL: string = 'http://localhost:8000/addFriend'; //update this later https://getsearchparty.com/addFriend
   GETFRIENDS_URL: string = 'http://localhost:8000/getFriends'; //update this later https://getsearchparty.com/getFriends
+  RETRIEVEFRIENDHUNT_URL: string = 'http://localhost:8000/getFriendHunt'; //update this later https://getsearchparty.com/getFriendHunt
   contentHeader: Headers = new Headers({'Content-Type': 'application/json'});
   
   constructor(private _http:Http) {}
@@ -57,6 +58,30 @@ export class FriendService {
     });
     
     return getFriendsPostPromise;
+  }
+  
+  getFriendHunt(friendusername) {
+    console.log('called post req');
+    let dataToSend = { username: friendusername };
+    
+    let getFriendHuntPostPromise = new Promise((resolve, reject) => {
+      
+      this._http.post(this.RETRIEVEFRIENDHUNT_URL, JSON.stringify(dataToSend), {headers: this.contentHeader})
+        .map(res => res.json())
+        .subscribe(
+            data => {
+              console.log('data from promise: ', data);
+              resolve(data);
+          },
+            err => {
+              this.logError(err);
+              reject(err);
+          },
+            () => console.log('data recieved')
+          )
+    });
+    
+    return getFriendHuntPostPromise;
   }
   
   logError(err) {

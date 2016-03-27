@@ -4,6 +4,7 @@ import {FriendService} from '../../services/friend/friend-service';
 import {AuthService} from '../../services/auth/auth-service';
 import {FORM_DIRECTIVES} from 'angular2/common';
 import {PastHuntsPage} from '../past-hunts/past-hunts';
+import {FriendPage} from '../friend/friend';
 
 @Page({
   templateUrl: 'build/pages/profile/profile.html',
@@ -47,7 +48,9 @@ export class ProfilePage {
   }
   
   friendTapped(event, friend) {
-    
+    this.nav.push(FriendPage, {
+      friend: friend
+    });
   }
 
   huntTapped(event, hunt) {
