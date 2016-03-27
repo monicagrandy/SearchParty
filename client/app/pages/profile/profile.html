@@ -5,44 +5,23 @@
   <ion-title>My Profile</ion-title>
 </ion-navbar>
 
-<!--<ion-content>
-  <h2>Your Friends</h2>
-  <h4 *ngIf="!friends">You have no friends!</h4>
-  <ion-list>
-    <button ion-item *ngFor="#friend of friends" (click)="seeFriends($event, friend)">
-      <ion-icon name="contact" item-left></ion-icon>
-      {{friend.name}}
-      <div class="item-note" item-right>
-        {{friend.note}}
-      </div>
-    </button>
-  </ion-list>
-</ion-content>-->
-
-
-<!--<ion-content>
-  <ion-list>
-    <h2>Your Hunts</h2>
-    <h4 *ngIf="!hunts">You have no hunts!</h4>
-    <button ion-item *ngFor="#hunt of hunts" (click)="itemTapped($event, hunt)">
-      <ion-icon name="{{hunt.icon}}" item-left></ion-icon>
-      {{hunt.title}}
-      <div class="item-note" item-right>
-        {{hunt.note}}
-      </div>
-    </button>
-  </ion-list>
-</ion-content>-->
-
 <ion-content>
+  <form #friendAdd="ngForm" (ngSubmit)="addFriend(friendAdd.value)">
+    <ion-item> 
+      <ion-label fixed>Add friend</ion-label>
+      <ion-input type="text" ngControl="username"></ion-input>
+      <button block type="submit">Add</button>
+    </ion-item>
+  </form>
+  
   <ion-card>
     <ion-card-header>
       Your Friends
     </ion-card-header>
     <ion-list *ngIf="friends">
-      <button ion-item *ngFor="#friend of friends" (click)="friendTapped($event, hunt)">
+      <button ion-item *ngFor="#friend of friends" (click)="friendTapped($event, friend)">
         <ion-icon name="contact" item-left></ion-icon>
-        {{friend.name}}
+        {{friend.firstname}} {{friend.lastname}}
       </button>
     </ion-list>
     <ion-list *ngIf="!friends">
@@ -64,33 +43,3 @@
     </ion-list>
   </ion-card>
 </ion-content>
-
-
-
-  <!--<ion-navbar *navbar>
-    <ion-title>Profile</ion-title>
-  </ion-navbar>
-
-  <ion-content padding *ngIf="!auth.authenticated()">
-    
-    <button block (click)="auth.login()">Login</button>
-    
-  </ion-content>
-
-  <ion-content padding *ngIf="auth.authenticated()">  
-    
-    <ion-card>
-
-      <ion-item *ngIf="auth.user">
-        <ion-avatar item-left>
-          <img src="{{ auth.user.picture }}">
-        </ion-avatar>
-        <h2>{{ auth.user.nickname }}</h2>
-        <p>{{ auth.user.email }}</p>
-      </ion-item>
-    
-    </ion-card>
-    
-    <button block (click)="auth.logout()">Logout</button>
-    
-  </ion-content>-->

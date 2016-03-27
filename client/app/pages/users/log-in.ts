@@ -31,6 +31,10 @@ export class LogIn {
     if(token) {
       this.user = this.jwtHelper.decodeToken(token).username;
     }
+    // show auth0 login popup
+    // if(!auth.authenticated()) {
+    //   auth.login();
+    // }
   }
 
   getCoords(){
