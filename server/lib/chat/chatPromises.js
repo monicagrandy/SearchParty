@@ -32,7 +32,7 @@ module.exports = {
 
   retrieveChatMessages: chatID => {
     const retrieveChatQuery =
-    `MATCH (chat:Chat{chatID:"${chatID}"})
+    `MATCH (chat:Chatroom{chatID:"${chatID}"})
     WITH chat
     MATCH (chat)-[:CURRENT]-(latestmessage)-[:NEXT*0..10]-(oldermessages)
     RETURN oldermessages ORDER BY oldermessages.datetime`;

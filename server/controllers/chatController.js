@@ -15,9 +15,9 @@ module.exports = {
     .catch(error => console.error(error));
   },
   retrieveChatMessages: (req, res) => {
-    let huntID = req.body.huntID;
+    let chatID = req.body.chatID;
 
-    chatPromises.retrieveChatMessages(huntID)
+    chatPromises.retrieveChatMessages(chatID)
     .then(chatMessageArray => {
       console.log("10 latest messages from db ", chatMessageArray);
       res.json({"chatMessages": chatMessageArray})
