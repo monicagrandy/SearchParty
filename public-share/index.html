@@ -3,23 +3,23 @@
     <base href='/'>
     <title>Search Party</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="styles.css">
-    <link rel="stylesheet" href="node_modules/ng2-material/dist/ng2-material.css">
-    <link rel="stylesheet" href="node_modules/ng2-material/dist/font.css">
+    <link rel="stylesheet" href="huntshare/styles.css">
+    <link rel="stylesheet" href="huntshare/node_modules/ng2-material/dist/ng2-material.css">
+    <link rel="stylesheet" href="huntshare/node_modules/ng2-material/dist/font.css">
 
     <!-- 1. Load libraries -->
     <!-- IE required polyfills, in this exact order -->
-    <script src="node_modules/es6-shim/es6-shim.min.js"></script>
-    <script src="node_modules/systemjs/dist/system-polyfills.js"></script>
-    <script src="node_modules/angular2/es6/dev/src/testing/shims_for_IE.js"></script>
+    <script src="huntshare/node_modules/es6-shim/es6-shim.min.js"></script>
+    <script src="huntshare/node_modules/systemjs/dist/system-polyfills.js"></script>
+    <script src="huntshare/node_modules/angular2/es6/dev/src/testing/shims_for_IE.js"></script>
 
-    <script src="node_modules/angular2/bundles/angular2-polyfills.js"></script>
-    <script src="node_modules/systemjs/dist/system.src.js"></script>
-    <script src="node_modules/rxjs/bundles/Rx.js"></script>
-    <script src="node_modules/angular2/bundles/angular2.dev.js"></script>
-    <script src="node_modules/angular2/bundles/router.dev.js"></script>
-    <script src="node_modules/angular2/bundles/http.dev.js"></script>
-    <script src="node_modules/ng2-material/dist/ng2-material.js"></script>
+    <script src="huntshare/node_modules/angular2/bundles/angular2-polyfills.js"></script>
+    <script src="huntshare/node_modules/systemjs/dist/system.src.js"></script>
+    <script src="huntshare/node_modules/rxjs/bundles/Rx.js"></script>
+    <script src="huntshare/node_modules/angular2/bundles/angular2.dev.js"></script>
+    <script src="huntshare/node_modules/angular2/bundles/router.dev.js"></script>
+    <script src="huntshare/node_modules/angular2/bundles/http.dev.js"></script>
+    <script src="huntshare/node_modules/ng2-material/dist/ng2-material.js"></script>
 
     <script
   src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAU3QUmonrNrG5bQuWbXce0jPWm5v2cRDY&libraries=geometry">
@@ -28,12 +28,25 @@
     <!-- 2. Configure SystemJS -->
     <script>
       System.config({
+        baseURL: 'huntshare/',
+        map: {
+            package: 'public-share/app',
+            'angular2': 'node_modules/angular2',
+            'ng2-material': 'node_modules/ng2-material',
+            'rxjs': 'node_modules/rxjs'
+        },
         packages: {
           app: {
             format: 'register',
             defaultExtension: 'js'
           },
           'ng2-material': {
+            defaultExtension: 'js'
+          },
+          'angular2': {
+            defaultExtension: 'js'
+          },
+          'rxjs': {
             defaultExtension: 'js'
           }
         }
