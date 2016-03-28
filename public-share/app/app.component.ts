@@ -12,11 +12,10 @@ import * as _ from 'underscore';
   styleUrls: ['./huntshare/app/app.component.css'],
   directives: [ROUTER_DIRECTIVES, MATERIAL_DIRECTIVES],
   providers: [
-    ROUTER_PROVIDERS,
     Http,
     ConnectionBackend,
     HTTP_PROVIDERS,
-    MATERIAL_PROVIDERS,
+    MATERIAL_PROVIDERS
   ]
 })
 @RouteConfig([

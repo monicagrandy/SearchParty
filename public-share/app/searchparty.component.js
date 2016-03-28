@@ -40,11 +40,10 @@ System.register(['angular2/core', 'angular2/http', 'angular2/router', 'ng2-mater
                         styleUrls: ['./huntshare/app/searchparty.component.css'],
                         directives: [router_1.ROUTER_DIRECTIVES, all_1.MATERIAL_DIRECTIVES],
                         providers: [
-                            router_1.ROUTER_PROVIDERS,
                             http_1.Http,
                             http_1.ConnectionBackend,
                             http_1.HTTP_PROVIDERS,
-                            all_1.MATERIAL_PROVIDERS,
+                            all_1.MATERIAL_PROVIDERS
                         ]
                     }), 
                     __metadata('design:paramtypes', [http_1.Http])
