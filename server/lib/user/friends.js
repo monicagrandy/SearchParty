@@ -20,7 +20,7 @@ module.exports = {
           reject({error: "could not add friend"});
         }
       })
-    })
+    }).catch(error => console.error(error));
   },
 
   retrieveFriendsPromise: (username) => {
@@ -36,6 +36,6 @@ module.exports = {
           reject({error: "could not retrieve friends"});
         }
       })
-    })
+    }).catch(error => console.error(error));
   }
 }

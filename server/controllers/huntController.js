@@ -7,7 +7,6 @@ const config = require('../config/config.js');
 const makeHunt = require('../lib/hunt/createEntireHunt.js');
 const createNewHunt = require('../lib/hunt/createNewHuntID.js');
 const createFeedback = require('../lib/hunt/createFeedback.js');
-const retrieveChat = require('../lib/user/retrieveChat.js');
 
 module.exports = {
   huntMaker: (req, res) => {
@@ -56,17 +55,6 @@ module.exports = {
       })
       .catch(error => {
          console.log('Error with creating feedback: ', error);
-      });
-   },
-
-   chat: (req, res) => {
-      let huntID = req.body.huntID;
-      retrieveChat.chatQuery(huntID, res)
-      .then(chatID => {
-         res.json(chatID);
-      })
-      .catch(error => {
-         console.log('Error with fetching chat from database');
       });
    }
 }
