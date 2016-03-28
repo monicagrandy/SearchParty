@@ -33,6 +33,7 @@
     "protractor": "^3.2.1",
     "qs": "^6.1.0",
     "request": "^2.69.0",
-    "shortid": "^2.2.4"
+    "shortid": "^2.2.4",
+    "underscore": "^1.8.3"
   }
 }

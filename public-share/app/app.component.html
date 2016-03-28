@@ -1,8 +1,7 @@
 <h1>{{title}}</h1>
-<!-- <nav>
-  <a [routerLink]="['Dashboard']">Dashboard</a>
-  <a [routerLink]="['Heroes']">Heroes</a>
-</nav> -->
+ <nav>
+  <a [routerLink]="['/SearchParty', {huntID: 1}]">SearchParty</a>
+</nav> 
 <my-map></my-map>
 <button md-raised-button class="md-raised md-primary">Search</button>
 <router-outlet></router-outlet>

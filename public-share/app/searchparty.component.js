@@ -1,4 +1,4 @@
-System.register(['angular2/core', 'angular2/http', 'angular2/router', 'ng2-material/all', './searchparty.component', 'rxjs/add/operator/map'], function(exports_1, context_1) {
+System.register(['angular2/core', 'angular2/http', 'angular2/router', 'ng2-material/all', 'rxjs/add/operator/map'], function(exports_1, context_1) {
     "use strict";
     var __moduleName = context_1 && context_1.id;
     var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
@@ -10,8 +10,8 @@ System.register(['angular2/core', 'angular2/http', 'angular2/router', 'ng2-mater
     var __metadata = (this && this.__metadata) || function (k, v) {
         if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
     };
-    var core_1, http_1, router_1, all_1, searchparty_component_1;
-    var AppComponent;
+    var core_1, http_1, router_1, all_1;
+    var SearchPartyComponent;
     return {
         setters:[
             function (core_1_1) {
@@ -26,22 +26,18 @@ System.register(['angular2/core', 'angular2/http', 'angular2/router', 'ng2-mater
             function (all_1_1) {
                 all_1 = all_1_1;
             },
-            function (searchparty_component_1_1) {
-                searchparty_component_1 = searchparty_component_1_1;
-            },
             function (_1) {}],
         execute: function() {
-            AppComponent = (function () {
-                function AppComponent(_http) {
+            SearchPartyComponent = (function () {
+                function SearchPartyComponent(_http) {
                     this._http = _http;
-                    this.title = 'Search Party';
                     this._http = _http;
                 }
-                AppComponent = __decorate([
+                SearchPartyComponent = __decorate([
                     core_1.Component({
-                        selector: 'my-app',
-                        templateUrl: './huntshare/app/app.component.html',
-                        styleUrls: ['./huntshare/app/app.component.css'],
+                        selector: 'my-searchparty',
+                        templateUrl: './huntshare/app/searchparty.component.html',
+                        styleUrls: ['./huntshare/app/searchparty.component.css'],
                         directives: [router_1.ROUTER_DIRECTIVES, all_1.MATERIAL_DIRECTIVES],
                         providers: [
                             router_1.ROUTER_PROVIDERS,
@@ -50,20 +46,13 @@ System.register(['angular2/core', 'angular2/http', 'angular2/router', 'ng2-mater
                             http_1.HTTP_PROVIDERS,
                             all_1.MATERIAL_PROVIDERS,
                         ]
-                    }),
-                    router_1.RouteConfig([
-                        {
-                            path: '/huntshare/:huntID',
-                            name: 'SearchParty',
-                            component: searchparty_component_1.SearchPartyComponent
-                        },
-                    ]), 
+                    }), 
                     __metadata('design:paramtypes', [http_1.Http])
-                ], AppComponent);
-                return AppComponent;
+                ], SearchPartyComponent);
+                return SearchPartyComponent;
             }());
-            exports_1("AppComponent", AppComponent);
+            exports_1("SearchPartyComponent", SearchPartyComponent);
         }
     }
 });
-//# sourceMappingURL=app.component.js.map
+//# sourceMappingURL=searchparty.component.js.map
