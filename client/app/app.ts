@@ -42,13 +42,13 @@ export class MyApp {
     this.initializeApp();
 
     //set our app's pages
-    
+
     this.pages = [
       { title: 'Hunts', component: TemplatePage },
       { title: 'My Profile', component: ProfilePage },
       { title: 'Log Out', component: LogIn }
     ];
-    
+
     // unauthenticated pages
     this.unauthPages = [
       { title: 'Log In', component: LogIn }
@@ -58,7 +58,7 @@ export class MyApp {
 
   initializeApp() {
     this.platform.ready().then(() => {
-    
+
       // The platform is now ready. Note: if this callback fails to fire, follow
       // the Troubleshooting guide for a number of possible solutions:
       //
@@ -76,7 +76,7 @@ export class MyApp {
     });
   }
 
-  openPage(page) { 
+  openPage(page) {
     // close the menu when clicking a link from the menu
     this.menu.close();
     //this.setPages();

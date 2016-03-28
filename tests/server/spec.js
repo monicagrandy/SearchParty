@@ -53,23 +53,17 @@ describe('Server Response', () => {
       });
    });
 
+   it('should return chat', (done) => {
+      chai.request(server)
+       .post('/chat')
+       .send({
+         "huntID": "h4J3JLp0pg",
+       })
+      .end((err, res) => {
+         res.body.should.be.a('array');
+         res.body[0].should.be.a('object');
+         expect(res.body[0].chatID).to.equal('c4Je2JIpATx');
+         done();
+      });
+   });
 });
-
-//Fix later. The callback from the server is never sent; it's just a console.log().
-// it('should return an error if a user tries to create a duplicate profile', (done) => {
-//     chai.request(server)
-//     .post('/signup')
-//     .send({
-//       "username": "monica1",
-//       "password": "monica123"
-//     })
-//    .end((err, res) => {
-//       res.body.should.be.a('object');
-//       expect(res).to.have.status(400);
-//       done();
-//    })
-//    // .catch((err) => {
-//    //    throw err;
-//    //    done();
-//    // })
-// });

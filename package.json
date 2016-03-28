@@ -18,6 +18,7 @@
   },
   "homepage": "https://github.com/ecdemis123/SearchParty#readme",
   "dependencies": {
+    "angular-socket-io": "^0.7.0",
     "bcrypt-nodejs": "0.0.3",
     "body-parser": "^1.15.0",
     "chai": "^3.2.0",
