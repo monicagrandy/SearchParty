@@ -40,8 +40,8 @@ System.register(['angular2/core', 'angular2/http', 'angular2/router', 'ng2-mater
                 AppComponent = __decorate([
                     core_1.Component({
                         selector: 'my-app',
-                        templateUrl: './huntshare/app/app.component.html',
-                        styleUrls: ['./huntshare/app/app.component.css'],
+                        templateUrl: './share/app/app.component.html',
+                        styleUrls: ['./share/app/app.component.css'],
                         directives: [router_1.ROUTER_DIRECTIVES, all_1.MATERIAL_DIRECTIVES],
                         providers: [
                             http_1.Http,
@@ -52,7 +52,7 @@ System.register(['angular2/core', 'angular2/http', 'angular2/router', 'ng2-mater
                     }),
                     router_1.RouteConfig([
                         {
-                            path: '/huntshare/:huntID',
+                            path: 'hunt/:huntID',
                             name: 'SearchParty',
                             component: searchparty_component_1.SearchPartyComponent
                         },

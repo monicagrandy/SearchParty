@@ -1,14 +1,14 @@
 import {Component, OnInit} from 'angular2/core';
 import {Http, ConnectionBackend, HTTP_PROVIDERS, Headers} from 'angular2/http';
-import {RouteConfig, ROUTER_DIRECTIVES, ROUTER_PROVIDERS} from 'angular2/router';
+import {RouteConfig, ROUTER_DIRECTIVES, ROUTER_PROVIDERS, RouteParams} from 'angular2/router';
 import {MATERIAL_DIRECTIVES, MATERIAL_PROVIDERS} from 'ng2-material/all';
 import 'rxjs/add/operator/map';
 import * as _ from 'underscore';
 
 @Component({
   selector: 'my-searchparty',
-  templateUrl: './huntshare/app/searchparty.component.html',
-  styleUrls: ['./huntshare/app/searchparty.component.css'],
+  templateUrl: './share/app/searchparty.component.html',
+  styleUrls: ['./share/app/searchparty.component.css'],
   directives: [ROUTER_DIRECTIVES, MATERIAL_DIRECTIVES],
   providers: [
     Http,
@@ -18,9 +18,12 @@ import * as _ from 'underscore';
   ]
 })
 export class SearchPartyComponent {
-
-  constructor(private _http:Http) {
+  
+  huntID: any;
+  
+  constructor(private _http:Http, private _params: RouteParams) {
     this._http = _http;
+    this.huntID = _params.get('huntID');
   }
 
 }

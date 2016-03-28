@@ -8,8 +8,8 @@ import * as _ from 'underscore';
 
 @Component({
   selector: 'my-app',
-  templateUrl: './huntshare/app/app.component.html',
-  styleUrls: ['./huntshare/app/app.component.css'],
+  templateUrl: './share/app/app.component.html',
+  styleUrls: ['./share/app/app.component.css'],
   directives: [ROUTER_DIRECTIVES, MATERIAL_DIRECTIVES],
   providers: [
     Http,
@@ -20,7 +20,7 @@ import * as _ from 'underscore';
 })
 @RouteConfig([
   {
-    path: '/huntshare/:huntID',
+    path: 'hunt/:huntID',
     name: 'SearchParty',
     component: SearchPartyComponent
   },

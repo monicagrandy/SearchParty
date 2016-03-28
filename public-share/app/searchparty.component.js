@@ -29,15 +29,17 @@ System.register(['angular2/core', 'angular2/http', 'angular2/router', 'ng2-mater
             function (_1) {}],
         execute: function() {
             SearchPartyComponent = (function () {
-                function SearchPartyComponent(_http) {
+                function SearchPartyComponent(_http, _params) {
                     this._http = _http;
+                    this._params = _params;
                     this._http = _http;
+                    this.huntID = _params.get('huntID');
                 }
                 SearchPartyComponent = __decorate([
                     core_1.Component({
                         selector: 'my-searchparty',
-                        templateUrl: './huntshare/app/searchparty.component.html',
-                        styleUrls: ['./huntshare/app/searchparty.component.css'],
+                        templateUrl: './share/app/searchparty.component.html',
+                        styleUrls: ['./share/app/searchparty.component.css'],
                         directives: [router_1.ROUTER_DIRECTIVES, all_1.MATERIAL_DIRECTIVES],
                         providers: [
                             http_1.Http,
@@ -46,7 +48,7 @@ System.register(['angular2/core', 'angular2/http', 'angular2/router', 'ng2-mater
                             all_1.MATERIAL_PROVIDERS
                         ]
                     }), 
-                    __metadata('design:paramtypes', [http_1.Http])
+                    __metadata('design:paramtypes', [http_1.Http, router_1.RouteParams])
                 ], SearchPartyComponent);
                 return SearchPartyComponent;
             }());
