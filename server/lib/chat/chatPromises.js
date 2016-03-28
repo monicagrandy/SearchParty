@@ -1,6 +1,7 @@
 'use strict'
 const neo4jPromise = require('../neo4j/neo4jQueryPromiseReturn.js');
 const messageFormatter = require('./formatChatMessageForDB.js');
+
 module.exports = {
   addChatMessageToDB: (messageBody, chatID) => {
 
@@ -24,9 +25,10 @@ module.exports = {
       })
     }).catch(error => console.error(error));
   },
-  retrieveChatMessages: huntID => {
+
+  retrieveChatMessages: chatID => {
     const retrieveChatQuery =
-    `MATCH (hunt:Hunt{huntID:"${huntID}"})-[:HAS_CHAT]->(chat)
+    `MATCH (chat:Chat{chatID:"${chatID}"})
     WITH chat
     MATCH (chat)-[:CURRENT]-(latestmessage)-[:NEXT*0..10]-(oldermessages)
     RETURN oldermessages ORDER BY oldermessages.datetime`;

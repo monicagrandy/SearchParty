@@ -7,7 +7,6 @@ const config = require('../config/config.js');
 const makeHunt = require('../lib/hunt/createEntireHunt.js');
 const createNewHunt = require('../lib/hunt/createNewHuntID.js');
 const createFeedback = require('../lib/hunt/createFeedback.js');
-const retrieveChat = require('../lib/user/retrieveChat.js');
 
 module.exports = {
   huntMaker: (req, res) => {
