@@ -1,4 +1,4 @@
-System.register(['angular2/core', 'angular2/router', 'ng2-material/all', './searchparty.component', 'rxjs/add/operator/map'], function(exports_1, context_1) {
+System.register(['angular2/core', 'angular2/http', 'angular2/router', 'ng2-material/all', './searchparty.component', 'rxjs/add/operator/map'], function(exports_1, context_1) {
     "use strict";
     var __moduleName = context_1 && context_1.id;
     var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
@@ -10,12 +10,15 @@ System.register(['angular2/core', 'angular2/router', 'ng2-material/all', './sear
     var __metadata = (this && this.__metadata) || function (k, v) {
         if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
     };
-    var core_1, router_1, all_1, searchparty_component_1;
+    var core_1, http_1, router_1, all_1, searchparty_component_1;
     var AppComponent;
     return {
         setters:[
             function (core_1_1) {
                 core_1 = core_1_1;
+            },
+            function (http_1_1) {
+                http_1 = http_1_1;
             },
             function (router_1_1) {
                 router_1 = router_1_1;
@@ -38,7 +41,12 @@ System.register(['angular2/core', 'angular2/router', 'ng2-material/all', './sear
                         templateUrl: './share/app/app.component.html',
                         styleUrls: ['./share/app/app.component.css'],
                         directives: [router_1.ROUTER_DIRECTIVES, all_1.MATERIAL_DIRECTIVES],
-                        providers: [all_1.MATERIAL_PROVIDERS]
+                        providers: [
+                            http_1.Http,
+                            http_1.ConnectionBackend,
+                            http_1.HTTP_PROVIDERS,
+                            all_1.MATERIAL_PROVIDERS
+                        ]
                     }),
                     router_1.RouteConfig([
                         {

@@ -34,6 +34,7 @@ Requirements
 ----
 
 Node v5.8.0+, Typscript, and Ionic 2 beta are required.
+As of 3/28/16, the line ///<reference path='../node/index.d.ts' /> needs to be added to the typings definition of socket.io
 
 
 Demo
