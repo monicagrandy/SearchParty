@@ -81,11 +81,7 @@ export class MyApp {
     this.menu.close();
     //this.setPages();
     if(page.title === 'Log Out'){
-      localStorage.removeItem('id_token');
-      localStorage.removeItem('userLat');
-      localStorage.removeItem('userLng');
-      localStorage.removeItem('startTime');
-      localStorage.removeItem('endTime');
+      localStorage.clear();
       location.reload();
 
     }

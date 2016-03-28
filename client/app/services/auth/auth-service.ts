@@ -40,7 +40,7 @@ export class AuthService {
       // If authentication is successful, save the items
       // in local storage
       this.local.set('profile', JSON.stringify(profile));
-      this.local.set('id_token', token);
+      this.local.set('id_token', profile.token);
       this.local.set('refresh_token', refreshToken);
       this.user = profile;
       // Schedule a token refresh

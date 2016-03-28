@@ -4,10 +4,11 @@ import {GoogleMapService} from '../../services/map/map-service';
 import {ConnectionBackend, HTTP_PROVIDERS} from 'angular2/http';
 import {JwtHelper} from 'angular2-jwt';
 import {NgZone} from 'angular2/core';
+import {Camera} from 'ionic-native';
 import {TemplatePage} from '../templates/templates';
 import 'rxjs/add/operator/map';
 
-declare var Camera:any;
+//declare var Camera:any;
 
 @Page({
   templateUrl: 'build/pages/tasks/tasks.html',
@@ -20,6 +21,9 @@ declare var Camera:any;
 })
 
 export class TaskPage {
+  // static get parameters(){
+  //     return [NgZone];
+  // }
   title = 'Current Task';
   map = null;
   local: LocalStorage;
@@ -42,7 +46,8 @@ export class TaskPage {
   huntID: any;
   _zone: any;
   platform: any;
-  images: Array<{src: String}>;
+  image: any;
+  imgData: string;
   finalDist: any;
   TASKS_URL: string = 'https://getsearchparty.com/tasks';
   FEEDBACK_URL: string = 'https://getsearchparty.com/feedback';
@@ -54,9 +59,7 @@ export class TaskPage {
     //this.map = null;
     this._zone = _zone;
     this.platform = platform;
-    this.images = [];
-
-
+    this.image = null;
     this.tasksLeft = true;
     //console.log(localStorage.id_token)
     this.token = localStorage.id_token;
@@ -78,32 +81,52 @@ export class TaskPage {
   }
 
 
-  takePhoto() {
-  this.platform.ready().then(() => {
-    let options = {
-      quality: 80,
-      destinationType: Camera.DestinationType.DATA_URL,
-      sourceType: Camera.PictureSourceType.CAMERA,
+//   takePhoto() {
+//   this.platform.ready().then(() => {
+//     let options = {
+//       quality: 80,
+//       destinationType: Camera.DestinationType.DATA_URL,
+//       sourceType: Camera.PictureSourceType.CAMERA,
+//       allowEdit: false,
+//       encodingType: Camera.EncodingType.JPEG,
+//       saveToPhotoAlbum: false
+//     };
+//     // https://github.com/apache/cordova-plugin-camera#module_camera.getPicture
+//     navigator.camera.getPicture(
+//       (data) => {
+//         let image = "data:image/jpeg;base64," + data;
+//          this._zone.run(()=> this.images.unshift({
+//            src: image
+//          }))
+//       }, (error) => {
+//         alert(error);
+//       }, options
+//     );
+//   });
+// }
+
+takePic() {
+  console.log('taking picture')    
+  let options = {
+      destinationType: 0,
+      sourceType: 1,
+      encodingType: 0,
+      quality:100,
       allowEdit: false,
-      encodingType: Camera.EncodingType.JPEG,
       saveToPhotoAlbum: false
-    };
-    // https://github.com/apache/cordova-plugin-camera#module_camera.getPicture
-    navigator.camera.getPicture(
-      (data) => {
-        let image = "data:image/jpeg;base64," + data;
-         this._zone.run(()=> this.images.unshift({
-           src: image
-         }))
-      }, (error) => {
-        alert(error);
-      }, options
-    );
+  };
+  Camera.getPicture(options).then((data) => {
+      this.imgData = 'data:image/jpeg;base64,' + data;
+      this._zone.run(() => this.image = this.imgData);
+
+  }, (error) => {
+      alert(error);
   });
 }
 
   //this should be triggered when the next button is pushed
   getNewTask(){
+    this.imgData = ""
     console.log('getting ready to send new task!')
     console.log(this.keywords);
     console.log('this is the huntID in the tasks! ');
