@@ -6,7 +6,8 @@ const huntController = require('../controllers/huntController.js');
 module.exports = (app, express) => {
 
   app.use(jsonParser);
-  app.use(express.static('./client/www'));
+  app.use('/', express.static('./client/www'));
+  app.use('/huntshare', express.static('./public-share'));
 
   app.post('/feedback', jsonParser, huntController.feedback);
   app.post('/tasks', jsonParser, huntController.huntMaker);
