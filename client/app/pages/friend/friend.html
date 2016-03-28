@@ -1,0 +1,20 @@
+<ion-navbar *navbar>
+  <button menuToggle>
+    <ion-icon name="menu"></ion-icon>
+  </button>
+  <ion-title>Friend Profile</ion-title>
+</ion-navbar>
+
+<ion-content>
+  <ion-card>
+    <ion-card-header>
+      {{friend.firstname}} {{friend.lastname}}'s Hunts
+    </ion-card-header>
+    <ion-list>
+      <button ion-item *ngFor="#hunt of hunts" (click)="huntTapped($event, hunt)">
+        <ion-icon name="search" item-left></ion-icon>
+        {{hunt.stats.huntID}}
+      </button>
+    </ion-list>
+  </ion-card>
+</ion-content>
