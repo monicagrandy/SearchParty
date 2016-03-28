@@ -1,5 +1,5 @@
 {
-  "name": "SearchParty",
+  "name": "SearchPartyShareClient",
   "version": "0.0.1",
   "scripts": {
     "start": "concurrently \"npm run tsc:w\" \"npm run lite\" ",
