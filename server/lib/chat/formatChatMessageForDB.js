@@ -2,8 +2,9 @@
 const shortid = require('shortid');
 
 module.exports = {
-  let chatMessageID = "m" + shortid();
+
   formatChatMessageWithProps: messageObject => {
+    let chatMessageID = "m" + shortid();
     return {
       "props": {
         "text": messageObject.text,
@@ -13,4 +14,4 @@ module.exports = {
       }
     }
   }
- }
+}

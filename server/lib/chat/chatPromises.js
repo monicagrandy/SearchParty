@@ -4,10 +4,12 @@ const messageFormatter = require('./formatChatMessageForDB.js');
 
 module.exports = {
   addChatMessageToDB: (messageBody, chatID) => {
+    console.log("message body", messageBody);
 
     let formattedMessageObject = messageFormatter.formatChatMessageWithProps(messageBody);
+    console.log("formatted chat object ", formattedMessageObject);
 
-    const addChatMessageQuery = `MATCH (root:Chatroom{id:"${chatID}"})
+    const addChatMessageQuery = `MATCH (root:Chatroom{chatID:"${chatID}"})
     OPTIONAL MATCH (root)-[r:CURRENT]-(secondlatestmessage)
     DELETE r
     CREATE (root)-[:CURRENT]->(latest_message :Message{props})

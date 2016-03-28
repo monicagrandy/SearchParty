@@ -1,12 +1,12 @@
 'use strict'
 
-const chatPromises = ('../lib/chat/chatPromises.js');
+const chatPromises = require('../lib/chat/chatPromises.js');
 
 module.exports = {
   insertChatMessage: (req, res) => {
+    //expecting req to have a chatID, text, username, and datetime property
     let messageBody = req.body.message;
     let chatID = req.body.chatID;
-
     chatPromises.addChatMessageToDB(messageBody, chatID)
     .then(messageAdded => {
       console.log('message added in chat controller', messageAdded);
