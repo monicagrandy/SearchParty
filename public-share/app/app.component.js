@@ -1,4 +1,4 @@
-System.register(['angular2/core', 'angular2/http', 'angular2/router', "ng2-material/all", 'rxjs/add/operator/map'], function(exports_1, context_1) {
+System.register(['angular2/core', 'angular2/http', 'angular2/router', "ng2-material/all", 'rxjs/add/operator/map', 'underscore'], function(exports_1, context_1) {
     "use strict";
     var __moduleName = context_1 && context_1.id;
     var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
@@ -10,7 +10,7 @@ System.register(['angular2/core', 'angular2/http', 'angular2/router', "ng2-mater
     var __metadata = (this && this.__metadata) || function (k, v) {
         if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
     };
-    var core_1, http_1, router_1, all_1;
+    var core_1, http_1, router_1, all_1, _;
     var AppComponent;
     return {
         setters:[
@@ -26,13 +26,19 @@ System.register(['angular2/core', 'angular2/http', 'angular2/router', "ng2-mater
             function (all_1_1) {
                 all_1 = all_1_1;
             },
-            function (_1) {}],
+            function (_1) {},
+            function (_2) {
+                _ = _2;
+            }],
         execute: function() {
             AppComponent = (function () {
                 function AppComponent(_http) {
                     this._http = _http;
                     this.title = 'Search Party';
                     this._http = _http;
+                    _.each([1, 2, 3, 4, 5], function (number) {
+                        console.log(number);
+                    });
                 }
                 AppComponent = __decorate([
                     core_1.Component({

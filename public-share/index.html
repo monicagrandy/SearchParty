@@ -12,13 +12,13 @@
     <script src="huntshare/node_modules/es6-shim/es6-shim.min.js"></script>
     <script src="huntshare/node_modules/systemjs/dist/system-polyfills.js"></script>
     <script src="huntshare/node_modules/angular2/es6/dev/src/testing/shims_for_IE.js"></script>
-
     <script src="huntshare/node_modules/angular2/bundles/angular2-polyfills.js"></script>
     <script src="huntshare/node_modules/systemjs/dist/system.src.js"></script>
     <script src="huntshare/node_modules/rxjs/bundles/Rx.js"></script>
     <script src="huntshare/node_modules/angular2/bundles/angular2.dev.js"></script>
     <script src="huntshare/node_modules/angular2/bundles/router.dev.js"></script>
     <script src="huntshare/node_modules/angular2/bundles/http.dev.js"></script>
+    <script src="huntshare/node_modules/underscore/underscore.js"></script>
     <script src="huntshare/node_modules/ng2-material/dist/ng2-material.js"></script>
 
     <script
@@ -34,11 +34,14 @@
             'angular2': 'node_modules/angular2',
             'ng2-material': 'node_modules/ng2-material',
             'rxjs': 'node_modules/rxjs',
-            'underscore': 'node_modules/underscore'
+            'underscore': 'node_modules/underscore/underscore.js'
         },
         packages: {
           app: {
             format: 'register',
+            defaultExtension: 'js'
+          },
+          'underscore': {
             defaultExtension: 'js'
           },
           'ng2-material': {
@@ -48,9 +51,6 @@
             defaultExtension: 'js'
           },
           'rxjs': {
-            defaultExtension: 'js'
-          },
-          underscore: {
             defaultExtension: 'js'
           }
         }

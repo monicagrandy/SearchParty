@@ -28,6 +28,9 @@ export class AppComponent {
     private _http:Http
     ) {
     this._http = _http;
+    _.each([1, 2, 3, 4, 5], number => {
+      console.log(number);
+    })
   }
 
 }
