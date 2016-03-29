@@ -48,7 +48,7 @@ export class TaskPage {
   finalDist: any;
   TASKS_URL: string = 'https://getsearchparty.com/tasks';
   FEEDBACK_URL: string = 'https://getsearchparty.com/feedback';
-  UPLOAD_URL: string = 'https://getsearchparty.com/upload';
+  UPLOAD_URL: string = 'http://172.20.10.2:8000/upload';
   feedback: string;
 
 
@@ -85,19 +85,22 @@ takePic() {
       destinationType: 0,
       sourceType: 1,
       encodingType: 0,
+      targetWidth: 1024,
+      targetHeight: 1024,
       quality:100,
       allowEdit: false,
       saveToPhotoAlbum: false
   };
   Camera.getPicture(options).then((data) => {
-      this.imgData = 'data:image/jpeg;base64,' + data;
+    this.imgData = 'data:image/jpeg;base64,' + data;
       this._zone.run(() => this.image = this.imgData);
+      let count = this.keywords.length
       let dataObj = {
-        token: localStorage.id_token,
+        count: count,
         huntID: this.huntID,
         image: this.imgData
        } 
-      this._taskService.postData(dataObj, this.UPLOAD_URL)
+      this._taskService.postData(JSON.stringify(dataObj), this.UPLOAD_URL)
         .then(result => {
           console.log("image sent to server")
         })
@@ -116,7 +119,6 @@ takePic() {
 
     if (this.keywords.length > 0) {
       let keyword = this.keywords.shift();
-      
       console.log('this is the huntID before it is sent! ', this.huntID);
       
       let dataObj = {
