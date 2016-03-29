@@ -2,14 +2,17 @@
   <button menuToggle>
     <ion-icon name="menu"></ion-icon>
   </button>
-  <ion-title>Friend Profile</ion-title>
+  <ion-title>Public Chat</ion-title>
 </ion-navbar>
 
 <ion-content>
   <ion-list>
       <ion-item *ngFor="#message of messages">{{message}}</ion-item>
+      <ion-item *ngIf="typing">{{username}}+" is typing..."</ion-item>
   </ion-list>
 </ion-content>
+
+<ion-
 
 <ion-toolbar position="bottom">
   <ion-input type="text" [(ngModel)]="chatBox" placeholder="Message...">
