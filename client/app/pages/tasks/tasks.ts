@@ -31,6 +31,7 @@ export class TaskPage {
   locName: string; //set this to whatever is in local storage
   completeToggle = false;
   keywords = ['Bar', 'Bar', 'Bar', 'Bar', 'Bar', 'Bar','Bar','Bar', 'Bar'];
+  keywordsLength: number;
   tasksLeft: any;
   endHunt: boolean;
   startTime: any;
@@ -55,6 +56,7 @@ export class TaskPage {
   constructor(platform: Platform, private nav: NavController, navParams: NavParams, private _taskService: TaskService, private googleMaps: GoogleMapService, _zone: NgZone) {
     // If we navigated to this page, we will have an item available as a nav param
     //this.map = null;
+    this.keywordsLength = this.keywords.length;
     this._zone = _zone;
     this.platform = platform;
     this.image = null;
@@ -80,7 +82,7 @@ export class TaskPage {
 
 
 takePic() {
-  console.log('taking picture')    
+  console.log('taking picture')   
   let options = {
       destinationType: 0,
       sourceType: 1,
@@ -94,7 +96,7 @@ takePic() {
   Camera.getPicture(options).then((data) => {
     this.imgData = 'data:image/jpeg;base64,' + data;
       this._zone.run(() => this.image = this.imgData);
-      let count = this.keywords.length
+      let count = this.keywordsLength - this.keywords.length
       let dataObj = {
         count: count,
         huntID: this.huntID,
@@ -111,6 +113,7 @@ takePic() {
 
   //this should be triggered when the next button is pushed
   getNewTask(){
+    console.log(this.keywordsLength - this.keywords.length)   
     this.imgData = ""
     console.log('getting ready to send new task!')
     console.log(this.keywords);
