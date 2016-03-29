@@ -4,39 +4,36 @@ const shortid = require('shortid');
 
 module.exports = {
   createPrettyUserObject: huntArray => {
-    let newHuntIndexes = [];
-    let prettyObj = {"hunts": []};
+    
+        let prettyUser = {};
 
-    for(let z = 0; z < huntArray.length; z++) {
-      let currObj = huntArray[z];
-      for(let key in currObj) {
-        if(key === "address") {
-          currObj.location = {};
-          currObj.location.coordinate = {};
-          currObj.location.coordinate.latitude = currObj.lat;
-          currObj.location.coordinate.longitude = currObj.lng;
-        }
-      }
-    }
+        for(let j = 0; j < huntArray.length; j++) {
+            let individualHunt = huntArray[j];
 
-    for(let i = 0; i < huntArray.length; i++) {
-        let currObject = huntArray[i];
-        for(let key in currObject) {
-            if(key === "huntID"){
-                newHuntIndexes.push(i);
-                prettyObj.hunts.push({"stats": huntArray[i], "chat":{"id": huntArray[i+1].id}, "tasks": []});
+        let prettyHunt = {stats: {}, tasks: [], chatroom: {}};
+
+            for(let i = 0; i < individualHunt.places.length; i++) {
+              let currObj = individualHunt.places[i];
+
+              currObj.location = {};
+              currObj.location.coordinate = {};
+              currObj.location.coordinate.latitude = currObj.lat;
+              currObj.location.coordinate.longitude = currObj.lng;
             }
-        }
-    }
 
-    for(let j = 0; j < newHuntIndexes.length; j++) {
-        let huntIndex = newHuntIndexes[j];
-        let huntObject = prettyObj.hunts[j];
-        let nextHunt = newHuntIndexes[j+1] || huntArray.length;
-        for(let k = huntIndex + 2; k < nextHunt; k+=2) {
-            huntObject.tasks.push({"place": huntArray[k], "task": huntArray[k+1]})
+             prettyHunt.chatroom.messages = individualHunt.messages;
+             prettyHunt.chatroom.chatID = individualHunt.chatData.chatID;
+
+            prettyHunt.stats = individualHunt.huntData;
+
+            for(let z = 0; z < individualHunt.tasks.length; z++) {
+              prettyHunt.tasks.push({task: individualHunt.tasks[z], place: individualHunt.places[z]})
+            }
+
+            prettyUser[individualHunt.huntData.huntID] = prettyHunt;
+
         }
-    }
-    return prettyObj;
+
+        return prettyUser;
   }
 }

@@ -5,7 +5,15 @@ const userFormat = require('../util/formatUserObject.js');
 module.exports = {
   giveAllUserHuntData: username => {
     console.log("inside of give all user hunt data function");
-    const returnAllUserInfoQuery = `MATCH (user:User{username:"${username}"})-[*]->(node) RETURN node`;
+    const returnAllUserInfoQuery = `MATCH (user:User{username:"${username}"})-[:PARTICIPATED_IN]-(hunt)
+    WITH COLLECT(DISTINCT hunt) AS hunts
+    UNWIND hunts AS h
+    WITH h
+    MATCH (h)-[:OCCURRED_AT*]->(place)-[:INCLUDES*]->(task)
+    MATCH (h)-[:HAS_CHAT*]->(chatInfo)
+    OPTIONAL MATCH (chatInfo)-[*]->(message)
+    WITH COLLECT(DISTINCT task) AS tasks, COLLECT(DISTINCT place) AS places, COLLECT(DISTINCT message) AS messages, h, chatInfo
+    RETURN {places: places, tasks: tasks, messages: messages, huntData: h, chatData: chatInfo}`;
 
     return neo4jPromise.databaseQueryPromise(returnAllUserInfoQuery)
     .then(allUserData => {
