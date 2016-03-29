@@ -31,6 +31,7 @@ export class TaskPage {
   locName: string; //set this to whatever is in local storage
   completeToggle = false;
   keywords = ['Bar', 'Bar', 'Bar', 'Bar', 'Bar', 'Bar','Bar','Bar', 'Bar'];
+  keywordsLength: number;
   tasksLeft: any;
   endHunt: boolean;
   startTime: any;
@@ -50,11 +51,14 @@ export class TaskPage {
   FEEDBACK_URL: string = 'https://getsearchparty.com/feedback';
   UPLOAD_URL: string = 'http://172.20.10.2:8000/upload';
   feedback: string;
+  showMobileSharing: boolean;
+  link: string;
 
 
   constructor(platform: Platform, private nav: NavController, navParams: NavParams, private _taskService: TaskService, private googleMaps: GoogleMapService, _zone: NgZone) {
     // If we navigated to this page, we will have an item available as a nav param
     //this.map = null;
+    this.keywordsLength = this.keywords.length;
     this._zone = _zone;
     this.platform = platform;
     this.image = null;
@@ -64,6 +68,12 @@ export class TaskPage {
 
     if (this.token) {
       this.user = this.jwtHelper.decodeToken(this.token).username;
+    }
+    
+    if (window.plugins) {
+      this.showMobileSharing = true;
+    } else {
+      this.showMobileSharing = false;
     }
 
     this.locAddress = navParams.get('locAddress');
@@ -75,12 +85,14 @@ export class TaskPage {
     this.previousPlaces = navParams.get('previousPlaces');
     this.previousTasks = navParams.get('previousTasks');
     let content = '<h4>' + this.locName + '</h4><p>' + this.locAddress  + '</p>';
+    
+    this.link = `http://localhost:8000/share/#/hunt/${this.huntID}`;
     setTimeout(()=>{ this.googleMaps.loadMap(this.locLat, this.locLng, 15, content, this.map).then(map => this.map = map), 2000 })
   }
 
 
 takePic() {
-  console.log('taking picture')    
+  console.log('taking picture')   
   let options = {
       destinationType: 0,
       sourceType: 1,
@@ -94,7 +106,7 @@ takePic() {
   Camera.getPicture(options).then((data) => {
     this.imgData = 'data:image/jpeg;base64,' + data;
       this._zone.run(() => this.image = this.imgData);
-      let count = this.keywords.length
+      let count = this.keywordsLength - this.keywords.length
       let dataObj = {
         count: count,
         huntID: this.huntID,
@@ -111,6 +123,7 @@ takePic() {
 
   //this should be triggered when the next button is pushed
   getNewTask(){
+    console.log(this.keywordsLength - this.keywords.length)   
     this.imgData = ""
     console.log('getting ready to send new task!')
     console.log(this.keywords);
@@ -170,7 +183,7 @@ takePic() {
     this.finalDist = this.googleMaps.calcDistance(this.previousPlaces);
     //get all images associated with hunt from server and add each to a card
   }
-
+  
   sendFeedback(val){
     if (val === 1) {
       console.log('sending good feedback!');
@@ -207,5 +220,29 @@ takePic() {
     }
     return this.completeToggle;
   }
+  
+  share(message, subject, file) {
+    if(window.plugins.socialsharing) {
+      window.plugins.socialsharing.share(message, subject, file, this.link);
+    }
+  }
 
+  shareViaTwitter(message, image) {
+    if(window.plugins.socialsharing) {
+      window.plugins.socialsharing.canShareVia("twitter", message, null, image, this.link, result => {
+          window.plugins.socialsharing.shareViaTwitter(message, image, link);
+      }, error => {
+          console.log(error);
+      });
+    }
+  }
+  
+  shareWeb(text) {
+    console.log(text, this.link);
+  }
+  
+  shareWebTwitter(text) {
+    console.log(text, this.link);
+  }
+    
 }

@@ -1,6 +1,6 @@
 {
-  "name": "searchparty",
-  "version": "1.0.0",
+  "name": "SearchPartyServer",
+  "version": "0.0.1",
   "description": "Party is the search.",
   "main": "index.js",
   "scripts": {
@@ -9,14 +9,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/ecdemis123/SearchParty.git"
+    "url": "git+https://github.com/EnglishMuffinLLC/SearchParty.git"
   },
   "author": "EnglishMuffinLLC",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/ecdemis123/SearchParty/issues"
+    "url": "https://github.com/EnglishMuffinLLC/SearchParty/issues"
   },
-  "homepage": "https://github.com/ecdemis123/SearchParty#readme",
+  "homepage": "https://github.com/EnglishMuffinLLC/SearchParty#readme",
   "dependencies": {
     "aws-sdk": "^2.2.47",
     "angular-socket-io": "^0.7.0",
@@ -36,6 +36,8 @@
     "protractor": "^3.2.1",
     "qs": "^6.1.0",
     "request": "^2.69.0",
-    "shortid": "^2.2.4"
+    "shortid": "^2.2.4",
+    "socket.io": "^1.4.5",
+    "underscore": "^1.8.3"
   }
 }
