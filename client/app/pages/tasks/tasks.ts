@@ -207,7 +207,7 @@ takePic() {
 
     this._taskService.postData(JSON.stringify(userFeedback), this.FEEDBACK_URL)
       .then(result => {
-      //   this.nav.setRoot(TemplatePage); //Fix after testing
+        this.nav.setRoot(TemplatePage); 
         console.log(result);
       });
   }
