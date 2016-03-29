@@ -86,7 +86,7 @@ export class TaskPage {
     this.previousTasks = navParams.get('previousTasks');
     let content = '<h4>' + this.locName + '</h4><p>' + this.locAddress  + '</p>';
     
-    let link = `http://localhost:8000/share/#/hunt/${this.huntID}`;
+    this.link = `http://localhost:8000/share/#/hunt/${this.huntID}`;
     setTimeout(()=>{ this.googleMaps.loadMap(this.locLat, this.locLng, 15, content, this.map).then(map => this.map = map), 2000 })
   }
 
@@ -249,12 +249,12 @@ takePic() {
     }
   }
   
-  shareWeb() {
-    
+  shareWeb(text) {
+    console.log(text, this.link);
   }
   
-  shareWebTwitter() {
-    
+  shareWebTwitter(text) {
+    console.log(text, this.link);
   }
     
 }

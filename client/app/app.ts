@@ -47,8 +47,8 @@ export class MyApp {
     this.pages = [
       { title: 'Hunts', component: TemplatePage },
       { title: 'My Profile', component: ProfilePage },
-      { title: 'Log Out', component: LogIn },
-      { title: 'Chat', component: Chat }
+      { title: 'Chat', component: Chat },
+      { title: 'Log Out', component: LogIn }
     ];
 
     // unauthenticated pages
