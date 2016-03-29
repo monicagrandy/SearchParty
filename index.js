@@ -55,8 +55,9 @@ io.on('connection', socket => {
     console.log('user disconnected');
   });
 
-  socket.on("typing", function(data) {
-  if (typeof people[socket.id] !== "undefined")
-    io.sockets.in(socket.room).emit("isTyping", {isTyping: data, person: people[socket.id].name});
+  socket.on("typing", function(message, username) {
+    if (message && username){
+      io.emit("isTyping", message, username);
+    };
   });
-});
+ });

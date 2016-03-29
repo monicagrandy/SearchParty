@@ -3,7 +3,8 @@ import {Http, Headers} from 'angular2/http';
 import {FORM_DIRECTIVES} from 'angular2/common';
 import {JwtHelper} from 'angular2-jwt';
 import {AuthService} from '../../services/auth/auth-service'
-import {NgZone} from "angular2/core";;
+import {NgZone} from "angular2/core";
+import {io} from "socket.io"
 
 @Page({
   templateUrl: 'build/pages/chat/chat.html',
@@ -25,36 +26,28 @@ export class Chat {
       private navParams: NavParams
    ) {
      let socket = this.io();
+     let typing = false;
+     let timeout = undefined;
      this.messages = [];
      this.zone = new NgZone({enableLongStackTrace: false});
      this.chatBox = "";
      this.socket = socket;
-     this.socket.on("chat_message", msg => {
+     this.socket.on("chat_message", (msg, username) => {
        this.zone.run(() => {
          this.messages.push(msg);
        });
+       //clear typing field
+       //TODO: remove username div here too;
+       clearTimeout(timout);
+       timeout = setTimeout(timeoutFunction, 0);
      });
 
      //See when someone is typing:
-     var typing = false;
-     var timeout = undefined;
-
       function timeoutFunction() {
         typing = false;
         socket.emit("typing", false);
       }
 
-      // $("#msg").keypress(function(e){
-      //   if (e.which !== 13) {
-      //     if (typing === false && myRoomID !== null && $("#msg").is(":focus")) {
-      //       typing = true;
-      //       socket.emit("typing", true);
-      //     } else {
-      //       clearTimeout(timeout);
-      //       timeout = setTimeout(timeoutFunction, 5000);
-      //     }
-      //   }
-      // });
       //:::UPON USER TYPING, SEND TYPING MESSAGE TO SERVER:::
       sendTyping(characters) => {
          if(characters > 0) {
@@ -65,35 +58,16 @@ export class Chat {
             timeout = setTimeout(timeoutFunction, 5000);
          }
       }
-
-      // socket.on("isTyping", function(data) {
-      //   if (data.isTyping) {
-      //     if ($("#"+data.person+"").length === 0) {
-      //       $("#updates").append("<li id='"+ data.person +"'><span class='text-muted'><small><i class='fa fa-keyboard-o'></i>" + data.person + " is typing.</small></li>");
-      //       timeout = setTimeout(timeoutFunction, 5000);
-      //     }
-      //   } else {
-      //     $("#"+data.person+"").remove();
-      //   }
-      // });
+      
       //:::UPON USER RECEIVING isTyping FROM SERVER, DISPLAY IT:::
-      socket.on("isTyping", function(data) {
-         console.log('Data from server about typing: ', data);
+      socket.on("isTyping", function(message, username) {
+         console.log('Message & : ', message, username);
        if (data.isTyping) {
           timeout = setTimeout(timeoutFunction, 5000);
           //Append ionic username div
        } else {
           //Remove ionic username div
        }
-      });
-
-
-      socket.on("chat", function(person, msg) {
-        $("#msgs").append("<li><strong><span class='text-success'>" + person.name + "</span></strong>: " + msg + "</li>");
-        //clear typing field
-         $("#"+person.name+"").remove();
-         clearTimeout(timeout);
-         timeout = setTimeout(timeoutFunction, 0);
       });
 }
 
