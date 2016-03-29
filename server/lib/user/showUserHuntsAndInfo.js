@@ -10,16 +10,17 @@ module.exports = {
     UNWIND hunts AS h
     WITH h
     MATCH (h)-[:OCCURRED_AT*]->(place)-[:INCLUDES*]->(task)
-    OPTIONAL MATCH (h)-[:HAS_CHAT*]->(chatInfo)-[*]->(message)
+    MATCH (h)-[:HAS_CHAT*]->(chatInfo)
+    OPTIONAL MATCH (chatInfo)-[*]->(message)
     WITH COLLECT(DISTINCT task) AS tasks, COLLECT(DISTINCT place) AS places, COLLECT(DISTINCT message) AS messages, h, chatInfo
     RETURN {places: places, tasks: tasks, messages: messages, huntData: h, chatData: chatInfo}`;
 
     return neo4jPromise.databaseQueryPromise(returnAllUserInfoQuery)
     .then(allUserData => {
       console.log("++All userData", allUserData);
-      // var prettyUserObject = userFormat.createPrettyUserObject(allUserData);
+      var prettyUserObject = userFormat.createPrettyUserObject(allUserData);
       return new Promise((resolve, reject) => {
-        resolve(allUserData);
+        resolve(prettyUserObject);
         reject({error: "cannot return user"});
       })
     })
