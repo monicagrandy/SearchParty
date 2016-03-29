@@ -46,10 +46,17 @@ io.attach(httpsServer);
 
 io.on('connection', socket => {
   console.log('a user connected');
+
   socket.on('chat_message', msg => {
     io.emit('chat_message', msg);
   });
+
   socket.on('disconnect', () => {
     console.log('user disconnected');
+  });
+
+  socket.on("typing", function(data) {
+  if (typeof people[socket.id] !== "undefined")
+    io.sockets.in(socket.room).emit("isTyping", {isTyping: data, person: people[socket.id].name});
   });
 });
