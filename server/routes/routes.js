@@ -7,7 +7,8 @@ const chatController = require('../controllers/chatController.js');
 module.exports = (app, express) => {
 
   app.use(jsonParser);
-  app.use(express.static('./client/www'));
+  app.use('/', express.static('./client/www'));
+  app.use('/share', express.static('./public-share'));
 
   app.post('/feedback', jsonParser, huntController.feedback);
   app.post('/tasks', jsonParser, huntController.huntMaker);
