@@ -36,6 +36,7 @@
     "qs": "^6.1.0",
     "request": "^2.69.0",
     "shortid": "^2.2.4",
+    "socket.io": "^1.4.5",
     "underscore": "^1.8.3"
   }
 }

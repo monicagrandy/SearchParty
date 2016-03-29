@@ -6,6 +6,7 @@ const httpsPort = config.HTTPSPORT || 8001;
 const https = require('https');
 const http = require('http');
 const fs = require('fs');
+const ioServer = require('socket.io');
 
 const ca = [];
 let chain = fs.readFileSync('getsearchparty_com.ca-bundle', 'utf8');
@@ -30,7 +31,22 @@ const options = {
   cert: fs.readFileSync('server.crt')
 };
 
+const httpServer = http.createServer(app);
+const httpsServer = https.createServer(options, app);
+
 // Create an HTTP service.
-http.createServer(app).listen(httpPort, () => console.log(`express HTTP server listening on port ${httpPort}`));
+httpServer.listen(httpPort, () => console.log(`express HTTP server listening on port ${httpPort}`));
 // Create an HTTPS service identical to the HTTP service.
-https.createServer(options, app).listen(httpsPort, () => console.log(`express HTTPS server listening on port ${httpsPort}`) );
+httpsServer.listen(httpsPort, () => console.log(`express HTTPS server listening on port ${httpsPort}`) );
+
+var io = new ioServer();
+
+io.attach(httpServer);
+io.attach(httpsServer);
+
+io.on('connection', socket => {
+  console.log('a user connected');
+  socket.on('disconnect', () => {
+    console.log('user disconnected');
+  });
+});

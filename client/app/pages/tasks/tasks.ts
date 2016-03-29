@@ -52,6 +52,8 @@ export class TaskPage {
   TASKS_URL: string = 'https://getsearchparty.com/tasks';
   FEEDBACK_URL: string = 'https://getsearchparty.com/feedback';
   feedback: string;
+  showMobileSharing: boolean;
+  link: string;
 
 
   constructor(platform: Platform, private nav: NavController, navParams: NavParams, private _taskService: TaskService, private googleMaps: GoogleMapService, _zone: NgZone) {
@@ -67,6 +69,12 @@ export class TaskPage {
     if (this.token) {
       this.user = this.jwtHelper.decodeToken(this.token).username;
     }
+    
+    if (window.plugins) {
+      this.showMobileSharing = true;
+    } else {
+      this.showMobileSharing = false;
+    }
 
     this.locAddress = navParams.get('locAddress');
     this.huntID = navParams.get('huntID');
@@ -77,6 +85,8 @@ export class TaskPage {
     this.previousPlaces = navParams.get('previousPlaces');
     this.previousTasks = navParams.get('previousTasks');
     let content = '<h4>' + this.locName + '</h4><p>' + this.locAddress  + '</p>';
+    
+    let link = `http://localhost:8000/share/#/hunt/${this.huntID}`;
     setTimeout(()=>{ this.googleMaps.loadMap(this.locLat, this.locLng, 15, content, this.map).then(map => this.map = map), 2000 })
   }
 
@@ -184,20 +194,8 @@ takePic() {
       });
 
     this.finalDist = this.googleMaps.calcDistance(this.previousPlaces);
-      else {
-        console.log("no more tasks!")
-    }
-        console.log(this.previousTasks)
-        console.log(this.previousPlaces)
-    }
   }
-
-  searchComplete(){
-
-  }
-
-  }
-
+  
   sendFeedback(val){
     if (val === 1) {
       console.log('sending good feedback!');
@@ -234,5 +232,29 @@ takePic() {
     }
     return this.completeToggle;
   }
+  
+  share(message, subject, file) {
+    if(window.plugins.socialsharing) {
+      window.plugins.socialsharing.share(message, subject, file, this.link);
+    }
+  }
 
+  shareViaTwitter(message, image) {
+    if(window.plugins.socialsharing) {
+      window.plugins.socialsharing.canShareVia("twitter", message, null, image, this.link, result => {
+          window.plugins.socialsharing.shareViaTwitter(message, image, link);
+      }, error => {
+          console.log(error);
+      });
+    }
+  }
+  
+  shareWeb() {
+    
+  }
+  
+  shareWebTwitter() {
+    
+  }
+    
 }

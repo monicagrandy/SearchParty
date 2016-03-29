@@ -1,0 +1,35 @@
+<ion-navbar *navbar>
+  <button menuToggle>
+    <ion-icon name="menu"></ion-icon>
+  </button>
+  <ion-title>Chat</ion-title>
+</ion-navbar>
+​
+<ion-content class="chat">
+      <ion-card-header>
+         Chats
+      </ion-card-header>
+      <ion-list>
+         <ion-item *ngFor="#message of messages">{{message}}</ion-item>
+      </ion-list>
+</ion-content>
+​
+<ion-footer-bar>
+    <ion-input>
+        <input type="text" [(ngModel)]="chatBox" placeholder="Message..." />
+        <button (click)="send(chatBox)">Send</button>
+    </ion-input>
+</ion-footer-bar>
+​
+​
+​
+​
+<!-- <div class="chatbox">
+  <span ng-repeat="messages in updated track by $index">{{messages}}<br></span>
+</div>
+​
+​
+​
+<form class="messageInput" ng-submit="sendMessage()">
+  <input ng-model="chat.message" type="text" placeholder="enter a message">
+</form> -->

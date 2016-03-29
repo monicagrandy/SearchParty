@@ -7,6 +7,7 @@
 </ion-navbar>
 
 <ion-content class="has-header cards-bg">
+  
   <ion-card class="adv-map">
     <div style="position: relative">
       <ion-item *ngIf="tasksLeft">
@@ -36,13 +37,23 @@
     <button *ngIf="completeToggle" primary clear item-right (click)="takePic()">  
       Take Photo
     </button>
-    <div *ngIf="completeToggle">
+    <ion-item *ngIf="completeToggle">
       <p>Img Here</p>
       <img src="{{imgData}}">
-    </div>
+    </ion-item>
     <button primary clear item-right *ngIf="completeToggle && tasksLeft" (click)="getNewTask()">  
       Next Task
     </button>
+    <ion-item *ngIf="!showMobileSharing">
+      <h4>Share Your Hunt!</h4>
+      <button default (click)="shareWeb('I am going on an adventure! Follow me on Search Party!', 'Search Party is Starting', null, null)">Share</button>
+      <button default (click)="shareWebTwitter('I am going on an adventure! Follow me on Search Party! @SearchPartyApp', null, null)">Share on Twitter</button>
+    </ion-item>
+    <ion-item *ngIf="showMobileSharing">
+      <h4>Share Your Hunt!</h4>
+      <button default (click)="share('I am going on an adventure! Follow me on Search Party!', 'Search Party is Starting', null)">Share</button>
+      <button default (click)="shareViaTwitter('I am going on an adventure! Follow me on Search Party! @SearchPartyApp', null)">Share on Twitter</button>
+    </ion-item>
   </ion-card>
 
   <ion-card *ngIf="!tasksLeft">

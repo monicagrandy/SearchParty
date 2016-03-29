@@ -7,6 +7,7 @@ import {LogIn} from './pages/users/log-in';
 import {TemplatePage} from './pages/templates/templates';
 import {TaskPage} from './pages/tasks/tasks';
 import {ProfilePage} from './pages/profile/profile';
+import {Chat} from './pages/chat/chat';
 
 import * as _ from 'underscore';
 
@@ -46,7 +47,8 @@ export class MyApp {
     this.pages = [
       { title: 'Hunts', component: TemplatePage },
       { title: 'My Profile', component: ProfilePage },
-      { title: 'Log Out', component: LogIn }
+      { title: 'Log Out', component: LogIn },
+      { title: 'Chat', component: Chat }
     ];
 
     // unauthenticated pages
@@ -89,4 +91,5 @@ export class MyApp {
     let nav = this.app.getComponent('nav');
       nav.push(page.component);
   }
+  
 }

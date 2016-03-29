@@ -33,7 +33,8 @@
     "cordova-plugin-splashscreen",
     "cordova-plugin-statusbar",
     "ionic-plugin-keyboard",
-    "cordova-plugin-camera"
+    "cordova-plugin-camera",
+    "cordova-plugin-x-socialsharing"
   ],
   "cordovaPlatforms": [
     "ios",
