@@ -4,8 +4,8 @@ const shortid = require('shortid');
 
 module.exports = {
   createPrettyUserObject: huntArray => {
-    
-        let prettyUser = {};
+
+        let prettyUser = {hunts: []};
 
         for(let j = 0; j < huntArray.length; j++) {
             let individualHunt = huntArray[j];
@@ -30,7 +30,7 @@ module.exports = {
               prettyHunt.tasks.push({task: individualHunt.tasks[z], place: individualHunt.places[z]})
             }
 
-            prettyUser[individualHunt.huntData.huntID] = prettyHunt;
+            prettyUser.hunts.push(prettyHunt);
 
         }
 
