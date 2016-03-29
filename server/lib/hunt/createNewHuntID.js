@@ -3,6 +3,7 @@
 const neo = require('../../db/neo.js');
 const shortid = require('shortid');
 const neo4jPromise = require('../neo4j/neo4jQueryPromiseReturn.js');
+const moment = require('moment');
 
 module.exports = {
   initializeHunt: username => {
