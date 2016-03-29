@@ -1,7 +1,7 @@
 'use strict'
 
 const neo4jPromise = require('../neo4j/neo4jQueryPromiseReturn.js');
-
+const huntFormatter = require('../util/formatHunt.js');
 
 module.exports = {
   retrieveHunt: huntID => {
@@ -16,8 +16,8 @@ module.exports = {
     .then(huntData => {
       return new Promise((resolve, reject) => {
         if(huntData.length > 0) {
-          // let prettyHuntData = userFormat.createPrettyUserObject(huntData);
-          resolve(huntData);
+          let prettyHuntData = huntFormatter.createPrettyHuntObject(huntData);
+          resolve(prettyHuntData);
         } else {
           reject({"error": "could not retrieve hunt"})
         }
