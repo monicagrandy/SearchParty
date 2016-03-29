@@ -74,6 +74,14 @@ module.exports = {
     }).catch(error => console.error(error));
   },
 
+  getHuntImages: (req, res) => {
+    let huntID = req.body.huntID;
+    uploadImage.getImagesBasedOnHunt(huntID)
+    .then(imageURLArray => {
+      res.json({urls: imageURLArray});
+    }).catch(error => console.error(error));
+  },
+
    retrieveSingleHunt: (req, res) => {
      let huntID = req.body.huntID;
 

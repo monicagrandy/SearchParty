@@ -13,6 +13,7 @@ module.exports = (app, express) => {
   app.post('/feedback', jsonParser, huntController.feedback);
   app.post('/tasks', jsonParser, huntController.huntMaker);
   app.post('/upload', jsonParser, huntController.upload);
+  app.post('/getPic', jsonParser, huntController.upload);
   app.post('/signup', jsonParser, userController.signup);
   app.post('/signin', jsonParser, userController.signin);
   app.post('/userProfile', jsonParser, userController.getUserInfo);
