@@ -39,13 +39,16 @@ httpServer.listen(httpPort, () => console.log(`express HTTP server listening on 
 // Create an HTTPS service identical to the HTTP service.
 httpsServer.listen(httpsPort, () => console.log(`express HTTPS server listening on port ${httpsPort}`) );
 
-var io = new ioServer();
+const io = new ioServer();
 
 io.attach(httpServer);
 io.attach(httpsServer);
 
 io.on('connection', socket => {
   console.log('a user connected');
+  socket.on('chat_message', msg => {
+    io.emit('chat_message', msg);
+  });
   socket.on('disconnect', () => {
     console.log('user disconnected');
   });
