@@ -18,6 +18,8 @@ var IONIC_DIR = "node_modules/ionic-angular/"
  * watch
  * Build the app and watch for source file changes.
  ******************************************************************************/
+gulp.task('serve:before', ['watch']);
+
 gulp.task('watch', ['sass', 'copy.fonts', 'copy.html'], function(done) {
   watch('www/app/**/*.scss', function(){
     gulp.start('sass');
