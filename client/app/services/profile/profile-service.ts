@@ -5,9 +5,9 @@ import 'rxjs/add/operator/map';
 
 @Injectable()
 export class ProfileService {
-  PROFILE_URL: string = 'https://getsearchparty.com/userProfile'; //update this later
+  PROFILE_URL: string = 'http://localhost:8000/userProfile'; //update this later
   contentHeader: Headers = new Headers({'Content-Type': 'application/json'});
-  
+
   constructor(private _http:Http) {}
 
   getProfile(token) {
@@ -32,8 +32,8 @@ export class ProfileService {
         })
     return httpPostPromise;
   }
-  
+
   logError(err) {
     console.error('There was an error: ' + err);
   }
-}  
+}

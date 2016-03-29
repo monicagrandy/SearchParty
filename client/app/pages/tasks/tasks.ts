@@ -47,9 +47,9 @@ export class TaskPage {
   image: any;
   imgData: string;
   finalDist: any;
-  TASKS_URL: string = 'https://getsearchparty.com/tasks';
-  FEEDBACK_URL: string = 'https://getsearchparty.com/feedback';
-  UPLOAD_URL: string = 'http://172.20.10.2:8000/upload';
+  TASKS_URL: string = 'http://localhost:8000/tasks';
+  FEEDBACK_URL: string = 'http://localhost:8000/feedback';
+  UPLOAD_URL: string = 'http://localhost:8000/upload';
   feedback: string;
   showMobileSharing: boolean;
   link: string;
@@ -69,7 +69,7 @@ export class TaskPage {
     if (this.token) {
       this.user = this.jwtHelper.decodeToken(this.token).username;
     }
-    
+
     if (window.plugins) {
       this.showMobileSharing = true;
     } else {
@@ -85,14 +85,14 @@ export class TaskPage {
     this.previousPlaces = navParams.get('previousPlaces');
     this.previousTasks = navParams.get('previousTasks');
     let content = '<h4>' + this.locName + '</h4><p>' + this.locAddress  + '</p>';
-    
+
     this.link = `http://localhost:8000/share/#/hunt/${this.huntID}`;
     setTimeout(()=>{ this.googleMaps.loadMap(this.locLat, this.locLng, 15, content, this.map).then(map => this.map = map), 2000 })
   }
 
 
 takePic() {
-  console.log('taking picture')   
+  console.log('taking picture')
   let options = {
       destinationType: 0,
       sourceType: 1,
@@ -111,7 +111,7 @@ takePic() {
         count: count,
         huntID: this.huntID,
         image: this.imgData
-       } 
+       }
       this._taskService.postData(JSON.stringify(dataObj), this.UPLOAD_URL)
         .then(result => {
           console.log("image sent to server")
@@ -123,7 +123,7 @@ takePic() {
 
   //this should be triggered when the next button is pushed
   getNewTask(){
-    console.log(this.keywordsLength - this.keywords.length)   
+    console.log(this.keywordsLength - this.keywords.length)
     this.imgData = ""
     console.log('getting ready to send new task!')
     console.log(this.keywords);
@@ -172,8 +172,10 @@ takePic() {
   searchComplete(){
     console.log(this.previousTasks);
     this.endTime = new Date().toLocaleTimeString();
+    this.endTimeUnix = Date.now();
     localStorage.endTime = this.endTime;
     this.startTime = localStorage.startTime;
+    this.startTimeUnix = localStorage.startTimeUnix;
 
     this.googleMaps.finalMapMaker(this.previousPlaces, this.previousTasks)
       .then(data => {
@@ -183,7 +185,7 @@ takePic() {
     this.finalDist = this.googleMaps.calcDistance(this.previousPlaces);
     //get all images associated with hunt from server and add each to a card
   }
-  
+
   sendFeedback(val){
     if (val === 1) {
       console.log('sending good feedback!');
@@ -194,11 +196,10 @@ takePic() {
       console.log('sending bad feedback!');
       this.feedback = "bad";
     }
-
     let userFeedback = {
           token: localStorage.id_token,
           huntID: this.huntID,
-          endTime: localStorage.endTime,
+          endTime: this.endTimeUnix,
           distance: this.finalDist,
           feedback: this.feedback
     };
@@ -220,7 +221,7 @@ takePic() {
     }
     return this.completeToggle;
   }
-  
+
   share(message, subject, file) {
     if(window.plugins.socialsharing) {
       window.plugins.socialsharing.share(message, subject, file, this.link);
@@ -236,13 +237,13 @@ takePic() {
       });
     }
   }
-  
+
   shareWeb(text) {
     console.log(text, this.link);
   }
-  
+
   shareWebTwitter(text) {
     console.log(text, this.link);
   }
-    
+
 }
