@@ -9,6 +9,7 @@ const createNewHunt = require('../lib/hunt/createNewHuntID.js');
 const createFeedback = require('../lib/hunt/createFeedback.js');
 const uploadImage = require('../lib/image/s3Upload.js');
 const singleHunt = require('../lib/hunt/returnSingleHunt.js');
+const convertTime = require('../lib/util/convertTime.js');
 
 module.exports = {
   huntMaker: (req, res) => {
@@ -47,7 +48,7 @@ module.exports = {
       let username = jwt.decode(req.body.token, config.secret).username;
       let feedback = req.body.feedback;
       let huntID = req.body.huntID;
-      let endtime = req.body.endTime;
+      let endtime = convertTime.unix(req.body.endTime);
       let distance = req.body.distance;
 
       createFeedback.initializeFeedback(username, feedback, huntID, endtime, distance)

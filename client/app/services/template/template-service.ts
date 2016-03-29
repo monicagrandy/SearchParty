@@ -6,11 +6,11 @@ import 'rxjs/add/operator/map';
 
 @Injectable()
 export class TemplateService {
-  TEMPLATES_URL: string = 'https://getsearchparty.com//templates'; //update this later
-  TASKS_URL: string = 'https://getsearchparty.com/tasks';
+  TEMPLATES_URL: string = 'http://localhost:8000/templates'; //update this later
+  TASKS_URL: string = 'http://localhost:8000/tasks';
   keyword: string;
   contentHeader: Headers = new Headers({'Content-Type': 'application/json'});
-  
+
   constructor(private _http:Http) {}
 
   // future use function
@@ -42,7 +42,7 @@ export class TemplateService {
       console.log('THIS IS THE DATA shold be keyword', data)
       console.log("THIS IS THE USER LOCATION IN TEMPLATE SERVICE ", userInfo);
       let currentTime = new Date();
-      
+
       let dataToSend = {
         keyword: data,
         geolocation:  {
@@ -54,7 +54,7 @@ export class TemplateService {
         previousTasks: [],
         date: currentTime
       };
-      
+
       console.log("THIS IS THE COMBO DATA BEFORE SENT ", dataToSend);
       this._http.post(this.TASKS_URL, JSON.stringify(dataToSend), {headers: this.contentHeader})
         .map(res => res.json())
@@ -72,8 +72,8 @@ export class TemplateService {
         })
     return httpGetPromise;
   }
-  
+
   logError(err) {
     console.error('There was an error: ' + err);
   }
-}  
+}
