@@ -60,12 +60,13 @@ module.exports = {
       });
    },
 
-<<<<<<< HEAD
+
    upload: (req, res) => {
     let image = req.body.image
     let id = req.body.huntID + "_" + req.body.count
     uploadImage.sendToS3(image, id)
-=======
+  },
+
    retrieveSingleHunt: (req, res) => {
      let huntID = req.body.huntID;
 
@@ -75,6 +76,5 @@ module.exports = {
        res.json(huntData);
      })
      .catch(error => console.error(error));
->>>>>>> 8e23d6b8316e2da0bc903f61c25b7344577d0747
    }
 }
