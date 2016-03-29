@@ -9,7 +9,6 @@ const createNewHunt = require('../lib/hunt/createNewHuntID.js');
 const createFeedback = require('../lib/hunt/createFeedback.js');
 const uploadImage = require('../lib/image/s3Upload.js');
 const singleHunt = require('../lib/hunt/returnSingleHunt.js');
-const convertTime = require('../lib/util/convertTime.js');
 
 module.exports = {
   huntMaker: (req, res) => {

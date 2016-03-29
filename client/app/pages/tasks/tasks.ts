@@ -196,7 +196,6 @@ takePic() {
       console.log('sending bad feedback!');
       this.feedback = "bad";
     }
-    console.log('UNIX TIME END: ', this.endTimeUnix);
     let userFeedback = {
           token: localStorage.id_token,
           huntID: this.huntID,
@@ -207,7 +206,7 @@ takePic() {
 
     this._taskService.postData(JSON.stringify(userFeedback), this.FEEDBACK_URL)
       .then(result => {
-        this.nav.setRoot(TemplatePage); 
+        this.nav.setRoot(TemplatePage);
         console.log(result);
       });
   }
