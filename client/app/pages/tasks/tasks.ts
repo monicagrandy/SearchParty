@@ -68,7 +68,7 @@ export class TaskPage {
     if (this.token) {
       this.user = this.jwtHelper.decodeToken(this.token).username;
     }
-    
+
     if (window.plugins) {
       this.showMobileSharing = true;
     } else {
@@ -84,14 +84,14 @@ export class TaskPage {
     this.previousPlaces = navParams.get('previousPlaces');
     this.previousTasks = navParams.get('previousTasks');
     let content = '<h4>' + this.locName + '</h4><p>' + this.locAddress  + '</p>';
-    
+
     this.link = `http://localhost:8000/share/#/hunt/${this.huntID}`;
     setTimeout(()=>{ this.googleMaps.loadMap(this.locLat, this.locLng, 15, content, this.map).then(map => this.map = map), 2000 })
   }
 
 
 takePic() {
-  console.log('taking picture')   
+  console.log('taking picture')
   let options = {
       destinationType: 0,
       sourceType: 1,
@@ -110,7 +110,7 @@ takePic() {
         count: count,
         huntID: this.huntID,
         image: this.imgData
-       } 
+       }
       this._taskService.postData(JSON.stringify(dataObj), this.UPLOAD_URL)
         .then(result => {
           console.log("image sent to server")
@@ -122,7 +122,7 @@ takePic() {
 
   //this should be triggered when the next button is pushed
   getNewTask(){
-    console.log(this.keywordsLength - this.keywords.length)   
+    console.log(this.keywordsLength - this.keywords.length)
     this.imgData = ""
     console.log('getting ready to send new task!')
     console.log(this.keywords);
@@ -170,14 +170,19 @@ takePic() {
 
   searchComplete(){
     console.log(this.previousTasks);
-    this._taskService.postData(this.huntID, this.IMAGES_URL)
+    let dataObj = {
+      huntID: this.huntID
+    }
+    this._taskService.postData(JSON.stringify(dataObj), this.IMAGES_URL)
       .then(result => {
         this.allImages = result.urls
         console.log(this.allImages)
       })
     this.endTime = new Date().toLocaleTimeString();
+    this.endTimeUnix = Date.now();
     localStorage.endTime = this.endTime;
     this.startTime = localStorage.startTime;
+    this.startTimeUnix = localStorage.startTimeUnix;
 
     this.googleMaps.finalMapMaker(this.previousPlaces, this.previousTasks)
       .then(data => {
@@ -186,7 +191,7 @@ takePic() {
 
     this.finalDist = this.googleMaps.calcDistance(this.previousPlaces);   
   }
-  
+
   sendFeedback(val){
     if (val === 1) {
       console.log('sending good feedback!');
@@ -197,11 +202,10 @@ takePic() {
       console.log('sending bad feedback!');
       this.feedback = "bad";
     }
-
     let userFeedback = {
           token: localStorage.id_token,
           huntID: this.huntID,
-          endTime: localStorage.endTime,
+          endTime: this.endTimeUnix,
           distance: this.finalDist,
           feedback: this.feedback
     };
@@ -223,7 +227,7 @@ takePic() {
     }
     return this.completeToggle;
   }
-  
+
   share(message, subject, file) {
     if(window.plugins.socialsharing) {
       window.plugins.socialsharing.share(message, subject, file, this.link);
@@ -239,13 +243,13 @@ takePic() {
       });
     }
   }
-  
+
   shareWeb(text) {
     console.log(this.link);
   }
-  
+
   shareWebTwitter(text) {
     console.log(this.link);
   }
-    
+
 }

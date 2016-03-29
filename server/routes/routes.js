@@ -13,6 +13,7 @@ module.exports = (app, express) => {
   app.post('/feedback', jsonParser, huntController.feedback);
   app.post('/tasks', jsonParser, huntController.huntMaker);
   app.post('/upload', jsonParser, huntController.upload);
+  app.post('/getPics', jsonParser, huntController.getHuntImages);
   app.post('/signup', jsonParser, userController.signup);
   app.post('/signin', jsonParser, userController.signin);
   app.post('/userProfile', jsonParser, userController.getUserInfo);
@@ -22,5 +23,4 @@ module.exports = (app, express) => {
   app.post('/addChatMessage', jsonParser, chatController.insertChatMessage);
   app.post('/getChatMessages', jsonParser, chatController.retrieveChatMessages);
   app.post('/singleHunt', jsonParser, huntController.retrieveSingleHunt);
-
 }

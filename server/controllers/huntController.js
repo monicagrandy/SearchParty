@@ -7,7 +7,7 @@ const config = require('../config/config.js');
 const makeHunt = require('../lib/hunt/createEntireHunt.js');
 const createNewHunt = require('../lib/hunt/createNewHuntID.js');
 const createFeedback = require('../lib/hunt/createFeedback.js');
-const uploadImage = require('../lib/image/s3Upload.js');
+const imageHandling = require('../lib/image/imagePromises.js');
 const singleHunt = require('../lib/hunt/returnSingleHunt.js');
 
 module.exports = {
@@ -62,9 +62,24 @@ module.exports = {
 
 
    upload: (req, res) => {
-    let image = req.body.image
-    let id = req.body.huntID + "_" + req.body.count
-    uploadImage.sendToS3(image, id)
+    let image = req.body.image;
+    let huntID = req.body.huntID;
+    let id = req.body.huntID + "_" + req.body.count;
+    imageHandling.sendToS3(image, id)
+    .then(url => {
+      imageHandling.insertURLIntoDB(huntID, url)
+      .then(url => {
+        res.json({url: url});
+      })
+    }).catch(error => console.error(error));
+  },
+
+  getHuntImages: (req, res) => {
+    let huntID = req.body.huntID;
+    imageHandling.getImagesBasedOnHunt(huntID)
+    .then(imageURLArray => {
+      res.json({urls: imageURLArray});
+    }).catch(error => console.error(error));
   },
 
    retrieveSingleHunt: (req, res) => {

@@ -21,13 +21,13 @@ export class TemplatePage {
   constructor(private nav: NavController, navParams: NavParams, private templateService: TemplateService) {
     // If we navigated to this page, we will have an item available as a nav param
     this.selectedItem = navParams.get('item');
-    
+
     this.loadingImg = 'img/poi.gif';
 
     if (localStorage.userLat && localStorage.userLng) {
       this.userLat = localStorage.userLat;
       this.userLng = localStorage.userLng;
-    } else { 
+    } else {
       if (navigator.geolocation) {
       console.log("getting geolocation")
       navigator.geolocation.watchPosition((position => {
@@ -37,7 +37,7 @@ export class TemplatePage {
         this.local.set('userLng', position.coords.longitude);
       }), (error => console.log(error)), {})
     }
-   } 
+   }
 
 
 
@@ -64,6 +64,7 @@ export class TemplatePage {
   itemTapped(event, item) {
     console.log('sending item.type... ', item);
     this.userInfo = localStorage;
+    localStorage.startTimeUnix = Date.now();
     localStorage.startTime = new Date().toLocaleTimeString()
     console.log('sending userInfo... ', this.userInfo);
     this.templateService.postData(item.title, this.userInfo)
