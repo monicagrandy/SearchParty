@@ -4,7 +4,7 @@ import {FORM_DIRECTIVES} from 'angular2/common';
 import {JwtHelper} from 'angular2-jwt';
 import {AuthService} from '../../services/auth/auth-service'
 import {NgZone} from "angular2/core";
-import {io} from "socket.io"
+// import {io} from "socket.io"
 
 @Page({
   templateUrl: 'build/pages/chat/chat.html',
@@ -25,7 +25,7 @@ export class Chat {
       private nav: NavController,
       private navParams: NavParams
    ) {
-     let socket = this.io();
+     let socket = io.connect('http://localhost:8000');
      let typing = false;
      let timeout = undefined;
      this.messages = [];
@@ -49,7 +49,7 @@ export class Chat {
       }
 
       //:::UPON USER TYPING, SEND TYPING MESSAGE TO SERVER:::
-      sendTyping(characters) => {
+      function sendTyping(characters) => {
          if(characters > 0) {
             typing = true;
             socket.emit("typing", true);
@@ -58,7 +58,7 @@ export class Chat {
             timeout = setTimeout(timeoutFunction, 5000);
          }
       }
-      
+
       //:::UPON USER RECEIVING isTyping FROM SERVER, DISPLAY IT:::
       socket.on("isTyping", function(message, username) {
          console.log('Message & : ', message, username);
@@ -73,7 +73,7 @@ export class Chat {
 
 
   send(message) {
-    if (message && message != "") {
+    if (message && message !== "") {
       this.socket.emit("chat_message", message, this.username);
     }
     this.chatBox = "";
