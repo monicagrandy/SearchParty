@@ -21,9 +21,6 @@ import 'rxjs/add/operator/map';
 })
 
 export class TaskPage {
-  // static get parameters(){
-  //     return [NgZone];
-  // }
   title = 'Current Task';
   map = null;
   local: LocalStorage;
@@ -34,6 +31,7 @@ export class TaskPage {
   locName: string; //set this to whatever is in local storage
   completeToggle = false;
   keywords = ['Bar', 'Bar', 'Bar', 'Bar', 'Bar', 'Bar','Bar','Bar', 'Bar'];
+  keywordsLength: number;
   tasksLeft: any;
   endHunt: boolean;
   startTime: any;
@@ -51,6 +49,7 @@ export class TaskPage {
   finalDist: any;
   TASKS_URL: string = 'https://getsearchparty.com/tasks';
   FEEDBACK_URL: string = 'https://getsearchparty.com/feedback';
+  UPLOAD_URL: string = 'http://172.20.10.2:8000/upload';
   feedback: string;
   showMobileSharing: boolean;
   link: string;
@@ -59,6 +58,7 @@ export class TaskPage {
   constructor(platform: Platform, private nav: NavController, navParams: NavParams, private _taskService: TaskService, private googleMaps: GoogleMapService, _zone: NgZone) {
     // If we navigated to this page, we will have an item available as a nav param
     //this.map = null;
+    this.keywordsLength = this.keywords.length;
     this._zone = _zone;
     this.platform = platform;
     this.image = null;
@@ -91,44 +91,31 @@ export class TaskPage {
   }
 
 
-//   takePhoto() {
-//   this.platform.ready().then(() => {
-//     let options = {
-//       quality: 80,
-//       destinationType: Camera.DestinationType.DATA_URL,
-//       sourceType: Camera.PictureSourceType.CAMERA,
-//       allowEdit: false,
-//       encodingType: Camera.EncodingType.JPEG,
-//       saveToPhotoAlbum: false
-//     };
-//     // https://github.com/apache/cordova-plugin-camera#module_camera.getPicture
-//     navigator.camera.getPicture(
-//       (data) => {
-//         let image = "data:image/jpeg;base64," + data;
-//          this._zone.run(()=> this.images.unshift({
-//            src: image
-//          }))
-//       }, (error) => {
-//         alert(error);
-//       }, options
-//     );
-//   });
-// }
-
 takePic() {
-  console.log('taking picture')    
+  console.log('taking picture')   
   let options = {
       destinationType: 0,
       sourceType: 1,
       encodingType: 0,
+      targetWidth: 1024,
+      targetHeight: 1024,
       quality:100,
       allowEdit: false,
       saveToPhotoAlbum: false
   };
   Camera.getPicture(options).then((data) => {
-      this.imgData = 'data:image/jpeg;base64,' + data;
+    this.imgData = 'data:image/jpeg;base64,' + data;
       this._zone.run(() => this.image = this.imgData);
-
+      let count = this.keywordsLength - this.keywords.length
+      let dataObj = {
+        count: count,
+        huntID: this.huntID,
+        image: this.imgData
+       } 
+      this._taskService.postData(JSON.stringify(dataObj), this.UPLOAD_URL)
+        .then(result => {
+          console.log("image sent to server")
+        })
   }, (error) => {
       alert(error);
   });
@@ -136,6 +123,7 @@ takePic() {
 
   //this should be triggered when the next button is pushed
   getNewTask(){
+    console.log(this.keywordsLength - this.keywords.length)   
     this.imgData = ""
     console.log('getting ready to send new task!')
     console.log(this.keywords);
@@ -144,7 +132,6 @@ takePic() {
 
     if (this.keywords.length > 0) {
       let keyword = this.keywords.shift();
-
       console.log('this is the huntID before it is sent! ', this.huntID);
 
       let dataObj = {
@@ -194,6 +181,7 @@ takePic() {
       });
 
     this.finalDist = this.googleMaps.calcDistance(this.previousPlaces);
+    //get all images associated with hunt from server and add each to a card
   }
   
   sendFeedback(val){
