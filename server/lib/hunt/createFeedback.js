@@ -5,7 +5,7 @@ const neo4jPromise = require('../neo4j/neo4jQueryPromiseReturn.js');
 
 module.exports = {
    initializeFeedback: (username, feedback, huntID, endtime, distance) => {
-
+      console.log('Unix Time: ', endtime);
       const initializeFeedbackQuery =
       `MATCH (user:User{username:"${username}"}), (hunt:Hunt{huntID:"${huntID}"})
        SET hunt.endtime = "${endtime}",

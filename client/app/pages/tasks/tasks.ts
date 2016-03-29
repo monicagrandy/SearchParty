@@ -172,8 +172,10 @@ takePic() {
   searchComplete(){
     console.log(this.previousTasks);
     this.endTime = new Date().toLocaleTimeString();
+    this.endTimeUnix = Date.now();
     localStorage.endTime = this.endTime;
     this.startTime = localStorage.startTime;
+    this.startTimeUnix = localStorage.startTimeUnix;
 
     this.googleMaps.finalMapMaker(this.previousPlaces, this.previousTasks)
       .then(data => {
@@ -194,11 +196,11 @@ takePic() {
       console.log('sending bad feedback!');
       this.feedback = "bad";
     }
-
+    console.log('UNIX TIME END: ', this.endTimeUnix);
     let userFeedback = {
           token: localStorage.id_token,
           huntID: this.huntID,
-          endTime: localStorage.endTime,
+          endTime: this.endTimeUnix,
           distance: this.finalDist,
           feedback: this.feedback
     };

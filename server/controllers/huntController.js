@@ -48,7 +48,7 @@ module.exports = {
       let username = jwt.decode(req.body.token, config.secret).username;
       let feedback = req.body.feedback;
       let huntID = req.body.huntID;
-      let endtime = convertTime.unix(req.body.endTime);
+      let endtime = req.body.endTime;
       let distance = req.body.distance;
 
       createFeedback.initializeFeedback(username, feedback, huntID, endtime, distance)
