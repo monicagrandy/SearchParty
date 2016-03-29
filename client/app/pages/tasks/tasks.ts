@@ -47,23 +47,22 @@ export class TaskPage {
   image: any;
   imgData: string;
   finalDist: any;
+  IMAGES_URL: string = 'http://172.20.10.2:8000/getPics';
   TASKS_URL: string = 'https://getsearchparty.com/tasks';
   FEEDBACK_URL: string = 'https://getsearchparty.com/feedback';
   UPLOAD_URL: string = 'http://172.20.10.2:8000/upload';
   feedback: string;
   showMobileSharing: boolean;
   link: string;
+  allImages: any;
 
 
   constructor(platform: Platform, private nav: NavController, navParams: NavParams, private _taskService: TaskService, private googleMaps: GoogleMapService, _zone: NgZone) {
-    // If we navigated to this page, we will have an item available as a nav param
-    //this.map = null;
     this.keywordsLength = this.keywords.length;
     this._zone = _zone;
     this.platform = platform;
     this.image = null;
     this.tasksLeft = true;
-    //console.log(localStorage.id_token)
     this.token = localStorage.id_token;
 
     if (this.token) {
@@ -171,6 +170,11 @@ takePic() {
 
   searchComplete(){
     console.log(this.previousTasks);
+    this._taskService.postData(this.huntID, this.IMAGES_URL)
+      .then(result => {
+        this.allImages = result.urls
+        console.log(this.allImages)
+      })
     this.endTime = new Date().toLocaleTimeString();
     localStorage.endTime = this.endTime;
     this.startTime = localStorage.startTime;
@@ -180,8 +184,7 @@ takePic() {
         let flightPath = data;
       });
 
-    this.finalDist = this.googleMaps.calcDistance(this.previousPlaces);
-    //get all images associated with hunt from server and add each to a card
+    this.finalDist = this.googleMaps.calcDistance(this.previousPlaces);   
   }
   
   sendFeedback(val){
