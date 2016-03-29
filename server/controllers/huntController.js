@@ -7,6 +7,7 @@ const config = require('../config/config.js');
 const makeHunt = require('../lib/hunt/createEntireHunt.js');
 const createNewHunt = require('../lib/hunt/createNewHuntID.js');
 const createFeedback = require('../lib/hunt/createFeedback.js');
+const uploadImage = require('../lib/image/s3Upload.js');
 const singleHunt = require('../lib/hunt/returnSingleHunt.js');
 
 module.exports = {
@@ -58,6 +59,13 @@ module.exports = {
          console.log('Error with creating feedback: ', error);
       });
    },
+
+
+   upload: (req, res) => {
+    let image = req.body.image
+    let id = req.body.huntID + "_" + req.body.count
+    uploadImage.sendToS3(image, id)
+  },
 
    retrieveSingleHunt: (req, res) => {
      let huntID = req.body.huntID;
