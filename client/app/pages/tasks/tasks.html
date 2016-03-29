@@ -37,10 +37,10 @@
     <button *ngIf="completeToggle" primary clear item-right (click)="takePic()">  
       Take Photo
     </button>
-    <ion-item *ngIf="completeToggle">
+    <!-- <ion-item *ngIf="completeToggle">
       <p>Img Here</p>
       <img src="{{imgData}}">
-    </ion-item>
+    </ion-item> -->
     <button primary clear item-right *ngIf="completeToggle && tasksLeft" (click)="getNewTask()">  
       Next Task
     </button>
@@ -55,6 +55,13 @@
       <button default (click)="shareViaTwitter('I am going on an adventure! Follow me on Search Party! @SearchPartyApp', null)">Share on Twitter</button>
     </ion-item>
   </ion-card>
+
+  <ion-card *ngIf="imgData">
+    <img src="{{imgData}}">
+  </ion-card>
+
+
+  <!-- </ion-card> -->
 
   <ion-card *ngIf="!tasksLeft">
     <ion-list>

@@ -238,11 +238,11 @@ takePic() {
   }
   
   shareWeb(text) {
-    console.log(text, this.link);
+    console.log(this.link);
   }
   
   shareWebTwitter(text) {
-    console.log(text, this.link);
+    console.log(this.link);
   }
     
 }
