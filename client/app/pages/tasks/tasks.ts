@@ -21,9 +21,6 @@ import 'rxjs/add/operator/map';
 })
 
 export class TaskPage {
-  // static get parameters(){
-  //     return [NgZone];
-  // }
   title = 'Current Task';
   map = null;
   local: LocalStorage;
@@ -51,6 +48,7 @@ export class TaskPage {
   finalDist: any;
   TASKS_URL: string = 'https://getsearchparty.com/tasks';
   FEEDBACK_URL: string = 'https://getsearchparty.com/feedback';
+  UPLOAD_URL: string = 'http://172.20.10.2:8000/upload';
   feedback: string;
 
 
@@ -81,44 +79,31 @@ export class TaskPage {
   }
 
 
-//   takePhoto() {
-//   this.platform.ready().then(() => {
-//     let options = {
-//       quality: 80,
-//       destinationType: Camera.DestinationType.DATA_URL,
-//       sourceType: Camera.PictureSourceType.CAMERA,
-//       allowEdit: false,
-//       encodingType: Camera.EncodingType.JPEG,
-//       saveToPhotoAlbum: false
-//     };
-//     // https://github.com/apache/cordova-plugin-camera#module_camera.getPicture
-//     navigator.camera.getPicture(
-//       (data) => {
-//         let image = "data:image/jpeg;base64," + data;
-//          this._zone.run(()=> this.images.unshift({
-//            src: image
-//          }))
-//       }, (error) => {
-//         alert(error);
-//       }, options
-//     );
-//   });
-// }
-
 takePic() {
   console.log('taking picture')    
   let options = {
       destinationType: 0,
       sourceType: 1,
       encodingType: 0,
+      targetWidth: 1024,
+      targetHeight: 1024,
       quality:100,
       allowEdit: false,
       saveToPhotoAlbum: false
   };
   Camera.getPicture(options).then((data) => {
-      this.imgData = 'data:image/jpeg;base64,' + data;
+    this.imgData = 'data:image/jpeg;base64,' + data;
       this._zone.run(() => this.image = this.imgData);
-
+      let count = this.keywords.length
+      let dataObj = {
+        count: count,
+        huntID: this.huntID,
+        image: this.imgData
+       } 
+      this._taskService.postData(JSON.stringify(dataObj), this.UPLOAD_URL)
+        .then(result => {
+          console.log("image sent to server")
+        })
   }, (error) => {
       alert(error);
   });
@@ -134,7 +119,6 @@ takePic() {
 
     if (this.keywords.length > 0) {
       let keyword = this.keywords.shift();
-
       console.log('this is the huntID before it is sent! ', this.huntID);
 
       let dataObj = {
@@ -184,18 +168,7 @@ takePic() {
       });
 
     this.finalDist = this.googleMaps.calcDistance(this.previousPlaces);
-      else {
-        console.log("no more tasks!")
-    }
-        console.log(this.previousTasks)
-        console.log(this.previousPlaces)
-    }
-  }
-
-  searchComplete(){
-
-  }
-
+    //get all images associated with hunt from server and add each to a card
   }
 
   sendFeedback(val){
