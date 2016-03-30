@@ -14,7 +14,7 @@ export class Chat {
    socket: any;
    zone: any;
    chatBox: any;
-   
+
    constructor(
       private http: Http,
       private nav: NavController,
@@ -31,11 +31,11 @@ export class Chat {
        });
      });
    }
-   
+
   send(message) {
     if (message && message != "") {
       this.socket.emit("chat_message", message);
     }
     this.chatBox = "";
-  }   
+  }
 }
