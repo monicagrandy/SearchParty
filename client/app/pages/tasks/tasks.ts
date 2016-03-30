@@ -48,14 +48,13 @@ export class TaskPage {
   image: any;
   imgData: string;
   finalDist: any;
-  HUNT_URL: string = 'http://localhost:8000/singleHunt';
+  HUNT_URL: string = 'https://getsearchparty.com/singleHunt';
   TASKS_URL: string = 'https://getsearchparty.com/tasks';
   FEEDBACK_URL: string = 'https://getsearchparty.com/feedback';
-  UPLOAD_URL: string = 'http://172.20.10.2:8000/upload';
+  UPLOAD_URL: string = 'https://getsearchparty.com/upload';
   feedback: string;
   showMobileSharing: boolean;
   link: string;
-  allImages: any;
   finalData: any;
 
 
@@ -179,7 +178,7 @@ takePic() {
     }
     this._taskService.postData(JSON.stringify(dataObj), this.HUNT_URL)
         .then(result => {
-          //this.huntStats = result.urls[0]
+         this.finalData = result.tasks
           console.log("+++line 179 in tasks.js data: ", result)
       })
     this.endTime = new Date().toLocaleTimeString();

@@ -59,15 +59,14 @@
     </ion-item>   
   </ion-card>
 
-  <ion-card *ngIf="!tasksLeft && !allImages">
+  <ion-card *ngIf="!tasksLeft">
     <ion-item>
       <h2>HuntSummary:</h2>
     </ion-item>
-    <ion-item *ngFor="#task of previousTasks">
-    <ion-item *ngFor="#place of previousPlaces">
-      <p>{{task.content}}</p>
-      <p>{{place.name}}</p>
-    </ion-item>
+    <ion-item *ngFor="#obj of finalData">
+      <p>{{obj.place.name}}</p>
+      <p>{{obj.task.content}}</p>
+      <img *ngIf="obj.image" src="{{obj.image.url}}">
     </ion-item>
   </ion-card>
 

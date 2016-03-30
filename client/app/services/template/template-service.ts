@@ -6,10 +6,8 @@ import 'rxjs/add/operator/map';
 
 @Injectable()
 export class TemplateService {
-  TEMPLATES_URL: string = 'http://localhost:8000/templates'; //update this later
-  //TEMPLATES_URL: string = 'http://172.20.10.2:8000/templates';
-  TASKS_URL: string = 'http://localhost:8000/tasks';
-  //TASKS_URL: string = 'http://172.20.10.2:8000/tasks';
+  TEMPLATES_URL: string = 'https://getsearchparty.com/templates';
+  TASKS_URL: string = 'https://getsearchparty.com/tasks';
   keyword: string;
   contentHeader: Headers = new Headers({'Content-Type': 'application/json'});
 
