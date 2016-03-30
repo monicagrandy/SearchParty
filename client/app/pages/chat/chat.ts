@@ -39,14 +39,14 @@ export class Chat {
       navParams: NavParams,
       private _chatService: ChatService
    ) {
-     let socket = io.connect('http://localhost:8000');
+      this.token = localStorage.id_token;
+      if (this.token) {
+         this.username = this.jwtHelper.decodeToken(this.token).username;
+      }
+     let socket = io.connect('http://localhost:8000', this.username, this.huntID);
      this.timeout = undefined;
      this.typing = false;
 
-     this.token = localStorage.id_token;
-     if (this.token) {
-       this.username = this.jwtHelper.decodeToken(this.token).username;
-     }
 
      this.huntID = navParams.get('huntID');
 
@@ -83,8 +83,8 @@ export class Chat {
 
   send(message) {
     if (message && message !== "") {
-      console.log("username inside chat.ts", this.username);
-      console.log("message inside chat.ts", message);
+      // console.log("username inside chat.ts", this.username);
+      // console.log("message inside chat.ts", message);
 
       let messageObject = {
         username: this.username,

@@ -45,9 +45,9 @@ const io = new ioServer();
 io.attach(httpServer);
 io.attach(httpsServer);
 
-io.on('connection', socket => {
-  console.log('a user connected');
-  chatPromises.retrieveChatMessages("cNkgYkThXAx")
+io.on('connection', (socket, username, huntID) => {
+  console.log(username + ' connected to ' + huntID + ' chat room.');
+  chatPromises.retrieveChatMessages(hunt)
   .then(data =>{
      console.log('Fetching message history from Database.');
      console.log(data);
@@ -72,7 +72,7 @@ io.on('connection', socket => {
       }
     });
 
-  socket.on('chat_message', (msg, usernamem, room) => {
+  socket.on('chat_message', (msg, username, room) => {
     console.log('socket: ', msg, username);
     io.to(room).emit('chat_message', msg, username);
     // chatPromises.addChatMessageToDB(msg, 'cNkgYkThXAx', username);
@@ -82,8 +82,8 @@ io.on('connection', socket => {
     console.log('user disconnected');
   });
 
-  socket.on('typing', data => {
+  socket.on('typing', data, room => {
       console.log('is typing', data);
-      io.emit('isTyping', data);
+      io.to(room).emit('isTyping', data);
   });
 });
