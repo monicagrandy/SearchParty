@@ -9,7 +9,11 @@ import {ChatService} from '../../services/chat/chat-service';
 
 @Page({
   templateUrl: 'build/pages/chat/chat.html',
-  providers: [ChatService]
+  providers: [
+    ConnectionBackend,
+    HTTP_PROVIDERS,
+    ChatService
+  ],
   directives: [FORM_DIRECTIVES]
 })
 export class Chat {
@@ -79,13 +83,14 @@ export class Chat {
   send(message) {
     if (message && message !== "") {
       let messageObject = {
-        token: locaStorage.id_token,
-        huntID: this.huntID
+        username: this.username,
+        huntID: this.huntID,
+        message: message
       };
 
       this._chatService.postData(JSON.stringify(messageObject), this.ADD_MESSAGE_URL)
       .then(messageAdded => {
-        this.socket.emit("chat_message", message, this.username);
+        this.socket.emit("chat_message", messageAdded, this.username);
       }).catch(error => console.error(error))
 
     }

@@ -1,13 +1,22 @@
 'use strict'
 
 const chatPromises = require('../lib/chat/chatPromises.js');
+// const jwt = require('jwt-simple');
+const config = require('../config/config.js');
 
 module.exports = {
   insertChatMessage: (req, res) => {
     //expecting req to have a chatID, text, username, and datetime property
-    let messageBody = req.body.message;
-    let chatID = req.body.chatID;
-    chatPromises.addChatMessageToDB(messageBody, chatID)
+    let huntID = req.body.huntID;
+
+    let messageBody = {
+      text: req.body.message,
+      huntID: req.body.huntID,
+      username: req.body.username,
+      datetime: Date.now()
+    };
+
+    chatPromises.addChatMessageToDB(messageBody, huntID)
     .then(messageAdded => {
       console.log('message added in chat controller', messageAdded);
       res.json({"messageAdded": messageAdded});

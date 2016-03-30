@@ -63,8 +63,9 @@ export class TaskPage {
     private nav: NavController,
     navParams: NavParams,
     private _taskService: TaskService,
-    private googleMaps: GoogleMapService, 
-    _zone: NgZone) {
+    private googleMaps: GoogleMapService,
+    _zone: NgZone
+  ) {
     this.keywordsLength = this.keywords.length;
 
     this._zone = _zone;
