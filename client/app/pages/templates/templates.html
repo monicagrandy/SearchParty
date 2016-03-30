@@ -6,8 +6,8 @@
 </ion-navbar>
 
 
-<ion-content *ngIf="!userLat && !userLng"> 
-  <img src="{{loadingImg}}">
+<ion-content class="loadingContent" *ngIf="!userLat && !userLng"> 
+  <img class="loadingImg" src="{{loadingImg}}">
 </ion-content>
 
 <ion-content class="has-header cards-bg" *ngIf="userLat && userLng" >

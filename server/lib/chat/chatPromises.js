@@ -3,22 +3,22 @@ const neo4jPromise = require('../neo4j/neo4jQueryPromiseReturn.js');
 const messageFormatter = require('./formatChatMessageForDB.js');
 
 module.exports = {
-  addChatMessageToDB: (messageBody, chatID) => {
+  addChatMessageToDB: (messageBody, chatID, username) => {
     console.log("message body", messageBody);
 
-    let formattedMessageObject = messageFormatter.formatChatMessageWithProps(messageBody);
-    console.log("formatted chat object ", formattedMessageObject);
+    //  let formattedMessageObject = messageFormatter.formatChatMessageWithProps(messageBody);
+    //  console.log("formatted chat object ", formattedMessageObject);
 
     const addChatMessageQuery = `MATCH (root)
     WHERE root.chatID="${chatID}"
     OPTIONAL MATCH (root)-[r:CURRENT]-(secondlatestmessage)
     DELETE r
-    CREATE (root)-[:CURRENT]->(latest_message :Message{props})
+    CREATE (root)-[:CURRENT]->(latest_message :Message{text:"${messageBody}", username:"${username}"})
     WITH latest_message, collect(secondlatestmessage) AS seconds
     FOREACH (x IN seconds | CREATE (latest_message)-[:NEXT]->(x))
     RETURN latest_message`;
 
-    return neo4jPromise.databaseQueryPromise(addChatMessageQuery, formattedMessageObject)
+    return neo4jPromise.databaseQueryPromise(addChatMessageQuery)
     .then(latestMessage => {
       return new Promise((resolve, reject) => {
         if(latestMessage.length > 0) {
@@ -34,7 +34,7 @@ module.exports = {
     const retrieveChatQuery =
     `MATCH (chat:Chatroom{chatID:"${chatID}"})
     WITH chat
-    MATCH (chat)-[:CURRENT]-(latestmessage)-[:NEXT*0..10]-(oldermessages)
+    MATCH (chat)-[:CURRENT]-(latestmessage)-[:NEXT*0..28]-(oldermessages)
     RETURN oldermessages ORDER BY oldermessages.datetime`;
 
     return neo4jPromise.databaseQueryPromise(retrieveChatQuery)

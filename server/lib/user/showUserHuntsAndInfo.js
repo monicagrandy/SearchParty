@@ -12,8 +12,9 @@ module.exports = {
     MATCH (h)-[:OCCURRED_AT*]->(place)-[:INCLUDES*]->(task)
     MATCH (h)-[:HAS_CHAT*]->(chatInfo)
     OPTIONAL MATCH (chatInfo)-[*]->(message)
-    WITH COLLECT(DISTINCT task) AS tasks, COLLECT(DISTINCT place) AS places, COLLECT(DISTINCT message) AS messages, h, chatInfo
-    RETURN {places: places, tasks: tasks, messages: messages, huntData: h, chatData: chatInfo}`;
+    OPTIONAL MATCH (hunt)-[:HAS_PIC*]->(picurl)
+    WITH COLLECT(DISTINCT task) AS tasks, COLLECT(DISTINCT place) AS places, COLLECT(DISTINCT message) AS messages, COLLECT(DISTINCT picurl) AS urls, h, chatInfo
+    RETURN {places: places, tasks: tasks, urls: urls, messages: messages, huntData: h, chatData: chatInfo}`;
 
     return neo4jPromise.databaseQueryPromise(returnAllUserInfoQuery)
     .then(allUserData => {
