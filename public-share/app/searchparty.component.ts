@@ -24,32 +24,35 @@ export class SearchPartyComponent {
   totalDist: number;
   startLat: number;
   startLng: number;
-  //content: any;
+  content: any;
   
   constructor(private _params: RouteParams, private googleMaps: GoogleMapService, private _searchPartyService: SearchPartyService) {
     this.huntID = _params.get('huntID');
     this.allTasks = []
     this.allPlaces = []
-    this._searchPartyService.getHunt(this.huntID)
-      .then(data => {
-        console.log("data received")
-        this.huntTasks = data.tasks;
-        this.startLat = data.tasks[0].place.lat;
-        this.startLng = data.tasks[0].place.lng;
-        //console.log(this.startLat)
-        //console.log(this.startLng)
-        let content = '<h4>' + data.tasks[0].place.name + ' < /h4><p>' + data.tasks[0].place.address+ '</p > ';
-        //console.log(content)
-        this.huntChats = data.chats.messages;
-        // this.huntTasks.forEach((item) => {
-        //   this.allTasks.push(item.place);
-        //   this.allTasks.push(item.task);
-        // })
-        this.googleMaps.loadMap(this.startLat, this.startLng, 15, content, this.map).then(map => this.map = map)
-        //this.showMap()
+    this.getHuntData(this.huntID)
+  } 
+
+ getHuntData(id){
+   this._searchPartyService.getHunt(id)
+    .then(data => {
+      //console.log("promise returned")
+      this.huntTasks = data.tasks;
+      this.startLat = data.tasks[0].place.lat;
+      this.startLng = data.tasks[0].place.lng;
+      this.content = '<h4>' + data.tasks[0].place.name + ' < /h4><p>' + data.tasks[0].place.address + '</p > ';
+      //this.huntChats = data.chats.messages;
+      this.huntTasks.forEach((item) => {
+        this.allPlaces.push(item.place);
+        this.allTasks.push(item.task);
       })
+      console.log("hello")
+      console.log(this.allTasks)
+      console.log(this.allPlaces)
+      this.showMap()
+    })
       .catch(err => console.log(err));
-  }     
+}   
     
   showMap() {
     this.googleMaps.finalMapMaker(this.allPlaces, this.allTasks)
