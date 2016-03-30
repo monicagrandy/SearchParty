@@ -47,23 +47,31 @@ io.attach(httpsServer);
 
 io.on('connection', socket => {
   console.log('a user connected');
+  chatPromises.retrieveChatMessages("cNkgYkThXAx")
+  .then(data =>{
+     console.log('Fetching message history from Database.');
+     console.log(data);
+     //We must use ES5 forLoop here because we receive data in a
+     //backwards array and there is no way to iterate backwards
+     for(let message of data) {
+        console.log(message.text);
+        io.emit('chat_message', message.text);
+     }
+ })
 
   socket.on('chat_message', (msg, username) => {
-     console.log('socket: ', msg, username);
+    console.log('socket: ', msg, username);
     io.emit('chat_message', msg, username);
-    //call some function to record the message to the database;
-    chatPromises.addChatMessageToDB(username +": "+ msg, 'cNkgYkThXAx');
+    chatPromises.addChatMessageToDB(msg, 'cNkgYkThXAx', username);
   });
 
   socket.on('disconnect', () => {
+   //   io.to('some room').emit(username)
     console.log('user disconnected');
   });
 
   socket.on('typing', data => {
-   //  if (message && username) {
       console.log('is typing', data);
       io.emit('isTyping', data);
-
-   //  };
   });
  });

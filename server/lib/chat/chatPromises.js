@@ -3,7 +3,7 @@ const neo4jPromise = require('../neo4j/neo4jQueryPromiseReturn.js');
 const messageFormatter = require('./formatChatMessageForDB.js');
 
 module.exports = {
-  addChatMessageToDB: (messageBody, chatID) => {
+  addChatMessageToDB: (messageBody, chatID, username) => {
     console.log("message body", messageBody);
 
    //  let formattedMessageObject = messageFormatter.formatChatMessageWithProps(messageBody);
@@ -13,7 +13,7 @@ module.exports = {
     WHERE root.chatID="${chatID}"
     OPTIONAL MATCH (root)-[r:CURRENT]-(secondlatestmessage)
     DELETE r
-    CREATE (root)-[:CURRENT]->(latest_message :Message{text:"${messageBody}"})
+    CREATE (root)-[:CURRENT]->(latest_message :Message{text:"${messageBody}", username:"${username}"})
     WITH latest_message, collect(secondlatestmessage) AS seconds
     FOREACH (x IN seconds | CREATE (latest_message)-[:NEXT]->(x))
     RETURN latest_message`;
