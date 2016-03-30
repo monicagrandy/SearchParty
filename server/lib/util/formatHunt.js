@@ -18,7 +18,16 @@ module.exports = {
 
     prettyHunt.stats = huntArray.huntData;
     for(let i = 0; i < huntArray.tasks.length; i++) {
-      prettyHunt.tasks.push({task: huntArray.tasks[i], place: huntArray.places[i]})
+      if (huntArray.urls[i]) {
+        console.log('inside huntArray for loop image url exits');
+        if (huntArray.urls[i].url.charAt(huntArray.urls[i].url.length - 1) == i) {
+          console.log('url matches task');
+          prettyHunt.tasks.push({task: huntArray.tasks[i], place: huntArray.places[i], image: huntArray.urls[i]});
+          console.log('pushed image to prettyhunt');
+        }
+      } else {
+        prettyHunt.tasks.push({task: huntArray.tasks[i], place: huntArray.places[i], image: null});
+      }
     }
     return prettyHunt;
   }
