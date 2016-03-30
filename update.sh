@@ -1,9 +1,10 @@
 #!/bin/bash
-# npm --prefix ./client install ./client
+pm2 stop index.js
 cd ./client/
 npm install
-npm install gulp -g
 node_modules/.bin/gulp build
 cd ..
 cd ./public-share/
 npm install
+cd ..
+pm2 start index.js
