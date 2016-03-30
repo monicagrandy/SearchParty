@@ -3,7 +3,7 @@
     <ion-icon name="menu"></ion-icon>
   </button>
   <ion-title *ngIf="tasksLeft">Current Task</ion-title>
-  <ion-title *ngIf="!tasksLeft">Congratulations {{user}}!</ion-title>
+  <ion-title *ngIf="!tasksLeft">You're Done!</ion-title>
 </ion-navbar>
 
 <ion-content class="has-header cards-bg">
@@ -14,7 +14,7 @@
         <h2>{{locAddress}}</h2>
       </ion-item>
       <ion-item *ngIf="!tasksLeft">
-        <h2><strong>Final Stats</strong></h2>
+        <h2><strong>{{user}}'s Final Stats</strong></h2>
       </ion-item>
       <div id="map"></div>
     </div>
@@ -28,7 +28,7 @@
       <ion-checkbox secondary [checked]="completeToggle" (click)="markComplete()"></ion-checkbox>
     </ion-item>
     <ion-item *ngIf="completeToggle && tasksLeft">
-      <button *ngIf="showMobileSharing" primary clear item-right (click)="takePic()">Take Photo<ion-icon name="camera"></ion-icon></button>
+      <button primary clear item-right (click)="takePic()">Take Photo<ion-icon name="camera"></ion-icon></button>
       <button primary clear item-right (click)="getNewTask()">  
         Next Task<ion-icon name="arrow-forward"></ion-icon>
       </button>
@@ -58,8 +58,12 @@
     </ion-item>   
   </ion-card>
 
-  <ion-card *ngIf="!tasksLeft && showMobileSharing" *ngFor="#image of allImages">
-    <img src="{{image.url}">
+  <ion-item>
+    <h2>Photo Log:</h2>
+  </ion-item>
+
+  <ion-card *ngIf="!tasksLeft && allImages" *ngFor="#image of allImages">
+    <img src="{{image.url}}">
   </ion-card>
 
   <ion-card *ngIf="!tasksLeft">

@@ -59,6 +59,7 @@ export class TaskPage {
 
   constructor(platform: Platform, private nav: NavController, navParams: NavParams, private _taskService: TaskService, private googleMaps: GoogleMapService, _zone: NgZone) {
     this.keywordsLength = this.keywords.length;
+
     this._zone = _zone;
     this.platform = platform;
     this.image = null;
@@ -74,6 +75,7 @@ export class TaskPage {
     } else {
       this.showMobileSharing = false;
     }
+    console.log("+++line 79 tasks.js", this.showMobileSharing)
 
     this.locAddress = navParams.get('locAddress');
     this.huntID = navParams.get('huntID');
@@ -173,11 +175,13 @@ takePic() {
     let dataObj = {
       huntID: this.huntID
     }
-    this._taskService.postData(JSON.stringify(dataObj), this.IMAGES_URL)
-      .then(result => {
-        this.allImages = result.urls
-        console.log(this.allImages)
-      })
+    setTimeout(() => {
+      this._taskService.postData(JSON.stringify(dataObj), this.IMAGES_URL)
+        .then(result => {
+          this.allImages = result.urls[0]
+          console.log("+++line 179 in tasks.js", this.allImages)
+        })
+    }, 3000)
     this.endTime = new Date().toLocaleTimeString();
     this.endTimeUnix = Date.now();
     localStorage.endTime = this.endTime;
