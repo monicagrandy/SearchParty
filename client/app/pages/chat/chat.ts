@@ -43,7 +43,7 @@ export class Chat {
       if (this.token) {
          this.username = this.jwtHelper.decodeToken(this.token).username;
       }
-     let socket = io.connect('http://localhost:8000', this.username, this.huntID);
+     let socket = io.connect('http://localhost:8000');
      this.timeout = undefined;
      this.typing = false;
 
