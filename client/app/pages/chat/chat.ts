@@ -45,8 +45,6 @@ export class Chat {
           console.log(this.messages);
          this.messages.push([username +": "+ msg]);
        });
-       clearTimeout(this.timeout);
-       this.timeout = setTimeout(this.timeoutFunction, 0);
    });
 }
 

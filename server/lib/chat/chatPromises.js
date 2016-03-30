@@ -34,7 +34,7 @@ module.exports = {
     const retrieveChatQuery =
     `MATCH (chat:Chatroom{chatID:"${chatID}"})
     WITH chat
-    MATCH (chat)-[:CURRENT]-(latestmessage)-[:NEXT*0..10]-(oldermessages)
+    MATCH (chat)-[:CURRENT]-(latestmessage)-[:NEXT*0..28]-(oldermessages)
     RETURN oldermessages ORDER BY oldermessages.datetime`;
 
     return neo4jPromise.databaseQueryPromise(retrieveChatQuery)
