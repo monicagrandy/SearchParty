@@ -72,14 +72,13 @@ io.on('connection', socket => {
       }
     });
 
-  socket.on('chat_message', (msg, username) => {
+  socket.on('chat_message', (msg, usernamem, room) => {
     console.log('socket: ', msg, username);
-    io.emit('chat_message', msg, username);
+    io.to(room).emit('chat_message', msg, username);
     // chatPromises.addChatMessageToDB(msg, 'cNkgYkThXAx', username);
   });
 
   socket.on('disconnect', () => {
-   //   io.to('some room').emit(username)
     console.log('user disconnected');
   });
 
@@ -87,4 +86,4 @@ io.on('connection', socket => {
       console.log('is typing', data);
       io.emit('isTyping', data);
   });
- });
+});
