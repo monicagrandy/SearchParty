@@ -54,20 +54,15 @@ io.on('connection', socket => {
      //We recieve our data backwards and es6 wont easily allow
      //iterating backwards in an array, so we use a stack
      let tempStack = [];
-     console.log(data.length);
      for(let messages of data) {
         if(messages.username) {
            tempStack.push(messages);
         }
      }
-     console.log(tempStack.length);
-     while(tempStack.length >= 0 ) {
-        let name = tempStack[tempStack.length-1].username;
-        console.log('name: ', name);
-        let message = tempStack[tempStack.length-1].text;
-         console.log('text: ', message);
-        io.emit('chat_message', message, name);
 
+     while(tempStack.length >= 0 ) {
+        let last = tempStack[tempStack.length-1];
+        io.emit('chat_message', last.text, last.username);
         tempStack.pop();
 
       }
