@@ -47,23 +47,23 @@ export class TaskPage {
   image: any;
   imgData: string;
   finalDist: any;
-  TASKS_URL: string = 'http://localhost:8000/tasks';
-  FEEDBACK_URL: string = 'http://localhost:8000/feedback';
-  UPLOAD_URL: string = 'http://localhost:8000/upload';
+  IMAGES_URL: string = 'http://172.20.10.2:8000/getPics';
+  TASKS_URL: string = 'https://getsearchparty.com/tasks';
+  FEEDBACK_URL: string = 'https://getsearchparty.com/feedback';
+  UPLOAD_URL: string = 'http://172.20.10.2:8000/upload';
   feedback: string;
   showMobileSharing: boolean;
   link: string;
+  allImages: any;
 
 
   constructor(platform: Platform, private nav: NavController, navParams: NavParams, private _taskService: TaskService, private googleMaps: GoogleMapService, _zone: NgZone) {
-    // If we navigated to this page, we will have an item available as a nav param
-    //this.map = null;
     this.keywordsLength = this.keywords.length;
+
     this._zone = _zone;
     this.platform = platform;
     this.image = null;
     this.tasksLeft = true;
-    //console.log(localStorage.id_token)
     this.token = localStorage.id_token;
 
     if (this.token) {
@@ -75,6 +75,7 @@ export class TaskPage {
     } else {
       this.showMobileSharing = false;
     }
+    console.log("+++line 79 tasks.js", this.showMobileSharing)
 
     this.locAddress = navParams.get('locAddress');
     this.huntID = navParams.get('huntID');
@@ -171,6 +172,16 @@ takePic() {
 
   searchComplete(){
     console.log(this.previousTasks);
+    let dataObj = {
+      huntID: this.huntID
+    }
+    setTimeout(() => {
+      this._taskService.postData(JSON.stringify(dataObj), this.IMAGES_URL)
+        .then(result => {
+          this.allImages = result.urls[0]
+          console.log("+++line 179 in tasks.js", this.allImages)
+        })
+    }, 3000)
     this.endTime = new Date().toLocaleTimeString();
     this.endTimeUnix = Date.now();
     localStorage.endTime = this.endTime;
@@ -182,8 +193,7 @@ takePic() {
         let flightPath = data;
       });
 
-    this.finalDist = this.googleMaps.calcDistance(this.previousPlaces);
-    //get all images associated with hunt from server and add each to a card
+    this.finalDist = this.googleMaps.calcDistance(this.previousPlaces);   
   }
 
   sendFeedback(val){
@@ -239,11 +249,11 @@ takePic() {
   }
 
   shareWeb(text) {
-    console.log(text, this.link);
+    console.log(this.link);
   }
 
   shareWebTwitter(text) {
-    console.log(text, this.link);
+    console.log(this.link);
   }
 
 }

@@ -15,6 +15,7 @@ import 'rxjs/add/operator/map';
 
 export class LogIn {
   LOGIN_URL: string = 'http://localhost:8000/signin'; //update this later
+  //LOGIN_URL: string = 'http://172.20.10.2:8000/signin'; //update this later
   SIGNUP_URL: string = 'http://localhost:8000/signup';
   // When the page loads, we want the Login segment to be selected
   authType: string = 'login';
