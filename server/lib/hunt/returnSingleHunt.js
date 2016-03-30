@@ -9,6 +9,7 @@ module.exports = {
     `MATCH (hunt:Hunt{huntID:"${huntID}"})-[:OCCURRED_AT*]->(place)-[:INCLUDES*]->(task)
     MATCH (hunt)-[:HAS_PIC*]->(picurl)
     MATCH (hunt)-[:HAS_CHAT*]->(chatInfo)
+    OPTIONAL MATCH (hunt)-[:HAS_PIC*]->(picurl)
     OPTIONAL MATCH (chatInfo)-[*]->(message)
     WITH COLLECT(DISTINCT task) AS tasks, COLLECT(DISTINCT picurl) AS urls, COLLECT(DISTINCT place) AS places, COLLECT(DISTINCT message) AS messages, hunt, chatInfo 
     RETURN {places: places, tasks: tasks, urls: urls, messages: messages, huntData: hunt, chatData: chatInfo}
