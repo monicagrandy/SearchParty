@@ -47,31 +47,7 @@ export class Chat {
        });
        clearTimeout(this.timeout);
        this.timeout = setTimeout(this.timeoutFunction, 0);
-     });
-     //  clear typing field
-     //  TODO: remove username div here too;
-
-      //:::UPON USER TYPING, SEND TYPING MESSAGE TO SERVER:::
-      // sendTyping(characters) => {
-      //    if(characters > 0) {
-      //       typing = true;
-      //       socket.emit("typing", true);
-      //    } else {
-      //       clearTimeout(timeout);
-      //       timeout = setTimeout(timeoutFunction, 5000);
-      //    }
-      // }
-
-      //:::UPON USER RECEIVING isTyping FROM SERVER, DISPLAY IT:::
-      // socket.on("isTyping", function(message, username) {
-      //    console.log('Message & : ', message, username);
-      //  if (message && username) {
-      //     timeout = setTimeout(timeoutFunction, 5000);
-      //     //Append ionic username div
-      //  } else {
-      //     //Remove ionic username div
-      //  }
-      // });
+   });
 }
 
    timeoutFunction() {

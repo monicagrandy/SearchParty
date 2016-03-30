@@ -51,12 +51,28 @@ io.on('connection', socket => {
   .then(data =>{
      console.log('Fetching message history from Database.');
      console.log(data);
-     //We must use ES5 forLoop here because we receive data in a
-     //backwards array and there is no way to iterate backwards
-     for(let message of data) {
-        console.log(message.text);
-        io.emit('chat_message', message.text);
+     //We recieve our data backwards and es6 wont easily allow
+     //iterating backwards in an array, so we use a stack
+     let tempStack = [];
+     console.log(data.length);
+     for(let messages of data) {
+        if(messages.username) {
+           tempStack.push(messages);
+        }
      }
+     console.log(tempStack.length);
+     while(tempStack.length >= 0 ) {
+        let name = tempStack[tempStack.length-1].username;
+        console.log('name: ', name);
+        let message = tempStack[tempStack.length-1].text;
+         console.log('text: ', message);
+        io.emit('chat_message', message, name);
+
+        tempStack.pop();
+
+      }
+
+
  })
 
   socket.on('chat_message', (msg, username) => {
