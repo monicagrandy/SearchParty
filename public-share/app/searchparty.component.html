@@ -1,5 +1,23 @@
-<h2>HUNT GOES HERE</h2>
-<h3>{{huntID}}</h3>
+<h2>Hunt Updates:</h2>
+
+  <div id="map"></div>
+  
+  <div *ngFor="#obj of huntTasks">
+    <p>{{obj.place.name}}</p>
+    <p>{{obj.task.content}}</p>
+    <img *ngIf="obj.image" src="{{obj.image.url}}">
+    <img *ngIf="!obj.image" src="http://cricketfeet.com/temp/blogimages/searchparty23.gif">
+  </div>
+
+  <h2>Hunt Chat:</h2>
+    <div *ngFor="#obj of huntChats">
+      <p>{{obj.username}} said at {{obj.datetime}}</p>
+      <p>{{obj.text}}</p>
+    </div>
+    <div *ngIf="!huntChats">
+      <p>No chats to display</p>
+    </div>
+
 <div *ngIf="error">
   <p>{{error}}</p>
 </div>

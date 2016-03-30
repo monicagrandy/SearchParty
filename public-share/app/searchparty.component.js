@@ -33,11 +33,16 @@ System.register(['angular2/core', 'angular2/router', 'ng2-material/all', './sear
         execute: function() {
             SearchPartyComponent = (function () {
                 function SearchPartyComponent(_params, _searchPartyService) {
+                    var _this = this;
                     this._params = _params;
                     this._searchPartyService = _searchPartyService;
                     this.huntID = _params.get('huntID');
                     this._searchPartyService.getHunt(this.huntID)
-                        .then(function (data) { return console.log(data); })
+                        .then(function (data) {
+                        _this.huntTasks = data.tasks;
+                        _this.huntChats = data.chats.messages;
+                        console.log(data);
+                    })
                         .catch(function (err) { return console.log(err); });
                 }
                 SearchPartyComponent = __decorate([
