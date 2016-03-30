@@ -1,9 +1,10 @@
-import {Page, NavController, NavParams} from 'ionic-angular';
+import {Page, NavController, NavParams, LocalStorage} from 'ionic-angular';
 import {Http, Headers} from 'angular2/http';
 import {FORM_DIRECTIVES} from 'angular2/common';
 import {JwtHelper} from 'angular2-jwt';
 import {AuthService} from '../../services/auth/auth-service'
-import {NgZone} from "angular2/core";;
+import {NgZone} from "angular2/core";
+// import {io} from "socket.io"
 
 @Page({
   templateUrl: 'build/pages/chat/chat.html',
@@ -18,88 +19,57 @@ export class Chat {
    username: any;
    timeout: any;
    timoutFunction: any;
+   jwtHelper: JwtHelper = new JwtHelper();
+   typing: boolean;
 
    constructor(
       private http: Http,
       private nav: NavController,
       private navParams: NavParams
    ) {
-     let socket = this.io();
+     let socket = io.connect('http://localhost:8000');
+     this.timeout = undefined;
+     this.typing = false;
+
+     this.token = localStorage.id_token;
+     if (this.token) {
+       this.username = this.jwtHelper.decodeToken(this.token).username;
+     }
+
      this.messages = [];
      this.zone = new NgZone({enableLongStackTrace: false});
      this.chatBox = "";
      this.socket = socket;
-     this.socket.on("chat_message", msg => {
+     this.socket.on("chat_message", (msg, username) => {
        this.zone.run(() => {
-         this.messages.push(msg);
+          console.log(this.messages);
+         this.messages.push([username +": "+ msg]);
        });
-     });
-
-     //See when someone is typing:
-     var typing = false;
-     var timeout = undefined;
-
-      function timeoutFunction() {
-        typing = false;
-        socket.emit("typing", false);
-      }
-
-      // $("#msg").keypress(function(e){
-      //   if (e.which !== 13) {
-      //     if (typing === false && myRoomID !== null && $("#msg").is(":focus")) {
-      //       typing = true;
-      //       socket.emit("typing", true);
-      //     } else {
-      //       clearTimeout(timeout);
-      //       timeout = setTimeout(timeoutFunction, 5000);
-      //     }
-      //   }
-      // });
-      //:::UPON USER TYPING, SEND TYPING MESSAGE TO SERVER:::
-      sendTyping(characters) => {
-         if(characters > 0) {
-            typing = true;
-            socket.emit("typing", true);
-         } else {
-            clearTimeout(timeout);
-            timeout = setTimeout(timeoutFunction, 5000);
-         }
-      }
-
-      // socket.on("isTyping", function(data) {
-      //   if (data.isTyping) {
-      //     if ($("#"+data.person+"").length === 0) {
-      //       $("#updates").append("<li id='"+ data.person +"'><span class='text-muted'><small><i class='fa fa-keyboard-o'></i>" + data.person + " is typing.</small></li>");
-      //       timeout = setTimeout(timeoutFunction, 5000);
-      //     }
-      //   } else {
-      //     $("#"+data.person+"").remove();
-      //   }
-      // });
-      //:::UPON USER RECEIVING isTyping FROM SERVER, DISPLAY IT:::
-      socket.on("isTyping", function(data) {
-         console.log('Data from server about typing: ', data);
-       if (data.isTyping) {
-          timeout = setTimeout(timeoutFunction, 5000);
-          //Append ionic username div
-       } else {
-          //Remove ionic username div
-       }
-      });
-
-
-      socket.on("chat", function(person, msg) {
-        $("#msgs").append("<li><strong><span class='text-success'>" + person.name + "</span></strong>: " + msg + "</li>");
-        //clear typing field
-         $("#"+person.name+"").remove();
-         clearTimeout(timeout);
-         timeout = setTimeout(timeoutFunction, 0);
-      });
+   });
 }
+
+   timeoutFunction() {
+      this.typing = false;
+      this.socket.emit('typing', false);
+   }
+
+  OnKey(event:KeyboardEvent) {
+     console.log('this is the keyup event ', event);
+     if (event) {
+        console.log('ln 84: ', this.typing);
+        if (this.typing === false) {
+           this.typing = true;
+           console.log('emitting true for typing', this.typing);
+           this.socket.emit('typing', true);
+           clearTimeout(this.timeout);
+           this.timeout = setTimeout(this.timeoutFunction.bind(this), 1500);
+        }
+     }
+ }
 
 
   send(message) {
-    if (message && message != "") {
+    if (message && message !== "") {
       this.socket.emit("chat_message", message, this.username);
     }
     this.chatBox = "";
