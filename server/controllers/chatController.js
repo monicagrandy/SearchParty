@@ -11,7 +11,6 @@ module.exports = {
 
     let messageBody = {
       text: req.body.message,
-      huntID: req.body.huntID,
       username: req.body.username,
       datetime: Date.now()
     };
