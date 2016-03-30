@@ -4,6 +4,11 @@
   </button>
   <ion-title *ngIf="tasksLeft">Current Task</ion-title>
   <ion-title *ngIf="!tasksLeft">You're Done!</ion-title>
+  <ion-buttons end>
+    <button (click)="chat($event)">
+      <ion-icon name="chatbubbles"></ion-icon>
+    </button>
+  </ion-buttons>
 </ion-navbar>
 
 <ion-content class="has-header cards-bg">

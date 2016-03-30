@@ -6,6 +6,7 @@ import {JwtHelper} from 'angular2-jwt';
 import {NgZone} from 'angular2/core';
 import {Camera} from 'ionic-native';
 import {TemplatePage} from '../templates/templates';
+import {Chat} from '../chat/chat';
 import 'rxjs/add/operator/map';
 
 //declare var Camera:any;
@@ -253,6 +254,12 @@ takePic() {
 
   shareWebTwitter(text) {
     console.log(this.link);
+  }
+  
+  chat(event) {
+    this.nav.push(Chat, {
+      huntID: this.huntID
+    });
   }
 
 }
