@@ -8,9 +8,10 @@ module.exports = {
     const retrieveEntireHuntQuery =
     `MATCH (hunt:Hunt{huntID:"${huntID}"})-[:OCCURRED_AT*]->(place)-[:INCLUDES*]->(task)
     MATCH (hunt)-[:HAS_CHAT*]->(chatInfo)
+    OPTIONAL MATCH (hunt)-[:HAS_PIC*]->(picurl)
     OPTIONAL MATCH (chatInfo)-[*]->(message)
-    WITH COLLECT(DISTINCT task) AS tasks, COLLECT(DISTINCT place) AS places, COLLECT(DISTINCT message) AS messages, hunt, chatInfo
-    RETURN {places: places, tasks: tasks, messages: messages, huntData: hunt, chatData: chatInfo}
+    WITH COLLECT(DISTINCT task) AS tasks, COLLECT(DISTINCT picurl) AS urls, COLLECT(DISTINCT place) AS places, COLLECT(DISTINCT message) AS messages, hunt, chatInfo 
+    RETURN {places: places, tasks: tasks, urls: urls, messages: messages, huntData: hunt, chatData: chatInfo}
     `;
 
     return neo4jPromise.databaseQueryPromise(retrieveEntireHuntQuery)
