@@ -6,19 +6,19 @@ module.exports = {
   addChatMessageToDB: (messageBody, chatID) => {
     console.log("message body", messageBody);
 
-    let formattedMessageObject = messageFormatter.formatChatMessageWithProps(messageBody);
-    console.log("formatted chat object ", formattedMessageObject);
+   //  let formattedMessageObject = messageFormatter.formatChatMessageWithProps(messageBody);
+   //  console.log("formatted chat object ", formattedMessageObject);
 
     const addChatMessageQuery = `MATCH (root)
     WHERE root.chatID="${chatID}"
     OPTIONAL MATCH (root)-[r:CURRENT]-(secondlatestmessage)
     DELETE r
-    CREATE (root)-[:CURRENT]->(latest_message :Message{props})
+    CREATE (root)-[:CURRENT]->(latest_message :Message{text:"${messageBody}"})
     WITH latest_message, collect(secondlatestmessage) AS seconds
     FOREACH (x IN seconds | CREATE (latest_message)-[:NEXT]->(x))
     RETURN latest_message`;
 
-    return neo4jPromise.databaseQueryPromise(addChatMessageQuery, formattedMessageObject)
+    return neo4jPromise.databaseQueryPromise(addChatMessageQuery)
     .then(latestMessage => {
       return new Promise((resolve, reject) => {
         if(latestMessage.length > 0) {

@@ -7,6 +7,7 @@ const https = require('https');
 const http = require('http');
 const fs = require('fs');
 const ioServer = require('socket.io');
+const chatPromises = require('./server/lib/chat/chatPromises.js');
 
 const ca = [];
 let chain = fs.readFileSync('getsearchparty_com.ca-bundle', 'utf8');
@@ -50,6 +51,8 @@ io.on('connection', socket => {
   socket.on('chat_message', (msg, username) => {
      console.log('socket: ', msg, username);
     io.emit('chat_message', msg, username);
+    //call some function to record the message to the database;
+    chatPromises.addChatMessageToDB(username +": "+ msg, 'cNkgYkThXAx');
   });
 
   socket.on('disconnect', () => {
@@ -60,6 +63,7 @@ io.on('connection', socket => {
    //  if (message && username) {
       console.log('is typing', data);
       io.emit('isTyping', data);
+
    //  };
   });
  });
