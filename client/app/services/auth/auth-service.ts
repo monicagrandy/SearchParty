@@ -11,7 +11,7 @@ export class AuthService {
   local: Storage = new Storage(LocalStorage);
   refreshSubscription: any;
   user: Object;
-  
+
   constructor(private authHttp: AuthHttp) {
     // If there is a profile saved in local storage
     let profile = this.local.get('profile')._result;
@@ -19,12 +19,12 @@ export class AuthService {
       this.user = JSON.parse(profile);
     }
   }
-  
+
   public authenticated() {
     // Check if there's an unexpired JWT
     return tokenNotExpired();
   }
-  
+
   // future use for auth0 and deployment of server
   public login() {
     // Show the Auth0 Lock widget
@@ -45,7 +45,7 @@ export class AuthService {
       this.user = profile;
       // Schedule a token refresh
       this.scheduleRefresh();
-    });    
+    });
   }
 
   public logout() {
@@ -68,12 +68,12 @@ export class AuthService {
         let jwtExp = this.jwtHelper.decodeToken(token).exp;
         let iat = new Date(0);
         let exp = new Date(0);
-        
+
         let delay = (exp.setUTCSeconds(jwtExp) - iat.setUTCSeconds(jwtIat));
-        
+
         return Observable.interval(delay);
       });
-      
+
     this.refreshSubscription = source.subscribe(() => {
       this.getNewJwt();
     });
@@ -92,12 +92,12 @@ export class AuthService {
           let exp: Date = new Date(0);
           exp.setUTCSeconds(jwtExp);
           let delay: number = exp.valueOf() - now;
-          
+
           // Use the delay in a timer to
           // run the refresh at the proper time
           return Observable.timer(delay);
         });
-      
+
         // Once the delay time from above is
         // reached, get a new JWT and schedule
         // additional refreshes
@@ -107,14 +107,14 @@ export class AuthService {
         });
       }
     }
-    
+
     public unscheduleRefresh() {
-      // Unsubscribe fromt the refresh
+      // Unsubscribe from the refresh
       if (this.refreshSubscription) {
         this.refreshSubscription.unsubscribe();
       }
     }
-    
+
     public getNewJwt() {
       // Get a new JWT from Auth0 using the refresh token saved
       // in local storage
@@ -127,4 +127,3 @@ export class AuthService {
       });
     }
 }
-

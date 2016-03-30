@@ -6,6 +6,7 @@ import {JwtHelper} from 'angular2-jwt';
 import {NgZone} from 'angular2/core';
 import {Camera} from 'ionic-native';
 import {TemplatePage} from '../templates/templates';
+import {Chat} from '../chat/chat';
 import 'rxjs/add/operator/map';
 
 //declare var Camera:any;
@@ -21,9 +22,6 @@ import 'rxjs/add/operator/map';
 })
 
 export class TaskPage {
-  // static get parameters(){
-  //     return [NgZone];
-  // }
   title = 'Current Task';
   map = null;
   local: LocalStorage;
@@ -34,6 +32,7 @@ export class TaskPage {
   locName: string; //set this to whatever is in local storage
   completeToggle = false;
   keywords = ['Bar', 'Bar', 'Bar', 'Bar', 'Bar', 'Bar','Bar','Bar', 'Bar'];
+  keywordsLength: number;
   tasksLeft: any;
   endHunt: boolean;
   startTime: any;
@@ -49,26 +48,37 @@ export class TaskPage {
   image: any;
   imgData: string;
   finalDist: any;
+  HUNT_URL: string = 'https://getsearchparty.com/singleHunt';
   TASKS_URL: string = 'https://getsearchparty.com/tasks';
   FEEDBACK_URL: string = 'https://getsearchparty.com/feedback';
+  UPLOAD_URL: string = 'https://getsearchparty.com/upload';
   feedback: string;
+  showMobileSharing: boolean;
+  link: string;
+  finalData: any;
 
 
   constructor(platform: Platform, private nav: NavController, navParams: NavParams, private _taskService: TaskService, private googleMaps: GoogleMapService, _zone: NgZone) {
-    // If we navigated to this page, we will have an item available as a nav param
-    //this.map = null;
+    this.keywordsLength = this.keywords.length;
+
     this._zone = _zone;
     this.platform = platform;
     this.image = null;
     this.tasksLeft = true;
-    //console.log(localStorage.id_token)
     this.token = localStorage.id_token;
-    
+
     if (this.token) {
       this.user = this.jwtHelper.decodeToken(this.token).username;
     }
-    
-    this.locAddress  = navParams.get('locAddress');
+
+    if (window.plugins) {
+      this.showMobileSharing = true;
+    } else {
+      this.showMobileSharing = false;
+    }
+    console.log("+++line 79 tasks.js", this.showMobileSharing)
+
+    this.locAddress = navParams.get('locAddress');
     this.huntID = navParams.get('huntID');
     this.currChallenge =  localStorage.currChallenge || navParams.get('currChallenge');
     this.locLat = localStorage.locLat || navParams.get('locLat');
@@ -77,48 +87,37 @@ export class TaskPage {
     this.previousPlaces = navParams.get('previousPlaces');
     this.previousTasks = navParams.get('previousTasks');
     let content = '<h4>' + this.locName + '</h4><p>' + this.locAddress  + '</p>';
+
+    this.link = `http://localhost:8000/share/#/hunt/${this.huntID}`;
     setTimeout(()=>{ this.googleMaps.loadMap(this.locLat, this.locLng, 15, content, this.map).then(map => this.map = map), 2000 })
   }
 
 
-//   takePhoto() {
-//   this.platform.ready().then(() => {
-//     let options = {
-//       quality: 80,
-//       destinationType: Camera.DestinationType.DATA_URL,
-//       sourceType: Camera.PictureSourceType.CAMERA,
-//       allowEdit: false,
-//       encodingType: Camera.EncodingType.JPEG,
-//       saveToPhotoAlbum: false
-//     };
-//     // https://github.com/apache/cordova-plugin-camera#module_camera.getPicture
-//     navigator.camera.getPicture(
-//       (data) => {
-//         let image = "data:image/jpeg;base64," + data;
-//          this._zone.run(()=> this.images.unshift({
-//            src: image
-//          }))
-//       }, (error) => {
-//         alert(error);
-//       }, options
-//     );
-//   });
-// }
-
 takePic() {
-  console.log('taking picture')    
+  console.log('taking picture')
   let options = {
       destinationType: 0,
       sourceType: 1,
       encodingType: 0,
+      targetWidth: 1024,
+      targetHeight: 1024,
       quality:100,
       allowEdit: false,
       saveToPhotoAlbum: false
   };
   Camera.getPicture(options).then((data) => {
-      this.imgData = 'data:image/jpeg;base64,' + data;
+    this.imgData = 'data:image/jpeg;base64,' + data;
       this._zone.run(() => this.image = this.imgData);
-
+      let count = this.keywordsLength - this.keywords.length
+      let dataObj = {
+        count: count,
+        huntID: this.huntID,
+        image: this.imgData
+       }
+      this._taskService.postData(JSON.stringify(dataObj), this.UPLOAD_URL)
+        .then(result => {
+          console.log("image sent to server")
+        })
   }, (error) => {
       alert(error);
   });
@@ -126,6 +125,7 @@ takePic() {
 
   //this should be triggered when the next button is pushed
   getNewTask(){
+    console.log(this.keywordsLength - this.keywords.length)
     this.imgData = ""
     console.log('getting ready to send new task!')
     console.log(this.keywords);
@@ -134,9 +134,8 @@ takePic() {
 
     if (this.keywords.length > 0) {
       let keyword = this.keywords.shift();
-      
       console.log('this is the huntID before it is sent! ', this.huntID);
-      
+
       let dataObj = {
         previousPlaces: this.previousPlaces,
         previousTasks: this.previousTasks,
@@ -162,7 +161,7 @@ takePic() {
           let content = '<h4>' + this.locName + '</h4><p>' + this.locAddress  + '</p>';
           this.map = this.googleMaps.loadMap(this.locLat, this.locLng, 15, content, this.map);
         });
-        
+
     } else {
       console.log('no more tasks!');
       console.log(this.previousTasks);
@@ -174,17 +173,26 @@ takePic() {
 
   searchComplete(){
     console.log(this.previousTasks);
+    let dataObj = {
+      huntID: this.huntID
+    }
+    this._taskService.postData(JSON.stringify(dataObj), this.HUNT_URL)
+        .then(result => {
+         this.finalData = result.tasks
+          console.log("+++line 179 in tasks.js data: ", result)
+      })
     this.endTime = new Date().toLocaleTimeString();
+    this.endTimeUnix = Date.now();
     localStorage.endTime = this.endTime;
     this.startTime = localStorage.startTime;
-    
+    this.startTimeUnix = localStorage.startTimeUnix;
+
     this.googleMaps.finalMapMaker(this.previousPlaces, this.previousTasks)
       .then(data => {
         let flightPath = data;
       });
-      
-    this.finalDist = this.googleMaps.calcDistance(this.previousPlaces);
 
+    this.finalDist = this.googleMaps.calcDistance(this.previousPlaces);   
   }
 
   sendFeedback(val){
@@ -192,20 +200,19 @@ takePic() {
       console.log('sending good feedback!');
       this.feedback = "good";
     }
-    
+
     if (val === 2) {
       console.log('sending bad feedback!');
       this.feedback = "bad";
     }
-    
     let userFeedback = {
           token: localStorage.id_token,
           huntID: this.huntID,
-          endTime: localStorage.endTime,
+          endTime: this.endTimeUnix,
           distance: this.finalDist,
           feedback: this.feedback
     };
-    
+
     this._taskService.postData(JSON.stringify(userFeedback), this.FEEDBACK_URL)
       .then(result => {
         this.nav.setRoot(TemplatePage);
@@ -222,6 +229,36 @@ takePic() {
       this.completeToggle = false;
     }
     return this.completeToggle;
+  }
+
+  share(message, subject, file) {
+    if(window.plugins.socialsharing) {
+      window.plugins.socialsharing.share(message, subject, file, this.link);
+    }
+  }
+
+  shareViaTwitter(message, image) {
+    if(window.plugins.socialsharing) {
+      window.plugins.socialsharing.canShareVia("twitter", message, null, image, this.link, result => {
+          window.plugins.socialsharing.shareViaTwitter(message, image, link);
+      }, error => {
+          console.log(error);
+      });
+    }
+  }
+
+  shareWeb(text) {
+    console.log(this.link);
+  }
+
+  shareWebTwitter(text) {
+    console.log(this.link);
+  }
+  
+  chat(event) {
+    this.nav.push(Chat, {
+      huntID: this.huntID
+    });
   }
 
 }

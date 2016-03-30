@@ -7,6 +7,8 @@ const config = require('../config/config.js');
 const makeHunt = require('../lib/hunt/createEntireHunt.js');
 const createNewHunt = require('../lib/hunt/createNewHuntID.js');
 const createFeedback = require('../lib/hunt/createFeedback.js');
+const imageHandling = require('../lib/image/imagePromises.js');
+const singleHunt = require('../lib/hunt/returnSingleHunt.js');
 
 module.exports = {
   huntMaker: (req, res) => {
@@ -56,5 +58,38 @@ module.exports = {
       .catch(error => {
          console.log('Error with creating feedback: ', error);
       });
+   },
+
+
+   upload: (req, res) => {
+    let image = req.body.image;
+    let huntID = req.body.huntID;
+    let id = req.body.huntID + "_" + req.body.count;
+    imageHandling.sendToS3(image, id)
+    .then(url => {
+      imageHandling.insertURLIntoDB(huntID, url)
+      .then(url => {
+        res.json({url: url});
+      })
+    }).catch(error => console.error(error));
+  },
+
+  getHuntImages: (req, res) => {
+    let huntID = req.body.huntID;
+    imageHandling.getImagesBasedOnHunt(huntID)
+    .then(imageURLArray => {
+      res.json({urls: imageURLArray});
+    }).catch(error => console.error(error));
+  },
+
+   retrieveSingleHunt: (req, res) => {
+     let huntID = req.body.huntID;
+
+     singleHunt.retrieveHunt(huntID)
+     .then(huntData => {
+       console.log("hunt data retrieved", huntData);
+       res.json(huntData);
+     })
+     .catch(error => console.error(error));
    }
 }

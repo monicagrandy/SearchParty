@@ -7,6 +7,7 @@ import {LogIn} from './pages/users/log-in';
 import {TemplatePage} from './pages/templates/templates';
 import {TaskPage} from './pages/tasks/tasks';
 import {ProfilePage} from './pages/profile/profile';
+import {Chat} from './pages/chat/chat';
 import {enableProdMode} from 'angular2/core';
 
 enableProdMode();
@@ -45,13 +46,13 @@ export class MyApp {
     this.initializeApp();
 
     //set our app's pages
-    
+
     this.pages = [
       { title: 'Hunts', component: TemplatePage },
       { title: 'My Profile', component: ProfilePage },
       { title: 'Log Out', component: LogIn }
     ];
-    
+
     // unauthenticated pages
     this.unauthPages = [
       { title: 'Log In', component: LogIn }
@@ -61,7 +62,7 @@ export class MyApp {
 
   initializeApp() {
     this.platform.ready().then(() => {
-    
+
       // The platform is now ready. Note: if this callback fails to fire, follow
       // the Troubleshooting guide for a number of possible solutions:
       //
@@ -79,7 +80,7 @@ export class MyApp {
     });
   }
 
-  openPage(page) { 
+  openPage(page) {
     // close the menu when clicking a link from the menu
     this.menu.close();
     //this.setPages();
@@ -92,4 +93,5 @@ export class MyApp {
     let nav = this.app.getComponent('nav');
       nav.push(page.component);
   }
+  
 }
