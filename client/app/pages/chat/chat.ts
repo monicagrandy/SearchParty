@@ -81,16 +81,15 @@ export class Chat {
 
   OnKey(event:KeyboardEvent) {
      console.log('this is the keyup event ', event);
-     if (event.which !== 13) {
+     if (event) {
         console.log('ln 84: ', this.typing);
         if (this.typing === false) {
            this.typing = true;
            console.log('emitting true for typing', this.typing);
            this.socket.emit('typing', true);
+           clearTimeout(this.timeout);
+           this.timeout = setTimeout(this.timeoutFunction.bind(this), 1500);
         }
-     } else {
-        clearTimeout(this.timeout);
-        this.timeout = setTimeout(this.timeoutFunction.bind(this), 1000);
      }
  }
 
