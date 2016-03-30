@@ -75,7 +75,7 @@ io.on('connection', socket => {
   socket.on('chat_message', (msg, username) => {
     console.log('socket: ', msg, username);
     io.emit('chat_message', msg, username);
-    chatPromises.addChatMessageToDB(msg, 'cNkgYkThXAx', username);
+    // chatPromises.addChatMessageToDB(msg, 'cNkgYkThXAx', username);
   });
 
   socket.on('disconnect', () => {

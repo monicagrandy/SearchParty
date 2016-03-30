@@ -58,7 +58,14 @@ export class TaskPage {
   finalData: any;
 
 
-  constructor(platform: Platform, private nav: NavController, navParams: NavParams, private _taskService: TaskService, private googleMaps: GoogleMapService, _zone: NgZone) {
+  constructor(
+    platform: Platform,
+    private nav: NavController,
+    navParams: NavParams,
+    private _taskService: TaskService,
+    private googleMaps: GoogleMapService,
+    _zone: NgZone
+  ) {
     this.keywordsLength = this.keywords.length;
 
     this._zone = _zone;
@@ -192,7 +199,7 @@ takePic() {
         let flightPath = data;
       });
 
-    this.finalDist = this.googleMaps.calcDistance(this.previousPlaces);   
+    this.finalDist = this.googleMaps.calcDistance(this.previousPlaces);
   }
 
   sendFeedback(val){
@@ -254,7 +261,7 @@ takePic() {
   shareWebTwitter(text) {
     console.log(this.link);
   }
-  
+
   chat(event) {
     this.nav.push(Chat, {
       huntID: this.huntID

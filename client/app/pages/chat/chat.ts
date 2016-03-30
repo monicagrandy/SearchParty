@@ -2,12 +2,19 @@ import {Page, NavController, NavParams, LocalStorage} from 'ionic-angular';
 import {Http, Headers} from 'angular2/http';
 import {FORM_DIRECTIVES} from 'angular2/common';
 import {JwtHelper} from 'angular2-jwt';
+import {ConnectionBackend, HTTP_PROVIDERS} from 'angular2/http';
 import {AuthService} from '../../services/auth/auth-service'
 import {NgZone} from "angular2/core";
+import {ChatService} from '../../services/chat/chat-service';
 // import {io} from "socket.io"
 
 @Page({
   templateUrl: 'build/pages/chat/chat.html',
+  providers: [
+    ConnectionBackend,
+    HTTP_PROVIDERS,
+    ChatService
+  ],
   directives: [FORM_DIRECTIVES]
 })
 export class Chat {
@@ -21,11 +28,16 @@ export class Chat {
    timoutFunction: any;
    jwtHelper: JwtHelper = new JwtHelper();
    typing: boolean;
+   ADD_MESSAGE_URL: string = 'http://localhost:8000/addChatMessage';
+   GET_MESSAGES_URL: string = 'https://getsearchparty.com/getChatMessages';
+   huntID: any;
+
 
    constructor(
       private http: Http,
       private nav: NavController,
-      private navParams: NavParams
+      navParams: NavParams,
+      private _chatService: ChatService
    ) {
      let socket = io.connect('http://localhost:8000');
      this.timeout = undefined;
@@ -35,6 +47,8 @@ export class Chat {
      if (this.token) {
        this.username = this.jwtHelper.decodeToken(this.token).username;
      }
+
+     this.huntID = navParams.get('huntID');
 
      this.messages = [];
      this.zone = new NgZone({enableLongStackTrace: false});
@@ -67,10 +81,22 @@ export class Chat {
      }
  }
 
-
   send(message) {
     if (message && message !== "") {
-      this.socket.emit("chat_message", message, this.username);
+      console.log("username inside chat.ts", this.username);
+      console.log("message inside chat.ts", message);
+
+      let messageObject = {
+        username: this.username,
+        huntID: this.huntID,
+        message: message
+      };
+
+      this._chatService.postData(JSON.stringify(messageObject), this.ADD_MESSAGE_URL)
+      .then(messageAdded => {
+        this.socket.emit("chat_message", messageAdded, this.username);
+      }).catch(error => console.error(error))
+
     }
     this.chatBox = "";
   }
