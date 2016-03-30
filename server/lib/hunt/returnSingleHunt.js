@@ -7,7 +7,8 @@ module.exports = {
   retrieveHunt: huntID => {
     const retrieveEntireHuntQuery =
     `MATCH (hunt:Hunt{huntID:"${huntID}"})-[:OCCURRED_AT*]->(place)-[:INCLUDES*]->(task)
-    MATCH (hunt)-[:HAS_CHAT*]->(chatInfo)-[*]->(message)
+    MATCH (hunt)-[:HAS_CHAT*]->(chatInfo)
+    OPTIONAL MATCH (chatInfo)-[*]->(message)
     WITH COLLECT(DISTINCT task) AS tasks, COLLECT(DISTINCT place) AS places, COLLECT(DISTINCT message) AS messages, hunt, chatInfo
     RETURN {places: places, tasks: tasks, messages: messages, huntData: hunt, chatData: chatInfo}
     `;
