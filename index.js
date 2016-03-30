@@ -55,20 +55,22 @@ io.on('connection', socket => {
      //iterating backwards in an array, so we use a stack
      let tempStack = [];
      for(let messages of data) {
-        if(messages.username) {
-           tempStack.push(messages);
-        }
+       if(messages.username) {
+        tempStack.push(messages);
+       }
      }
-
      while(tempStack.length >= 0 ) {
-        let last = tempStack[tempStack.length-1];
-        io.emit('chat_message', last.text, last.username);
-        tempStack.pop();
+       let last = tempStack[tempStack.length-1];
+       io.emit('chat_message', last.text, last.username);
+       tempStack.pop();
+     }
+   });
 
+    socket.on('location', location => {
+      if (location.id != userInfo.id) {
+         location_callback(location);
       }
-
-
- })
+    });
 
   socket.on('chat_message', (msg, username) => {
     console.log('socket: ', msg, username);

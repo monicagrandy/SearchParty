@@ -3,11 +3,15 @@
     <ion-icon name="menu"></ion-icon>
   </button>
   <ion-title *ngIf="tasksLeft">Current Task</ion-title>
-  <ion-title *ngIf="!tasksLeft">Congratulations {{user}}!</ion-title>
+  <ion-title *ngIf="!tasksLeft">You're Done!</ion-title>
+  <ion-buttons end>
+    <button (click)="chat($event)">
+      <ion-icon name="chatbubbles"></ion-icon>
+    </button>
+  </ion-buttons>
 </ion-navbar>
 
 <ion-content class="has-header cards-bg">
-  
   <ion-card class="adv-map">
     <div style="position: relative">
       <ion-item *ngIf="tasksLeft">
@@ -15,7 +19,7 @@
         <h2>{{locAddress}}</h2>
       </ion-item>
       <ion-item *ngIf="!tasksLeft">
-        <h2>You completed <strong>{{previousTasks.length}}</strong> tasks and travelled <strong>{{finalDist}}</strong> miles</h2>
+        <h2><strong>{{user}}'s Final Stats</strong></h2>
       </ion-item>
       <div id="map"></div>
     </div>
@@ -24,37 +28,64 @@
       <h3>Current challenge</h3>
       <p>{{currChallenge}}</p> 
     </ion-item>
-    <ion-item *ngIf="!tasksLeft">
-      <h3>You started this hunt at:</h3>
-        <p>{{startTime}}</p> 
-      <h3>and ended at:</h3>
-        <p>{{endTime}}</p> 
-    </ion-item>
     <ion-item *ngIf="tasksLeft">
       <ion-label>Mark Complete</ion-label>
       <ion-checkbox secondary [checked]="completeToggle" (click)="markComplete()"></ion-checkbox>
     </ion-item>
-    <button *ngIf="completeToggle" primary clear item-right (click)="takePic()">  
-      Take Photo
-    </button>
-    <ion-item *ngIf="completeToggle">
-      <p>Img Here</p>
-      <img src="{{imgData}}">
-    </ion-item>
-    <button primary clear item-right *ngIf="completeToggle && tasksLeft" (click)="getNewTask()">  
-      Next Task
-    </button>
-    <ion-item *ngIf="!showMobileSharing">
-      <h4>Share Your Hunt!</h4>
-      <button default (click)="shareWeb('I am going on an adventure! Follow me on Search Party!', 'Search Party is Starting')">Share</button>
-      <button default (click)="shareWebTwitter('I am going on an adventure! Follow me on Search Party! @SearchPartyApp')">Share on Twitter</button>
-    </ion-item>
-    <ion-item *ngIf="showMobileSharing">
-      <h4>Share Your Hunt!</h4>
-      <button default (click)="share('I am going on an adventure! Follow me on Search Party!', 'Search Party is Starting', null)">Share</button>
-      <button default (click)="shareViaTwitter('I am going on an adventure! Follow me on Search Party! @SearchPartyApp', null)">Share on Twitter</button>
+    <ion-item *ngIf="completeToggle && tasksLeft">
+      <button primary clear item-right (click)="takePic()">Take Photo<ion-icon name="camera"></ion-icon></button>
+      <button primary clear item-right (click)="getNewTask()">  
+        Next Task<ion-icon name="arrow-forward"></ion-icon>
+      </button>
     </ion-item>
   </ion-card>
+
+  <ion-card *ngIf="imgData">
+    <img src="{{imgData}}">
+  </ion-card>
+
+  <ion-card *ngIf="!tasksLeft">
+    <ion-item>
+      <h3>Started hunt at:</h3>
+      <p>{{startTime}}</p>
+    </ion-item>
+    <ion-item>     
+      <h3>Ended hunt at:</h3>
+      <p>{{endTime}}</p> 
+    </ion-item>
+    <ion-item>
+      <h3>Distance travelled:</h3>
+      <p>{{finalDist}} miles</p>
+    </ion-item>   
+  </ion-card>
+
+  <ion-card *ngIf="!tasksLeft">
+    <ion-item>
+      <h2>HuntSummary:</h2>
+    </ion-item>
+    <ion-item *ngFor="#obj of finalData">
+      <p>{{obj.place.name}}</p>
+      <p>{{obj.task.content}}</p>
+      <img *ngIf="obj.image" src="{{obj.image.url}}">
+    </ion-item>
+  </ion-card>
+
+
+<!--   <ion-card *ngIf="!tasksLeft && allImages">
+    <ion-item>
+      <h2>HuntSummary:</h2>
+    </ion-item>
+    <ion-item *ngFor="#task of previousTasks">
+    <ion-item *ngFor="#place of previousPlaces">
+    <ion-item *ngIf="allImages" *ngFor="#image of allImages">
+      <p>{{task.content}}</p>
+      <p>{{place.name}}</p>
+      <img *ngIf="image" src="{{image.url}}">
+      <img *ngIf="!image" src="https://commons.wikimedia.org/wiki/File:Magnifying_glass_icon.svg">
+    </ion-item>
+    </ion-item>
+    </ion-item>
+  </ion-card> -->
 
   <ion-card *ngIf="!tasksLeft">
     <ion-list>
@@ -72,6 +103,22 @@
         </button>
       </ion-item>
     </ion-list>  
+  </ion-card>
+
+    <ion-card *ngIf="!showMobileSharing">
+      <ion-item >
+        <h4>Share Your Hunt!</h4>
+        <button default (click)="shareWeb('I am going on an adventure! Follow me on Search Party!', 'Search Party is Starting')">Share</button>
+        <button default (click)="shareWebTwitter('I am going on an adventure! Follow me on Search Party! @SearchPartyApp')">Share on Twitter</button>
+      </ion-item>
+    </ion-card>
+
+    <ion-card *ngIf="showMobileSharing">
+      <ion-item>
+        <h4>Share Your Hunt!</h4>
+        <button default (click)="share('I am going on an adventure! Follow me on Search Party!', 'Search Party is Starting', null)">Share</button>
+        <button default (click)="shareViaTwitter('I am going on an adventure! Follow me on Search Party! @SearchPartyApp', null)">Share on Twitter</button>
+    </ion-item>
   </ion-card>
 
 </ion-content>
