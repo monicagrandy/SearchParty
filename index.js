@@ -46,6 +46,12 @@ io.attach(httpsServer);
 
 io.on('connection', socket => {
   console.log('a user connected');
+  
+  socket.on('location', location => {
+    if (location.id != userInfo.id) {
+        location_callback(location);
+    }
+  });
 
   socket.on('chat_message', msg => {
     io.emit('chat_message', msg);
