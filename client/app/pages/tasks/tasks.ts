@@ -48,14 +48,14 @@ export class TaskPage {
   image: any;
   imgData: string;
   finalDist: any;
-  IMAGES_URL: string = 'http://172.20.10.2:8000/getPics';
+  HUNT_URL: string = 'https://getsearchparty.com/singleHunt';
   TASKS_URL: string = 'https://getsearchparty.com/tasks';
   FEEDBACK_URL: string = 'https://getsearchparty.com/feedback';
-  UPLOAD_URL: string = 'http://172.20.10.2:8000/upload';
+  UPLOAD_URL: string = 'https://getsearchparty.com/upload';
   feedback: string;
   showMobileSharing: boolean;
   link: string;
-  allImages: any;
+  finalData: any;
 
 
   constructor(platform: Platform, private nav: NavController, navParams: NavParams, private _taskService: TaskService, private googleMaps: GoogleMapService, _zone: NgZone) {
@@ -176,13 +176,11 @@ takePic() {
     let dataObj = {
       huntID: this.huntID
     }
-    setTimeout(() => {
-      this._taskService.postData(JSON.stringify(dataObj), this.IMAGES_URL)
+    this._taskService.postData(JSON.stringify(dataObj), this.HUNT_URL)
         .then(result => {
-          this.allImages = result.urls[0]
-          console.log("+++line 179 in tasks.js", this.allImages)
-        })
-    }, 3000)
+         this.finalData = result.tasks
+          console.log("+++line 179 in tasks.js data: ", result)
+      })
     this.endTime = new Date().toLocaleTimeString();
     this.endTimeUnix = Date.now();
     localStorage.endTime = this.endTime;
