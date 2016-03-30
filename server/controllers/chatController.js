@@ -6,7 +6,8 @@ const config = require('../config/config.js');
 
 module.exports = {
   insertChatMessage: (req, res) => {
-    //expecting req to have a chatID, text, username, and datetime property
+
+    console.log("request body ", req.body);
     let huntID = req.body.huntID;
 
     let messageBody = {
@@ -15,10 +16,12 @@ module.exports = {
       datetime: Date.now()
     };
 
+    console.log("message body? ", messageBody);
+
     chatPromises.addChatMessageToDB(messageBody, huntID)
     .then(messageAdded => {
       console.log('message added in chat controller', messageAdded);
-      res.json({"messageAdded": messageAdded});
+      res.json(messageAdded);
     })
     .catch(error => console.error(error));
   },

@@ -2,6 +2,7 @@ import {Page, NavController, NavParams, LocalStorage} from 'ionic-angular';
 import {Http, Headers} from 'angular2/http';
 import {FORM_DIRECTIVES} from 'angular2/common';
 import {JwtHelper} from 'angular2-jwt';
+import {ConnectionBackend, HTTP_PROVIDERS} from 'angular2/http';
 import {AuthService} from '../../services/auth/auth-service'
 import {NgZone} from "angular2/core";
 import {ChatService} from '../../services/chat/chat-service';
@@ -27,7 +28,7 @@ export class Chat {
    timoutFunction: any;
    jwtHelper: JwtHelper = new JwtHelper();
    typing: boolean;
-   ADD_MESSAGE_URL: string = 'https://getsearchparty.com/addChatMessage';
+   ADD_MESSAGE_URL: string = 'http://localhost:8000/addChatMessage';
    GET_MESSAGES_URL: string = 'https://getsearchparty.com/getChatMessages';
    huntID: any;
 
@@ -82,6 +83,9 @@ export class Chat {
 
   send(message) {
     if (message && message !== "") {
+      console.log("username inside chat.ts", this.username);
+      console.log("message inside chat.ts", message);
+
       let messageObject = {
         username: this.username,
         huntID: this.huntID,

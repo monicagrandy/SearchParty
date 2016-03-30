@@ -4,7 +4,7 @@ const messageFormatter = require('./formatChatMessageForDB.js');
 
 module.exports = {
   addChatMessageToDB: (messageBody, huntID) => {
-    console.log("message body", messageBody);
+    console.log("message body insdie of chat promises", messageBody);
 
      let formattedMessageObject = messageFormatter.formatChatMessageWithProps(messageBody);
      console.log("formatted chat object ", formattedMessageObject);
