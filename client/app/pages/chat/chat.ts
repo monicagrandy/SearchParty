@@ -20,6 +20,7 @@ export class Chat {
    timeout: any;
    timoutFunction: any;
    jwtHelper: JwtHelper = new JwtHelper();
+   typing: boolean;
 
    constructor(
       private http: Http,
@@ -27,8 +28,8 @@ export class Chat {
       private navParams: NavParams
    ) {
      let socket = io.connect('http://localhost:8000');
-     let typing = false;
-     let timeout = undefined;
+     this.timeout = undefined;
+     this.typing = false;
 
      this.token = localStorage.id_token;
      if (this.token) {
@@ -44,41 +45,55 @@ export class Chat {
           console.log(this.messages);
          this.messages.push([username +": "+ msg]);
        });
-       //clear typing field
-       //TODO: remove username div here too;
-      //  clearTimeout(timout);
-      //  timeout = setTimeout(timeoutFunction, 0);
+       clearTimeout(this.timeout);
+       this.timeout = setTimeout(this.timeoutFunction, 0);
      });
+     //  clear typing field
+     //  TODO: remove username div here too;
 
-     //See when someone is typing:
-//       function timeoutFunction() {
-//         typing = false;
-//         socket.emit("typing", false);
-//       }
-//
-//       //:::UPON USER TYPING, SEND TYPING MESSAGE TO SERVER:::
-//       function sendTyping(characters) => {
-//          if(characters > 0) {
-//             typing = true;
-//             socket.emit("typing", true);
-//          } else {
-//             clearTimeout(timeout);
-//             timeout = setTimeout(timeoutFunction, 5000);
-//          }
-//       }
-//
-//       //:::UPON USER RECEIVING isTyping FROM SERVER, DISPLAY IT:::
-//       socket.on("isTyping", function(message, username) {
-//          console.log('Message & : ', message, username);
-//        if (data.isTyping) {
-//           timeout = setTimeout(timeoutFunction, 5000);
-//           //Append ionic username div
-//        } else {
-//           //Remove ionic username div
-//        }
-//       });
-// }
+      //:::UPON USER TYPING, SEND TYPING MESSAGE TO SERVER:::
+      // sendTyping(characters) => {
+      //    if(characters > 0) {
+      //       typing = true;
+      //       socket.emit("typing", true);
+      //    } else {
+      //       clearTimeout(timeout);
+      //       timeout = setTimeout(timeoutFunction, 5000);
+      //    }
+      // }
+
+      //:::UPON USER RECEIVING isTyping FROM SERVER, DISPLAY IT:::
+      // socket.on("isTyping", function(message, username) {
+      //    console.log('Message & : ', message, username);
+      //  if (message && username) {
+      //     timeout = setTimeout(timeoutFunction, 5000);
+      //     //Append ionic username div
+      //  } else {
+      //     //Remove ionic username div
+      //  }
+      // });
 }
+
+   timeoutFunction() {
+      this.typing = false;
+      this.socket.emit('typing', false);
+   }
+
+  OnKey(event:KeyboardEvent) {
+     console.log('this is the keyup event ', event);
+     if (event.which !== 13) {
+        console.log('ln 84: ', this.typing);
+        if (this.typing === false) {
+           this.typing = true;
+           console.log('emitting true for typing', this.typing);
+           this.socket.emit('typing', true);
+        }
+     } else {
+        clearTimeout(this.timeout);
+        this.timeout = setTimeout(this.timeoutFunction.bind(this), 1000);
+     }
+ }
+
 
   send(message) {
     if (message && message !== "") {

@@ -56,9 +56,10 @@ io.on('connection', socket => {
     console.log('user disconnected');
   });
 
-  socket.on("typing", function(message, username) {
-    if (message && username){
-      io.emit("isTyping", message, username);
-    };
+  socket.on('typing', data => {
+   //  if (message && username) {
+      console.log('is typing', data);
+      io.emit('isTyping', data);
+   //  };
   });
  });
