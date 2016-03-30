@@ -8,12 +8,12 @@
 <ion-content>
   <ion-list>
       <ion-item *ngFor="#message of messages">{{message}}</ion-item>
-      <ion-item *ngIf="typing" >{{username}}+" is typing..."</ion-item>
+      <!-- <ion-item *ngIf="typing" >{{username}}+" is typing..."</ion-item> -->
   </ion-list>
 </ion-content>
 
 <ion-toolbar position="bottom">
-  <ion-input type="text" ng-keyup="count = count + 1" ng-keydown ="count = count - 1" ng-init="count = 0" [(ngModel)]="chatBox" placeholder="Message...">
+  <ion-input type="text" [(ngModel)]="chatBox" placeholder="Message...">
   </ion-input>
   <ion-buttons end>
     <button (click)="send(chatBox)">

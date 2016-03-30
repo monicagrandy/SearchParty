@@ -47,8 +47,9 @@ io.attach(httpsServer);
 io.on('connection', socket => {
   console.log('a user connected');
 
-  socket.on('chat_message', msg => {
-    io.emit('chat_message', msg);
+  socket.on('chat_message', (msg, username) => {
+     console.log('socket: ', msg, username);
+    io.emit('chat_message', msg, username);
   });
 
   socket.on('disconnect', () => {
