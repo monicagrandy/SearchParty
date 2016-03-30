@@ -4,10 +4,12 @@ import {FORM_DIRECTIVES} from 'angular2/common';
 import {JwtHelper} from 'angular2-jwt';
 import {AuthService} from '../../services/auth/auth-service'
 import {NgZone} from "angular2/core";
+import {ChatService} from '../../services/chat/chat-service';
 // import {io} from "socket.io"
 
 @Page({
   templateUrl: 'build/pages/chat/chat.html',
+  providers: [ChatService]
   directives: [FORM_DIRECTIVES]
 })
 export class Chat {
@@ -21,12 +23,16 @@ export class Chat {
    timoutFunction: any;
    jwtHelper: JwtHelper = new JwtHelper();
    typing: boolean;
+   ADD_MESSAGE_URL: string = 'https://getsearchparty.com/addChatMessage';
+   GET_MESSAGES_URL: string = 'https://getsearchparty.com/getChatMessages';
+   huntID: any;
 
 
    constructor(
       private http: Http,
       private nav: NavController,
-      private navParams: NavParams
+      navParams: NavParams,
+      private _chatService: ChatService
    ) {
      let socket = io.connect('http://localhost:8000');
      this.timeout = undefined;
@@ -36,6 +42,8 @@ export class Chat {
      if (this.token) {
        this.username = this.jwtHelper.decodeToken(this.token).username;
      }
+
+     this.huntID = navParams.get('huntID');
 
      this.messages = [];
      this.zone = new NgZone({enableLongStackTrace: false});
@@ -70,7 +78,16 @@ export class Chat {
 
   send(message) {
     if (message && message !== "") {
-      this.socket.emit("chat_message", message, this.username);
+      let messageObject = {
+        token: locaStorage.id_token,
+        huntID: this.huntID
+      };
+
+      this._chatService.postData(JSON.stringify(messageObject), this.ADD_MESSAGE_URL)
+      .then(messageAdded => {
+        this.socket.emit("chat_message", message, this.username);
+      }).catch(error => console.error(error))
+
     }
     this.chatBox = "";
   }
