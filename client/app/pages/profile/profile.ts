@@ -5,6 +5,7 @@ import {AuthService} from '../../services/auth/auth-service';
 import {FORM_DIRECTIVES} from 'angular2/common';
 import {PastHuntsPage} from '../past-hunts/past-hunts';
 import {FriendPage} from '../friend/friend';
+import {FriendsListPage} from '../friends-list/friends-list';
 
 @Page({
   templateUrl: 'build/pages/profile/profile.html',
@@ -76,7 +77,9 @@ export class ProfilePage {
         .catch(error => console.log(error));
   }
 
-  addFriendToHunt(event, hunt) {
-    
+  addFriendToHuntTapped(event, hunt) {
+    this.nav.push(FriendsListPage, {
+      huntID: hunt.stats.huntID
+    })
   }
 }

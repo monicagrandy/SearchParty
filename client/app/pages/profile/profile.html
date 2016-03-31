@@ -36,9 +36,11 @@
       Your Hunts
     </ion-card-header>
     <ion-list>
-      <button ion-item *ngFor="#hunt of hunts" (click)="huntTapped($event, hunt)">
+      <button ion-item *ngFor="#hunt of hunts" >
         <ion-icon name="search" item-left></ion-icon>
-        {{hunt.stats.huntID}}
+        <div (click)="huntTapped($event, hunt)">
+          {{hunt.stats.huntID}}
+        </div>
         <ion-icon name="play" item-right (click)="addFriendToHuntTapped($event, hunt)"></ion-icon>
 
       </button>

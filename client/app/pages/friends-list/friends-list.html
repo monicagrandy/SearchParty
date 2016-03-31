@@ -1,0 +1,25 @@
+<ion-navbar *navbar>
+  <button menuToggle>
+    <ion-icon name="menu"></ion-icon>
+  </button>
+  <ion-title>List of My Friends</ion-title>
+</ion-navbar>
+
+<ion-content>
+  <ion-card>
+    <ion-card-header>
+      Your Friends
+    </ion-card-header>
+    <ion-list *ngIf="friends">
+      <button ion-item *ngFor="#friend of friends" (click)="friendTappedToHunt($event, friend)">
+        <ion-icon name="contact" item-left></ion-icon>
+        {{friend.firstname}} {{friend.lastname}}
+      </button>
+    </ion-list>
+    <ion-list *ngIf="!friends">
+      <p ion-item>
+        You have no friends, so go make some!
+      </p>
+    </ion-list>
+  </ion-card>
+</ion-content>
