@@ -60,6 +60,7 @@ export class TaskPage {
   link: string;
   directionLink: string;
   finalData: any;
+  showURL = false;
 
 
   constructor(
@@ -142,6 +143,7 @@ takePic() {
   getNewTask(){
     console.log(this.keywordsLength - this.keywords.length)
     this.imgData = ""
+    this.showURL = false;
     console.log('getting ready to send new task!')
     console.log(this.keywords);
     console.log('this is the huntID in the tasks! ');
@@ -207,7 +209,7 @@ takePic() {
         let flightPath = data;
       });
 
-    this.finalDist = this.googleMaps.calcDistance(this.previousPlaces);   
+    this.finalDist = this.googleMaps.calcDistance(this.previousPlaces);
   }
 
   sendFeedback(val){
@@ -263,7 +265,9 @@ takePic() {
   }
 
   shareWeb(text) {
+    this.showURL = true
     console.log(this.link);
+    return this.showURL;
   }
 
   chat(event) {
