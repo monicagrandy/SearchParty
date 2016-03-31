@@ -56,13 +56,12 @@ export class ChatComponent {
       });
    });
 
-   this.socket.on("isTyping", (bool, username, room) => {
+   this.socket.on("isTyping", (bool, username) => {
       if(bool === true) {
          this.otherUsername = username;
          this.otherUserTyping = true;
       } else {
-         clearTimeout(this.timeout);
-         this.timeout = setTimeout(this.timeoutFunction2.bind(this), 500);
+         this.otherUserTyping = false;
       }
    });
 
@@ -80,53 +79,44 @@ export class ChatComponent {
         }
       })
    }).catch(error => console.error(error));
-   //Change this later ethan, jesus dude
+   //Change this later
    this.username = window.prompt('Enter a username!', '');
 }
 
-  timeoutFunction() {
-    this.typing = false;
-    this.socket.emit('typing', false);
-  }
+invocation() {
+   this.timeout = setTimeout(
+      () => {
+         this.socket.emit('typing', false, this.username, this.huntID);
+      }, 2500);
+}
 
-  timeoutFunction2() {
-     this.otherUserTyping = false;
-     this.socket.emit('typing', false);
-  }
+OnKey(event:KeyboardEvent) {
+   if (event) {
+     clearTimeout(this.timeout);
+     this.socket.emit('typing', true, this.username, this.huntID);
+     this.invocation();
+   }
+};
 
-  OnKey(event:KeyboardEvent) {
-    console.log('this is the keyup event ', event);
-    if (event) {
-      console.log('ln 84: ', this.typing);
-      if (this.typing === false) {
-        this.typing = true;
-        console.log('emitting true for typing', this.typing);
-        this.socket.emit('typing', true, this.huntID);
-        clearTimeout(this.timeout);
-        this.timeout = setTimeout(this.timeoutFunction.bind(this), 1500);
-      }
-    }
-  }
+send(message) {
+ if (message && message !== "") {
 
-  send(message) {
-    if (message && message !== "") {
+   let messageObject = {
+     username: this.username,
+     huntID: this.huntID,
+     message: message
+   };
 
-      let messageObject = {
-        username: this.username,
-        huntID: this.huntID,
-        message: message
-      };
+   this._chatService.postData(JSON.stringify(messageObject), this.ADD_MESSAGE_URL)
+   .then(messageAdded => {
+     messageAdded = messageAdded[0];
+     console.log("message  added", messageAdded);
+     this.socket.emit("chat_message", messageAdded.text, messageAdded.username, messageAdded.datetime, this.huntID);
+  }).catch(error => {
+     console.error(error)
+  });
 
-      this._chatService.postData(JSON.stringify(messageObject), this.ADD_MESSAGE_URL)
-      .then(messageAdded => {
-        messageAdded = messageAdded[0];
-        console.log("message  added", messageAdded);
-        this.socket.emit("chat_message", messageAdded.text, messageAdded.username, messageAdded.datetime, this.huntID);
-     }).catch(error => {
-        console.error(error)
-     });
-
-    }
-    this.chatBox = "";
-  }
+ }
+ this.chatBox = "";
+}
 }

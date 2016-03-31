@@ -31,6 +31,11 @@ export class Chat {
   ADD_MESSAGE_URL: string = 'http://localhost:8000/addChatMessage';
   GET_MESSAGES_URL: string = 'http://localhost:8000/getChatMessages';
   huntID: any;
+  token: any;
+  id_token: any;
+  otherUserTyping: any;
+  otherUsername: any;
+  chatMessages: any;
 
    constructor(
       private http: Http,
@@ -51,7 +56,7 @@ export class Chat {
    this.zone = new NgZone({enableLongStackTrace: false});
    this.chatBox = "";
    this.socket = socket;
-   
+
    this.socket.on("connect", () => {
       this.socket.emit('huntChatRoom', this.huntID);
    });
@@ -90,16 +95,17 @@ export class Chat {
 };
 
 invocation() {
-   this.timeout = window.setTimeout(
-      ()=>{
+   this.timeout = setTimeout(
+      () => {
          this.socket.emit('typing', false, this.username, this.huntID);
-      }
-), 1000};
+         console.log('false called');
+      }, 2500);
+};
 
 OnKey(event:KeyboardEvent) {
    if (event) {
-     clearTimeout(this.timeout);
      this.socket.emit('typing', true, this.username, this.huntID);
+     clearTimeout(this.timeout);
      this.invocation();
    }
 };
