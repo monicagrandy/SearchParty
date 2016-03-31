@@ -63,7 +63,7 @@ export class Chat {
       });
    });
 
-   this.socket.on("typing", (username, room) => {
+   this.socket.on("isTyping", (username, room) => {
       this.otherUsername = username;
       this.otherUserTyping = true;
    }
@@ -89,11 +89,16 @@ export class Chat {
     this.socket.emit('typing', false);
   }
 
+  timeoutFunction2() {
+     this.otherUserTyping = false;
+     this.socket.emit('typing', )
+ }
+
   OnKey(event:KeyboardEvent) {
     if (event) {
       if (this.typing === false) {
         this.typing = true;
-        this.socket.emit('typing', this.username, this.huntID);
+        this.socket.emit('typing', true, this.username, this.huntID);
         clearTimeout(this.timeout);
         this.timeout = setTimeout(this.timeoutFunction.bind(this), 1500);
       }
