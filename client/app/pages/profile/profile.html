@@ -42,7 +42,7 @@
       Ongoing Hunts
     </ion-card-header>
     <ion-list>
-      <button ion-item *ngFor="#hunt of hunts | HuntFilterPipe:'feedback'" >
+      <button ion-item *ngFor="#hunt of ongoingHunts" >
         <!-- <div *ngIf="!hunt.feedback.value"> -->
           <div (click)="huntTapped($event, hunt)">
             <ion-icon name="search" item-left></ion-icon>

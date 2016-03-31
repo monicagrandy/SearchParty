@@ -16,7 +16,9 @@ import {HuntFilterPipe} from '../../util/filter-pipe';
 })
 export class ProfilePage {
   local: Storage = new Storage(LocalStorage);
-  hunts: any;
+  ongoingHunts: any;
+  likedHunts: any;
+  dislikedHunts: any;
   token: any;
   friends: any;
   // sample types for hunts and friends
@@ -29,27 +31,33 @@ export class ProfilePage {
     private profileService: ProfileService,
     private auth: AuthService,
     private friendService: FriendService
-    ) {
+  ) {
     this.token = this.local.get('id_token')._result;
 
     console.log('this is the token before it is sent', this.token);
 
-    this.hunts = this.profileService.getProfile(this.token)
-      .then(data => {
-        return new Promise((resolve, reject) => {
-          setTimeout(() => {
-            resolve(data.hunts);
-          }, 2000)
-        })
-      })
-        .catch(error => console.log(error));
+    this.profileService.getProfile(this.token)
+    .then(data => {
+      // this.ongoingHunts = [];
+      for(let i = 0; i < data.hunts.length; i++) {
+        let individualHunt = data.hunts[i];
+        if(!individualHunt.feedback.value) {
+          this.ongoingHunts = individualHunt;
+        } else if(individualHunt.feedback.value === "good") {
+          this.likedHunts.push(individualHunt);
+        } else {
+          this.dislikedHunts.push(individualHunt);
+        }
+      }
+    })
+    .catch(error => console.log(error));
 
     this.friendService.getFriends(this.token)
-      .then(data => {
-        console.log('friends gotten! ', data);
-        this.friends = data;
-      })
-        .catch(error => console.log(error));
+    .then(data => {
+      console.log('friends gotten! ', data);
+      this.friends = data;
+    })
+    .catch(error => console.log(error));
   }
 
   friendTapped(event, friend) {
@@ -68,17 +76,17 @@ export class ProfilePage {
   addFriend(friend) {
     console.log(friend);
     this.friendService.addFriend(this.token, friend)
+    .then(data => {
+      console.log('friend added! ', data);
+      // update friendslist after friend is added
+      this.friendService.getFriends(this.token)
       .then(data => {
-        console.log('friend added! ', data);
-        // update friendslist after friend is added
-        this.friendService.getFriends(this.token)
-          .then(data => {
-            console.log('friends gotten! ', data);
-            this.friends = data;
-          })
-            .catch(error => console.log(error));
+        console.log('friends gotten! ', data);
+        this.friends = data;
       })
-        .catch(error => console.log(error));
+      .catch(error => console.log(error));
+    })
+    .catch(error => console.log(error));
   }
 
   addFriendToHuntTapped(event, hunt) {
