@@ -87,20 +87,20 @@ invocation() {
    this.timeout = setTimeout(
       () => {
          this.socket.emit('typing', false, this.username, this.huntID);
-      }, 2500);
+      }, 1000);
 }
 
 OnKey(event:KeyboardEvent) {
    if (event) {
-     clearTimeout(this.timeout);
      this.socket.emit('typing', true, this.username, this.huntID);
+     clearTimeout(this.timeout);
      this.invocation();
    }
 };
 
 send(message) {
  if (message && message !== "") {
-
+   this.socket.emit('typing', false, this.username, this.huntID);
    let messageObject = {
      username: this.username,
      huntID: this.huntID,

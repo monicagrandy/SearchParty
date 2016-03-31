@@ -4,9 +4,8 @@
       <li *ngFor="#message of messages">
          <h2>{{message[0]}}: {{message[1]}}</h2>
          <p>{{message[2]}}</p>
+         <p*ngIf="otherUserTyping" >{{otherUsername}} is typing...</p>
       </li>
-      <li *ngIf="typing" >{{username}} is typing...</li>
-      <li *ngIf="otherUserTyping" >{{otherUsername}} is typing...</li>
   </ul>
   <form action="">
     <input id="m" autocomplete="off" (keyup)="OnKey($event)" [(ngModel)]="chatBox" placeholder="Message..."/>

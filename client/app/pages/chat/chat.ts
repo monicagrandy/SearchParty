@@ -70,6 +70,7 @@ export class Chat {
    });
 
    this.socket.on("isTyping", (bool, username) => {
+      console.log('INC TYPING :::')
       if(bool === true) {
          this.otherUsername = username;
          this.otherUserTyping = true;
@@ -99,7 +100,7 @@ invocation() {
       () => {
          this.socket.emit('typing', false, this.username, this.huntID);
          console.log('false called');
-      }, 2500);
+      }, 1000);
 };
 
 OnKey(event:KeyboardEvent) {
