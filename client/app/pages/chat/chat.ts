@@ -45,6 +45,7 @@ export class Chat {
    this.huntID = navParams.get('huntID');
    let socket = io.connect('http://localhost:8000');
    this.timeout = undefined;
+   this.timeout2 = undefined;
    this.typing = false;
    this.otherUserTyping = false;
    this.otherUsername = '';
@@ -68,8 +69,8 @@ export class Chat {
          this.otherUsername = username;
          this.otherUserTyping = true;
       } else {
-         clearTimeout(this.timeout);
-         this.timeout = setTimeout(this.timeoutFunction2.bind(this), 500);
+         clearTimeout(this.timeout2);
+         this.timeout2 = setTimeout(this.timeoutFunction2.bind(this), 200);
       }
    });
 
