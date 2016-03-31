@@ -25,7 +25,6 @@ import 'rxjs/add/operator/map';
 
 export class TaskPage {
   title = 'Current Task';
-  tweetcontainer: null;
   map = null;
   local: LocalStorage;
   locAddress: string; //set this to whatever is in local storage
@@ -62,7 +61,12 @@ export class TaskPage {
   link: string;
   directionLink: string;
   finalData: any;
-  showURL = false;
+  text: string;
+  url: string;
+  hashtags: string;
+  via: string;
+  showURL: boolean;
+  encodedTweetLink: any;
 
 
   constructor(
@@ -74,6 +78,7 @@ export class TaskPage {
     private tweetButtonService: TweetButtonService,
     _zone: NgZone
     ) {
+    this.showURL = false;
     this.keywordsLength = this.keywords.length;
     this._zone = _zone;
     this.platform = platform;
@@ -109,6 +114,13 @@ export class TaskPage {
     this.link = `http://localhost:8000/share/#/hunt/${this.huntID}`;
     this.directionLink = `https://www.google.com/maps/dir/${this.userLat},${this.userLong}/${this.locAddress}`;
 
+    // twitter specific link generation
+    this.text = encodeURIComponent('I am going on an adventure! Follow me on Search Party!');
+    this.hashtags = 'searchparty';
+    this.via = 'GetSearchParty';
+    this.url = encodeURIComponent(this.link);
+    this.encodedTweetLink = `https://twitter.com/intent/tweet?hashtags=${this.hashtags}&url=${this.url}&text=${this.text}&via=${this.via}`;
+    
     setTimeout(()=>{ this.googleMaps.loadMap(this.locLat, this.locLng, 15, content, this.map).then(map => this.map = map), 2000 });
     setTimeout(()=>{ this.tweetButtonService.getButton(this.tweetcontainer, this.link).then(button => this.tweetcontainer = button), 2000 });
   }
