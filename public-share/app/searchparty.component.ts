@@ -3,8 +3,7 @@ import {RouteConfig, ROUTER_DIRECTIVES, ROUTER_PROVIDERS, RouteParams} from 'ang
 import {MATERIAL_DIRECTIVES, MATERIAL_PROVIDERS} from 'ng2-material/all';
 import {SearchPartyService} from './searchparty.service';
 import {GoogleMapService} from './map.service';
-import 'rxjs/add/operator/map';
-import * as _ from 'underscore';
+
 
 @Component({
   selector: 'my-searchparty',

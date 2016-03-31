@@ -1,4 +1,4 @@
-System.register(['angular2/core', 'angular2/router', 'ng2-material/all', './searchparty.service', './map.service', 'rxjs/add/operator/map'], function(exports_1, context_1) {
+System.register(['angular2/core', 'angular2/router', 'ng2-material/all', './searchparty.service', './map.service'], function(exports_1, context_1) {
     "use strict";
     var __moduleName = context_1 && context_1.id;
     var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
@@ -28,8 +28,7 @@ System.register(['angular2/core', 'angular2/router', 'ng2-material/all', './sear
             },
             function (map_service_1_1) {
                 map_service_1 = map_service_1_1;
-            },
-            function (_1) {}],
+            }],
         execute: function() {
             SearchPartyComponent = (function () {
                 function SearchPartyComponent(_params, googleMaps, _searchPartyService) {
