@@ -1,12 +1,18 @@
-<h2>Hunt Updates:</h2>
+<h2>Where you've been:</h2>
 
   <div id="map"></div>
 
   <div *ngFor="#obj of huntTasks">
+    <strong>Location</strong>
     <p>{{obj.place.name}}</p>
+    <strong>Challenge</strong>
     <p>{{obj.task.content}}</p>
     <img *ngIf="obj.image" src="{{obj.image.url}}">
-    <img *ngIf="!obj.image" src="http://cricketfeet.com/temp/blogimages/searchparty23.gif">
+  </div>
+
+  <div>
+    <h2>Distance Travelled:</h2>
+    <p>{{totalDist}} miles</p>
   </div>
 
   <h2>Hunt Chat:</h2>

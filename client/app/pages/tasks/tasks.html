@@ -67,7 +67,6 @@
       <p>{{obj.place.name}}</p>
       <p>{{obj.task.content}}</p>
       <img *ngIf="obj.image" src="{{obj.image.url}}">
-      <img *ngIf="!obj.image" src="http://cricketfeet.com/temp/blogimages/searchparty23.gif">
     </ion-item>
   </ion-card>
 
@@ -125,7 +124,7 @@
   <ion-card *ngIf="showURL">
     <ion-item>
     <h4>Your share link:</h4>
-    <p contenteditable="true">{{link}}</p>
+    <input placeholder="{{link}}" value="{{link}}">
     </ion-item>
   </ion-card>
 
