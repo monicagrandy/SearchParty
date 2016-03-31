@@ -68,10 +68,10 @@ export class TaskPage {
 
 
   constructor(
-    platform: Platform, 
-    private nav: NavController, 
-    navParams: NavParams, 
-    private _taskService: TaskService, 
+    platform: Platform,
+    private nav: NavController,
+    navParams: NavParams,
+    private _taskService: TaskService,
     private googleMaps: GoogleMapService,
     _zone: NgZone
     ) {
@@ -117,7 +117,7 @@ export class TaskPage {
     this.via = 'GetSearchParty';
     this.url = encodeURIComponent(this.link);
     this.encodedTweetLink = `https://twitter.com/intent/tweet?hashtags=${this.hashtags}&url=${this.url}&text=${this.text}&via=${this.via}`;
-    
+
     setTimeout(()=>{ this.googleMaps.loadMap(this.locLat, this.locLng, 15, content, this.map).then(map => this.map = map), 2000 });
   }
 

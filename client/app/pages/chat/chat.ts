@@ -53,6 +53,7 @@ export class Chat {
    this.socket.on("connect", () => {
       this.socket.emit('huntChatRoom', this.huntID);
    });
+   this.timeout;
 
    this.socket.on("chat_message", (msg, username, datetime) => {
       this.zone.run(() => {
@@ -85,25 +86,26 @@ export class Chat {
         }
       })
    }).catch(error => console.error(error));
-}
+};
 
-  timerCountDown() => {
-     setTimeout(
-     function() => {
-        this.socket.emit('typing', false);
-     }, 1000);
+invocation() {
+   this.timeout = window.setTimeout(
+      ()=>{
+         this.socket.emit('typing', false, this.username, this.huntID);
+      }
+), 1000};
 
-  OnKey(event:KeyboardEvent) {
-    if (event) {
-     clearTimeout(this.timeCountDown);
+OnKey(event:KeyboardEvent) {
+   if (event) {
+     clearTimeout(this.timeout);
      this.socket.emit('typing', true, this.username, this.huntID);
-     timerCountDown();
-    }
-  }
+     this.invocation();
+   }
+};
 
-  send(message) {
-    if (message && message !== "") {
-
+send(message) {
+   if (message && message !== "") {
+      this.socket.emit('typing', false, this.username, this.huntID);
       let messageObject = {
         username: this.username,
         huntID: this.huntID,
@@ -119,7 +121,7 @@ export class Chat {
         console.error(error)
      });
 
-    }
-    this.chatBox = "";
-  }
+   }
+   this.chatBox = "";
+};
 }
