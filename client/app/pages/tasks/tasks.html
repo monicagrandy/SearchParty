@@ -107,7 +107,7 @@
   </ion-card>
 
     <ion-card *ngIf="!showMobileSharing">
-      <ion-item >
+      <ion-item>
         <h4>Share Your Hunt!</h4>
         <button default (click)="shareWeb('I am going on an adventure! Follow me on Search Party!', 'Search Party is Starting')">Share</button>
         <button default (click)="shareWebTwitter('I am going on an adventure! Follow me on Search Party! @SearchPartyApp')">Share on Twitter</button>
@@ -119,6 +119,13 @@
         <h4>Share Your Hunt!</h4>
         <button default (click)="share('I am going on an adventure! Follow me on Search Party!', 'Search Party is Starting', null)">Share</button>
         <button default (click)="shareViaTwitter('I am going on an adventure! Follow me on Search Party! @SearchPartyApp', null)">Share on Twitter</button>
+    </ion-item>
+  </ion-card>
+
+  <ion-card *ngIf="showURL">
+    <ion-item>
+    <h4>Your share link:</h4>
+    <p contenteditable="true">{{link}}</p>
     </ion-item>
   </ion-card>
 

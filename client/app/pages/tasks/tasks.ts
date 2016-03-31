@@ -56,6 +56,7 @@ export class TaskPage {
   showMobileSharing: boolean;
   link: string;
   finalData: any;
+  showURL = false;
 
 
   constructor(platform: Platform, private nav: NavController, navParams: NavParams, private _taskService: TaskService, private googleMaps: GoogleMapService, _zone: NgZone) {
@@ -127,6 +128,7 @@ takePic() {
   getNewTask(){
     console.log(this.keywordsLength - this.keywords.length)
     this.imgData = ""
+    this.showURL = false;
     console.log('getting ready to send new task!')
     console.log(this.keywords);
     console.log('this is the huntID in the tasks! ');
@@ -248,7 +250,9 @@ takePic() {
   }
 
   shareWeb(text) {
+    this.showURL = true
     console.log(this.link);
+    return this.showURL;
   }
 
   shareWebTwitter(text) {
