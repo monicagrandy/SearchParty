@@ -1,4 +1,4 @@
-System.register(['angular2/core', 'angular2/http', 'angular2/router', 'ng2-material/all', './searchparty.component', 'rxjs/add/operator/map', 'underscore'], function(exports_1, context_1) {
+System.register(['angular2/core', 'angular2/http', 'angular2/router', 'ng2-material/all', './searchparty.component', 'underscore'], function(exports_1, context_1) {
     "use strict";
     var __moduleName = context_1 && context_1.id;
     var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
@@ -29,9 +29,8 @@ System.register(['angular2/core', 'angular2/http', 'angular2/router', 'ng2-mater
             function (searchparty_component_1_1) {
                 searchparty_component_1 = searchparty_component_1_1;
             },
-            function (_1) {},
-            function (_2) {
-                _ = _2;
+            function (_1) {
+                _ = _1;
             }],
         execute: function() {
             AppComponent = (function () {
