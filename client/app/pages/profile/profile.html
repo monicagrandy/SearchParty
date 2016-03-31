@@ -33,17 +33,53 @@
 
   <ion-card>
     <ion-card-header>
-      Your Hunts
+      Ongoing Hunts
     </ion-card-header>
     <ion-list>
       <button ion-item *ngFor="#hunt of hunts" >
-        <div (click)="huntTapped($event, hunt)">
-          <ion-icon name="search" item-left></ion-icon>
-          {{hunt.stats.huntID}}
+        <div *ngIf="!hunt.feedback.value">
+          <div (click)="huntTapped($event, hunt)">
+            <ion-icon name="search" item-left></ion-icon>
+            {{hunt.stats.huntID}}
+            <ion-icon name="person-add" item-right (click)="addFriendToHuntTapped($event, hunt)"></ion-icon>
+          </div>
         </div>
-        <ion-icon name="person-add" item-right (click)="addFriendToHuntTapped($event, hunt)"></ion-icon>
-
       </button>
     </ion-list>
   </ion-card>
+
+  <ion-card>
+    <ion-card-header>
+      Liked Completed Hunts
+    </ion-card-header>
+    <ion-list>
+      <button ion-item *ngFor="#hunt of hunts" >
+        <div *ngIf="hunt.feedback.value === 'good' ">
+          <div (click)="huntTapped($event, hunt)">
+            <ion-icon name="search" item-left></ion-icon>
+            {{hunt.stats.huntID}}
+            <ion-icon name="person-add" item-right (click)="addFriendToHuntTapped($event, hunt)"></ion-icon>
+          </div>
+        </div>
+      </button>
+    </ion-list>
+  </ion-card>
+
+  <ion-card>
+    <ion-card-header>
+      Disliked Completed Hunts
+    </ion-card-header>
+    <ion-list>
+      <button ion-item *ngFor="#hunt of hunts" >
+        <div *ngIf="hunt.feedback.value === 'bad' ">
+          <div (click)="huntTapped($event, hunt)">
+            <ion-icon name="search" item-left></ion-icon>
+            {{hunt.stats.huntID}}
+            <ion-icon name="person-add" item-right (click)="addFriendToHuntTapped($event, hunt)"></ion-icon>
+          </div>
+        </div>
+      </button>
+    </ion-list>
+  </ion-card>
+
 </ion-content>
