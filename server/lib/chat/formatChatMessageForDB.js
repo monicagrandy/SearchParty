@@ -10,7 +10,7 @@ module.exports = {
         "text": messageObject.text,
         "username": messageObject.username,
         "messageID": chatMessageID,
-        "datetime": messageObject.datetime
+        "datetime": Date.now() / 1000
       }
     }
   }

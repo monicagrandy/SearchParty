@@ -1,106 +1,120 @@
-import {Page, NavController, NavParams} from 'ionic-angular';
+import {Page, NavController, NavParams, LocalStorage} from 'ionic-angular';
 import {Http, Headers} from 'angular2/http';
 import {FORM_DIRECTIVES} from 'angular2/common';
 import {JwtHelper} from 'angular2-jwt';
+import {ConnectionBackend, HTTP_PROVIDERS} from 'angular2/http';
 import {AuthService} from '../../services/auth/auth-service'
-import {NgZone} from "angular2/core";;
+import {NgZone} from "angular2/core";
+import {ChatService} from '../../services/chat/chat-service';
+import * as moment from 'moment';
 
 @Page({
   templateUrl: 'build/pages/chat/chat.html',
+  providers: [
+    ConnectionBackend,
+    HTTP_PROVIDERS,
+    ChatService
+  ],
   directives: [FORM_DIRECTIVES]
 })
 export class Chat {
-   messages: any;
-   socket: any;
-   zone: any;
-   chatBox: any;
-   io: any;
-   username: any;
-   timeout: any;
-   timoutFunction: any;
+  messages: any;
+  socket: any;
+  zone: any;
+  chatBox: any;
+  io: any;
+  username: any;
+  timeout: any;
+  timoutFunction: any;
+  jwtHelper: JwtHelper = new JwtHelper();
+  typing: boolean;
+  ADD_MESSAGE_URL: string = 'http://localhost:8000/addChatMessage';
+  GET_MESSAGES_URL: string = 'http://localhost:8000/getChatMessages';
+  huntID: any;
 
-   constructor(
-      private http: Http,
-      private nav: NavController,
-      private navParams: NavParams
-   ) {
-     let socket = this.io();
-     this.messages = [];
-     this.zone = new NgZone({enableLongStackTrace: false});
-     this.chatBox = "";
-     this.socket = socket;
-     this.socket.on("chat_message", msg => {
-       this.zone.run(() => {
-         this.messages.push(msg);
-       });
-     });
 
-     //See when someone is typing:
-     var typing = false;
-     var timeout = undefined;
 
-      function timeoutFunction() {
-        typing = false;
-        socket.emit("typing", false);
-      }
+  constructor(
+    private http: Http,
+    private nav: NavController,
+    navParams: NavParams,
+    private _chatService: ChatService
+  ) {
+    let socket = io.connect('http://localhost:8000');
+    this.timeout = undefined;
+    this.typing = false;
 
-      // $("#msg").keypress(function(e){
-      //   if (e.which !== 13) {
-      //     if (typing === false && myRoomID !== null && $("#msg").is(":focus")) {
-      //       typing = true;
-      //       socket.emit("typing", true);
-      //     } else {
-      //       clearTimeout(timeout);
-      //       timeout = setTimeout(timeoutFunction, 5000);
-      //     }
-      //   }
-      // });
-      //:::UPON USER TYPING, SEND TYPING MESSAGE TO SERVER:::
-      sendTyping(characters) => {
-         if(characters > 0) {
-            typing = true;
-            socket.emit("typing", true);
-         } else {
-            clearTimeout(timeout);
-            timeout = setTimeout(timeoutFunction, 5000);
-         }
-      }
+    this.token = localStorage.id_token;
+    if (this.token) {
+      this.username = this.jwtHelper.decodeToken(this.token).username;
+    }
 
-      // socket.on("isTyping", function(data) {
-      //   if (data.isTyping) {
-      //     if ($("#"+data.person+"").length === 0) {
-      //       $("#updates").append("<li id='"+ data.person +"'><span class='text-muted'><small><i class='fa fa-keyboard-o'></i>" + data.person + " is typing.</small></li>");
-      //       timeout = setTimeout(timeoutFunction, 5000);
-      //     }
-      //   } else {
-      //     $("#"+data.person+"").remove();
-      //   }
-      // });
-      //:::UPON USER RECEIVING isTyping FROM SERVER, DISPLAY IT:::
-      socket.on("isTyping", function(data) {
-         console.log('Data from server about typing: ', data);
-       if (data.isTyping) {
-          timeout = setTimeout(timeoutFunction, 5000);
-          //Append ionic username div
-       } else {
-          //Remove ionic username div
-       }
+    this.huntID = navParams.get('huntID');
+
+    this.messages = [];
+    this.zone = new NgZone({enableLongStackTrace: false});
+    this.chatBox = "";
+    this.socket = socket;
+    this.socket.on("chat_message", (msg, username, datetime) => {
+      this.zone.run(() => {
+        console.log(this.messages);
+        datetime = moment.unix(datetime).fromNow();
+        this.messages.push([username +": "+ msg + " @ " + datetime]);
       });
+    });
 
+    let huntIDObject = {huntID: this.huntID};
+    this._chatService.postData(JSON.stringify(huntIDObject), this.GET_MESSAGES_URL)
+    .then(messagesFromDB => {
+      this.zone.run(() => {
+        console.log("messages from DB", messagesFromDB);
+        let messagesArray = messagesFromDB.chatMessages;
+        for(let i = 0; i < messagesArray.length; i++) {
+          let datetime = moment.unix(messagesArray[i].datetime).fromNow();
+          this.messages.push([messagesArray[i].username + ": " + messagesArray[i].text + " @ " + datetime]);
+        }
+      })
+    }).catch(error => console.error(error));
 
-      socket.on("chat", function(person, msg) {
-        $("#msgs").append("<li><strong><span class='text-success'>" + person.name + "</span></strong>: " + msg + "</li>");
-        //clear typing field
-         $("#"+person.name+"").remove();
-         clearTimeout(timeout);
-         timeout = setTimeout(timeoutFunction, 0);
-      });
-}
+  }
 
+  timeoutFunction() {
+    this.typing = false;
+    this.socket.emit('typing', false);
+  }
+
+  OnKey(event:KeyboardEvent) {
+    console.log('this is the keyup event ', event);
+    if (event) {
+      console.log('ln 84: ', this.typing);
+      if (this.typing === false) {
+        this.typing = true;
+        console.log('emitting true for typing', this.typing);
+        this.socket.emit('typing', true);
+        clearTimeout(this.timeout);
+        this.timeout = setTimeout(this.timeoutFunction.bind(this), 1500);
+      }
+    }
+  }
 
   send(message) {
-    if (message && message != "") {
-      this.socket.emit("chat_message", message, this.username);
+    if (message && message !== "") {
+      console.log("username inside chat.ts", this.username);
+      console.log("message inside chat.ts", message);
+
+      let messageObject = {
+        username: this.username,
+        huntID: this.huntID,
+        message: message
+      };
+
+      this._chatService.postData(JSON.stringify(messageObject), this.ADD_MESSAGE_URL)
+      .then(messageAdded => {
+        messageAdded = messageAdded[0];
+        console.log("message  added", messageAdded);
+        this.socket.emit("chat_message", messageAdded.text, this.username, messageAdded.datetime);
+      }).catch(error => console.error(error))
+
     }
     this.chatBox = "";
   }

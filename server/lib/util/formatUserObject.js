@@ -27,7 +27,10 @@ module.exports = {
             prettyHunt.stats = individualHunt.huntData;
 
             for(let z = 0; z < individualHunt.tasks.length; z++) {
-              prettyHunt.tasks.push({task: individualHunt.tasks[z], place: individualHunt.places[z]})
+              if(individualHunt.urls[i]){
+                prettyHunt.tasks.push({task: individualHunt.tasks[z], place: individualHunt.places[z], image:individualHunt.urls[i]})
+
+              }
             }
 
             prettyUser.hunts.push(prettyHunt);

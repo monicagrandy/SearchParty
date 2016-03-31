@@ -3,14 +3,14 @@ const neo4jPromise = require('../neo4j/neo4jQueryPromiseReturn.js');
 const messageFormatter = require('./formatChatMessageForDB.js');
 
 module.exports = {
-  addChatMessageToDB: (messageBody, chatID) => {
-    console.log("message body", messageBody);
+  addChatMessageToDB: (messageBody, huntID) => {
+    console.log("message body insdie of chat promises", messageBody);
 
-    let formattedMessageObject = messageFormatter.formatChatMessageWithProps(messageBody);
-    console.log("formatted chat object ", formattedMessageObject);
+     let formattedMessageObject = messageFormatter.formatChatMessageWithProps(messageBody);
+     console.log("formatted chat object ", formattedMessageObject);
 
-    const addChatMessageQuery = `MATCH (root)
-    WHERE root.chatID="${chatID}"
+    const addChatMessageQuery = `
+    MATCH (:Hunt{huntID:"${huntID}"})-[:HAS_CHAT]->(root)
     OPTIONAL MATCH (root)-[r:CURRENT]-(secondlatestmessage)
     DELETE r
     CREATE (root)-[:CURRENT]->(latest_message :Message{props})
@@ -30,9 +30,9 @@ module.exports = {
     }).catch(error => console.error(error));
   },
 
-  retrieveChatMessages: chatID => {
+  retrieveChatMessages: huntID => {
     const retrieveChatQuery =
-    `MATCH (chat:Chatroom{chatID:"${chatID}"})
+    `MATCH (:Hunt{huntID:"${huntID}"})-[:HAS_CHAT]->(chat)
     WITH chat
     MATCH (chat)-[:CURRENT]-(latestmessage)-[:NEXT*0..10]-(oldermessages)
     RETURN oldermessages ORDER BY oldermessages.datetime`;
@@ -40,7 +40,7 @@ module.exports = {
     return neo4jPromise.databaseQueryPromise(retrieveChatQuery)
     .then(chatMessageArray => {
       return new Promise((resolve, reject) => {
-        if(chatMessageArray.length > 0) {
+        if(chatMessageArray) {
           resolve(chatMessageArray);
         } else {
           reject({"error": "could not retrieve chat messages"});

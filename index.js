@@ -7,6 +7,7 @@ const https = require('https');
 const http = require('http');
 const fs = require('fs');
 const ioServer = require('socket.io');
+const chatPromises = require('./server/lib/chat/chatPromises.js');
 
 const ca = [];
 let chain = fs.readFileSync('getsearchparty_com.ca-bundle', 'utf8');
@@ -45,24 +46,45 @@ io.attach(httpServer);
 io.attach(httpsServer);
 
 io.on('connection', socket => {
-  console.log('a user connected');
-  
-  socket.on('location', location => {
-    if (location.id != userInfo.id) {
-        location_callback(location);
-    }
-  });
+  // console.log('a user connected');
+  // chatPromises.retrieveChatMessages("cNkgYkThXAx")
+  // .then(data =>{
+  //    console.log('Fetching message history from Database.');
+  //    console.log(data);
+  //    //We recieve our data backwards and es6 wont easily allow
+  //    //iterating backwards in an array, so we use a stack
+  //    let tempStack = [];
+  //    for(let messages of data) {
+  //      if(messages.username) {
+  //       tempStack.push(messages);
+  //      }
+  //    }
+  //    while(tempStack.length >= 0 ) {
+  //      let last = tempStack[tempStack.length-1];
+  //      io.emit('chat_message', last.text, last.username);
+  //      tempStack.pop();
+  //    }
+  //  });
 
-  socket.on('chat_message', msg => {
-    io.emit('chat_message', msg);
+    socket.on('location', location => {
+      if (location.id != userInfo.id) {
+         location_callback(location);
+      }
+    });
+
+  socket.on('chat_message', (msg, username, datetime) => {
+    console.log('socket: ', msg, username);
+    io.emit('chat_message', msg, username, datetime);
+    // chatPromises.addChatMessageToDB(msg, 'cNkgYkThXAx', username);
   });
 
   socket.on('disconnect', () => {
+   //   io.to('some room').emit(username)
     console.log('user disconnected');
   });
 
-  socket.on("typing", function(data) {
-  if (typeof people[socket.id] !== "undefined")
-    io.sockets.in(socket.room).emit("isTyping", {isTyping: data, person: people[socket.id].name});
+  socket.on('typing', data => {
+      console.log('is typing', data);
+      io.emit('isTyping', data);
   });
-});
+ });
