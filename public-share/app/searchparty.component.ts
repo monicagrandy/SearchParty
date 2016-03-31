@@ -63,6 +63,7 @@ export class SearchPartyComponent {
         });
 
       this.totalDist = this.googleMaps.calcDistance(this.allPlaces);
+      console.log(this.totalDist)
     }
 
 }
