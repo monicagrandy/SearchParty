@@ -71,6 +71,7 @@ System.register(['angular2/core', 'angular2/router', 'ng2-material/all', './sear
                         var flightPath = data;
                     });
                     this.totalDist = this.googleMaps.calcDistance(this.allPlaces);
+                    console.log(this.totalDist);
                 };
                 SearchPartyComponent = __decorate([
                     core_1.Component({
