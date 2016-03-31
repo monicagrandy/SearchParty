@@ -6,6 +6,44 @@
 </ion-navbar>
 
 <ion-content class="has-header cards-bg">
+  <ion-card class="adv-map"> 
+    <ion-item>
+      <h2>Distance Travelled:</h2>
+      <p>{{totalDist}} miles</p>
+    </ion-item>
+
+    <div id="map"></div>
+
+    <ion-item>
+      <div *ngFor="#obj of huntTasks">
+        <strong>Location</strong>
+        <p>{{obj.place.name}}</p>
+        <strong>Challenge</strong>
+        <p>{{obj.task.content}}</p>
+        <img *ngIf="obj.image" src="{{obj.image.url}}">
+      </div>
+    </ion-item>
+  </ion-card>
+
+  <ion-card>
+    <h2>Hunt Chat:</h2>
+    <div *ngFor="#obj of huntChats">
+      <p>{{obj.username}} said at {{obj.datetime}}</p>
+      <p>{{obj.text}}</p>
+    </div>
+    <div *ngIf="!huntChats">
+      <p>No chats to display</p>
+    </div>
+  </ion-card>  
+
+ <ion-item> 
+    <div *ngIf="error">
+    <p>{{error}}</p>
+    </div>
+ </ion-item> 
+</ion-content>
+
+<!-- <ion-content class="has-header cards-bg">
   <ion-card class="adv-map">
     <div style="position: relative">
       <ion-item>
@@ -13,16 +51,16 @@
       </ion-item>
       <div id="map"></div>
     </div>
-    <!--<ion-item *ngIf="tasksLeft">
+    <ion-item *ngIf="tasksLeft">
       <ion-icon subtle large item-left name='ios-pint'></ion-icon>
       <h3>Current challenge</h3>
       <p>{{currChallenge}}</p> 
-    </ion-item>-->
+    </ion-item> -->
     <!--<ion-item *ngIf="!tasksLeft">
       <h3>You started this hunt at:</h3>
         <p>{{startTime}}</p> 
       <h3>and ended at:</h3>
         <p>{{endTime}}</p> 
     </ion-item>-->
-  </ion-card>
-</ion-content>
+<!--   </ion-card>
+</ion-content> --> 

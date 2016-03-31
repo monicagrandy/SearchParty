@@ -66,7 +66,7 @@
     <ion-item *ngFor="#obj of finalData">
       <p>{{obj.place.name}}</p>
       <p>{{obj.task.content}}</p>
-      <img *ngIf="obj.image.url" src="{{obj.image.url}}">
+      <img *ngIf="obj.image" src="{{obj.image.url}}">
     </ion-item>
   </ion-card>
 
