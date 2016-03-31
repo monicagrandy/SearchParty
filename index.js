@@ -84,7 +84,11 @@ io.on('connection', (socket) => {
    });
 
   socket.on('typing', (bool, username, room) => {
-      console.log(username + 'is typing');
+     if(bool === true) {
+        console.log(username + 'is typing');
+     } else {
+        console.log(username + 'stopped typing');
+     }
       io.to(room).emit('isTyping', bool, username);
   });
 });
