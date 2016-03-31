@@ -36,18 +36,18 @@ export class ChatComponent {
   ) {
    this.huntID = _params.get('huntID');
    let socket = io.connect('http://localhost:8000');
-   this.timeout = undefined;
-   this.typing = false;
-   this.messages = [];
-   this.zone = new NgZone({enableLongStackTrace: false});
-   this.chatBox = "";
    this.otherUserTyping = false;
    this.otherUsername = '';
-   this.username='';
+   this.messages = [];
+   this.timeout;
+   this.zone = new NgZone({enableLongStackTrace: false});
+   this.chatBox = "";
    this.socket = socket;
+
    this.socket.on("connect", () => {
       this.socket.emit('huntChatRoom', this.huntID);
    });
+
    this.socket.on("chat_message", (msg, username, datetime) => {
       this.zone.run(() => {
         console.log(this.messages);
@@ -55,6 +55,7 @@ export class ChatComponent {
         this.messages.push([username, msg, datetime]);
       });
    });
+
    this.socket.on("isTyping", (bool, username, room) => {
       if(bool === true) {
          this.otherUsername = username;

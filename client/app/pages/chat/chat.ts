@@ -47,13 +47,14 @@ export class Chat {
    this.otherUserTyping = false;
    this.otherUsername = '';
    this.messages = [];
+   this.timeout;
    this.zone = new NgZone({enableLongStackTrace: false});
    this.chatBox = "";
    this.socket = socket;
+   
    this.socket.on("connect", () => {
       this.socket.emit('huntChatRoom', this.huntID);
    });
-   this.timeout;
 
    this.socket.on("chat_message", (msg, username, datetime) => {
       this.zone.run(() => {
