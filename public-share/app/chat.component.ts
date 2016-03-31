@@ -40,6 +40,8 @@ export class ChatComponent {
    this.messages = [];
    this.zone = new NgZone({enableLongStackTrace: false});
    this.chatBox = "";
+   this.otherUserTyping = false;
+   this.otherUsername = '';
    this.socket = socket;
    this.socket.on("connect", () => {
       this.socket.emit('huntChatRoom', this.huntID);
@@ -88,7 +90,7 @@ export class ChatComponent {
      this.otherUserTyping = false;
      this.socket.emit('typing', false);
   }
-  
+
   OnKey(event:KeyboardEvent) {
     console.log('this is the keyup event ', event);
     if (event) {

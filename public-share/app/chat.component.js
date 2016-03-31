@@ -47,6 +47,8 @@ System.register(['angular2/core', 'ng2-material/all', 'angular2/router', './chat
                     this.messages = [];
                     this.zone = new core_2.NgZone({ enableLongStackTrace: false });
                     this.chatBox = "";
+                    this.otherUserTyping = false;
+                    this.otherUsername = '';
                     this.socket = socket;
                     this.socket.on("connect", function () {
                         _this.socket.emit('huntChatRoom', _this.huntID);

@@ -6,6 +6,7 @@
          <p>{{message[2]}}</p>
       </li>
       <li *ngIf="typing" >{{username}} is typing...</li>
+      <li *ngIf="otherUserTyping" >{{username}} is typing...</li>
   </ul>
   <form action="">
     <input id="m" autocomplete="off" (keyup)="OnKey($event)" [(ngModel)]="chatBox" placeholder="Message..."/><button (click)="send(chatBox)">Send</button>
