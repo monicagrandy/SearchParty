@@ -39,7 +39,7 @@ module.exports = {
     }).catch(error => console.error(error));
   },
 
-  addFriendToHunt: (username, huntID) => {
+  addFriendToHuntPromise: (username, huntID) => {
 
     let addFriendToHuntQuery =
     `MATCH (hunt:Hunt{huntID:"${huntID}"}), (friend:User{username:"${username}"})
