@@ -8,6 +8,7 @@ import {TemplatePage} from './pages/templates/templates';
 import {TaskPage} from './pages/tasks/tasks';
 import {ProfilePage} from './pages/profile/profile';
 import {Chat} from './pages/chat/chat';
+import {enableProdMode} from 'angular2/core';
 
 import * as _ from 'underscore';
 

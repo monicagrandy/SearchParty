@@ -27,6 +27,8 @@ export class TaskPage {
   local: LocalStorage;
   locAddress: string; //set this to whatever is in local storage
   currChallenge: string;
+  userLat: any;
+  userLong: any;
   locLat: any; //set this to whatever is in local storage
   locLng: any; //set this to whatever is in local storage
   locName: string; //set this to whatever is in local storage
@@ -55,19 +57,26 @@ export class TaskPage {
   feedback: string;
   showMobileSharing: boolean;
   link: string;
+  directionLink: string;
   finalData: any;
+  text: string;
+  url: string;
+  hashtags: string;
+  via: string;
+  showURL: boolean;
+  encodedTweetLink: any;
 
 
   constructor(
-    platform: Platform,
-    private nav: NavController,
-    navParams: NavParams,
-    private _taskService: TaskService,
+    platform: Platform, 
+    private nav: NavController, 
+    navParams: NavParams, 
+    private _taskService: TaskService, 
     private googleMaps: GoogleMapService,
     _zone: NgZone
-  ) {
+    ) {
+    this.showURL = false;
     this.keywordsLength = this.keywords.length;
-
     this._zone = _zone;
     this.platform = platform;
     this.image = null;
@@ -86,6 +95,10 @@ export class TaskPage {
     console.log("+++line 79 tasks.js", this.showMobileSharing)
 
     this.locAddress = navParams.get('locAddress');
+    this.userLat = localStorage.userLat;
+    this.userLong = localStorage.userLng;
+    console.log('this userLat ', this.userLat);
+    console.log('this userLong ', this.userLong);
     this.huntID = navParams.get('huntID');
     this.currChallenge =  localStorage.currChallenge || navParams.get('currChallenge');
     this.locLat = localStorage.locLat || navParams.get('locLat');
@@ -96,7 +109,16 @@ export class TaskPage {
     let content = '<h4>' + this.locName + '</h4><p>' + this.locAddress  + '</p>';
 
     this.link = `http://localhost:8000/share/#/hunt/${this.huntID}`;
-    setTimeout(()=>{ this.googleMaps.loadMap(this.locLat, this.locLng, 15, content, this.map).then(map => this.map = map), 2000 })
+    this.directionLink = `https://www.google.com/maps/dir/${this.userLat},${this.userLong}/${this.locAddress}`;
+
+    // twitter specific link generation
+    this.text = encodeURIComponent('I am going on an adventure! Follow me on Search Party!');
+    this.hashtags = 'searchparty';
+    this.via = 'GetSearchParty';
+    this.url = encodeURIComponent(this.link);
+    this.encodedTweetLink = `https://twitter.com/intent/tweet?hashtags=${this.hashtags}&url=${this.url}&text=${this.text}&via=${this.via}`;
+    
+    setTimeout(()=>{ this.googleMaps.loadMap(this.locLat, this.locLng, 15, content, this.map).then(map => this.map = map), 2000 });
   }
 
 
@@ -134,6 +156,7 @@ takePic() {
   getNewTask(){
     console.log(this.keywordsLength - this.keywords.length)
     this.imgData = ""
+    this.showURL = false;
     console.log('getting ready to send new task!')
     console.log(this.keywords);
     console.log('this is the huntID in the tasks! ');
@@ -255,11 +278,9 @@ takePic() {
   }
 
   shareWeb(text) {
+    this.showURL = true
     console.log(this.link);
-  }
-
-  shareWebTwitter(text) {
-    console.log(this.link);
+    return this.showURL;
   }
 
   chat(event) {

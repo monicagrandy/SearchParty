@@ -16,7 +16,7 @@
     <div style="position: relative">
       <ion-item *ngIf="tasksLeft">
         <h2>{{locName}}</h2> 
-        <h2>{{locAddress}}</h2>
+        <h2><a href={{directionLink}} target="_blank">{{locAddress}}</a></h2>
       </ion-item>
       <ion-item *ngIf="!tasksLeft">
         <h2><strong>{{user}}'s Final Stats</strong></h2>
@@ -61,12 +61,13 @@
 
   <ion-card *ngIf="!tasksLeft">
     <ion-item>
-      <h2>HuntSummary:</h2>
+      <h2>Hunt Summary:</h2>
     </ion-item>
     <ion-item *ngFor="#obj of finalData">
       <p>{{obj.place.name}}</p>
       <p>{{obj.task.content}}</p>
       <img *ngIf="obj.image" src="{{obj.image.url}}">
+      <img *ngIf="!obj.image" src="http://cricketfeet.com/temp/blogimages/searchparty23.gif">
     </ion-item>
   </ion-card>
 
@@ -106,18 +107,25 @@
   </ion-card>
 
     <ion-card *ngIf="!showMobileSharing">
-      <ion-item >
+      <ion-item>
         <h4>Share Your Hunt!</h4>
-        <button default (click)="shareWeb('I am going on an adventure! Follow me on Search Party!', 'Search Party is Starting')">Share</button>
-        <button default (click)="shareWebTwitter('I am going on an adventure! Follow me on Search Party! @SearchPartyApp')">Share on Twitter</button>
+        <button default><a target='_blank' href={{encodedTweetLink}}>Tweet</a></button>
+        <button default (click)="shareWeb()">Share</button>
       </ion-item>
     </ion-card>
 
     <ion-card *ngIf="showMobileSharing">
       <ion-item>
         <h4>Share Your Hunt!</h4>
-        <button default (click)="share('I am going on an adventure! Follow me on Search Party!', 'Search Party is Starting', null)">Share</button>
+        <button default (click)="shareWeb('I am going on an adventure! Follow me on Search Party!', 'Search Party is Starting', null)">Share</button>
         <button default (click)="shareViaTwitter('I am going on an adventure! Follow me on Search Party! @SearchPartyApp', null)">Share on Twitter</button>
+    </ion-item>
+  </ion-card>
+
+  <ion-card *ngIf="showURL">
+    <ion-item>
+    <h4>Your share link:</h4>
+    <p contenteditable="true">{{link}}</p>
     </ion-item>
   </ion-card>
 

@@ -2,6 +2,14 @@
   text-align: center;
 }
 
+a:link, a:visited {
+    color: inherit;
+}
+
 .task-icon {
   font-size: 50px;
+}
+
+#tweetcontainer {
+  display: inline;
 }
