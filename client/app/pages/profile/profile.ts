@@ -21,16 +21,16 @@ export class ProfilePage {
   // hunts: Array<{type: string, huntname: string, image: string, icon: string}>;
 
   constructor(
-    private nav: NavController, 
+    private nav: NavController,
     navParams: NavParams,
     private profileService: ProfileService,
     private auth: AuthService,
     private friendService: FriendService
     ) {
     this.token = this.local.get('id_token')._result;
-    
+
     console.log('this is the token before it is sent', this.token);
-    
+
     this.profileService.getProfile(this.token)
       .then(data => {
         console.log(data.hunts);
@@ -38,7 +38,7 @@ export class ProfilePage {
         this.hunts = data.hunts;
       })
         .catch(error => console.log(error));
-        
+
     this.friendService.getFriends(this.token)
       .then(data => {
         console.log('friends gotten! ', data);
@@ -46,7 +46,7 @@ export class ProfilePage {
       })
         .catch(error => console.log(error));
   }
-  
+
   friendTapped(event, friend) {
     this.nav.push(FriendPage, {
       friend: friend
@@ -59,7 +59,7 @@ export class ProfilePage {
       huntID: hunt.stats.huntID
     });
   }
-  
+
   addFriend(friend) {
     console.log(friend);
     this.friendService.addFriend(this.token, friend)
@@ -74,5 +74,9 @@ export class ProfilePage {
             .catch(error => console.log(error));
       })
         .catch(error => console.log(error));
+  }
+
+  addFriendToHunt(event, hunt) {
+    
   }
 }
