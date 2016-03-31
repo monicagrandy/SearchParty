@@ -41,7 +41,6 @@ httpServer.listen(httpPort, () => console.log(`express HTTP server listening on 
 httpsServer.listen(httpsPort, () => console.log(`express HTTPS server listening on port ${httpsPort}`) );
 
 const io = new ioServer();
-
 io.attach(httpServer);
 io.attach(httpsServer);
 

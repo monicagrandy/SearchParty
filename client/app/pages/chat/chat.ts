@@ -93,11 +93,10 @@ export class Chat {
         huntID: this.huntID,
         message: message
       };
-      this.socket.emit("chat_message", messageAdded, this.username);
 
       this._chatService.postData(JSON.stringify(messageObject), this.ADD_MESSAGE_URL)
       .then(messageAdded => {
-         console.log('Message stored successfully');
+        this.socket.emit("chat_message", messageAdded, this.username);
       }).catch(error => console.error(error))
 
     }
