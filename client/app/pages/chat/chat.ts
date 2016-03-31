@@ -44,9 +44,6 @@ export class Chat {
    }
    this.huntID = navParams.get('huntID');
    let socket = io.connect('http://localhost:8000');
-   this.timeout = undefined;
-   this.timeout2 = undefined;
-   this.typing = false;
    this.otherUserTyping = false;
    this.otherUsername = '';
    this.messages = [];
@@ -56,6 +53,7 @@ export class Chat {
    this.socket.on("connect", () => {
       this.socket.emit('huntChatRoom', this.huntID);
    });
+
    this.socket.on("chat_message", (msg, username, datetime) => {
       this.zone.run(() => {
         console.log(this.messages);
@@ -69,8 +67,7 @@ export class Chat {
          this.otherUsername = username;
          this.otherUserTyping = true;
       } else {
-         clearTimeout(this.timeout);
-         this.timeout = setTimeout(this.timeoutFunction.bind(this), 1500);
+         this.otherUserTyping = false;
       }
    });
 
@@ -90,21 +87,19 @@ export class Chat {
    }).catch(error => console.error(error));
 }
 
-  timeoutFunction() {
-    this.typing = false;
-    this.socket.emit('typing', false);
-  }
+  timerCountDown() => {
+     setTimeout(
+     function() => {
+        this.socket.emit('typing', false);
+     }, 1000);
 
-  // OnKey(event:KeyboardEvent) {
-  //   if (event) {
-  //     if (this.typing === false) {
-  //       this.typing = true;
-  //       this.socket.emit('typing', true, this.username, this.huntID);
-  //       clearTimeout(this.timeout);
-  //       this.timeout = setTimeout(this.timeoutFunction.bind(this), 1500);
-  //     }
-  //   }
-  // }
+  OnKey(event:KeyboardEvent) {
+    if (event) {
+     clearTimeout(this.timeCountDown);
+     this.socket.emit('typing', true, this.username, this.huntID);
+     timerCountDown();
+    }
+  }
 
   send(message) {
     if (message && message !== "") {
