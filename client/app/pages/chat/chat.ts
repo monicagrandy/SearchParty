@@ -47,6 +47,7 @@ export class Chat {
    this.timeout = undefined;
    this.typing = false;
    this.otherUserTyping = false;
+   this.otherUsername = '';
    this.messages = [];
    this.zone = new NgZone({enableLongStackTrace: false});
    this.chatBox = "";
@@ -63,7 +64,8 @@ export class Chat {
    });
 
    this.socket.on("typing", (username, room) => {
-
+      this.otherUsername = username;
+      this.otherUserTyping = true;
    }
 
    let huntIDObject = {huntID: this.huntID};
@@ -91,7 +93,7 @@ export class Chat {
     if (event) {
       if (this.typing === false) {
         this.typing = true;
-        this.socket.emit('typing', true, this.huntID);
+        this.socket.emit('typing', this.username, this.huntID);
         clearTimeout(this.timeout);
         this.timeout = setTimeout(this.timeoutFunction.bind(this), 1500);
       }
