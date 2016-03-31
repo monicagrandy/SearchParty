@@ -3,13 +3,14 @@ import {RouteConfig, ROUTER_DIRECTIVES, ROUTER_PROVIDERS, RouteParams} from 'ang
 import {MATERIAL_DIRECTIVES, MATERIAL_PROVIDERS} from 'ng2-material/all';
 import {SearchPartyService} from './searchparty.service';
 import {GoogleMapService} from './map.service';
+import {ChatComponent} from './chat.component';
 
 
 @Component({
   selector: 'my-searchparty',
   templateUrl: './share/app/searchparty.component.html',
   styleUrls: ['./share/app/searchparty.component.css'],
-  directives: [ROUTER_DIRECTIVES, MATERIAL_DIRECTIVES],
+  directives: [ROUTER_DIRECTIVES, MATERIAL_DIRECTIVES, ChatComponent],
   providers: [MATERIAL_PROVIDERS, SearchPartyService, GoogleMapService]
 })
 export class SearchPartyComponent {

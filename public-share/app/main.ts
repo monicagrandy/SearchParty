@@ -3,6 +3,8 @@
 /// <reference path="../typings/main/ambient/google.maps/index.d.ts" />
 /// <reference path="../typings/main/ambient/node/index.d.ts" />
 /// <reference path="../typings/main/ambient/socket.io/index.d.ts" />
+/// <reference path="../typings/main/ambient/moment-node/index.d.ts" />
+/// <reference path="../typings/main/ambient/moment/index.d.ts" />
 
 import {bootstrap} from 'angular2/platform/browser';
 import {AppComponent} from './app.component';

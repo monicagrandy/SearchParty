@@ -3,6 +3,8 @@
 /// <reference path="../typings/main/ambient/google.maps/index.d.ts" />
 /// <reference path="../typings/main/ambient/node/index.d.ts" />
 /// <reference path="../typings/main/ambient/socket.io/index.d.ts" />
+/// <reference path="../typings/main/ambient/moment-node/index.d.ts" />
+/// <reference path="../typings/main/ambient/moment/index.d.ts" />
 System.register(['angular2/platform/browser', './app.component', 'angular2/core', 'angular2/router', 'rxjs/Rx'], function(exports_1, context_1) {
     "use strict";
     var __moduleName = context_1 && context_1.id;
