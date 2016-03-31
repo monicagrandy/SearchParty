@@ -72,9 +72,6 @@ export class PastHuntsPage {
           this.allPlaces.push(item.place);
           this.allTasks.push(item.task);
         })
-        console.log("hello")
-        console.log(this.allTasks)
-        console.log(this.allPlaces)
         setTimeout(() => { this.showMap() }, 1000)
       })
       .catch(err => console.log(err));
