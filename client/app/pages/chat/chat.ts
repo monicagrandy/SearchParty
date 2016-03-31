@@ -38,45 +38,44 @@ export class Chat {
       navParams: NavParams,
       private _chatService: ChatService
    ) {
-      this.token = localStorage.id_token;
-      if (this.token) {
-         this.username = this.jwtHelper.decodeToken(this.token).username;
-      }
-      this.huntID = navParams.get('huntID');
-     let socket = io.connect('http://localhost:8000');
-     this.timeout = undefined;
-     this.typing = false;
-
-
-    this.messages = [];
-    this.zone = new NgZone({enableLongStackTrace: false});
-    this.chatBox = "";
-    this.socket = socket;
-    this.socket.on("connect", () => {
-         this.socket.emit('huntChatRoom', this.huntID);
-    });
-    this.socket.on("chat_message", (msg, username, datetime) => {
+   this.token = localStorage.id_token;
+   if (this.token) {
+      this.username = this.jwtHelper.decodeToken(this.token).username;
+   }
+   this.huntID = navParams.get('huntID');
+   let socket = io.connect('http://localhost:8000');
+   this.timeout = undefined;
+   this.typing = false;
+   this.messages = [];
+   this.zone = new NgZone({enableLongStackTrace: false});
+   this.chatBox = "";
+   this.socket = socket;
+   this.socket.on("connect", () => {
+      this.socket.emit('huntChatRoom', this.huntID);
+   });
+   this.socket.on("chat_message", (msg, username, datetime) => {
       this.zone.run(() => {
         console.log(this.messages);
         datetime = moment.unix(datetime).fromNow();
         this.messages.push([username +": "+ msg + " @ " + datetime]);
       });
-    });
+   });
 
-    let huntIDObject = {huntID: this.huntID};
-    this._chatService.postData(JSON.stringify(huntIDObject), this.GET_MESSAGES_URL)
-    .then(messagesFromDB => {
+   let huntIDObject = {huntID: this.huntID};
+   this._chatService.postData(JSON.stringify(huntIDObject), this.GET_MESSAGES_URL)
+   .then(messagesFromDB => {
       this.zone.run(() => {
         console.log("messages from DB", messagesFromDB);
         let messagesArray = messagesFromDB.chatMessages;
         for(let i = 0; i < messagesArray.length; i++) {
           let datetime = moment.unix(messagesArray[i].datetime).fromNow();
-          this.messages.push([messagesArray[i].username + ": " + messagesArray[i].text + "\n" + datetime]);
+          console.log('THIS IS BEING PUSHED TO MESSAGES ARRAY');
+          console.log(messagesArray[i].username, messagesArray[i].text, datetime);
+          this.messages.push([messagesArray[i].username + ": " + messagesArray[i].text + " @ " + datetime]);
         }
       })
-    }).catch(error => console.error(error));
-
-  }
+   }).catch(error => console.error(error));
+}
 
   timeoutFunction() {
     this.typing = false;
@@ -90,7 +89,7 @@ export class Chat {
       if (this.typing === false) {
         this.typing = true;
         console.log('emitting true for typing', this.typing);
-        this.socket.emit('typing', true);
+        this.socket.emit('typing', true, this.huntID);
         clearTimeout(this.timeout);
         this.timeout = setTimeout(this.timeoutFunction.bind(this), 1500);
       }
@@ -110,7 +109,7 @@ export class Chat {
       .then(messageAdded => {
         messageAdded = messageAdded[0];
         console.log("message  added", messageAdded);
-        this.socket.emit("chat_message", messageAdded.text, this.username, messageAdded.datetime, this.huntID);
+        this.socket.emit("chat_message", messageAdded.text, messageAdded.username, messageAdded.datetime, this.huntID);
      }).catch(error => {
         console.error(error)
      });
