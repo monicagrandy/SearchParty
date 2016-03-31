@@ -41,7 +41,9 @@ export class SearchPartyComponent {
       this.startLat = data.tasks[0].place.lat;
       this.startLng = data.tasks[0].place.lng;
       this.content = '<h4>' + data.tasks[0].place.name + ' < /h4><p>' + data.tasks[0].place.address + '</p > ';
-      //this.huntChats = data.chats.messages;
+      if(data.chatroom.messages.length > 0){
+        this.huntChats = data.chatroom.messages;
+      }
       this.huntTasks.forEach((item) => {
         this.allPlaces.push(item.place);
         this.allTasks.push(item.task);

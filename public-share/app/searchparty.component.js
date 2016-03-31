@@ -51,7 +51,9 @@ System.register(['angular2/core', 'angular2/router', 'ng2-material/all', './sear
                         _this.startLat = data.tasks[0].place.lat;
                         _this.startLng = data.tasks[0].place.lng;
                         _this.content = '<h4>' + data.tasks[0].place.name + ' < /h4><p>' + data.tasks[0].place.address + '</p > ';
-                        //this.huntChats = data.chats.messages;
+                        if (data.chatroom.messages.length > 0) {
+                            _this.huntChats = data.chatroom.messages;
+                        }
                         _this.huntTasks.forEach(function (item) {
                             _this.allPlaces.push(item.place);
                             _this.allTasks.push(item.task);
