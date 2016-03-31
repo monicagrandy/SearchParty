@@ -7,6 +7,7 @@ import {PastHuntsPage} from '../past-hunts/past-hunts';
 import {FriendPage} from '../friend/friend';
 import {FriendsListPage} from '../friends-list/friends-list';
 import {FilterPipe} from '../../util/filter-pipe';
+import {TaskPage} from '../tasks/tasks';
 
 @Page({
   templateUrl: 'build/pages/profile/profile.html',
@@ -61,6 +62,13 @@ export class ProfilePage {
       previousHuntTasksAndLocations: hunt.tasks,
       huntID: hunt.stats.huntID
     });
+  }
+  
+  onGoingHuntTapped(event, hunt) {
+    this.nav.setRoot(TaskPage, {
+      previousHuntTasksAndLocations: hunt.tasks,
+      huntID: hunt.stats.huntID
+    })
   }
 
   addFriend(friend) {
