@@ -57,7 +57,7 @@ export class ChatComponent {
    });
 
    this.socket.on("isTyping", (bool, username) => {
-      if(bool === true) {
+      if(bool === true && username !== this.username) {
          this.otherUsername = username;
          this.otherUserTyping = true;
       } else {

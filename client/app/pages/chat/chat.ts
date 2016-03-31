@@ -70,8 +70,7 @@ export class Chat {
    });
 
    this.socket.on("isTyping", (bool, username) => {
-      console.log('INC TYPING :::')
-      if(bool === true) {
+      if(bool === true && username !== this.username) {
          this.otherUsername = username;
          this.otherUserTyping = true;
       } else {

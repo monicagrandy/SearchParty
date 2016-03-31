@@ -60,7 +60,7 @@ System.register(['angular2/core', 'ng2-material/all', 'angular2/router', './chat
                         });
                     });
                     this.socket.on("isTyping", function (bool, username) {
-                        if (bool === true) {
+                        if (bool === true && username !== _this.username) {
                             _this.otherUsername = username;
                             _this.otherUserTyping = true;
                         }
