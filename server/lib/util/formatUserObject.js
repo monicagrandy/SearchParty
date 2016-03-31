@@ -10,7 +10,7 @@ module.exports = {
         for(let j = 0; j < huntArray.length; j++) {
             let individualHunt = huntArray[j];
 
-        let prettyHunt = {stats: {}, tasks: [], chatroom: {}};
+        let prettyHunt = {stats: {}, tasks: [], chatroom: {}, feedback:{}};
 
             for(let i = 0; i < individualHunt.places.length; i++) {
               let currObj = individualHunt.places[i];
@@ -25,9 +25,12 @@ module.exports = {
              prettyHunt.chatroom.chatID = individualHunt.chatData.chatID;
 
             prettyHunt.stats = individualHunt.huntData;
+            if(individualHunt.feedback){
+              prettyHunt.feedback.value = individualHunt.feedback.value;
+            }
 
             for(let z = 0; z < individualHunt.tasks.length; z++) {
-              if(individualHunt.urls[i]){
+              if(individualHunt.urls[z]){
                 prettyHunt.tasks.push({task: individualHunt.tasks[z], place: individualHunt.places[z], image:individualHunt.urls[i]})
 
               }
