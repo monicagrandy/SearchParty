@@ -34,11 +34,13 @@ export class ProfilePage {
 
     console.log('this is the token before it is sent', this.token);
 
-    this.profileService.getProfile(this.token)
+    this.hunts = this.profileService.getProfile(this.token)
       .then(data => {
-        console.log(data.hunts);
-        // this.friends = data.friends;
-        this.hunts = data.hunts;
+        return new Promise((resolve, reject) => {
+          setTimeout(() => {
+            resolve(data.hunts);
+          }, 2000)
+        })
       })
         .catch(error => console.log(error));
 

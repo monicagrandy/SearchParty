@@ -30,10 +30,10 @@ module.exports = {
             }
 
             for(let z = 0; z < individualHunt.tasks.length; z++) {
-              if(individualHunt.urls[z]){
-                prettyHunt.tasks.push({task: individualHunt.tasks[z], place: individualHunt.places[z], image:individualHunt.urls[i]})
+              // if(individualHunt.urls[z]){
+                prettyHunt.tasks.push({task: individualHunt.tasks[z], place: individualHunt.places[z]})
 
-              }
+              // }
             }
 
             prettyUser.hunts.push(prettyHunt);
