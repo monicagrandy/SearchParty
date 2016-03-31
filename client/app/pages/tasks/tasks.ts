@@ -1,6 +1,7 @@
 import {Page, Platform, NavController, NavParams, LocalStorage} from 'ionic-angular';
 import {TaskService} from '../../services/task/task-service';
 import {GoogleMapService} from '../../services/map/map-service';
+import {TweetButtonService} from '../../services/tweet-button/tweet-button-service';
 import {ConnectionBackend, HTTP_PROVIDERS} from 'angular2/http';
 import {JwtHelper} from 'angular2-jwt';
 import {NgZone} from 'angular2/core';
@@ -17,7 +18,8 @@ import 'rxjs/add/operator/map';
     ConnectionBackend,
     HTTP_PROVIDERS,
     TaskService,
-    GoogleMapService
+    GoogleMapService,
+    TweetButtonService
   ]
 })
 
@@ -27,6 +29,8 @@ export class TaskPage {
   local: LocalStorage;
   locAddress: string; //set this to whatever is in local storage
   currChallenge: string;
+  userLat: any;
+  userLong: any;
   locLat: any; //set this to whatever is in local storage
   locLng: any; //set this to whatever is in local storage
   locName: string; //set this to whatever is in local storage
@@ -55,20 +59,27 @@ export class TaskPage {
   feedback: string;
   showMobileSharing: boolean;
   link: string;
+  directionLink: string;
   finalData: any;
-  showURL = false;
+  text: string;
+  url: string;
+  hashtags: string;
+  via: string;
+  showURL: boolean;
+  encodedTweetLink: any;
 
 
   constructor(
-    platform: Platform,
-    private nav: NavController,
-    navParams: NavParams,
-    private _taskService: TaskService,
+    platform: Platform, 
+    private nav: NavController, 
+    navParams: NavParams, 
+    private _taskService: TaskService, 
     private googleMaps: GoogleMapService,
+    private tweetButtonService: TweetButtonService,
     _zone: NgZone
-  ) {
+    ) {
+    this.showURL = false;
     this.keywordsLength = this.keywords.length;
-
     this._zone = _zone;
     this.platform = platform;
     this.image = null;
@@ -87,6 +98,10 @@ export class TaskPage {
     console.log("+++line 79 tasks.js", this.showMobileSharing)
 
     this.locAddress = navParams.get('locAddress');
+    this.userLat = localStorage.userLat;
+    this.userLong = localStorage.userLng;
+    console.log('this userLat ', this.userLat);
+    console.log('this userLong ', this.userLong);
     this.huntID = navParams.get('huntID');
     this.currChallenge =  localStorage.currChallenge || navParams.get('currChallenge');
     this.locLat = localStorage.locLat || navParams.get('locLat');
@@ -97,7 +112,17 @@ export class TaskPage {
     let content = '<h4>' + this.locName + '</h4><p>' + this.locAddress  + '</p>';
 
     this.link = `http://localhost:8000/share/#/hunt/${this.huntID}`;
-    setTimeout(()=>{ this.googleMaps.loadMap(this.locLat, this.locLng, 15, content, this.map).then(map => this.map = map), 2000 })
+    this.directionLink = `https://www.google.com/maps/dir/${this.userLat},${this.userLong}/${this.locAddress}`;
+
+    // twitter specific link generation
+    this.text = encodeURIComponent('I am going on an adventure! Follow me on Search Party!');
+    this.hashtags = 'searchparty';
+    this.via = 'GetSearchParty';
+    this.url = encodeURIComponent(this.link);
+    this.encodedTweetLink = `https://twitter.com/intent/tweet?hashtags=${this.hashtags}&url=${this.url}&text=${this.text}&via=${this.via}`;
+    
+    setTimeout(()=>{ this.googleMaps.loadMap(this.locLat, this.locLng, 15, content, this.map).then(map => this.map = map), 2000 });
+    setTimeout(()=>{ this.tweetButtonService.getButton(this.tweetcontainer, this.link).then(button => this.tweetcontainer = button), 2000 });
   }
 
 
@@ -260,10 +285,6 @@ takePic() {
     this.showURL = true
     console.log(this.link);
     return this.showURL;
-  }
-
-  shareWebTwitter(text) {
-    console.log(this.link);
   }
 
   chat(event) {
