@@ -46,6 +46,7 @@ export class Chat {
    let socket = io.connect('http://localhost:8000');
    this.timeout = undefined;
    this.typing = false;
+   this.otherUserTyping = false;
    this.messages = [];
    this.zone = new NgZone({enableLongStackTrace: false});
    this.chatBox = "";
@@ -60,6 +61,10 @@ export class Chat {
         this.messages.push([username, msg, datetime]);
       });
    });
+
+   this.socket.on("typing", (username, room) => {
+
+   }
 
    let huntIDObject = {huntID: this.huntID};
    this._chatService.postData(JSON.stringify(huntIDObject), this.GET_MESSAGES_URL)
@@ -83,12 +88,9 @@ export class Chat {
   }
 
   OnKey(event:KeyboardEvent) {
-    console.log('this is the keyup event ', event);
     if (event) {
-      console.log('ln 84: ', this.typing);
       if (this.typing === false) {
         this.typing = true;
-        console.log('emitting true for typing', this.typing);
         this.socket.emit('typing', true, this.huntID);
         clearTimeout(this.timeout);
         this.timeout = setTimeout(this.timeoutFunction.bind(this), 1500);

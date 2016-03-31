@@ -51,6 +51,9 @@ export class ChatComponent {
         this.messages.push([username, msg, datetime]);
       });
    });
+   this.socket.on('typing', (data, room) => {
+      
+   })
 
    let huntIDObject = {huntID: this.huntID};
    this._chatService.postData(JSON.stringify(huntIDObject), this.GET_MESSAGES_URL)

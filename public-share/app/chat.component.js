@@ -58,6 +58,8 @@ System.register(['angular2/core', 'ng2-material/all', 'angular2/router', './chat
                             _this.messages.push([username, msg, datetime]);
                         });
                     });
+                    this.socket.on('typing', function (data, room) {
+                    });
                     var huntIDObject = { huntID: this.huntID };
                     this._chatService.postData(JSON.stringify(huntIDObject), this.GET_MESSAGES_URL)
                         .then(function (messagesFromDB) {
