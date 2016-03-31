@@ -1,4 +1,4 @@
-System.register(['angular2/core', 'angular2/router', 'ng2-material/all', './searchparty.service', './map.service', 'rxjs/add/operator/map'], function(exports_1, context_1) {
+System.register(['angular2/core', 'angular2/router', 'ng2-material/all', './searchparty.service', './map.service', './chat.component'], function(exports_1, context_1) {
     "use strict";
     var __moduleName = context_1 && context_1.id;
     var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
@@ -10,7 +10,7 @@ System.register(['angular2/core', 'angular2/router', 'ng2-material/all', './sear
     var __metadata = (this && this.__metadata) || function (k, v) {
         if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
     };
-    var core_1, router_1, all_1, searchparty_service_1, map_service_1;
+    var core_1, router_1, all_1, searchparty_service_1, map_service_1, chat_component_1;
     var SearchPartyComponent;
     return {
         setters:[
@@ -29,7 +29,9 @@ System.register(['angular2/core', 'angular2/router', 'ng2-material/all', './sear
             function (map_service_1_1) {
                 map_service_1 = map_service_1_1;
             },
-            function (_1) {}],
+            function (chat_component_1_1) {
+                chat_component_1 = chat_component_1_1;
+            }],
         execute: function() {
             SearchPartyComponent = (function () {
                 function SearchPartyComponent(_params, googleMaps, _searchPartyService) {
@@ -77,7 +79,7 @@ System.register(['angular2/core', 'angular2/router', 'ng2-material/all', './sear
                         selector: 'my-searchparty',
                         templateUrl: './share/app/searchparty.component.html',
                         styleUrls: ['./share/app/searchparty.component.css'],
-                        directives: [router_1.ROUTER_DIRECTIVES, all_1.MATERIAL_DIRECTIVES],
+                        directives: [router_1.ROUTER_DIRECTIVES, all_1.MATERIAL_DIRECTIVES, chat_component_1.ChatComponent],
                         providers: [all_1.MATERIAL_PROVIDERS, searchparty_service_1.SearchPartyService, map_service_1.GoogleMapService]
                     }), 
                     __metadata('design:paramtypes', [router_1.RouteParams, map_service_1.GoogleMapService, searchparty_service_1.SearchPartyService])

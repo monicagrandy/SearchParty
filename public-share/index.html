@@ -19,22 +19,31 @@
     <script src="share/node_modules/angular2/bundles/router.dev.js"></script>
     <script src="share/node_modules/angular2/bundles/http.dev.js"></script>
     <script src="share/node_modules/underscore/underscore.js"></script>
+    <script src="share/node_modules/moment/moment.js"></script>
     <script src="share/node_modules/ng2-material/dist/ng2-material.js"></script>
 
     <script
   src="https://maps.googleapis.com/maps/api/js?libraries=geometry">
 </script>
+  <!-- socket.io script -->
+  <script src="/socket.io/socket.io.js"></script>
 
     <!-- 2. Configure SystemJS -->
     <script>
       System.config({
+        transpiler: 'typescript',
+        //typescript compiler options
+        typescriptOptions: {
+          emitDecoratorMetadata: true
+        },
         baseURL: 'share/',
         map: {
             package: 'public-share/app',
             'angular2': 'node_modules/angular2',
             'ng2-material': 'node_modules/ng2-material',
             'rxjs': 'node_modules/rxjs',
-            'underscore': 'node_modules/underscore/underscore.js'
+            'underscore': 'node_modules/underscore/underscore.js',
+            'moment': 'node_modules/moment/moment.js'
         },
         packages: {
           app: {
@@ -51,6 +60,9 @@
             defaultExtension: 'js'
           },
           'rxjs': {
+            defaultExtension: 'js'
+          },
+          'moment': {
             defaultExtension: 'js'
           }
         }
