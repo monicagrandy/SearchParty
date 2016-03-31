@@ -32,14 +32,46 @@ System.register(['angular2/core', 'angular2/router', 'ng2-material/all', './sear
             function (_1) {}],
         execute: function() {
             SearchPartyComponent = (function () {
-                function SearchPartyComponent(_params, _searchPartyService) {
+                function SearchPartyComponent(_params, googleMaps, _searchPartyService) {
                     this._params = _params;
+                    this.googleMaps = googleMaps;
                     this._searchPartyService = _searchPartyService;
+                    this.map = null;
                     this.huntID = _params.get('huntID');
-                    this._searchPartyService.getHunt(this.huntID)
-                        .then(function (data) { return console.log(data); })
-                        .catch(function (err) { return console.log(err); });
+                    this.allTasks = [];
+                    this.allPlaces = [];
+                    this.getHuntData(this.huntID);
                 }
+                SearchPartyComponent.prototype.getHuntData = function (id) {
+                    var _this = this;
+                    this._searchPartyService.getHunt(id)
+                        .then(function (data) {
+                        //console.log("promise returned")
+                        _this.huntTasks = data.tasks;
+                        _this.startLat = data.tasks[0].place.lat;
+                        _this.startLng = data.tasks[0].place.lng;
+                        _this.content = '<h4>' + data.tasks[0].place.name + ' < /h4><p>' + data.tasks[0].place.address + '</p > ';
+                        if (data.chatroom.messages.length > 0) {
+                            _this.huntChats = data.chatroom.messages;
+                        }
+                        _this.huntTasks.forEach(function (item) {
+                            _this.allPlaces.push(item.place);
+                            _this.allTasks.push(item.task);
+                        });
+                        console.log("hello");
+                        console.log(_this.allTasks);
+                        console.log(_this.allPlaces);
+                        _this.showMap();
+                    })
+                        .catch(function (err) { return console.log(err); });
+                };
+                SearchPartyComponent.prototype.showMap = function () {
+                    this.googleMaps.finalMapMaker(this.allPlaces, this.allTasks)
+                        .then(function (data) {
+                        var flightPath = data;
+                    });
+                    this.totalDist = this.googleMaps.calcDistance(this.allPlaces);
+                };
                 SearchPartyComponent = __decorate([
                     core_1.Component({
                         selector: 'my-searchparty',
@@ -48,7 +80,7 @@ System.register(['angular2/core', 'angular2/router', 'ng2-material/all', './sear
                         directives: [router_1.ROUTER_DIRECTIVES, all_1.MATERIAL_DIRECTIVES],
                         providers: [all_1.MATERIAL_PROVIDERS, searchparty_service_1.SearchPartyService, map_service_1.GoogleMapService]
                     }), 
-                    __metadata('design:paramtypes', [router_1.RouteParams, searchparty_service_1.SearchPartyService])
+                    __metadata('design:paramtypes', [router_1.RouteParams, map_service_1.GoogleMapService, searchparty_service_1.SearchPartyService])
                 ], SearchPartyComponent);
                 return SearchPartyComponent;
             }());

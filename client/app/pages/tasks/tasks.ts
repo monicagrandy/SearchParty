@@ -56,6 +56,7 @@ export class TaskPage {
   showMobileSharing: boolean;
   link: string;
   finalData: any;
+  showURL = false;
 
 
   constructor(
@@ -134,6 +135,7 @@ takePic() {
   getNewTask(){
     console.log(this.keywordsLength - this.keywords.length)
     this.imgData = ""
+    this.showURL = false;
     console.log('getting ready to send new task!')
     console.log(this.keywords);
     console.log('this is the huntID in the tasks! ');
@@ -255,7 +257,9 @@ takePic() {
   }
 
   shareWeb(text) {
+    this.showURL = true
     console.log(this.link);
+    return this.showURL;
   }
 
   shareWebTwitter(text) {
