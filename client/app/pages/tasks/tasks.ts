@@ -73,7 +73,6 @@ export class TaskPage {
     navParams: NavParams, 
     private _taskService: TaskService, 
     private googleMaps: GoogleMapService,
-    private tweetButtonService: TweetButtonService,
     _zone: NgZone
     ) {
     this.showURL = false;
