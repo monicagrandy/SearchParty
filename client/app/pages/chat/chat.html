@@ -11,7 +11,7 @@
           <h2>{{message[0]}}: {{message[1]}}</h2>
           <p>{{message[2]}}</p>
       </ion-item>
-      <ion-item *ngIf="typing">
+      <ion-item *ngIf="otherUserTyping">
          <p>{{otherUsername}} is typing...</p>
       </ion-item>
   </ion-list>

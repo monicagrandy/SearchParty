@@ -60,7 +60,7 @@ System.register(['angular2/core', 'ng2-material/all', 'angular2/router', './chat
                         });
                     });
                     this.socket.on("isTyping", function (bool, username) {
-                        if (bool === true) {
+                        if (bool === true && username !== _this.username) {
                             _this.otherUsername = username;
                             _this.otherUserTyping = true;
                         }
@@ -89,12 +89,12 @@ System.register(['angular2/core', 'ng2-material/all', 'angular2/router', './chat
                     var _this = this;
                     this.timeout = setTimeout(function () {
                         _this.socket.emit('typing', false, _this.username, _this.huntID);
-                    }, 2500);
+                    }, 1000);
                 };
                 ChatComponent.prototype.OnKey = function (event) {
                     if (event) {
-                        clearTimeout(this.timeout);
                         this.socket.emit('typing', true, this.username, this.huntID);
+                        clearTimeout(this.timeout);
                         this.invocation();
                     }
                 };
@@ -102,6 +102,7 @@ System.register(['angular2/core', 'ng2-material/all', 'angular2/router', './chat
                 ChatComponent.prototype.send = function (message) {
                     var _this = this;
                     if (message && message !== "") {
+                        this.socket.emit('typing', false, this.username, this.huntID);
                         var messageObject = {
                             username: this.username,
                             huntID: this.huntID,
