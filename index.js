@@ -46,9 +46,9 @@ io.attach(httpServer);
 io.attach(httpsServer);
 
 io.on('connection', (socket) => {
-   console.log('socket: ', socket);
-   socket.on('join', function (room) {
-      chatPromises.retrieveChatMessages(hunt)
+   socket.on('huntChatRoom', function(huntID) {
+      socket.join(huntID);
+      chatPromises.retrieveChatMessages(huntID)
       .then(data =>{
          console.log('Connecting to socket#'+hunt+'...');
          console.log(data);
@@ -65,24 +65,24 @@ io.on('connection', (socket) => {
            io.emit('chat_message', last.text, last.username);
            tempStack.pop();
          }
-       });
-   })
+      });
+   });
 
-    socket.on('location', location => {
+   socket.on('location', location => {
       if (location.id != userInfo.id) {
          location_callback(location);
       }
-    });
+   });
 
-  socket.on('chat_message', (msg, username, room) => {
-    console.log('socket: ', msg, username);
-    io.to(room).emit('chat_message', msg, username);
-    // chatPromises.addChatMessageToDB(msg, 'cNkgYkThXAx', username);
-  });
+   socket.on('chat_message', (msg, username, room) => {
+      console.log('socket: ', msg, username);
+      io.to(room).emit('chat_message', msg, username);
+      // chatPromises.addChatMessageToDB(msg, 'cNkgYkThXAx', username);
+   });
 
-  socket.on('disconnect', () => {
-    console.log('user disconnected');
-  });
+   socket.on('disconnect', () => {
+      console.log('user disconnected');
+   });
 
   socket.on('typing', data, room => {
       console.log('is typing', data);

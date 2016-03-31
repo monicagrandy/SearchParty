@@ -43,12 +43,14 @@ export class Chat {
       if (this.token) {
          this.username = this.jwtHelper.decodeToken(this.token).username;
       }
+      this.huntID = navParams.get('huntID');
      let socket = io.connect('http://localhost:8000');
      this.timeout = undefined;
      this.typing = false;
 
-
-     this.huntID = navParams.get('huntID');
+     this.socket.on('connect' => {
+        this.socket.emit('huntChatRoom', this.huntID);
+     });
 
      this.messages = [];
      this.zone = new NgZone({enableLongStackTrace: false});
@@ -91,10 +93,11 @@ export class Chat {
         huntID: this.huntID,
         message: message
       };
+      this.socket.emit("chat_message", messageAdded, this.username);
 
       this._chatService.postData(JSON.stringify(messageObject), this.ADD_MESSAGE_URL)
       .then(messageAdded => {
-        this.socket.emit("chat_message", messageAdded, this.username);
+         console.log('Message stored successfully');
       }).catch(error => console.error(error))
 
     }
