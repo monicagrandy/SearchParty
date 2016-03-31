@@ -1,7 +1,6 @@
 import {Page, Platform, NavController, NavParams, LocalStorage} from 'ionic-angular';
 import {TaskService} from '../../services/task/task-service';
 import {GoogleMapService} from '../../services/map/map-service';
-import {TweetButtonService} from '../../services/tweet-button/tweet-button-service';
 import {ConnectionBackend, HTTP_PROVIDERS} from 'angular2/http';
 import {JwtHelper} from 'angular2-jwt';
 import {NgZone} from 'angular2/core';
@@ -18,8 +17,7 @@ import 'rxjs/add/operator/map';
     ConnectionBackend,
     HTTP_PROVIDERS,
     TaskService,
-    GoogleMapService,
-    TweetButtonService
+    GoogleMapService
   ]
 })
 
