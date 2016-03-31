@@ -64,13 +64,13 @@ export class Chat {
       });
    });
 
-   this.socket.on("isTyping", (bool, username, room) => {
+   this.socket.on("isTyping", (bool, username) => {
       if(bool === true) {
          this.otherUsername = username;
          this.otherUserTyping = true;
       } else {
-         clearTimeout(this.timeout2);
-         this.timeout2 = setTimeout(this.timeoutFunction2.bind(this), 200);
+         clearTimeout(this.timeout);
+         this.timeout = setTimeout(this.timeoutFunction.bind(this), 1500);
       }
    });
 
@@ -95,21 +95,16 @@ export class Chat {
     this.socket.emit('typing', false);
   }
 
-  timeoutFunction2() {
-     this.otherUserTyping = false;
-     this.socket.emit('typing', false);
- }
-
-  OnKey(event:KeyboardEvent) {
-    if (event) {
-      if (this.typing === false) {
-        this.typing = true;
-        this.socket.emit('typing', true, this.username, this.huntID);
-        clearTimeout(this.timeout);
-        this.timeout = setTimeout(this.timeoutFunction.bind(this), 200);
-      }
-    }
-  }
+  // OnKey(event:KeyboardEvent) {
+  //   if (event) {
+  //     if (this.typing === false) {
+  //       this.typing = true;
+  //       this.socket.emit('typing', true, this.username, this.huntID);
+  //       clearTimeout(this.timeout);
+  //       this.timeout = setTimeout(this.timeoutFunction.bind(this), 1500);
+  //     }
+  //   }
+  // }
 
   send(message) {
     if (message && message !== "") {
