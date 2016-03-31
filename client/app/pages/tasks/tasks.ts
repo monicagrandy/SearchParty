@@ -30,6 +30,8 @@ export class TaskPage {
   local: LocalStorage;
   locAddress: string; //set this to whatever is in local storage
   currChallenge: string;
+  userLat: any;
+  userLong: any;
   locLat: any; //set this to whatever is in local storage
   locLng: any; //set this to whatever is in local storage
   locName: string; //set this to whatever is in local storage
@@ -91,6 +93,10 @@ export class TaskPage {
     console.log("+++line 79 tasks.js", this.showMobileSharing)
 
     this.locAddress = navParams.get('locAddress');
+    this.userLat = localStorage.userLat;
+    this.userLong = localStorage.userLng;
+    console.log('this userLat ', this.userLat);
+    console.log('this userLong ', this.userLong);
     this.huntID = navParams.get('huntID');
     this.currChallenge =  localStorage.currChallenge || navParams.get('currChallenge');
     this.locLat = localStorage.locLat || navParams.get('locLat');
@@ -101,11 +107,10 @@ export class TaskPage {
     let content = '<h4>' + this.locName + '</h4><p>' + this.locAddress  + '</p>';
 
     this.link = `http://localhost:8000/share/#/hunt/${this.huntID}`;
-    this.directionLink = `https://www.google.com/maps/dir/${this.locLat},${this.locLng}/${this.locAddress}`
-    console.log('this is the directionLink ', this.directionLink);
-    setTimeout(()=>{ this.googleMaps.loadMap(this.locLat, this.locLng, 15, content, this.map).then(map => this.map = map), 2000 });
-    setTimeout(()=>{ this.tweetButtonService.getButton(this.tweetcontainer, this.link).then(button => this.tweetcontainer = button), 500 });
+    this.directionLink = `https://www.google.com/maps/dir/${this.userLat},${this.userLong}/${this.locAddress}`;
 
+    setTimeout(()=>{ this.googleMaps.loadMap(this.locLat, this.locLng, 15, content, this.map).then(map => this.map = map), 2000 });
+    setTimeout(()=>{ this.tweetButtonService.getButton(this.tweetcontainer, this.link).then(button => this.tweetcontainer = button), 2000 });
   }
 
 
