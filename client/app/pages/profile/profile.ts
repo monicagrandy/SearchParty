@@ -74,10 +74,29 @@ export class ProfilePage {
   
   onGoingHuntTapped(event, hunt) {
     console.log('this is the hunt length ', hunt.tasks.length);
+    // format previousTasks and PreviousPlaces
+    let previousPlaces = [];
+    let previousTasks = [];
+    
+    for (let task of hunt.tasks) {
+      previousPlaces.push(task.place);
+      previousTasks.push(task.task);
+    }
+    
+    let currentChallenge = previousTasks.pop();
+    let currentPlace = previousPlaces.pop();
+    
     this.nav.setRoot(TaskPage, {
-      previousTasks: hunt.tasks,
-      huntID: hunt.stats.huntID
-    })
+      previousTasks: previousTasks,
+      previousPlaces: previousPlaces,
+      huntID: hunt.stats.huntID,
+      currChallenge: currentChallenge.content,
+      locName: currentPlace.name,
+      locAddress: currentPlace.address,
+      locLat: currentPlace.lat,
+      locLng: currentPlace.lng,
+      resumeHuntKeywordsLeft: hunt.tasks.length
+    });
   }
 
   addFriend(friend) {

@@ -65,6 +65,7 @@ export class TaskPage {
   via: string;
   showURL: boolean;
   encodedTweetLink: any;
+  resumeHuntKeywordsLeft: number;
 
 
   constructor(
@@ -105,6 +106,7 @@ export class TaskPage {
     this.locLng = localStorage.locLng || navParams.get('locLng');
     this.locName = localStorage.locName || navParams.get('locName');
     this.previousPlaces = navParams.get('previousPlaces');
+    this.resumeHuntKeywordsLeft = navParams.get('resumeHuntKeywordsLeft');
     
     // run through previousTasks from navParams and splice out 
     // keywords to set proper length if coming back from a resuming hunt
@@ -114,7 +116,10 @@ export class TaskPage {
       let keyword = this.keywords.unshift()
       this.sendData(keyword);
     } else {
-      this.keywords.splice(0, this.previousTasks.length);
+      console.log('resuming hunt!');
+      console.log('this is the previous place ', this.previousPlaces);
+      console.log('this is the previous task ', this.previousTasks);
+      this.keywords.splice(0, this.resumeHuntKeywordsLeft);
     }
     
     let content = '<h4>' + this.locName + '</h4><p>' + this.locAddress  + '</p>';
