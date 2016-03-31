@@ -65,6 +65,7 @@ export class TaskPage {
   via: string;
   showURL: boolean;
   encodedTweetLink: any;
+  resumeHuntKeywordsLeft: number;
 
 
   constructor(
@@ -105,7 +106,22 @@ export class TaskPage {
     this.locLng = localStorage.locLng || navParams.get('locLng');
     this.locName = localStorage.locName || navParams.get('locName');
     this.previousPlaces = navParams.get('previousPlaces');
+    this.resumeHuntKeywordsLeft = navParams.get('resumeHuntKeywordsLeft');
+    
+    // run through previousTasks from navParams and splice out 
+    // keywords to set proper length if coming back from a resuming hunt
     this.previousTasks = navParams.get('previousTasks');
+    if (this.previousTasks.length === 0) {
+      this.previousPlaces = [];
+      let keyword = this.keywords.unshift()
+      this.sendData(keyword);
+    } else {
+      console.log('resuming hunt!');
+      console.log('this is the previous place ', this.previousPlaces);
+      console.log('this is the previous task ', this.previousTasks);
+      this.keywords.splice(0, this.resumeHuntKeywordsLeft);
+    }
+    
     let content = '<h4>' + this.locName + '</h4><p>' + this.locAddress  + '</p>';
 
     this.link = `http://localhost:8000/share/#/hunt/${this.huntID}`;
@@ -165,33 +181,7 @@ takePic() {
     if (this.keywords.length > 0) {
       let keyword = this.keywords.shift();
       console.log('this is the huntID before it is sent! ', this.huntID);
-
-      let dataObj = {
-        previousPlaces: this.previousPlaces,
-        previousTasks: this.previousTasks,
-        keyword: keyword,
-        token: localStorage.id_token,
-        huntID: this.huntID,
-        geolocation: {
-          lat: this.locLat,
-          lng: this.locLng
-        }
-      };
-
-      this._taskService.postData(JSON.stringify(dataObj), this.TASKS_URL)
-        .then(result => {
-          this.locName = result.businesses.name;
-          this.currChallenge = result.tasks.content;
-          this.previousPlaces.push(result.businesses);
-          this.locAddress = result.businesses.location.display_address[0] + ', ' + result.businesses.location.display_address[2];
-          this.previousTasks.push(result.tasks);
-          this.locLat = result.businesses.location.coordinate.latitude;
-          this.locLng = result.businesses.location.coordinate.longitude;
-          this.markComplete();
-          let content = '<h4>' + this.locName + '</h4><p>' + this.locAddress  + '</p>';
-          this.map = this.googleMaps.loadMap(this.locLat, this.locLng, 15, content, this.map);
-        });
-
+      this.sendData(keyword);
     } else {
       console.log('no more tasks!');
       console.log(this.previousTasks);
@@ -287,6 +277,34 @@ takePic() {
     this.nav.push(Chat, {
       huntID: this.huntID
     });
+  }
+  
+  sendData(keyword) {
+    let dataObj = {
+      previousPlaces: this.previousPlaces,
+      previousTasks: this.previousTasks,
+      keyword: keyword,
+      token: localStorage.id_token,
+      huntID: this.huntID,
+      geolocation: {
+        lat: this.locLat,
+        lng: this.locLng
+      }
+    };
+
+    this._taskService.postData(JSON.stringify(dataObj), this.TASKS_URL)
+      .then(result => {
+        this.locName = result.businesses.name;
+        this.currChallenge = result.tasks.content;
+        this.previousPlaces.push(result.businesses);
+        this.locAddress = result.businesses.location.display_address[0] + ', ' + result.businesses.location.display_address[2];
+        this.previousTasks.push(result.tasks);
+        this.locLat = result.businesses.location.coordinate.latitude;
+        this.locLng = result.businesses.location.coordinate.longitude;
+        this.markComplete();
+        let content = '<h4>' + this.locName + '</h4><p>' + this.locAddress  + '</p>';
+        this.map = this.googleMaps.loadMap(this.locLat, this.locLng, 15, content, this.map);
+      });
   }
 
 }
