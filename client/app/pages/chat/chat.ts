@@ -57,7 +57,7 @@ export class Chat {
       this.zone.run(() => {
         console.log(this.messages);
         datetime = moment.unix(datetime).fromNow();
-        this.messages.push([username +": "+ msg + " @ " + datetime]);
+        this.messages.push([username, msg, datetime]);
       });
    });
 
@@ -71,7 +71,7 @@ export class Chat {
           let datetime = moment.unix(messagesArray[i].datetime).fromNow();
           console.log('THIS IS BEING PUSHED TO MESSAGES ARRAY');
           console.log(messagesArray[i].username, messagesArray[i].text, datetime);
-          this.messages.push([messagesArray[i].username, messagesArray[i].text, datetime]);
+          this.messages.push([messagesArray[i].username + ": " + messagesArray[i].text + " @ " + datetime]);
         }
       })
    }).catch(error => console.error(error));
