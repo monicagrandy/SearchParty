@@ -105,7 +105,7 @@ export class Chat {
         this.typing = true;
         this.socket.emit('typing', true, this.username, this.huntID);
         clearTimeout(this.timeout);
-        this.timeout = setTimeout(this.timeoutFunction.bind(this), 1500);
+        this.timeout = setTimeout(this.timeoutFunction.bind(this), 200);
       }
     }
   }

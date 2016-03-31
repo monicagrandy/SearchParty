@@ -70,7 +70,8 @@ System.register(['angular2/core', 'ng2-material/all', 'angular2/router', './chat
                             clearTimeout(_this.timeout);
                             _this.timeout = setTimeout(_this.timeoutFunction2.bind(_this), 500);
                         }
-                    }, let, huntIDObject = { huntID: this.huntID });
+                    });
+                    var huntIDObject = { huntID: this.huntID };
                     this._chatService.postData(JSON.stringify(huntIDObject), this.GET_MESSAGES_URL)
                         .then(function (messagesFromDB) {
                         _this.zone.run(function () {
