@@ -1,6 +1,7 @@
 import {Page, Platform, NavController, NavParams, LocalStorage} from 'ionic-angular';
 import {TaskService} from '../../services/task/task-service';
 import {GoogleMapService} from '../../services/map/map-service';
+import {TweetButtonService} from '../../services/tweet-button/tweet-button-service';
 import {ConnectionBackend, HTTP_PROVIDERS} from 'angular2/http';
 import {JwtHelper} from 'angular2-jwt';
 import {NgZone} from 'angular2/core';
@@ -17,12 +18,14 @@ import 'rxjs/add/operator/map';
     ConnectionBackend,
     HTTP_PROVIDERS,
     TaskService,
-    GoogleMapService
+    GoogleMapService,
+    TweetButtonService
   ]
 })
 
 export class TaskPage {
   title = 'Current Task';
+  tweetcontainer: null;
   map = null;
   local: LocalStorage;
   locAddress: string; //set this to whatever is in local storage
@@ -55,12 +58,20 @@ export class TaskPage {
   feedback: string;
   showMobileSharing: boolean;
   link: string;
+  directionLink: string;
   finalData: any;
 
 
-  constructor(platform: Platform, private nav: NavController, navParams: NavParams, private _taskService: TaskService, private googleMaps: GoogleMapService, _zone: NgZone) {
+  constructor(
+    platform: Platform, 
+    private nav: NavController, 
+    navParams: NavParams, 
+    private _taskService: TaskService, 
+    private googleMaps: GoogleMapService,
+    private tweetButtonService: TweetButtonService,
+    _zone: NgZone
+    ) {
     this.keywordsLength = this.keywords.length;
-
     this._zone = _zone;
     this.platform = platform;
     this.image = null;
@@ -89,7 +100,11 @@ export class TaskPage {
     let content = '<h4>' + this.locName + '</h4><p>' + this.locAddress  + '</p>';
 
     this.link = `http://localhost:8000/share/#/hunt/${this.huntID}`;
-    setTimeout(()=>{ this.googleMaps.loadMap(this.locLat, this.locLng, 15, content, this.map).then(map => this.map = map), 2000 })
+    this.directionLink = `https://www.google.com/maps/dir/${this.locLat},${this.locLng}/${this.locAddress}`
+    console.log('this is the directionLink ', this.directionLink);
+    setTimeout(()=>{ this.googleMaps.loadMap(this.locLat, this.locLng, 15, content, this.map).then(map => this.map = map), 2000 });
+    setTimeout(()=>{ this.tweetButtonService.getButton(this.tweetcontainer, this.link).then(button => this.tweetcontainer = button), 500 });
+
   }
 
 
@@ -251,10 +266,6 @@ takePic() {
     console.log(this.link);
   }
 
-  shareWebTwitter(text) {
-    console.log(this.link);
-  }
-  
   chat(event) {
     this.nav.push(Chat, {
       huntID: this.huntID
