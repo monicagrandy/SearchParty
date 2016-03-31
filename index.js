@@ -44,6 +44,7 @@ const io = new ioServer();
 io.attach(httpServer);
 io.attach(httpsServer);
 
+
 io.on('connection', (socket) => {
    socket.on('huntChatRoom', function(huntID) {
       socket.join(huntID);
@@ -73,11 +74,19 @@ io.on('connection', (socket) => {
       }
    });
 
+
    socket.on('chat_message', (msg, username, room) => {
       console.log('socket: ', msg, username);
       io.to(room).emit('chat_message', msg, username);
       // chatPromises.addChatMessageToDB(msg, 'cNkgYkThXAx', username);
    });
+
+  socket.on('chat_message', (msg, username, datetime, room) => {
+    console.log('socket: ', msg, username);
+    io.emit('chat_message', msg, username, datetime);
+    // chatPromises.addChatMessageToDB(msg, 'cNkgYkThXAx', username);
+  });
+
 
    socket.on('disconnect', () => {
       console.log('user disconnected');
