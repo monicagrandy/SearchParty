@@ -28,6 +28,8 @@ import * as _ from 'underscore';
 export class AppComponent {
   title = 'Search Party';
 
-  constructor() {}
+  constructor() {
+    _.each([1,2,3,], number => console.log(number));
+  }
 
 }
