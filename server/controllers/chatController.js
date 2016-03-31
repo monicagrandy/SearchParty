@@ -13,7 +13,7 @@ module.exports = {
     let messageBody = {
       text: req.body.message,
       username: req.body.username,
-      datetime: Date.now()
+      datetime: req.body.datetime
     };
 
     console.log("message body? ", messageBody);
@@ -26,9 +26,10 @@ module.exports = {
     .catch(error => console.error(error));
   },
   retrieveChatMessages: (req, res) => {
-    let chatID = req.body.chatID;
+    console.log("retrieve chat messages called");
+    let huntID = req.body.huntID;
 
-    chatPromises.retrieveChatMessages(chatID)
+    chatPromises.retrieveChatMessages(huntID)
     .then(chatMessageArray => {
       console.log("10 latest messages from db ", chatMessageArray);
       res.json({"chatMessages": chatMessageArray})
