@@ -72,9 +72,9 @@ io.on('connection', socket => {
       }
     });
 
-  socket.on('chat_message', (msg, username) => {
+  socket.on('chat_message', (msg, username, datetime) => {
     console.log('socket: ', msg, username);
-    io.emit('chat_message', msg, username);
+    io.emit('chat_message', msg, username, datetime);
     // chatPromises.addChatMessageToDB(msg, 'cNkgYkThXAx', username);
   });
 

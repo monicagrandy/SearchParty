@@ -16,7 +16,7 @@ module.exports = {
     CREATE (root)-[:CURRENT]->(latest_message :Message{props})
     WITH latest_message, collect(secondlatestmessage) AS seconds
     FOREACH (x IN seconds | CREATE (latest_message)-[:NEXT]->(x))
-    RETURN latest_message.text`;
+    RETURN latest_message`;
 
     return neo4jPromise.databaseQueryPromise(addChatMessageQuery, formattedMessageObject)
     .then(latestMessage => {

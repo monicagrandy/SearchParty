@@ -13,7 +13,7 @@ module.exports = {
     let messageBody = {
       text: req.body.message,
       username: req.body.username,
-      datetime: Date.now()
+      datetime: req.body.datetime
     };
 
     console.log("message body? ", messageBody);

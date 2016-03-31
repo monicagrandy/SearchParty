@@ -6,7 +6,7 @@ import {ConnectionBackend, HTTP_PROVIDERS} from 'angular2/http';
 import {AuthService} from '../../services/auth/auth-service'
 import {NgZone} from "angular2/core";
 import {ChatService} from '../../services/chat/chat-service';
-// import {io} from "socket.io"
+import * as moment from 'moment';
 
 @Page({
   templateUrl: 'build/pages/chat/chat.html',
@@ -33,6 +33,7 @@ export class Chat {
   huntID: any;
 
 
+
   constructor(
     private http: Http,
     private nav: NavController,
@@ -54,10 +55,11 @@ export class Chat {
     this.zone = new NgZone({enableLongStackTrace: false});
     this.chatBox = "";
     this.socket = socket;
-    this.socket.on("chat_message", (msg, username) => {
+    this.socket.on("chat_message", (msg, username, datetime) => {
       this.zone.run(() => {
         console.log(this.messages);
-        this.messages.push([username +": "+ msg]);
+        datetime = moment.unix(datetime).fromNow();
+        this.messages.push([username +": "+ msg + " @ " + datetime]);
       });
     });
 
@@ -68,7 +70,8 @@ export class Chat {
         console.log("messages from DB", messagesFromDB);
         let messagesArray = messagesFromDB.chatMessages;
         for(let i = 0; i < messagesArray.length; i++) {
-          this.messages.push([messagesArray[i].username + ": " + messagesArray[i].text]);
+          // let datetime = moment.unix(messagesArray[i].datetime).fromNow();
+          this.messages.push([messagesArray[i].username + ": " + messagesArray[i].text + " @ " + messagesArray[i].datetime]);
         }
       })
     }).catch(error => console.error(error));
@@ -107,7 +110,9 @@ export class Chat {
 
       this._chatService.postData(JSON.stringify(messageObject), this.ADD_MESSAGE_URL)
       .then(messageAdded => {
-        this.socket.emit("chat_message", messageAdded, this.username);
+        messageAdded = messageAdded[0];
+        console.log("message  added", messageAdded);
+        this.socket.emit("chat_message", messageAdded.text, this.username, messageAdded.datetime);
       }).catch(error => console.error(error))
 
     }
