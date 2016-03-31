@@ -6,13 +6,13 @@ import {FORM_DIRECTIVES} from 'angular2/common';
 import {PastHuntsPage} from '../past-hunts/past-hunts';
 import {FriendPage} from '../friend/friend';
 import {FriendsListPage} from '../friends-list/friends-list';
-import {FilterPipe} from '../../util/filter-pipe';
+import {HuntFilterPipe} from '../../util/filter-pipe';
 
 @Page({
   templateUrl: 'build/pages/profile/profile.html',
   providers: [ProfileService, FriendService],
   directives: [FORM_DIRECTIVES],
-  pipes: [FilterPipe]
+  pipes: [HuntFilterPipe]
 })
 export class ProfilePage {
   local: Storage = new Storage(LocalStorage);
