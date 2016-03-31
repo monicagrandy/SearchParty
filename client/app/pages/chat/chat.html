@@ -2,13 +2,16 @@
   <button menuToggle>
     <ion-icon name="menu"></ion-icon>
   </button>
-  <ion-title>Public Chat</ion-title>
+  <ion-title>Hunt Chat</ion-title>
 </ion-navbar>
 
 <ion-content>
   <ion-list>
-      <ion-item *ngFor="#message of messages">{{message}}</ion-item>
-      <ion-item *ngIf="typing" >{{username}} is typing...</ion-item>
+      <ion-item class="item-text-wrap" *ngFor="#message of messages">
+         <h2>{{message}}</h2>
+         <p>{{message}}<p>
+      </ion-item>
+      <ion-item class="item-text-wrap" *ngIf="typing">{{username}} is typing...</ion-item>
   </ion-list>
 </ion-content>
 
