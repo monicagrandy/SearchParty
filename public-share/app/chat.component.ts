@@ -34,12 +34,6 @@ export class ChatComponent {
      public element: ElementRef
   ) {
     this.huntID = _params.get('huntID');
-
-    this.token = localStorage.id_token;
-   if (this.token) {
-      this.username = this.jwtHelper.decodeToken(this.token).username;
-   }
-   this.huntID = navParams.get('huntID');
    let socket = io.connect('http://localhost:8000');
    this.timeout = undefined;
    this.typing = false;
@@ -72,6 +66,7 @@ export class ChatComponent {
         }
       })
    }).catch(error => console.error(error));
+   //Change this later ethan, jesus dude
    this.username = window.prompt('Enter a username!', '');
 }
 

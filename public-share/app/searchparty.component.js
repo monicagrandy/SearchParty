@@ -63,15 +63,16 @@ System.register(['angular2/core', 'angular2/router', 'ng2-material/all', './sear
                         console.log("hello");
                         console.log(_this.allTasks);
                         console.log(_this.allPlaces);
-                        _this.showMap()
-                            .catch(function (err) { return console.log(err); });
-                    }, showMap(), {
-                        this: .googleMaps.finalMapMaker(this.allPlaces, this.allTasks)
-                            .then(function (data) {
-                            var flightPath = data;
-                        }),
-                        this: .totalDist = this.googleMaps.calcDistance(this.allPlaces)
+                        _this.showMap();
+                    })
+                        .catch(function (err) { return console.log(err); });
+                };
+                SearchPartyComponent.prototype.showMap = function () {
+                    this.googleMaps.finalMapMaker(this.allPlaces, this.allTasks)
+                        .then(function (data) {
+                        var flightPath = data;
                     });
+                    this.totalDist = this.googleMaps.calcDistance(this.allPlaces);
                 };
                 SearchPartyComponent = __decorate([
                     core_1.Component({

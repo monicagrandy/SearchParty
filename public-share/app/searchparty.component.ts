@@ -52,6 +52,7 @@ export class SearchPartyComponent {
       console.log(this.allTasks)
       console.log(this.allPlaces)
       this.showMap()
+    })
       .catch(err => console.log(err));
 }
 

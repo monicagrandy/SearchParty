@@ -41,11 +41,6 @@ System.register(['angular2/core', 'ng2-material/all', 'angular2/router', './chat
                     this.ADD_MESSAGE_URL = 'http://localhost:8000/addChatMessage';
                     this.GET_MESSAGES_URL = 'http://localhost:8000/getChatMessages';
                     this.huntID = _params.get('huntID');
-                    this.token = localStorage.id_token;
-                    if (this.token) {
-                        this.username = this.jwtHelper.decodeToken(this.token).username;
-                    }
-                    this.huntID = navParams.get('huntID');
                     var socket = io.connect('http://localhost:8000');
                     this.timeout = undefined;
                     this.typing = false;
@@ -77,6 +72,7 @@ System.register(['angular2/core', 'ng2-material/all', 'angular2/router', './chat
                             }
                         });
                     }).catch(function (error) { return console.error(error); });
+                    //Change this later ethan, jesus dude
                     this.username = window.prompt('Enter a username!', '');
                 }
                 ChatComponent.prototype.timeoutFunction = function () {
