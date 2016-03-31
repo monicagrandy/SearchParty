@@ -41,50 +41,50 @@ httpServer.listen(httpPort, () => console.log(`express HTTP server listening on 
 httpsServer.listen(httpsPort, () => console.log(`express HTTPS server listening on port ${httpsPort}`) );
 
 const io = new ioServer();
-
 io.attach(httpServer);
 io.attach(httpsServer);
 
-io.on('connection', socket => {
-  // console.log('a user connected');
-  // chatPromises.retrieveChatMessages("cNkgYkThXAx")
-  // .then(data =>{
-  //    console.log('Fetching message history from Database.');
-  //    console.log(data);
-  //    //We recieve our data backwards and es6 wont easily allow
-  //    //iterating backwards in an array, so we use a stack
-  //    let tempStack = [];
-  //    for(let messages of data) {
-  //      if(messages.username) {
-  //       tempStack.push(messages);
-  //      }
-  //    }
-  //    while(tempStack.length >= 0 ) {
-  //      let last = tempStack[tempStack.length-1];
-  //      io.emit('chat_message', last.text, last.username);
-  //      tempStack.pop();
-  //    }
-  //  });
 
-    socket.on('location', location => {
+io.on('connection', (socket) => {
+   socket.on('huntChatRoom', function(huntID) {
+      socket.join(huntID);
+      chatPromises.retrieveChatMessages(huntID)
+      .then(data =>{
+         console.log('Connecting to socket#'+hunt+'...');
+         console.log(data);
+         //We recieve our data backwards and es6 wont easily allow
+         //iterating backwards in an array, so we use a stack
+         let tempStack = [];
+         for(let messages of data) {
+           if(messages.username) {
+            tempStack.push(messages);
+           }
+         }
+         while(tempStack.length >= 0 ) {
+           let last = tempStack[tempStack.length-1];
+           io.emit('chat_message', last.text, last.username);
+           tempStack.pop();
+         }
+      });
+   });
+
+   socket.on('location', location => {
       if (location.id != userInfo.id) {
          location_callback(location);
       }
-    });
+   });
 
-  socket.on('chat_message', (msg, username, datetime) => {
-    console.log('socket: ', msg, username);
-    io.emit('chat_message', msg, username, datetime);
-    // chatPromises.addChatMessageToDB(msg, 'cNkgYkThXAx', username);
-  });
+   socket.on('chat_message', (msg, username, datetime, room) => {
+      console.log('incoming socket: ', msg, username, datetime, room);
+      io.to(room).emit('chat_message', msg, username, datetime);
+   });
 
-  socket.on('disconnect', () => {
-   //   io.to('some room').emit(username)
-    console.log('user disconnected');
-  });
+   socket.on('disconnect', () => {
+      console.log('user disconnected');
+   });
 
-  socket.on('typing', data => {
+  socket.on('typing', (data, room) => {
       console.log('is typing', data);
-      io.emit('isTyping', data);
+      io.to(room).emit('isTyping', data);
   });
- });
+});
