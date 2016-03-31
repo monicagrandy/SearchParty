@@ -8,10 +8,11 @@ import {FriendPage} from '../friend/friend';
 import {FriendsListPage} from '../friends-list/friends-list';
 import {FilterPipe} from '../../util/filter-pipe';
 import {TaskPage} from '../tasks/tasks';
+import {TaskService} from '../../services/task/task-service';
 
 @Page({
   templateUrl: 'build/pages/profile/profile.html',
-  providers: [ProfileService, FriendService],
+  providers: [ProfileService, FriendService, TaskService],
   directives: [FORM_DIRECTIVES],
   pipes: [FilterPipe]
 })
@@ -29,7 +30,8 @@ export class ProfilePage {
     navParams: NavParams,
     private profileService: ProfileService,
     private auth: AuthService,
-    private friendService: FriendService
+    private friendService: FriendService,
+    private taskService: TaskService
     ) {
     this.token = this.local.get('id_token')._result;
 
@@ -39,7 +41,13 @@ export class ProfilePage {
       .then(data => {
         console.log(data.hunts);
         // this.friends = data.friends;
-        this.hunts = data.hunts;
+        let huntsWithAtleastOneTask = [];
+        for (let hunt of data.hunts) {
+          if (hunt.tasks.length > 0) {
+            huntsWithAtleastOneTask.push(hunt);
+          }
+        }
+        this.hunts = huntsWithAtleastOneTask;
       })
         .catch(error => console.log(error));
 
@@ -65,8 +73,9 @@ export class ProfilePage {
   }
   
   onGoingHuntTapped(event, hunt) {
+    console.log('this is the hunt length ', hunt.tasks.length);
     this.nav.setRoot(TaskPage, {
-      previousHuntTasksAndLocations: hunt.tasks,
+      previousTasks: hunt.tasks,
       huntID: hunt.stats.huntID
     })
   }

@@ -43,7 +43,7 @@
     </ion-card-header>
     <ion-list>
       <button ion-item *ngFor="#hunt of hunts" >
-        <div *ngIf="!hunt.feedback.value">
+        <div *ngIf="!hunt.feedback.value && hunt.tasks.length > 0">
           <div (click)="onGoingHuntTapped($event, hunt)">
             <ion-icon name="search" item-left></ion-icon>
             {{hunt.stats.huntID}}
