@@ -73,7 +73,6 @@ export class TaskPage {
     navParams: NavParams, 
     private _taskService: TaskService, 
     private googleMaps: GoogleMapService,
-    private tweetButtonService: TweetButtonService,
     _zone: NgZone
     ) {
     this.showURL = false;
@@ -120,7 +119,6 @@ export class TaskPage {
     this.encodedTweetLink = `https://twitter.com/intent/tweet?hashtags=${this.hashtags}&url=${this.url}&text=${this.text}&via=${this.via}`;
     
     setTimeout(()=>{ this.googleMaps.loadMap(this.locLat, this.locLng, 15, content, this.map).then(map => this.map = map), 2000 });
-    setTimeout(()=>{ this.tweetButtonService.getButton(this.tweetcontainer, this.link).then(button => this.tweetcontainer = button), 2000 });
   }
 
 

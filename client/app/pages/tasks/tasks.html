@@ -108,7 +108,7 @@
     <ion-card *ngIf="!showMobileSharing">
       <ion-item>
         <h4>Share Your Hunt!</h4>
-        <button default><a href={{encodedTweetLink}}>Tweet</a></button>
+        <button default><a target='_blank' href={{encodedTweetLink}}>Tweet</a></button>
         <button default (click)="shareWeb()">Share</button>
       </ion-item>
     </ion-card>
