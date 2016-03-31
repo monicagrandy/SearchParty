@@ -74,25 +74,17 @@ io.on('connection', (socket) => {
       }
    });
 
-
-   socket.on('chat_message', (msg, username, room) => {
-      console.log('socket: ', msg, username);
-      io.to(room).emit('chat_message', msg, username);
+   socket.on('chat_message', (msg, username, datetime, room) => {
+      console.log('socket: ', msg, username, datetime, room);
+      io.to(room).emit('chat_message', msg, username, datetime);
       // chatPromises.addChatMessageToDB(msg, 'cNkgYkThXAx', username);
    });
-
-  socket.on('chat_message', (msg, username, datetime, room) => {
-    console.log('socket: ', msg, username);
-    io.emit('chat_message', msg, username, datetime);
-    // chatPromises.addChatMessageToDB(msg, 'cNkgYkThXAx', username);
-  });
-
 
    socket.on('disconnect', () => {
       console.log('user disconnected');
    });
 
-  socket.on('typing', data, room => {
+  socket.on('typing', (data, room) => {
       console.log('is typing', data);
       io.to(room).emit('isTyping', data);
   });

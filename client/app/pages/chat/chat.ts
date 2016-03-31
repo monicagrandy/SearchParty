@@ -47,14 +47,14 @@ export class Chat {
      this.timeout = undefined;
      this.typing = false;
 
-     this.socket.on('connect' => {
-        this.socket.emit('huntChatRoom', this.huntID);
-     });
 
     this.messages = [];
     this.zone = new NgZone({enableLongStackTrace: false});
     this.chatBox = "";
     this.socket = socket;
+    this.socket.on("connect", () => {
+         this.socket.emit('huntChatRoom', this.huntID);
+    });
     this.socket.on("chat_message", (msg, username, datetime) => {
       this.zone.run(() => {
         console.log(this.messages);
@@ -71,7 +71,7 @@ export class Chat {
         let messagesArray = messagesFromDB.chatMessages;
         for(let i = 0; i < messagesArray.length; i++) {
           let datetime = moment.unix(messagesArray[i].datetime).fromNow();
-          this.messages.push([messagesArray[i].username + ": " + messagesArray[i].text + " @ " + datetime]);
+          this.messages.push([messagesArray[i].username + ": " + messagesArray[i].text + "\n" + datetime]);
         }
       })
     }).catch(error => console.error(error));
@@ -99,8 +99,6 @@ export class Chat {
 
   send(message) {
     if (message && message !== "") {
-      // console.log("username inside chat.ts", this.username);
-      // console.log("message inside chat.ts", message);
 
       let messageObject = {
         username: this.username,
@@ -112,8 +110,10 @@ export class Chat {
       .then(messageAdded => {
         messageAdded = messageAdded[0];
         console.log("message  added", messageAdded);
-        this.socket.emit("chat_message", messageAdded.text, this.username, messageAdded.datetime);
-      }).catch(error => console.error(error))
+        this.socket.emit("chat_message", messageAdded.text, this.username, messageAdded.datetime, this.huntID);
+     }).catch(error => {
+        console.error(error)
+     });
 
     }
     this.chatBox = "";
