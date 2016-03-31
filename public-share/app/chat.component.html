@@ -1,0 +1,10 @@
+<div>
+  <ul id="messages"></ul>
+    <ul>
+      <li *ngFor="#message of messages">{{message}}</li>
+      <li *ngIf="typing" >{{username}} is typing...</li>
+  </ul>
+  <form action="">
+    <input id="m" autocomplete="off" (keyup)="OnKey($event)" [(ngModel)]="chatBox" placeholder="Message..."/><button (click)="send(chatBox)">Send</button>
+  </form>
+</div>
