@@ -51,9 +51,15 @@ export class ChatComponent {
         this.messages.push([username, msg, datetime]);
       });
    });
-   this.socket.on('typing', (data, room) => {
-      
-   })
+   this.socket.on("isTyping", (bool, username, room) => {
+      if(bool === true) {
+         this.otherUsername = username;
+         this.otherUserTyping = true;
+      } else {
+         clearTimeout(this.timeout);
+         this.timeout = setTimeout(this.timeoutFunction2.bind(this), 500);
+      }
+   }
 
    let huntIDObject = {huntID: this.huntID};
    this._chatService.postData(JSON.stringify(huntIDObject), this.GET_MESSAGES_URL)
@@ -78,6 +84,11 @@ export class ChatComponent {
     this.socket.emit('typing', false);
   }
 
+  timeoutFunction2() {
+     this.otherUserTyping = false;
+     this.socket.emit('typing', false);
+  }
+  
   OnKey(event:KeyboardEvent) {
     console.log('this is the keyup event ', event);
     if (event) {

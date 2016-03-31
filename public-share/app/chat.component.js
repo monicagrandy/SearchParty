@@ -58,9 +58,16 @@ System.register(['angular2/core', 'ng2-material/all', 'angular2/router', './chat
                             _this.messages.push([username, msg, datetime]);
                         });
                     });
-                    this.socket.on('typing', function (data, room) {
-                    });
-                    var huntIDObject = { huntID: this.huntID };
+                    this.socket.on("isTyping", function (bool, username, room) {
+                        if (bool === true) {
+                            _this.otherUsername = username;
+                            _this.otherUserTyping = true;
+                        }
+                        else {
+                            clearTimeout(_this.timeout);
+                            _this.timeout = setTimeout(_this.timeoutFunction2.bind(_this), 500);
+                        }
+                    }, let, huntIDObject = { huntID: this.huntID });
                     this._chatService.postData(JSON.stringify(huntIDObject), this.GET_MESSAGES_URL)
                         .then(function (messagesFromDB) {
                         _this.zone.run(function () {
@@ -79,6 +86,10 @@ System.register(['angular2/core', 'ng2-material/all', 'angular2/router', './chat
                 }
                 ChatComponent.prototype.timeoutFunction = function () {
                     this.typing = false;
+                    this.socket.emit('typing', false);
+                };
+                ChatComponent.prototype.timeoutFunction2 = function () {
+                    this.otherUserTyping = false;
                     this.socket.emit('typing', false);
                 };
                 ChatComponent.prototype.OnKey = function (event) {
