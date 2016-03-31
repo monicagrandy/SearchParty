@@ -8,7 +8,7 @@
 <ion-content>
   <ion-card>
     <ion-card-header>
-      Your Friends
+      Click to Add Your Amigos To Hunt {{huntID}}
     </ion-card-header>
     <ion-list *ngIf="friends">
       <button ion-item *ngFor="#friend of friends" (click)="friendTappedToHunt($event, friend)">
