@@ -19,6 +19,7 @@ export class ChatComponent {
     timeout: any;
     typing: boolean;
     huntID: string;
+    huntIDObject: any;
     messages: any;
     zone: any;
     chatBox: any;
@@ -33,7 +34,7 @@ export class ChatComponent {
      public dialog: MdDialog,
      public element: ElementRef
   ) {
-    this.huntID = _params.get('huntID');
+   this.huntID = _params.get('huntID');
    let socket = io.connect('http://localhost:8000');
    this.timeout = undefined;
    this.typing = false;
@@ -42,6 +43,7 @@ export class ChatComponent {
    this.chatBox = "";
    this.otherUserTyping = false;
    this.otherUsername = '';
+   this.username='';
    this.socket = socket;
    this.socket.on("connect", () => {
       this.socket.emit('huntChatRoom', this.huntID);

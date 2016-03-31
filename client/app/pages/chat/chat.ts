@@ -71,7 +71,7 @@ export class Chat {
          clearTimeout(this.timeout);
          this.timeout = setTimeout(this.timeoutFunction2.bind(this), 500);
       }
-   }
+   });
 
    let huntIDObject = {huntID: this.huntID};
    this._chatService.postData(JSON.stringify(huntIDObject), this.GET_MESSAGES_URL)

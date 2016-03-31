@@ -9,6 +9,7 @@
       <li *ngIf="otherUserTyping" >{{otherUsername}} is typing...</li>
   </ul>
   <form action="">
-    <input id="m" autocomplete="off" (keyup)="OnKey($event)" [(ngModel)]="chatBox" placeholder="Message..."/><button (click)="send(chatBox)">Send</button>
+    <input id="m" autocomplete="off" (keyup)="OnKey($event)" [(ngModel)]="chatBox" placeholder="Message..."/>
+    <button (click)="send(chatBox)" (ngSubmit)="send(chatBox)">Send</button>
   </form>
 </div>
