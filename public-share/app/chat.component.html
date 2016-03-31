@@ -1,7 +1,10 @@
 <div>
   <ul id="messages"></ul>
     <ul>
-      <li *ngFor="#message of messages">{{message}}</li>
+      <li *ngFor="#message of messages">
+         <h2>{{message[0]}}: {{message[1]}}</h2>
+         <p>{{message[2]}}</p>
+      </li>
       <li *ngIf="typing" >{{username}} is typing...</li>
   </ul>
   <form action="">

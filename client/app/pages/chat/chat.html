@@ -8,8 +8,7 @@
 <ion-content>
   <ion-list>
       <ion-item class="item-text-wrap" *ngFor="#message of messages">
-          <h2>{{message[0]}}</h2>
-          <p>{{message[1]}}</p>
+          <h2>{{message[0]}}: {{message[1]}}</h2>
           <p>{{message[2]}}</p>
       </ion-item>
       <ion-item class="item-text-wrap" *ngIf="typing">{{username}} is typing...</ion-item>
