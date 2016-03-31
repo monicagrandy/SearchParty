@@ -40,20 +40,36 @@ System.register(['angular2/core', 'ng2-material/all', 'angular2/router', './chat
                     this.element = element;
                     this.ADD_MESSAGE_URL = 'http://localhost:8000/addChatMessage';
                     this.GET_MESSAGES_URL = 'http://localhost:8000/getChatMessages';
+                    this.huntID = _params.get('huntID');
                     var socket = io.connect('http://localhost:8000');
                     this.timeout = undefined;
                     this.typing = false;
-                    this.huntID = _params.get('huntID');
                     this.messages = [];
                     this.zone = new core_2.NgZone({ enableLongStackTrace: false });
                     this.chatBox = "";
+                    this.otherUserTyping = false;
+                    this.otherUsername = '';
+                    this.username = '';
                     this.socket = socket;
+                    this.socket.on("connect", function () {
+                        _this.socket.emit('huntChatRoom', _this.huntID);
+                    });
                     this.socket.on("chat_message", function (msg, username, datetime) {
                         _this.zone.run(function () {
                             console.log(_this.messages);
                             datetime = moment.unix(datetime).fromNow();
-                            _this.messages.push([username + ": " + msg + " @ " + datetime]);
+                            _this.messages.push([username, msg, datetime]);
                         });
+                    });
+                    this.socket.on("isTyping", function (bool, username, room) {
+                        if (bool === true) {
+                            _this.otherUsername = username;
+                            _this.otherUserTyping = true;
+                        }
+                        else {
+                            clearTimeout(_this.timeout);
+                            _this.timeout = setTimeout(_this.timeoutFunction2.bind(_this), 500);
+                        }
                     });
                     var huntIDObject = { huntID: this.huntID };
                     this._chatService.postData(JSON.stringify(huntIDObject), this.GET_MESSAGES_URL)
@@ -63,21 +79,21 @@ System.register(['angular2/core', 'ng2-material/all', 'angular2/router', './chat
                             var messagesArray = messagesFromDB.chatMessages;
                             for (var i = 0; i < messagesArray.length; i++) {
                                 var datetime = moment.unix(messagesArray[i].datetime).fromNow();
+                                console.log('THIS IS BEING PUSHED TO MESSAGES ARRAY');
+                                console.log(messagesArray[i].username, messagesArray[i].text, datetime);
                                 _this.messages.push([messagesArray[i].username + ": " + messagesArray[i].text + " @ " + datetime]);
                             }
                         });
                     }).catch(function (error) { return console.error(error); });
+                    //Change this later ethan, jesus dude
                     this.username = window.prompt('Enter a username!', '');
                 }
-                // showAlert() {
-                //   let config = new MdDialogConfig()
-                //     .textContent('You can specify some description text in here')
-                //     .title('This is an alert title')
-                //     .ok('Got it!');
-                //   this.dialog.open(MdDialogBasic, this.element, config);
-                // };
                 ChatComponent.prototype.timeoutFunction = function () {
                     this.typing = false;
+                    this.socket.emit('typing', false);
+                };
+                ChatComponent.prototype.timeoutFunction2 = function () {
+                    this.otherUserTyping = false;
                     this.socket.emit('typing', false);
                 };
                 ChatComponent.prototype.OnKey = function (event) {
@@ -87,7 +103,7 @@ System.register(['angular2/core', 'ng2-material/all', 'angular2/router', './chat
                         if (this.typing === false) {
                             this.typing = true;
                             console.log('emitting true for typing', this.typing);
-                            this.socket.emit('typing', true);
+                            this.socket.emit('typing', true, this.huntID);
                             clearTimeout(this.timeout);
                             this.timeout = setTimeout(this.timeoutFunction.bind(this), 1500);
                         }
@@ -96,8 +112,6 @@ System.register(['angular2/core', 'ng2-material/all', 'angular2/router', './chat
                 ChatComponent.prototype.send = function (message) {
                     var _this = this;
                     if (message && message !== "") {
-                        console.log("username inside chat.ts", this.username);
-                        console.log("message inside chat.ts", message);
                         var messageObject = {
                             username: this.username,
                             huntID: this.huntID,
@@ -107,8 +121,10 @@ System.register(['angular2/core', 'ng2-material/all', 'angular2/router', './chat
                             .then(function (messageAdded) {
                             messageAdded = messageAdded[0];
                             console.log("message  added", messageAdded);
-                            _this.socket.emit("chat_message", messageAdded.text, _this.username, messageAdded.datetime);
-                        }).catch(function (error) { return console.error(error); });
+                            _this.socket.emit("chat_message", messageAdded.text, messageAdded.username, messageAdded.datetime, _this.huntID);
+                        }).catch(function (error) {
+                            console.error(error);
+                        });
                     }
                     this.chatBox = "";
                 };

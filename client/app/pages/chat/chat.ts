@@ -45,7 +45,10 @@ export class Chat {
    this.huntID = navParams.get('huntID');
    let socket = io.connect('http://localhost:8000');
    this.timeout = undefined;
+   this.timeout2 = undefined;
    this.typing = false;
+   this.otherUserTyping = false;
+   this.otherUsername = '';
    this.messages = [];
    this.zone = new NgZone({enableLongStackTrace: false});
    this.chatBox = "";
@@ -57,8 +60,18 @@ export class Chat {
       this.zone.run(() => {
         console.log(this.messages);
         datetime = moment.unix(datetime).fromNow();
-        this.messages.push([username +": "+ msg + " @ " + datetime]);
+        this.messages.push([username, msg, datetime]);
       });
+   });
+
+   this.socket.on("isTyping", (bool, username) => {
+      if(bool === true) {
+         this.otherUsername = username;
+         this.otherUserTyping = true;
+      } else {
+         clearTimeout(this.timeout);
+         this.timeout = setTimeout(this.timeoutFunction.bind(this), 1500);
+      }
    });
 
    let huntIDObject = {huntID: this.huntID};
@@ -82,19 +95,16 @@ export class Chat {
     this.socket.emit('typing', false);
   }
 
-  OnKey(event:KeyboardEvent) {
-    console.log('this is the keyup event ', event);
-    if (event) {
-      console.log('ln 84: ', this.typing);
-      if (this.typing === false) {
-        this.typing = true;
-        console.log('emitting true for typing', this.typing);
-        this.socket.emit('typing', true, this.huntID);
-        clearTimeout(this.timeout);
-        this.timeout = setTimeout(this.timeoutFunction.bind(this), 1500);
-      }
-    }
-  }
+  // OnKey(event:KeyboardEvent) {
+  //   if (event) {
+  //     if (this.typing === false) {
+  //       this.typing = true;
+  //       this.socket.emit('typing', true, this.username, this.huntID);
+  //       clearTimeout(this.timeout);
+  //       this.timeout = setTimeout(this.timeoutFunction.bind(this), 1500);
+  //     }
+  //   }
+  // }
 
   send(message) {
     if (message && message !== "") {
