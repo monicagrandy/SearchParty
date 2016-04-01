@@ -6,10 +6,10 @@ import {FORM_DIRECTIVES} from 'angular2/common';
 import {PastHuntsPage} from '../past-hunts/past-hunts';
 import {FriendPage} from '../friend/friend';
 import {FriendsListPage} from '../friends-list/friends-list';
+import {JwtHelper} from 'angular2-jwt';
 import {HuntFilterPipe} from '../../util/filter-pipe';
 import {TaskPage} from '../tasks/tasks';
 import {TaskService} from '../../services/task/task-service';
-
 
 @Page({
   templateUrl: 'build/pages/profile/profile.html',
@@ -22,6 +22,10 @@ export class ProfilePage {
   hunts: any;
   token: any;
   friends: any;
+  user: any;
+  jwtHelper: JwtHelper = new JwtHelper();
+  addedHunts: any;
+  noFriend: false;
   // sample types for hunts and friends
   // friends: Array<{username: string, profile_image: string}>;
   // hunts: Array<{type: string, huntname: string, image: string, icon: string}>;
@@ -36,6 +40,10 @@ export class ProfilePage {
   ) {
 
     this.token = this.local.get('id_token')._result;
+
+    if (this.token) {
+      this.user = this.jwtHelper.decodeToken(this.token).username;
+    }
 
     console.log('this is the token before it is sent', this.token);
 
@@ -52,6 +60,13 @@ export class ProfilePage {
       this.hunts = huntsWithAtleastOneTask;
     })
     .catch(error => console.log(error));
+
+    this.profileService.addedHunts(this.user)
+      .then(data => {
+        console.log("these are the added hunts in profile.ts", data)
+        this.addedHunts = data[0]
+      })    
+      .catch(error => console.log(error));
 
     this.friendService.getFriends(this.token)
     .then(data => {
@@ -105,16 +120,23 @@ export class ProfilePage {
     console.log(friend);
     this.friendService.addFriend(this.token, friend)
     .then(data => {
-      console.log('friend added! ', data);
-      // update friendslist after friend is added
-      this.friendService.getFriends(this.token)
-      .then(data => {
-        console.log('friends gotten! ', data);
-        this.friends = data;
+        console.log('friend added! ', data);
+        // update friendslist after friend is added
+        this.friendService.getFriends(this.token)
+          .then(data => {
+            console.log('friends gotten! ', data);
+            this.friends = data;
+          })
+            .catch(error => {
+              this.noFriend = true
+              console.log(error)
+            })
+        })
+      .catch(error => {
+        this.noFriend = true
+        console.log(error)
       })
-      .catch(error => console.log(error));
-    })
-    .catch(error => console.log(error));
+    setTimeout(() => { this.noFriend = false }, 1000);
   }
 
   addFriendToHuntTapped(event, hunt) {
