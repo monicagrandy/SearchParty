@@ -52,7 +52,9 @@ SearchParty is super awesome and uses [Neo4j](http://neo4j.com/), "the world's l
 Here's how to get an instance going on your machine:
 
 [Install neo4j LINUX/MAC Version](http://neo4j.com/download/other-releases/)
+
 Drag into your applications folder
+
 Change filename to be “neo4j-3.0.0-M05” (or whatever the version is)
 
 [Install java 1.8](http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html)
@@ -65,7 +67,6 @@ $ bin/neo4j stop #if you should want to stop the local instance
 ```
 
 Make sure that the IP Address in server/db/neo/neo.js matches yours!
----------------
 
 Now for the app itself:
 
