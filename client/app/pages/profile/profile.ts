@@ -6,7 +6,6 @@ import {FORM_DIRECTIVES} from 'angular2/common';
 import {PastHuntsPage} from '../past-hunts/past-hunts';
 import {FriendPage} from '../friend/friend';
 import {FriendsListPage} from '../friends-list/friends-list';
-import {FilterPipe} from '../../util/filter-pipe';
 import {JwtHelper} from 'angular2-jwt';
 import {HuntFilterPipe} from '../../util/filter-pipe';
 import {TaskPage} from '../tasks/tasks';
