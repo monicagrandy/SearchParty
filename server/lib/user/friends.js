@@ -44,6 +44,7 @@ module.exports = {
     let addFriendToHuntQuery =
     `MATCH (hunt:Hunt{huntID:"${huntID}"}), (friend:User{username:"${username}"})
     CREATE (friend)-[:PARTICIPATED_IN]->(hunt)
+    CREATE (friend)-[:ADDED_TO]->(hunt)
     RETURN friend`;
 
     return neo4jPromise.databaseQueryPromise(addFriendToHuntQuery)
@@ -53,6 +54,23 @@ module.exports = {
           resolve(friendAdded);
         } else {
           reject({"error": "could not add friend to hunt"});
+        }
+      })
+    }).catch(error => console.error(error));
+  }, 
+
+  retrieveAddedHuntsPromise: (username) => {
+    let addedHuntsQuery =
+    `MATCH (user:User{username:"${username}"})-[:ADDED_TO]->(hunt)
+    WITH COLLECT (distinct hunt) as hunts
+    RETURN hunts`;
+    return neo4jPromise.databaseQueryPromise(addedHuntsQuery)
+    .then(huntArray => {
+      return new Promise((resolve, reject) => {
+        if(huntArray !== null) {
+          resolve(huntArray);
+        } else {
+          reject({"error": "error finding hunts"});
         }
       })
     }).catch(error => console.error(error));
