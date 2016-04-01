@@ -25,6 +25,7 @@ export class ChatComponent {
     chatBox: any;
     socket: any;
     username: any;
+    nameAdded = false;
     ADD_MESSAGE_URL: string = 'http://localhost:8000/addChatMessage';
     GET_MESSAGES_URL: string = 'http://localhost:8000/getChatMessages';
 
@@ -80,7 +81,12 @@ export class ChatComponent {
       })
    }).catch(error => console.error(error));
    //Change this later
-   this.username = window.prompt('Enter a username!', '');
+   // this.username = window.prompt('Enter a username!', '');
+}
+
+getUsername(username){
+  this.username = username
+  this.nameAdded = true
 }
 
 invocation() {
