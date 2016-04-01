@@ -26,8 +26,8 @@ export class ChatComponent {
     socket: any;
     username: any;
     nameAdded = false;
-    ADD_MESSAGE_URL: string = 'http://localhost:8000/addChatMessage';
-    GET_MESSAGES_URL: string = 'http://localhost:8000/getChatMessages';
+    ADD_MESSAGE_URL: string = 'https://getsearchparty.com/addChatMessage';
+    GET_MESSAGES_URL: string = 'https://getsearchparty.com/getChatMessages';
 
   constructor(
      private _chatService: ChatService,
@@ -36,7 +36,7 @@ export class ChatComponent {
      public element: ElementRef
   ) {
    this.huntID = _params.get('huntID');
-   let socket = io.connect('http://localhost:8000');
+   let socket = io.connect('https://getsearchparty.com');
    this.otherUserTyping = false;
    this.otherUsername = '';
    this.messages = [];

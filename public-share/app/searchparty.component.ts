@@ -38,7 +38,7 @@ export class SearchPartyComponent {
     this.huntID = _params.get('huntID');
     this.allTasks = [];
     this.getHuntData(this.huntID);
-    let socket = io.connect('http://localhost:8000');
+    let socket = io.connect('https://getsearchparty.com');
     this.socket = socket;
     this.socket.on("connect", () => {
       // this.socket.emit('huntChatRoom', this.huntID);
