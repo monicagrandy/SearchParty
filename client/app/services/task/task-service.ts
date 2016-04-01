@@ -1,6 +1,6 @@
 import {Injectable} from 'angular2/core';
 import {Http, Headers} from 'angular2/http';
-import 'rxjs/add/operator/map';  // we need to import this now
+import 'rxjs/add/operator/map'; 
 
 @Injectable()
 export class TaskService {
@@ -34,7 +34,8 @@ export class TaskService {
   }
   
   createSocket(huntID, username) {
-    let socket = io.connect('http://localhost:8000');
+    // update url later
+    this.socket = io.connect('http://localhost:8000');
     this.huntID = huntID;
     this.username = username;
     this.socket.on("connect", () => {
