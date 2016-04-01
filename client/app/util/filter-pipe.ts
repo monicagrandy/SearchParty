@@ -5,22 +5,15 @@ import {Pipe, PipeTransform} from 'angular2/core';
 )
 export class HuntFilterPipe implements PipeTransform{
   transform(value:any, args) {
-
-    return value.filter(hunt => {
-
-      let prop = hunt;
-
-      for(let i = 0; i < args.length; i++) {
-        if(prop[args[i]]) {
-          prop = prop[args[i]];
-        }
-        else {
+    if(value) {
+      return value.filter(hunt => {
+        if(hunt.feedback.value == args) {
           return true;
+        } else {
+          return false;
         }
       }
-      return false;
-    })
-
+    }
   }
 }
 
