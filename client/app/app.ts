@@ -10,6 +10,8 @@ import {ProfilePage} from './pages/profile/profile';
 import {Chat} from './pages/chat/chat';
 import {enableProdMode} from 'angular2/core';
 
+enableProdMode();
+
 import * as _ from 'underscore';
 
 // Avoid name not found warnings
