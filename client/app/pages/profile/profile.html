@@ -44,7 +44,7 @@
       <button ion-item *ngFor="#hunt of addedHunts">
           <div (click)="onGoingHuntTapped($event, hunt)">
             <ion-icon name="search" item-left></ion-icon>
-            {{hunt.huntID}}
+            {{hunt.stats.huntID}}
           </div>
           <ion-icon name="person-add" item-right (click)="addFriendToHuntTapped($event, hunt)"></ion-icon>
       </button>
