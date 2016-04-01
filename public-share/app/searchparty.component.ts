@@ -1,29 +1,78 @@
-import {Component, OnInit} from 'angular2/core';
-import {RouteConfig, ROUTER_DIRECTIVES, ROUTER_PROVIDERS, RouteParams} from 'angular2/router';
+import {Component, OnInit, ViewChild} from 'angular2/core';
+import {RouteConfig, Router, ROUTER_DIRECTIVES, ROUTER_PROVIDERS, RouteParams} from 'angular2/router';
 import {MATERIAL_DIRECTIVES, MATERIAL_PROVIDERS} from 'ng2-material/all';
 import {SearchPartyService} from './searchparty.service';
 import {GoogleMapService} from './map.service';
-import 'rxjs/add/operator/map';
-import * as _ from 'underscore';
+import {ChatComponent} from './chat.component';
+
 
 @Component({
   selector: 'my-searchparty',
   templateUrl: './share/app/searchparty.component.html',
   styleUrls: ['./share/app/searchparty.component.css'],
-  directives: [ROUTER_DIRECTIVES, MATERIAL_DIRECTIVES],
+  directives: [ROUTER_DIRECTIVES, MATERIAL_DIRECTIVES, ChatComponent],
   providers: [MATERIAL_PROVIDERS, SearchPartyService, GoogleMapService]
 })
 export class SearchPartyComponent {
-  
+
+  @ViewChild('modal')
+  modal: ModalComponent;
+  items: string[] = ['item1', 'item2', 'item3'];
+  modalSelected: string;
+  selected: string;
+  animationsEnabled: boolean = true;
+
+  map = null;
   huntID: any;
   error: any;
-  map: any;
-  
-  constructor(private _params: RouteParams, private _searchPartyService: SearchPartyService) {
+  huntTasks: any;
+  huntChats: any;
+  allPlaces: any;
+  allTasks: any;
+  totalDist: number;
+  startLat: number;
+  startLng: number;
+  content: any;
+   
+
+  constructor(private _params: RouteParams, private googleMaps: GoogleMapService, private _searchPartyService: SearchPartyService) {
     this.huntID = _params.get('huntID');
-    this._searchPartyService.getHunt(this.huntID)
-      .then(data => console.log(data))
-        .catch(err => console.log(err));
+    this.allTasks = []
+    this.allPlaces = []
+    this.getHuntData(this.huntID)
   }
+
+ getHuntData(id){
+   this._searchPartyService.getHunt(id)
+    .then(data => {
+      //console.log("promise returned")
+      this.huntTasks = data.tasks;
+      this.startLat = data.tasks[0].place.lat;
+      this.startLng = data.tasks[0].place.lng;
+      this.content = '<h4>' + data.tasks[0].place.name + ' < /h4><p>' + data.tasks[0].place.address + '</p > ';
+      if(data.chatroom.messages.length > 0){
+        this.huntChats = data.chatroom.messages;
+      }
+      this.huntTasks.forEach((item) => {
+        this.allPlaces.push(item.place);
+        this.allTasks.push(item.task);
+      })
+      console.log("hello")
+      console.log(this.allTasks)
+      console.log(this.allPlaces)
+      this.showMap()
+    })
+      .catch(err => console.log(err));
+}
+
+  showMap() {
+    this.googleMaps.finalMapMaker(this.allPlaces, this.allTasks)
+        .then(data => {
+          let flightPath = data;
+        });
+
+      this.totalDist = this.googleMaps.calcDistance(this.allPlaces);
+      console.log(this.totalDist)
+    }
 
 }

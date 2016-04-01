@@ -73,4 +73,27 @@ module.exports = {
     })
     .catch(error);
   },
+  addFriendToHunt: (req, res) => {
+
+    let huntID = req.body.huntID;
+    let friendUsername = req.body.friendUsername;
+
+    friends.addFriendToHuntPromise(friendUsername, huntID)
+    .then(friendAdded => {
+      console.log("this friend was added to your hunt", friendAdded);
+      res.json(friendAdded);
+    })
+    .catch(error);
+  },
+  retrieveAddedHunts: (req, res) => {
+    
+    let username = req.body.username
+    console.log('calling retrieveAddedHunts!! with username ', username);
+    friends.retrieveAddedHuntsPromise(username)
+    .then(huntsArray => {
+      console.log("these are the hunts you've been added to", huntsArray);
+      res.json(huntsArray)
+    })
+    .catch(error);
+  }
 };

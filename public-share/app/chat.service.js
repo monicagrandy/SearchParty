@@ -11,7 +11,7 @@ System.register(['angular2/core', 'angular2/http', 'rxjs/add/operator/map'], fun
         if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
     };
     var core_1, http_1;
-    var SearchPartyService;
+    var ChatService;
     return {
         setters:[
             function (core_1_1) {
@@ -22,41 +22,34 @@ System.register(['angular2/core', 'angular2/http', 'rxjs/add/operator/map'], fun
             },
             function (_1) {}],
         execute: function() {
-            SearchPartyService = (function () {
-                function SearchPartyService(_http) {
+            ChatService = (function () {
+                function ChatService(_http) {
                     this._http = _http;
-                    this.URL = 'http://localhost:8000/singleHunt'; //update this later
                     this.contentHeader = new http_1.Headers({ 'Content-Type': 'application/json' });
                 }
-                SearchPartyService.prototype.getHunt = function (huntID) {
+                ChatService.prototype.postData = function (data, url) {
                     var _this = this;
-                    console.log('called post req');
-                    var httpPostPromise = new Promise(function (resolve, reject) {
-                        console.log('inside post promise');
-                        var dataToSend = { huntID: huntID };
-                        _this._http.post(_this.URL, JSON.stringify(dataToSend), { headers: _this.contentHeader })
+                    console.log("called post req");
+                    var httpPromise = new Promise(function (resolve, reject) {
+                        console.log("data inside chat Promise", data);
+                        _this._http.post(url, data, { headers: _this.contentHeader })
                             .map(function (res) { return res.json(); })
                             .subscribe(function (data) {
-                            console.log('data from promise: ', data);
+                            console.log("data from promise: ", data);
                             resolve(data);
-                        }, function (err) {
-                            _this.logError(err);
-                            reject(err);
-                        }, function () { return console.log('data recieved'); });
+                        }, function (err) { return reject(err); }, function () { return console.log('data recieved'); });
                     });
-                    return httpPostPromise;
+                    return httpPromise;
                 };
-                SearchPartyService.prototype.logError = function (err) {
-                    console.error('There was an error: ' + err);
-                };
-                SearchPartyService = __decorate([
+                ChatService = __decorate([
+                    // we need to import this now
                     core_1.Injectable(), 
                     __metadata('design:paramtypes', [http_1.Http])
-                ], SearchPartyService);
-                return SearchPartyService;
+                ], ChatService);
+                return ChatService;
             }());
-            exports_1("SearchPartyService", SearchPartyService);
+            exports_1("ChatService", ChatService);
         }
     }
 });
-//# sourceMappingURL=searchparty.service.js.map
+//# sourceMappingURL=chat.service.js.map

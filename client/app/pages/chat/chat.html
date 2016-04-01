@@ -2,22 +2,29 @@
   <button menuToggle>
     <ion-icon name="menu"></ion-icon>
   </button>
-  <ion-title>Public Chat</ion-title>
+  <ion-title>Hunt Chat</ion-title>
 </ion-navbar>
 
 <ion-content>
   <ion-list>
-      <ion-item *ngFor="#message of messages">{{message}}</ion-item>
-      <ion-item *ngIf="typing" >{{username}} is typing...</ion-item>
+      <ion-item *ngFor="#message of messages">
+          <h2>{{message[0]}}: {{message[1]}}</h2>
+          <p>{{message[2]}}</p>
+      </ion-item>
+      <ion-item *ngIf="otherUserTyping">
+         <p>{{otherUsername}} is typing...</p>
+      </ion-item>
   </ion-list>
 </ion-content>
 
 <ion-toolbar position="bottom">
+  <form ng-submit='submitLogin()'>
   <ion-input type="text" (keyup)="OnKey($event)" [(ngModel)]="chatBox" placeholder="Message...">
   </ion-input>
   <ion-buttons end>
-    <button (click)="send(chatBox)">
+    <button (click)="send(chatBox)" (ngSubmit)="send(chatBox)">
       Send
     </button>
   </ion-buttons>
+  </form>
 </ion-toolbar>

@@ -1,4 +1,4 @@
-System.register(['angular2/core', 'angular2/router', 'ng2-material/all', './searchparty.service', './map.service', 'rxjs/add/operator/map'], function(exports_1, context_1) {
+System.register(['angular2/core', 'angular2/router', 'ng2-material/all', './searchparty.service', './map.service', './chat.component'], function(exports_1, context_1) {
     "use strict";
     var __moduleName = context_1 && context_1.id;
     var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
@@ -10,7 +10,7 @@ System.register(['angular2/core', 'angular2/router', 'ng2-material/all', './sear
     var __metadata = (this && this.__metadata) || function (k, v) {
         if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
     };
-    var core_1, router_1, all_1, searchparty_service_1, map_service_1;
+    var core_1, router_1, all_1, searchparty_service_1, map_service_1, chat_component_1;
     var SearchPartyComponent;
     return {
         setters:[
@@ -29,26 +29,67 @@ System.register(['angular2/core', 'angular2/router', 'ng2-material/all', './sear
             function (map_service_1_1) {
                 map_service_1 = map_service_1_1;
             },
-            function (_1) {}],
+            function (chat_component_1_1) {
+                chat_component_1 = chat_component_1_1;
+            }],
         execute: function() {
             SearchPartyComponent = (function () {
-                function SearchPartyComponent(_params, _searchPartyService) {
+                function SearchPartyComponent(_params, googleMaps, _searchPartyService) {
                     this._params = _params;
+                    this.googleMaps = googleMaps;
                     this._searchPartyService = _searchPartyService;
+                    this.items = ['item1', 'item2', 'item3'];
+                    this.animationsEnabled = true;
+                    this.map = null;
                     this.huntID = _params.get('huntID');
-                    this._searchPartyService.getHunt(this.huntID)
-                        .then(function (data) { return console.log(data); })
-                        .catch(function (err) { return console.log(err); });
+                    this.allTasks = [];
+                    this.allPlaces = [];
+                    this.getHuntData(this.huntID);
                 }
+                SearchPartyComponent.prototype.getHuntData = function (id) {
+                    var _this = this;
+                    this._searchPartyService.getHunt(id)
+                        .then(function (data) {
+                        //console.log("promise returned")
+                        _this.huntTasks = data.tasks;
+                        _this.startLat = data.tasks[0].place.lat;
+                        _this.startLng = data.tasks[0].place.lng;
+                        _this.content = '<h4>' + data.tasks[0].place.name + ' < /h4><p>' + data.tasks[0].place.address + '</p > ';
+                        if (data.chatroom.messages.length > 0) {
+                            _this.huntChats = data.chatroom.messages;
+                        }
+                        _this.huntTasks.forEach(function (item) {
+                            _this.allPlaces.push(item.place);
+                            _this.allTasks.push(item.task);
+                        });
+                        console.log("hello");
+                        console.log(_this.allTasks);
+                        console.log(_this.allPlaces);
+                        _this.showMap();
+                    })
+                        .catch(function (err) { return console.log(err); });
+                };
+                SearchPartyComponent.prototype.showMap = function () {
+                    this.googleMaps.finalMapMaker(this.allPlaces, this.allTasks)
+                        .then(function (data) {
+                        var flightPath = data;
+                    });
+                    this.totalDist = this.googleMaps.calcDistance(this.allPlaces);
+                    console.log(this.totalDist);
+                };
+                __decorate([
+                    core_1.ViewChild('modal'), 
+                    __metadata('design:type', Object)
+                ], SearchPartyComponent.prototype, "modal", void 0);
                 SearchPartyComponent = __decorate([
                     core_1.Component({
                         selector: 'my-searchparty',
                         templateUrl: './share/app/searchparty.component.html',
                         styleUrls: ['./share/app/searchparty.component.css'],
-                        directives: [router_1.ROUTER_DIRECTIVES, all_1.MATERIAL_DIRECTIVES],
+                        directives: [router_1.ROUTER_DIRECTIVES, all_1.MATERIAL_DIRECTIVES, chat_component_1.ChatComponent],
                         providers: [all_1.MATERIAL_PROVIDERS, searchparty_service_1.SearchPartyService, map_service_1.GoogleMapService]
                     }), 
-                    __metadata('design:paramtypes', [router_1.RouteParams, searchparty_service_1.SearchPartyService])
+                    __metadata('design:paramtypes', [router_1.RouteParams, map_service_1.GoogleMapService, searchparty_service_1.SearchPartyService])
                 ], SearchPartyComponent);
                 return SearchPartyComponent;
             }());

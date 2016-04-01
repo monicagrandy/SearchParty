@@ -1,5 +1,23 @@
-<h2>HUNT GOES HERE</h2>
-<h3>{{huntID}}</h3>
+<h2>Where you've been:</h2>
+
+  <div id="map"></div>
+
+  <div *ngFor="#obj of huntTasks">
+    <strong>Location</strong>
+    <p>{{obj.place.name}}</p>
+    <strong>Challenge</strong>
+    <p>{{obj.task.content}}</p>
+    <img *ngIf="obj.image" src="{{obj.image.url}}">
+  </div>
+
+  <div>
+    <h2>Distance Travelled:</h2>
+    <p>{{totalDist}} miles</p>
+  </div>
+
+  <h2>Hunt Chat:</h2>
+  <my-chat></my-chat>
+
 <div *ngIf="error">
   <p>{{error}}</p>
 </div>

@@ -27,6 +27,8 @@ export class TaskPage {
   local: LocalStorage;
   locAddress: string; //set this to whatever is in local storage
   currChallenge: string;
+  userLat: any;
+  userLong: any;
   locLat: any; //set this to whatever is in local storage
   locLng: any; //set this to whatever is in local storage
   locName: string; //set this to whatever is in local storage
@@ -53,14 +55,28 @@ export class TaskPage {
   FEEDBACK_URL: string = 'https://getsearchparty.com/feedback';
   UPLOAD_URL: string = 'https://getsearchparty.com/upload';
   feedback: string;
-  showMobileSharing: boolean;
   link: string;
+  directionLink: string;
   finalData: any;
+  text: string;
+  url: string;
+  hashtags: string;
+  via: string;
+  showURL: boolean;
+  encodedTweetLink: any;
+  resumeHuntKeywordsLeft: number;
 
 
-  constructor(platform: Platform, private nav: NavController, navParams: NavParams, private _taskService: TaskService, private googleMaps: GoogleMapService, _zone: NgZone) {
+  constructor(
+    platform: Platform,
+    private nav: NavController,
+    navParams: NavParams,
+    private _taskService: TaskService,
+    private googleMaps: GoogleMapService,
+    _zone: NgZone
+    ) {
+    this.showURL = false;
     this.keywordsLength = this.keywords.length;
-
     this._zone = _zone;
     this.platform = platform;
     this.image = null;
@@ -70,26 +86,54 @@ export class TaskPage {
     if (this.token) {
       this.user = this.jwtHelper.decodeToken(this.token).username;
     }
-
-    if (window.plugins) {
-      this.showMobileSharing = true;
-    } else {
-      this.showMobileSharing = false;
-    }
-    console.log("+++line 79 tasks.js", this.showMobileSharing)
-
+    
+    // general grab params setup
     this.locAddress = navParams.get('locAddress');
+    this.userLat = localStorage.userLat;
+    this.userLong = localStorage.userLng;
     this.huntID = navParams.get('huntID');
     this.currChallenge =  localStorage.currChallenge || navParams.get('currChallenge');
     this.locLat = localStorage.locLat || navParams.get('locLat');
     this.locLng = localStorage.locLng || navParams.get('locLng');
     this.locName = localStorage.locName || navParams.get('locName');
     this.previousPlaces = navParams.get('previousPlaces');
+    this.resumeHuntKeywordsLeft = navParams.get('resumeHuntKeywordsLeft');
+    
+    // run through previousTasks from navParams and splice out 
+    // keywords to set proper length if coming back from a resuming hunt
     this.previousTasks = navParams.get('previousTasks');
-    let content = '<h4>' + this.locName + '</h4><p>' + this.locAddress  + '</p>';
-
+    if (this.previousTasks.length < 2 ) {
+      this.previousPlaces = [];
+      let keyword = this.keywords.unshift()
+      this.sendData(keyword);
+    } else {
+      console.log('resuming hunt!');
+      console.log('this is the previous place ', this.previousPlaces);
+      console.log('this is the previous task ', this.previousTasks);
+      this.keywords.splice(0, this.resumeHuntKeywordsLeft);
+    }
+    
+    // socket setup
+    this._taskService.createSocket(this.huntID, this.user);
+    this._taskService.createWatchLocation();
+    
+    // geowatching setup
+    // this._taskService.createWatchLocation();
+    
+    // set links for sharing and directions
     this.link = `http://localhost:8000/share/#/hunt/${this.huntID}`;
-    setTimeout(()=>{ this.googleMaps.loadMap(this.locLat, this.locLng, 15, content, this.map).then(map => this.map = map), 2000 })
+    this.directionLink = `https://www.google.com/maps/dir/${this.userLat},${this.userLong}/${this.locAddress}`;
+
+    // twitter specific link generation
+    this.text = encodeURIComponent('I am going on an adventure! Follow me on Search Party!');
+    this.hashtags = 'searchparty';
+    this.via = 'GetSearchParty';
+    this.url = encodeURIComponent(this.link);
+    this.encodedTweetLink = `https://twitter.com/intent/tweet?hashtags=${this.hashtags}&url=${this.url}&text=${this.text}&via=${this.via}`;
+    
+    // google map creation
+    let content = '<h4>' + this.locName + '</h4><p>' + this.locAddress  + '</p>';
+    setTimeout(()=>{ this.googleMaps.loadMap(this.locLat, this.locLng, 15, content, this.map).then(map => this.map = map), 2000 });
   }
 
 
@@ -127,6 +171,7 @@ takePic() {
   getNewTask(){
     console.log(this.keywordsLength - this.keywords.length)
     this.imgData = ""
+    this.showURL = false;
     console.log('getting ready to send new task!')
     console.log(this.keywords);
     console.log('this is the huntID in the tasks! ');
@@ -135,33 +180,7 @@ takePic() {
     if (this.keywords.length > 0) {
       let keyword = this.keywords.shift();
       console.log('this is the huntID before it is sent! ', this.huntID);
-
-      let dataObj = {
-        previousPlaces: this.previousPlaces,
-        previousTasks: this.previousTasks,
-        keyword: keyword,
-        token: localStorage.id_token,
-        huntID: this.huntID,
-        geolocation: {
-          lat: this.locLat,
-          lng: this.locLng
-        }
-      };
-
-      this._taskService.postData(JSON.stringify(dataObj), this.TASKS_URL)
-        .then(result => {
-          this.locName = result.businesses.name;
-          this.currChallenge = result.tasks.content;
-          this.previousPlaces.push(result.businesses);
-          this.locAddress = result.businesses.location.display_address[0] + ', ' + result.businesses.location.display_address[2];
-          this.previousTasks.push(result.tasks);
-          this.locLat = result.businesses.location.coordinate.latitude;
-          this.locLng = result.businesses.location.coordinate.longitude;
-          this.markComplete();
-          let content = '<h4>' + this.locName + '</h4><p>' + this.locAddress  + '</p>';
-          this.map = this.googleMaps.loadMap(this.locLat, this.locLng, 15, content, this.map);
-        });
-
+      this.sendData(keyword);
     } else {
       console.log('no more tasks!');
       console.log(this.previousTasks);
@@ -192,7 +211,7 @@ takePic() {
         let flightPath = data;
       });
 
-    this.finalDist = this.googleMaps.calcDistance(this.previousPlaces);   
+    this.finalDist = this.googleMaps.calcDistance(this.previousPlaces);
   }
 
   sendFeedback(val){
@@ -248,17 +267,43 @@ takePic() {
   }
 
   shareWeb(text) {
+    this.showURL = true
     console.log(this.link);
+    return this.showURL;
   }
 
-  shareWebTwitter(text) {
-    console.log(this.link);
-  }
-  
   chat(event) {
     this.nav.push(Chat, {
       huntID: this.huntID
     });
+  }
+  
+  sendData(keyword) {
+    let dataObj = {
+      previousPlaces: this.previousPlaces,
+      previousTasks: this.previousTasks,
+      keyword: keyword,
+      token: localStorage.id_token,
+      huntID: this.huntID,
+      geolocation: {
+        lat: this.locLat,
+        lng: this.locLng
+      }
+    };
+
+    this._taskService.postData(JSON.stringify(dataObj), this.TASKS_URL)
+      .then(result => {
+        this.locName = result.businesses.name;
+        this.currChallenge = result.tasks.content;
+        this.previousPlaces.push(result.businesses);
+        this.locAddress = result.businesses.location.display_address[0] + ', ' + result.businesses.location.display_address[2];
+        this.previousTasks.push(result.tasks);
+        this.locLat = result.businesses.location.coordinate.latitude;
+        this.locLng = result.businesses.location.coordinate.longitude;
+        this.markComplete();
+        let content = '<h4>' + this.locName + '</h4><p>' + this.locAddress  + '</p>';
+        this.map = this.googleMaps.loadMap(this.locLat, this.locLng, 15, content, this.map);
+      });
   }
 
 }
