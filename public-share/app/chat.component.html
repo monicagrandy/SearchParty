@@ -1,4 +1,9 @@
-<div>
+<div *ngIf="!nameAdded">
+  <input #username placeholder="please enter a username" >
+  <button (click)="getUsername(username.value)">Submit</button>
+</div>  
+
+<div *ngIf="nameAdded">
   <ul id="messages"></ul>
     <ul>
       <li *ngFor="#message of messages">

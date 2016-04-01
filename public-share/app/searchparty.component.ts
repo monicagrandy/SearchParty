@@ -1,5 +1,5 @@
-import {Component, OnInit} from 'angular2/core';
-import {RouteConfig, ROUTER_DIRECTIVES, ROUTER_PROVIDERS, RouteParams} from 'angular2/router';
+import {Component, OnInit, ViewChild} from 'angular2/core';
+import {RouteConfig, Router, ROUTER_DIRECTIVES, ROUTER_PROVIDERS, RouteParams} from 'angular2/router';
 import {MATERIAL_DIRECTIVES, MATERIAL_PROVIDERS} from 'ng2-material/all';
 import {SearchPartyService} from './searchparty.service';
 import {GoogleMapService} from './map.service';
@@ -14,6 +14,14 @@ import {ChatComponent} from './chat.component';
   providers: [MATERIAL_PROVIDERS, SearchPartyService, GoogleMapService]
 })
 export class SearchPartyComponent {
+
+  @ViewChild('modal')
+  modal: ModalComponent;
+  items: string[] = ['item1', 'item2', 'item3'];
+  modalSelected: string;
+  selected: string;
+  animationsEnabled: boolean = true;
+
   map = null;
   huntID: any;
   error: any;
@@ -25,6 +33,7 @@ export class SearchPartyComponent {
   startLat: number;
   startLng: number;
   content: any;
+   
 
   constructor(private _params: RouteParams, private googleMaps: GoogleMapService, private _searchPartyService: SearchPartyService) {
     this.huntID = _params.get('huntID');

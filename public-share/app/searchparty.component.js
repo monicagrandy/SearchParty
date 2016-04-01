@@ -38,6 +38,8 @@ System.register(['angular2/core', 'angular2/router', 'ng2-material/all', './sear
                     this._params = _params;
                     this.googleMaps = googleMaps;
                     this._searchPartyService = _searchPartyService;
+                    this.items = ['item1', 'item2', 'item3'];
+                    this.animationsEnabled = true;
                     this.map = null;
                     this.huntID = _params.get('huntID');
                     this.allTasks = [];
@@ -75,6 +77,10 @@ System.register(['angular2/core', 'angular2/router', 'ng2-material/all', './sear
                     this.totalDist = this.googleMaps.calcDistance(this.allPlaces);
                     console.log(this.totalDist);
                 };
+                __decorate([
+                    core_1.ViewChild('modal'), 
+                    __metadata('design:type', Object)
+                ], SearchPartyComponent.prototype, "modal", void 0);
                 SearchPartyComponent = __decorate([
                     core_1.Component({
                         selector: 'my-searchparty',
