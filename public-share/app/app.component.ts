@@ -1,4 +1,4 @@
-import {Component, OnInit} from 'angular2/core';
+import {Component, OnInit, ViewChild} from 'angular2/core';
 import {Http, ConnectionBackend, HTTP_PROVIDERS, Headers} from 'angular2/http';
 import {RouteConfig, ROUTER_DIRECTIVES, ROUTER_PROVIDERS} from 'angular2/router';
 import {MATERIAL_DIRECTIVES, MATERIAL_PROVIDERS} from 'ng2-material/all';
