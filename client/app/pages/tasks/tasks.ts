@@ -107,8 +107,8 @@ export class TaskPage {
     this.locName = localStorage.locName || navParams.get('locName');
     this.previousPlaces = navParams.get('previousPlaces');
     this.resumeHuntKeywordsLeft = navParams.get('resumeHuntKeywordsLeft');
-    
-    // run through previousTasks from navParams and splice out 
+
+    // run through previousTasks from navParams and splice out
     // keywords to set proper length if coming back from a resuming hunt
     this.previousTasks = navParams.get('previousTasks');
     if (this.previousTasks.length === 0) {
@@ -121,7 +121,7 @@ export class TaskPage {
       console.log('this is the previous task ', this.previousTasks);
       this.keywords.splice(0, this.resumeHuntKeywordsLeft);
     }
-    
+
     let content = '<h4>' + this.locName + '</h4><p>' + this.locAddress  + '</p>';
 
     this.link = `http://localhost:8000/share/#/hunt/${this.huntID}`;
@@ -262,7 +262,7 @@ takePic() {
       window.plugins.socialsharing.canShareVia("twitter", message, null, image, this.link, result => {
           window.plugins.socialsharing.shareViaTwitter(message, image, link);
       }, error => {
-          console.log(error);
+          console.error(error);
       });
     }
   }
@@ -278,7 +278,7 @@ takePic() {
       huntID: this.huntID
     });
   }
-  
+
   sendData(keyword) {
     let dataObj = {
       previousPlaces: this.previousPlaces,

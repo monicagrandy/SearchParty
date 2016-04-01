@@ -35,7 +35,7 @@ export class TemplatePage {
           this.userLng = position.coords.longitude;
           this.local.set('userLat', position.coords.latitude);
           this.local.set('userLng', position.coords.longitude);
-        }), (error => console.log(error)), {});
+        }), (error => console.error(error)), {});
       }
     }
 
@@ -78,7 +78,7 @@ export class TemplatePage {
           previousTasks: [data.tasks]
         });
       })
-        .catch(error => console.log(error));
+        .catch(error => console.error(error));
   }
 
 
