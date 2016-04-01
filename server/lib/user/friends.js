@@ -68,6 +68,7 @@ module.exports = {
     .then(huntArray => {
       return new Promise((resolve, reject) => {
         if(huntArray !== null) {
+          console.log('+++71 this is the retrieveAddedHuntsPromise data ', huntArray);
           resolve(huntArray);
         } else {
           reject({"error": "error finding hunts"});
