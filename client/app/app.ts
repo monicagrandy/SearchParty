@@ -12,6 +12,8 @@ import {enableProdMode} from 'angular2/core';
 
 import * as _ from 'underscore';
 
+enableProdMode();
+
 // Avoid name not found warnings
 declare var Auth0Lock: any;
 
