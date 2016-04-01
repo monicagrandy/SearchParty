@@ -67,8 +67,14 @@ io.on('connection', (socket) => {
          }
       });
    });
+   
+  socket.on('huntMapRoom', huntID => {
+    console.log('joining the hunt map ROOM!!!', huntID);
+    socket.join(huntID);
+  });
 
   socket.on('location', (data, username, room) => {
+    console.log('')
     console.log('incoming socket location change: ', data, username, room)
     io.to(room).emit('location', data, username, room);
   });

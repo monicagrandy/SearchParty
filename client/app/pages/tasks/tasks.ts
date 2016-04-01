@@ -102,7 +102,7 @@ export class TaskPage {
     // run through previousTasks from navParams and splice out 
     // keywords to set proper length if coming back from a resuming hunt
     this.previousTasks = navParams.get('previousTasks');
-    if (this.previousTasks.length === 0) {
+    if (this.previousTasks.length < 2 ) {
       this.previousPlaces = [];
       let keyword = this.keywords.unshift()
       this.sendData(keyword);
@@ -113,6 +113,12 @@ export class TaskPage {
       this.keywords.splice(0, this.resumeHuntKeywordsLeft);
     }
     
+    // socket setup
+    this._taskService.createSocket(this.huntID, this.user);
+    this._taskService.createWatchLocation();
+    
+    // geowatching setup
+    // this._taskService.createWatchLocation();
     
     // set links for sharing and directions
     this.link = `http://localhost:8000/share/#/hunt/${this.huntID}`;
