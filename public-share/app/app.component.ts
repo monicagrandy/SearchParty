@@ -28,7 +28,7 @@ export class AppComponent {
   title = 'Search Party';
 
   constructor() {
-    _.each([1,2,3,], number => console.log(number));
+    // _.each([1,2,3,], number => console.log(number));
   }
 
 }

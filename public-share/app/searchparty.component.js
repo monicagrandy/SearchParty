@@ -39,6 +39,7 @@ System.register(['angular2/core', 'angular2/router', 'ng2-material/all', './sear
                     this._params = _params;
                     this.googleMaps = googleMaps;
                     this._searchPartyService = _searchPartyService;
+                    // modal: ModalComponent;
                     this.items = ['item1', 'item2', 'item3'];
                     this.animationsEnabled = true;
                     this.map = null;
@@ -51,7 +52,6 @@ System.register(['angular2/core', 'angular2/router', 'ng2-material/all', './sear
                         _this.socket.emit('huntChatRoom', _this.huntID);
                     });
                     this.socket.on('taskChange', function (location, task, room, lat, lng, num) {
-                        console.log('{{}{}}{}{}}{} recieving taskChange {}{}{}{}');
                         _this.allTasks.unshift([[location], [task]]);
                         _this.allPlaces.push(location);
                         _this.socket.emit('chat_message', '::TASK HAS CHANGED::', 'SearchPartyAdmin', (Date.now() / 1000), _this.huntID);
@@ -60,9 +60,11 @@ System.register(['angular2/core', 'angular2/router', 'ng2-material/all', './sear
                 }
                 SearchPartyComponent.prototype.getHuntData = function (id) {
                     var _this = this;
+                    var previousPlaces = [];
+                    var previousTasks = [];
                     this._searchPartyService.getHunt(id)
                         .then(function (data) {
-                        //console.log("promise returned")
+                        console.log("data from searchparty service ", data);
                         _this.huntTasks = data.tasks;
                         _this.startLat = data.tasks[0].place.lat;
                         _this.startLng = data.tasks[0].place.lng;
@@ -72,10 +74,22 @@ System.register(['angular2/core', 'angular2/router', 'ng2-material/all', './sear
                             _this.huntChats = data.chatroom.messages;
                         }
                         _this.huntTasks.forEach(function (item) {
-                            // console.log(item);
+                            console.log(' this is the item ', item);
+                            console.log('this is the this.alltasks ', _this.allTasks);
                             _this.allTasks.unshift([[item.place.name], [item.task.content]]);
+                            previousPlaces.push(item.place);
+                            previousTasks.push(item.task);
                         });
-                        _this.showMap();
+                        console.log(' this is this.allPlaces ', previousPlaces);
+                        console.log('this is previous tasks ', previousTasks);
+                        setTimeout(function () {
+                            _this.googleMaps.finalMapMaker(previousPlaces, previousTasks)
+                                .then(function (data) {
+                                var flightPath = data;
+                            });
+                            _this.totalDist = _this.googleMaps.calcDistance(previousPlaces);
+                            console.log(_this.totalDist);
+                        }, 2000);
                     })
                         .catch(function (err) { return console.log(err); });
                 };
@@ -87,10 +101,6 @@ System.register(['angular2/core', 'angular2/router', 'ng2-material/all', './sear
                     this.totalDist = this.googleMaps.calcDistance(this.allPlaces);
                     console.log(this.totalDist);
                 };
-                __decorate([
-                    core_1.ViewChild('modal'), 
-                    __metadata('design:type', Object)
-                ], SearchPartyComponent.prototype, "modal", void 0);
                 SearchPartyComponent = __decorate([
                     core_1.Component({
                         selector: 'my-searchparty',

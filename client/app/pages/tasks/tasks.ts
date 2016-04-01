@@ -55,7 +55,6 @@ export class TaskPage {
   FEEDBACK_URL: string = 'https://getsearchparty.com/feedback';
   UPLOAD_URL: string = 'https://getsearchparty.com/upload';
   feedback: string;
-  showMobileSharing: boolean;
   link: string;
   directionLink: string;
   finalData: any;
@@ -91,19 +90,11 @@ export class TaskPage {
     if (this.token) {
       this.user = this.jwtHelper.decodeToken(this.token).username;
     }
-
-    if (window.plugins) {
-      this.showMobileSharing = true;
-    } else {
-      this.showMobileSharing = false;
-    }
-    console.log("+++line 79 tasks.js", this.showMobileSharing)
-
+    
+    // general grab params setup
     this.locAddress = navParams.get('locAddress');
     this.userLat = localStorage.userLat;
     this.userLong = localStorage.userLng;
-    console.log('this userLat ', this.userLat);
-    console.log('this userLong ', this.userLong);
     this.huntID = navParams.get('huntID');
     this.currChallenge =  localStorage.currChallenge || navParams.get('currChallenge');
     this.locLat = localStorage.locLat || navParams.get('locLat');
@@ -115,7 +106,7 @@ export class TaskPage {
     // run through previousTasks from navParams and splice out
     // keywords to set proper length if coming back from a resuming hunt
     this.previousTasks = navParams.get('previousTasks');
-    if (this.previousTasks.length === 0) {
+    if (this.previousTasks.length < 2 ) {
       this.previousPlaces = [];
       let keyword = this.keywords.unshift()
       this.sendData(keyword);
@@ -126,8 +117,14 @@ export class TaskPage {
       this.keywords.splice(0, this.resumeHuntKeywordsLeft);
     }
 
-    let content = '<h4>' + this.locName + '</h4><p>' + this.locAddress  + '</p>';
+    // socket setup
+    this._taskService.createSocket(this.huntID, this.user);
+        
+    // geowatching setup
+    this._taskService.createWatchLocation();
 
+    
+    // set links for sharing and directions
     this.link = `http://localhost:8000/share/#/hunt/${this.huntID}`;
     this.directionLink = `https://www.google.com/maps/dir/${this.userLat},${this.userLong}/${this.locAddress}`;
 
@@ -137,7 +134,9 @@ export class TaskPage {
     this.via = 'GetSearchParty';
     this.url = encodeURIComponent(this.link);
     this.encodedTweetLink = `https://twitter.com/intent/tweet?hashtags=${this.hashtags}&url=${this.url}&text=${this.text}&via=${this.via}`;
-
+    
+    // google map creation
+    let content = '<h4>' + this.locName + '</h4><p>' + this.locAddress  + '</p>';
     setTimeout(()=>{ this.googleMaps.loadMap(this.locLat, this.locLng, 15, content, this.map).then(map => this.map = map), 2000 });
   }
 
