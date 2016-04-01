@@ -48,12 +48,11 @@ export class SearchPartyComponent {
     });
     this.socket.on('taskChange', (location, task, room, lat, lng, num) => {
       console.log('{{}{}}{}{}}{} recieving taskChange {}{}{}{}');
-      this.allTasks.push(task);
+      this.allTasks.unshift([[location], [task]]);
       this.allPlaces.push(location);
       this.socket.emit('chat_message', '::TASK HAS CHANGED::', 'SearchPartyAdmin', null, this.huntID);
       this.showMap();
    });
-
 }
 
  getHuntData(id){
@@ -64,12 +63,13 @@ export class SearchPartyComponent {
       this.startLat = data.tasks[0].place.lat;
       this.startLng = data.tasks[0].place.lng;
       this.content = '<h4>' + data.tasks[0].place.name + ' < /h4><p>' + data.tasks[0].place.address + '</p > ';
-      if(data.chatroom.messages.length > 0){
+      console.log('data.chatroom.messages:::', data.chatroom.messages);
+      if(data.chatroom.messages){
         this.huntChats = data.chatroom.messages;
       }
       this.huntTasks.forEach((item) => {
-         console.log(item);
-         this.allTasks.push([item.place.name, item.task.content]);
+         // console.log(item);
+         this.allTasks.unshift([[item.place.name], [item.task.content]]);
       });
       this.showMap()
     })

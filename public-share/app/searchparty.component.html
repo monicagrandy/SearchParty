@@ -1,31 +1,32 @@
 
-<h2 layout="row">Where you've been:</h2>
-<div layout="row">
-  <div class="left" flex="66">
 
-     <div id="map"></div>
-     <div *ngFor="#task of allTasks" layout="row" class='tasks'>
-        <strong flex class='tasks'>
-           Location
-           <p>{{task[0]}}</p>
+   <h2 layout="row">Where you've been:</h2>
+   <div layout="row">
+     <div class="left" flex="66">
+
+        <div id="map"></div>
+        <div *ngFor="#task of allTasks" layout="row" class='tasks'>
+           <strong flex class='tasks'>
+              Location
+              <p>{{task[0]}}</p>
+           </strong>
+           <strong flex class='tasks'>
+              Challenge
+              <p>{{task[1]}}</p>
+           </strong>
+        </div>
+        <strong>
+           Distance Travelled:{{totalDist}} miles
         </strong>
-        <strong flex class='tasks'>
-           Challenge
-           <p>{{task[1]}}</p>
-        </strong>
+
      </div>
-     <strong>
-        Distance Travelled:{{totalDist}} miles
-     </strong>
 
-  </div>
+     <div class="right" flex="33">
 
-  <div class="right" flex="33">
+        <my-chat></my-chat>
 
-     <my-chat></my-chat>
+     </div>
 
-  </div>
-
-<div *ngIf="error">
-  <p>{{error}}</p>
-</div>
+   <div *ngIf="error">
+     <p>{{error}}</p>
+   </div>

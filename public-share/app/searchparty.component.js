@@ -52,7 +52,7 @@ System.register(['angular2/core', 'angular2/router', 'ng2-material/all', './sear
                     });
                     this.socket.on('taskChange', function (location, task, room, lat, lng, num) {
                         console.log('{{}{}}{}{}}{} recieving taskChange {}{}{}{}');
-                        _this.allTasks.push(task);
+                        _this.allTasks.unshift([[location], [task]]);
                         _this.allPlaces.push(location);
                         _this.socket.emit('chat_message', '::TASK HAS CHANGED::', 'SearchPartyAdmin', null, _this.huntID);
                         _this.showMap();
@@ -67,12 +67,13 @@ System.register(['angular2/core', 'angular2/router', 'ng2-material/all', './sear
                         _this.startLat = data.tasks[0].place.lat;
                         _this.startLng = data.tasks[0].place.lng;
                         _this.content = '<h4>' + data.tasks[0].place.name + ' < /h4><p>' + data.tasks[0].place.address + '</p > ';
-                        if (data.chatroom.messages.length > 0) {
+                        console.log('data.chatroom.messages:::', data.chatroom.messages);
+                        if (data.chatroom.messages) {
                             _this.huntChats = data.chatroom.messages;
                         }
                         _this.huntTasks.forEach(function (item) {
-                            console.log(item);
-                            _this.allTasks.push([item.place.name, item.task.content]);
+                            // console.log(item);
+                            _this.allTasks.unshift([[item.place.name], [item.task.content]]);
                         });
                         _this.showMap();
                     })
