@@ -38,6 +38,7 @@ System.register(['angular2/core', 'ng2-material/all', 'angular2/router', './chat
                     this._params = _params;
                     this.dialog = dialog;
                     this.element = element;
+                    this.nameAdded = false;
                     this.ADD_MESSAGE_URL = 'http://localhost:8000/addChatMessage';
                     this.GET_MESSAGES_URL = 'http://localhost:8000/getChatMessages';
                     this.huntID = _params.get('huntID');
@@ -83,8 +84,12 @@ System.register(['angular2/core', 'ng2-material/all', 'angular2/router', './chat
                         });
                     }).catch(function (error) { return console.error(error); });
                     //Change this later
-                    this.username = window.prompt('Enter a username!', '');
+                    // this.username = window.prompt('Enter a username!', '');
                 }
+                ChatComponent.prototype.getUsername = function (username) {
+                    this.username = username;
+                    this.nameAdded = true;
+                };
                 ChatComponent.prototype.invocation = function () {
                     var _this = this;
                     this.timeout = setTimeout(function () {
