@@ -46,7 +46,7 @@ io.attach(httpsServer);
 
 
 io.on('connection', (socket) => {
-   socket.on('huntChatRoom', function(huntID) {
+   socket.on('huntChatRoom', huntID => {
       socket.join(huntID);
       chatPromises.retrieveChatMessages(huntID)
       .then(data =>{
@@ -55,12 +55,12 @@ io.on('connection', (socket) => {
          //We recieve our data backwards and es6 wont easily allow
          //iterating backwards in an array, so we use a stack
          let tempStack = [];
-         for(let messages of data) {
-           if(messages.username) {
+         for (let messages of data) {
+           if (messages.username) {
             tempStack.push(messages);
            }
          }
-         while(tempStack.length >= 0 ) {
+         while (tempStack.length >= 0 ) {
            let last = tempStack[tempStack.length-1];
            io.emit('chat_message', last.text, last.username);
            tempStack.pop();
@@ -68,11 +68,10 @@ io.on('connection', (socket) => {
       });
    });
 
-   socket.on('location', location => {
-      if (location.id != userInfo.id) {
-         location_callback(location);
-      }
-   });
+  socket.on('location', (data, username, room) => {
+    console.log('incoming socket location change: ', data, username, room)
+    io.to(room).emit('location', data, username, room);
+  });
 
    socket.on('chat_message', (msg, username, datetime, room) => {
       console.log('incoming socket: ', msg, username, datetime, room);
@@ -84,7 +83,7 @@ io.on('connection', (socket) => {
    });
 
   socket.on('typing', (bool, username, room) => {
-     if(bool === true) {
+     if (bool === true) {
         console.log(username + 'is typing');
      } else {
         console.log(username + 'stopped typing');
