@@ -14,6 +14,8 @@ enableProdMode();
 
 import * as _ from 'underscore';
 
+enableProdMode();
+
 // Avoid name not found warnings
 declare var Auth0Lock: any;
 
