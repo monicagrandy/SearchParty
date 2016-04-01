@@ -92,9 +92,17 @@ io.on('connection', (socket) => {
       io.to(room).emit('isTyping', bool, username);
   });
 
-  socket.on('taskChange', (location, task, distance, map) =>{
+  socket.on('taskChange', (location, task, room, lat, lng, num) =>{
      console.log(':::ALERT::: Task Change Detected. WAKKA WAKKA');
-     io.to(room).emit('taskChange', location, task, distance, map);
+     io.to(room).emit('taskChange', location, task, room, lat, lng, num);
  });
+
+
+
+
+
+
+
+
 
 });

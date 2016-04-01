@@ -46,8 +46,15 @@ System.register(['angular2/core', 'angular2/router', 'ng2-material/all', './sear
                     this.getHuntData(this.huntID);
                     var socket = io.connect('http://localhost:8000');
                     this.socket = socket;
-                    socket.on('taskChange', function (location, task, distance) {
-                        _this.getHuntData(_this.huntID);
+                    this.socket.on("connect", function () {
+                        _this.socket.emit('huntChatRoom', _this.huntID);
+                    });
+                    this.socket.on('taskChange', function (location, task, room, lat, lng, num) {
+                        console.log('{{}{}}{}{}}{} recieving taskChange {}{}{}{}');
+                        _this.allTasks.push(task);
+                        _this.allPlaces.push(location);
+                        _this.socket.emit('chat_message', '::TASK HAS CHANGED::', 'SearchPartyAdmin', null, _this.huntID);
+                        _this.showMap();
                     });
                 }
                 SearchPartyComponent.prototype.getHuntData = function (id) {

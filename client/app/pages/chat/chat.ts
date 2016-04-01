@@ -82,12 +82,9 @@ export class Chat {
    this._chatService.postData(JSON.stringify(huntIDObject), this.GET_MESSAGES_URL)
    .then(messagesFromDB => {
       this.zone.run(() => {
-        console.log("messages from DB", messagesFromDB);
         let messagesArray = messagesFromDB.chatMessages;
         for(let i = 0; i < messagesArray.length; i++) {
           let datetime = moment.unix(messagesArray[i].datetime).fromNow();
-          console.log('THIS IS BEING PUSHED TO MESSAGES ARRAY');
-          console.log(messagesArray[i].username, messagesArray[i].text, datetime);
           this.messages.push([messagesArray[i].username + ": " + messagesArray[i].text + " @ " + datetime]);
         }
       })
@@ -98,7 +95,6 @@ invocation() {
    this.timeout = setTimeout(
       () => {
          this.socket.emit('typing', false, this.username, this.huntID);
-         console.log('false called');
       }, 1000);
 };
 

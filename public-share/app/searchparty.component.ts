@@ -26,6 +26,8 @@ export class SearchPartyComponent {
   startLng: number;
   content: any;
   socket: any;
+  tasks: any;
+  chatroom: any;
 
   constructor(private _params: RouteParams, private googleMaps: GoogleMapService, private _searchPartyService: SearchPartyService) {
     this.huntID = _params.get('huntID');
@@ -34,9 +36,17 @@ export class SearchPartyComponent {
     this.getHuntData(this.huntID);
     let socket = io.connect('http://localhost:8000');
     this.socket = socket;
-    socket.on('taskChange', (location, task, distance) => {
-      this.getHuntData(this.huntID);
-   })
+    this.socket.on("connect", () => {
+      this.socket.emit('huntChatRoom', this.huntID);
+    });
+    this.socket.on('taskChange', (location, task, room, lat, lng, num) => {
+      console.log('{{}{}}{}{}}{} recieving taskChange {}{}{}{}');
+      this.allTasks.push(task);
+      this.allPlaces.push(location);
+      this.socket.emit('chat_message', '::TASK HAS CHANGED::', 'SearchPartyAdmin', null, this.huntID);
+      this.showMap();
+   });
+
 }
 
  getHuntData(id){
