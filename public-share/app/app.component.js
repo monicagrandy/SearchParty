@@ -1,4 +1,4 @@
-System.register(['angular2/core', 'angular2/http', 'angular2/router', 'ng2-material/all', './searchparty.component', 'underscore'], function(exports_1, context_1) {
+System.register(['angular2/core', 'angular2/http', 'angular2/router', 'ng2-material/all', './searchparty.component'], function(exports_1, context_1) {
     "use strict";
     var __moduleName = context_1 && context_1.id;
     var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
@@ -10,7 +10,7 @@ System.register(['angular2/core', 'angular2/http', 'angular2/router', 'ng2-mater
     var __metadata = (this && this.__metadata) || function (k, v) {
         if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
     };
-    var core_1, http_1, router_1, all_1, searchparty_component_1, _;
+    var core_1, http_1, router_1, all_1, searchparty_component_1;
     var AppComponent;
     return {
         setters:[
@@ -28,15 +28,12 @@ System.register(['angular2/core', 'angular2/http', 'angular2/router', 'ng2-mater
             },
             function (searchparty_component_1_1) {
                 searchparty_component_1 = searchparty_component_1_1;
-            },
-            function (_1) {
-                _ = _1;
             }],
         execute: function() {
             AppComponent = (function () {
                 function AppComponent() {
                     this.title = 'Search Party';
-                    _.each([1, 2, 3,], function (number) { return console.log(number); });
+                    // _.each([1,2,3,], number => console.log(number));
                 }
                 AppComponent = __decorate([
                     core_1.Component({

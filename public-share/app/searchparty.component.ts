@@ -1,4 +1,4 @@
-import {Component, OnInit, ViewChild} from 'angular2/core';
+import {Component, OnInit} from 'angular2/core';
 import {RouteConfig, Router, ROUTER_DIRECTIVES, ROUTER_PROVIDERS, RouteParams} from 'angular2/router';
 import {MATERIAL_DIRECTIVES, MATERIAL_PROVIDERS} from 'ng2-material/all';
 import {SearchPartyService} from './searchparty.service';
@@ -14,13 +14,6 @@ import {ChatComponent} from './chat.component';
   providers: [MATERIAL_PROVIDERS, SearchPartyService, GoogleMapService]
 })
 export class SearchPartyComponent {
-
-  @ViewChild('modal')
-  modal: ModalComponent;
-  items: string[] = ['item1', 'item2', 'item3'];
-  modalSelected: string;
-  selected: string;
-  animationsEnabled: boolean = true;
 
   map = null;
   huntID: any;
@@ -51,14 +44,16 @@ export class SearchPartyComponent {
       this.allTasks.unshift([[location], [task]]);
       this.allPlaces.push(location);
       this.socket.emit('chat_message', '::TASK HAS CHANGED::', 'SearchPartyAdmin', null, this.huntID);
-      this.getHuntData();
+      // this.getHuntData();
    });
 }
 
  getHuntData(id){
+   let previousPlaces = [];
+   let previousTasks = [];
    this._searchPartyService.getHunt(id)
     .then(data => {
-      //console.log("promise returned")
+      console.log("data from searchparty service ", data);
       this.huntTasks = data.tasks;
       this.startLat = data.tasks[0].place.lat;
       this.startLng = data.tasks[0].place.lng;
@@ -68,10 +63,25 @@ export class SearchPartyComponent {
         this.huntChats = data.chatroom.messages;
       }
       this.huntTasks.forEach((item) => {
-         // console.log(item);
+         console.log(' this is the item ', item);
+         console.log('this is the this.alltasks ', this.allTasks);
          this.allTasks.unshift([[item.place.name], [item.task.content]]);
+         previousPlaces.push(item.place);
+         previousTasks.push(item.task);
       });
-      this.showMap()
+      console.log(' this is this.allPlaces ', previousPlaces);
+      console.log('this is previous tasks ', previousTasks);
+      
+      
+      setTimeout(() => {
+        this.googleMaps.finalMapMaker(previousPlaces, previousTasks)
+            .then(data => {
+              let flightPath = data;
+            });
+
+        this.totalDist = this.googleMaps.calcDistance(previousPlaces);
+        console.log(this.totalDist) 
+      }, 2000);
     })
       .catch(err => console.log(err));
 }
