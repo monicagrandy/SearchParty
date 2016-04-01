@@ -8,14 +8,16 @@
 <ion-content>
   <form #friendAdd="ngForm" (ngSubmit)="addFriend(friendAdd.value)">
     <ion-item>
-      <ion-label fixed>Add friend</ion-label>
-      <ion-input type="text" ngControl="username"></ion-input>
-      <button block type="submit">Add</button>
+      <!-- <ion-label fixed>Add friend</ion-label> -->
+      <ion-input placeholder="Add friend" type="text" ngControl="username"></ion-input>
+      <ion-icon ios="ios-add" md="md-add" click="addFriend(friendAdd.value)"></ion-icon>
     </ion-item>
   </form>
 
 
-
+  <ion-card *ngIf="noFriend">
+    <ion-item>Cannot find that friend!</ion-item>
+  </ion-card>  
 
   <ion-card>
     <ion-card-header>
@@ -34,7 +36,20 @@
     </ion-list>
   </ion-card>
 
-
+   <ion-card>
+    <ion-card-header>
+      Hunts I've Been Added To
+    </ion-card-header>
+    <ion-list>
+      <button ion-item *ngFor="#hunt of addedHunts">
+          <div (click)="huntTapped($event, hunt)">
+            <ion-icon name="search" item-left></ion-icon>
+            {{hunt.huntID}}
+            <ion-icon name="person-add" item-right (click)="addFriendToHuntTapped($event, hunt)"></ion-icon>
+          </div>
+      </button>
+    </ion-list>
+  </ion-card>
 
 
   <ion-card>
@@ -42,7 +57,7 @@
       Ongoing Hunts
     </ion-card-header>
     <ion-list>
-      <button ion-item *ngFor="#hunt of hunts | filter{feedback.value !== undefined}" >
+      <button ion-item *ngFor="#hunt of hunts">
         <div *ngIf="!hunt.feedback.value">
           <div (click)="huntTapped($event, hunt)">
             <ion-icon name="search" item-left></ion-icon>

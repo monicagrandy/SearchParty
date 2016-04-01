@@ -21,8 +21,8 @@ module.exports = (app, express) => {
   app.post('/getFriends', jsonParser, userController.retrieveUserFriends);
   app.post('/addFriendToHunt', jsonParser, userController.addFriendToHunt);
   app.post('/getFriendHunt', jsonParser, userController.retrieveFriendHunt);
+  app.post('/getAddedHunts', jsonParser, userController.retrieveAddedHunts);
   app.post('/addChatMessage', jsonParser, chatController.insertChatMessage);
   app.post('/getChatMessages', jsonParser, chatController.retrieveChatMessages);
   app.post('/singleHunt', jsonParser, huntController.retrieveSingleHunt);
-
 }

@@ -84,5 +84,16 @@ module.exports = {
       res.json(friendAdded);
     })
     .catch(error);
+  },
+  retrieveAddedHunts: (req, res) => {
+    
+    let username = req.body.username
+
+    friends.retrieveAddedHuntsPromise(username)
+    .then(huntsArray => {
+      console.log("these are the hunts you've been added to", huntsArray);
+      res.json(huntsArray)
+    })
+    .catch(error);
   }
 };
