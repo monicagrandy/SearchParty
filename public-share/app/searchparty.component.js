@@ -39,7 +39,6 @@ System.register(['angular2/core', 'angular2/router', 'ng2-material/all', './sear
                     this._params = _params;
                     this.googleMaps = googleMaps;
                     this._searchPartyService = _searchPartyService;
-                    // modal: ModalComponent;
                     this.items = ['item1', 'item2', 'item3'];
                     this.animationsEnabled = true;
                     this.map = null;
@@ -88,10 +87,7 @@ System.register(['angular2/core', 'angular2/router', 'ng2-material/all', './sear
                             previousPlaces.push(item.place);
                             previousTasks.push(item.task);
                         });
-                        console.log(' this is this.allPlaces ', previousPlaces);
-                        console.log('this is previous tasks ', previousTasks);
                         setTimeout(function () {
-                            console.log('set time out is done updating map');
                             _this.googleMaps.finalMapMaker(previousPlaces, previousTasks)
                                 .then(function (data) {
                                 var flightPath = data;
