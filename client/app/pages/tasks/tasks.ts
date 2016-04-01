@@ -65,6 +65,8 @@ export class TaskPage {
   showURL: boolean;
   encodedTweetLink: any;
   resumeHuntKeywordsLeft: number;
+  socket: any;
+  io: any;
 
 
   constructor(
@@ -81,6 +83,8 @@ export class TaskPage {
     this.platform = platform;
     this.image = null;
     this.tasksLeft = true;
+    let socket = io.connect('https://getsearchparty.com');
+    this.socket = socket;
     this.token = localStorage.id_token;
 
     if (this.token) {
@@ -98,8 +102,8 @@ export class TaskPage {
     this.locName = localStorage.locName || navParams.get('locName');
     this.previousPlaces = navParams.get('previousPlaces');
     this.resumeHuntKeywordsLeft = navParams.get('resumeHuntKeywordsLeft');
-    
-    // run through previousTasks from navParams and splice out 
+
+    // run through previousTasks from navParams and splice out
     // keywords to set proper length if coming back from a resuming hunt
     this.previousTasks = navParams.get('previousTasks');
     if (this.previousTasks.length < 2 ) {
@@ -112,16 +116,16 @@ export class TaskPage {
       console.log('this is the previous task ', this.previousTasks);
       this.keywords.splice(0, this.resumeHuntKeywordsLeft);
     }
-    
+
     // socket setup
     this._taskService.createSocket(this.huntID, this.user);
-    this._taskService.createWatchLocation();
-    
+        
     // geowatching setup
-    // this._taskService.createWatchLocation();
+    this._taskService.createWatchLocation();
+
     
     // set links for sharing and directions
-    this.link = `http://localhost:8000/share/#/hunt/${this.huntID}`;
+    this.link = `https://getsearchparty.com/share/#/hunt/${this.huntID}`;
     this.directionLink = `https://www.google.com/maps/dir/${this.userLat},${this.userLong}/${this.locAddress}`;
 
     // twitter specific link generation
@@ -258,7 +262,7 @@ takePic() {
 
   shareViaTwitter(message, image) {
     if(window.plugins.socialsharing) {
-      window.plugins.socialsharing.canShareVia("twitter", message, null, image, this.link, result => {
+      window.plugins.socialsharing.canShareVia("twitter", message, (Date.now())/1000, image, this.link, result => {
           window.plugins.socialsharing.shareViaTwitter(message, image, link);
       }, error => {
           console.log(error);
@@ -277,7 +281,7 @@ takePic() {
       huntID: this.huntID
     });
   }
-  
+
   sendData(keyword) {
     let dataObj = {
       previousPlaces: this.previousPlaces,
@@ -303,7 +307,12 @@ takePic() {
         this.markComplete();
         let content = '<h4>' + this.locName + '</h4><p>' + this.locAddress  + '</p>';
         this.map = this.googleMaps.loadMap(this.locLat, this.locLng, 15, content, this.map);
+        this.refreshFeed(this.locName, this.currChallenge, this.huntID, this.locLat, this.locLng, 15);
       });
-  }
+   }
+   refreshFeed(name, task, room, lat, lng, num) {
+      this.socket.emit('taskChange', name, task, room, lat, lng, num);
+      console.log('::::EMITTED SOCKET:::::');
+   }
 
 }

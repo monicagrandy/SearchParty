@@ -74,7 +74,6 @@ io.on('connection', (socket) => {
   });
 
   socket.on('location', (data, username, room) => {
-    console.log('')
     console.log('incoming socket location change: ', data, username, room)
     io.to(room).emit('location', data, username, room);
   });
@@ -96,4 +95,18 @@ io.on('connection', (socket) => {
      }
       io.to(room).emit('isTyping', bool, username);
   });
+
+  socket.on('taskChange', (location, task, room, lat, lng, num) =>{
+     console.log(':::ALERT::: Task Change Detected. WAKKA WAKKA');
+     io.to(room).emit('taskChange', location, task, room, lat, lng, num);
+ });
+
+
+
+
+
+
+
+
+
 });

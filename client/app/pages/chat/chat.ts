@@ -28,8 +28,8 @@ export class Chat {
   timoutFunction: any;
   jwtHelper: JwtHelper = new JwtHelper();
   typing: boolean;
-  ADD_MESSAGE_URL: string = 'http://localhost:8000/addChatMessage';
-  GET_MESSAGES_URL: string = 'http://localhost:8000/getChatMessages';
+  ADD_MESSAGE_URL: string = 'https://getsearchparty.com/addChatMessage';
+  GET_MESSAGES_URL: string = 'https://getsearchparty.com/getChatMessages';
   huntID: any;
   token: any;
   id_token: any;
@@ -48,7 +48,7 @@ export class Chat {
       this.username = this.jwtHelper.decodeToken(this.token).username;
    }
    this.huntID = navParams.get('huntID');
-   let socket = io.connect('http://localhost:8000');
+   let socket = io.connect('https://getsearchparty.com');
    this.otherUserTyping = false;
    this.otherUsername = '';
    this.messages = [];
@@ -66,6 +66,7 @@ export class Chat {
         console.log(this.messages);
         datetime = moment.unix(datetime).fromNow();
         this.messages.push([username, msg, datetime]);
+        console.log('Messages Array::', messages);
       });
    });
 
@@ -82,12 +83,9 @@ export class Chat {
    this._chatService.postData(JSON.stringify(huntIDObject), this.GET_MESSAGES_URL)
    .then(messagesFromDB => {
       this.zone.run(() => {
-        console.log("messages from DB", messagesFromDB);
         let messagesArray = messagesFromDB.chatMessages;
         for(let i = 0; i < messagesArray.length; i++) {
           let datetime = moment.unix(messagesArray[i].datetime).fromNow();
-          console.log('THIS IS BEING PUSHED TO MESSAGES ARRAY');
-          console.log(messagesArray[i].username, messagesArray[i].text, datetime);
           this.messages.push([messagesArray[i].username + ": " + messagesArray[i].text + " @ " + datetime]);
         }
       })
@@ -98,7 +96,6 @@ invocation() {
    this.timeout = setTimeout(
       () => {
          this.socket.emit('typing', false, this.username, this.huntID);
-         console.log('false called');
       }, 1000);
 };
 
@@ -112,6 +109,7 @@ OnKey(event:KeyboardEvent) {
 
 send(message) {
    if (message && message !== "") {
+      clearTimeout(this.timeout);
       this.socket.emit('typing', false, this.username, this.huntID);
       let messageObject = {
         username: this.username,

@@ -1,4 +1,4 @@
-import {Component, OnInit, ViewChild} from 'angular2/core';
+import {Component, OnInit} from 'angular2/core';
 import {RouteConfig, Router, ROUTER_DIRECTIVES, ROUTER_PROVIDERS, RouteParams} from 'angular2/router';
 import {MATERIAL_DIRECTIVES, MATERIAL_PROVIDERS} from 'ng2-material/all';
 import {SearchPartyService} from './searchparty.service';
@@ -14,14 +14,11 @@ import {ChatComponent} from './chat.component';
   providers: [MATERIAL_PROVIDERS, SearchPartyService, GoogleMapService]
 })
 export class SearchPartyComponent {
-
-  @ViewChild('modal')
-  modal: ModalComponent;
+  // modal: ModalComponent;
   items: string[] = ['item1', 'item2', 'item3'];
   modalSelected: string;
   selected: string;
   animationsEnabled: boolean = true;
-
   map = null;
   huntID: any;
   error: any;
@@ -33,46 +30,81 @@ export class SearchPartyComponent {
   startLat: number;
   startLng: number;
   content: any;
-   
+  socket: any;
+  tasks: any;
+  chatroom: any;
 
   constructor(private _params: RouteParams, private googleMaps: GoogleMapService, private _searchPartyService: SearchPartyService) {
     this.huntID = _params.get('huntID');
-    this.allTasks = []
-    this.allPlaces = []
-    this.getHuntData(this.huntID)
-  }
+    this.allTasks = [];
+    this.getHuntData(this.huntID);
+    let socket = io.connect('http://localhost:8000');
+    this.socket = socket;
+    this.socket.on("connect", () => {
+      // this.socket.emit('huntChatRoom', this.huntID);
+      this.socket.emit('huntMapRoom', this.huntID);
+    });
+    this.socket.on('taskChange', (location, task, room, lat, lng, num) => {
+      console.log('{{}{}}{}{}}{} recieving taskChange {}{}{}{}');
+      console.log(' this is the task change location change ', location);
+      this.allTasks.unshift([[location], [task]]);
+      // this.allPlaces.push(location);
+      this.socket.emit('chat_message', '::TASK HAS CHANGED::', 'SearchPartyAdmin', null, this.huntID);
+      this.getHuntData(this.huntID);
+   });
+   this.socket.on("location", (data, username) => {
+      // update map which reflected changes
+      console.log('location was updated from socket server ', data, username);
+   });
+ }
 
  getHuntData(id){
+   let previousPlaces = [];
+   let previousTasks = [];
+   this.allTasks = [];
    this._searchPartyService.getHunt(id)
     .then(data => {
-      //console.log("promise returned")
+      console.log("data from searchparty service ", data);
       this.huntTasks = data.tasks;
       this.startLat = data.tasks[0].place.lat;
       this.startLng = data.tasks[0].place.lng;
       this.content = '<h4>' + data.tasks[0].place.name + ' < /h4><p>' + data.tasks[0].place.address + '</p > ';
-      if(data.chatroom.messages.length > 0){
+      console.log('data.chatroom.messages:::', data.chatroom.messages);
+      if(data.chatroom.messages){
         this.huntChats = data.chatroom.messages;
       }
       this.huntTasks.forEach((item) => {
-        this.allPlaces.push(item.place);
-        this.allTasks.push(item.task);
-      })
-      console.log("hello")
-      console.log(this.allTasks)
-      console.log(this.allPlaces)
-      this.showMap()
+         console.log(' this is the item ', item);
+         console.log('this is the this.alltasks ', this.allTasks);
+         this.allTasks.unshift([[item.place.name], [item.task.content]]);
+         previousPlaces.push(item.place);
+         previousTasks.push(item.task);
+      });
+      console.log(' this is this.allPlaces ', previousPlaces);
+      console.log('this is previous tasks ', previousTasks);
+<<<<<<< HEAD
+      
+=======
+
+
+>>>>>>> 55a0b42f8c3c2dffec930fe5e481b7f06fa47c52
+      setTimeout(() => {
+        console.log('set time out is done updating map');
+        this.googleMaps.finalMapMaker(previousPlaces, previousTasks)
+            .then(data => {
+              let flightPath = data;
+            });
+
+        this.totalDist = this.googleMaps.calcDistance(previousPlaces);
+<<<<<<< HEAD
+        console.log(this.totalDist);
+=======
+        console.log(this.totalDist)
+>>>>>>> 55a0b42f8c3c2dffec930fe5e481b7f06fa47c52
+      }, 2000);
+      
     })
       .catch(err => console.log(err));
-}
-
-  showMap() {
-    this.googleMaps.finalMapMaker(this.allPlaces, this.allTasks)
-        .then(data => {
-          let flightPath = data;
-        });
-
-      this.totalDist = this.googleMaps.calcDistance(this.allPlaces);
-      console.log(this.totalDist)
-    }
+  }
 
 }
