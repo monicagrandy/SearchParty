@@ -83,8 +83,12 @@ io.on('connection', (socket) => {
       console.log('user disconnected');
    });
 
-  socket.on('typing', (data, room) => {
-      console.log('is typing', data);
-      io.to(room).emit('isTyping', data);
+  socket.on('typing', (bool, username, room) => {
+     if(bool === true) {
+        console.log(username + 'is typing');
+     } else {
+        console.log(username + 'stopped typing');
+     }
+      io.to(room).emit('isTyping', bool, username);
   });
 });

@@ -40,20 +40,33 @@ System.register(['angular2/core', 'ng2-material/all', 'angular2/router', './chat
                     this.element = element;
                     this.ADD_MESSAGE_URL = 'http://localhost:8000/addChatMessage';
                     this.GET_MESSAGES_URL = 'http://localhost:8000/getChatMessages';
-                    var socket = io.connect('http://localhost:8000');
-                    this.timeout = undefined;
-                    this.typing = false;
                     this.huntID = _params.get('huntID');
+                    var socket = io.connect('http://localhost:8000');
+                    this.otherUserTyping = false;
+                    this.otherUsername = '';
                     this.messages = [];
+                    this.timeout;
                     this.zone = new core_2.NgZone({ enableLongStackTrace: false });
                     this.chatBox = "";
                     this.socket = socket;
+                    this.socket.on("connect", function () {
+                        _this.socket.emit('huntChatRoom', _this.huntID);
+                    });
                     this.socket.on("chat_message", function (msg, username, datetime) {
                         _this.zone.run(function () {
                             console.log(_this.messages);
                             datetime = moment.unix(datetime).fromNow();
-                            _this.messages.push([username + ": " + msg + " @ " + datetime]);
+                            _this.messages.push([username, msg, datetime]);
                         });
+                    });
+                    this.socket.on("isTyping", function (bool, username) {
+                        if (bool === true && username !== _this.username) {
+                            _this.otherUsername = username;
+                            _this.otherUserTyping = true;
+                        }
+                        else {
+                            _this.otherUserTyping = false;
+                        }
                     });
                     var huntIDObject = { huntID: this.huntID };
                     this._chatService.postData(JSON.stringify(huntIDObject), this.GET_MESSAGES_URL)
@@ -63,41 +76,33 @@ System.register(['angular2/core', 'ng2-material/all', 'angular2/router', './chat
                             var messagesArray = messagesFromDB.chatMessages;
                             for (var i = 0; i < messagesArray.length; i++) {
                                 var datetime = moment.unix(messagesArray[i].datetime).fromNow();
+                                console.log('THIS IS BEING PUSHED TO MESSAGES ARRAY');
+                                console.log(messagesArray[i].username, messagesArray[i].text, datetime);
                                 _this.messages.push([messagesArray[i].username + ": " + messagesArray[i].text + " @ " + datetime]);
                             }
                         });
                     }).catch(function (error) { return console.error(error); });
+                    //Change this later
                     this.username = window.prompt('Enter a username!', '');
                 }
-                // showAlert() {
-                //   let config = new MdDialogConfig()
-                //     .textContent('You can specify some description text in here')
-                //     .title('This is an alert title')
-                //     .ok('Got it!');
-                //   this.dialog.open(MdDialogBasic, this.element, config);
-                // };
-                ChatComponent.prototype.timeoutFunction = function () {
-                    this.typing = false;
-                    this.socket.emit('typing', false);
+                ChatComponent.prototype.invocation = function () {
+                    var _this = this;
+                    this.timeout = setTimeout(function () {
+                        _this.socket.emit('typing', false, _this.username, _this.huntID);
+                    }, 1000);
                 };
                 ChatComponent.prototype.OnKey = function (event) {
-                    console.log('this is the keyup event ', event);
                     if (event) {
-                        console.log('ln 84: ', this.typing);
-                        if (this.typing === false) {
-                            this.typing = true;
-                            console.log('emitting true for typing', this.typing);
-                            this.socket.emit('typing', true);
-                            clearTimeout(this.timeout);
-                            this.timeout = setTimeout(this.timeoutFunction.bind(this), 1500);
-                        }
+                        this.socket.emit('typing', true, this.username, this.huntID);
+                        clearTimeout(this.timeout);
+                        this.invocation();
                     }
                 };
+                ;
                 ChatComponent.prototype.send = function (message) {
                     var _this = this;
                     if (message && message !== "") {
-                        console.log("username inside chat.ts", this.username);
-                        console.log("message inside chat.ts", message);
+                        this.socket.emit('typing', false, this.username, this.huntID);
                         var messageObject = {
                             username: this.username,
                             huntID: this.huntID,
@@ -107,8 +112,10 @@ System.register(['angular2/core', 'ng2-material/all', 'angular2/router', './chat
                             .then(function (messageAdded) {
                             messageAdded = messageAdded[0];
                             console.log("message  added", messageAdded);
-                            _this.socket.emit("chat_message", messageAdded.text, _this.username, messageAdded.datetime);
-                        }).catch(function (error) { return console.error(error); });
+                            _this.socket.emit("chat_message", messageAdded.text, messageAdded.username, messageAdded.datetime, _this.huntID);
+                        }).catch(function (error) {
+                            console.error(error);
+                        });
                     }
                     this.chatBox = "";
                 };

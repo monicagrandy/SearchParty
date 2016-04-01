@@ -25,13 +25,13 @@ export class SearchPartyComponent {
   startLat: number;
   startLng: number;
   content: any;
-  
+
   constructor(private _params: RouteParams, private googleMaps: GoogleMapService, private _searchPartyService: SearchPartyService) {
     this.huntID = _params.get('huntID');
     this.allTasks = []
     this.allPlaces = []
     this.getHuntData(this.huntID)
-  } 
+  }
 
  getHuntData(id){
    this._searchPartyService.getHunt(id)
@@ -54,8 +54,8 @@ export class SearchPartyComponent {
       this.showMap()
     })
       .catch(err => console.log(err));
-}   
-    
+}
+
   showMap() {
     this.googleMaps.finalMapMaker(this.allPlaces, this.allTasks)
         .then(data => {
