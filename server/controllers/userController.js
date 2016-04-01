@@ -88,7 +88,7 @@ module.exports = {
   retrieveAddedHunts: (req, res) => {
     
     let username = req.body.username
-
+    console.log('calling retrieveAddedHunts!! with username ', username);
     friends.retrieveAddedHuntsPromise(username)
     .then(huntsArray => {
       console.log("these are the hunts you've been added to", huntsArray);

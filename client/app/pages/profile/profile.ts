@@ -64,7 +64,7 @@ export class ProfilePage {
     this.profileService.addedHunts(this.user)
       .then(data => {
         console.log("these are the added hunts in profile.ts", data)
-        this.addedHunts = data[0]
+        this.addedHunts = data.hunts;
       })    
       .catch(error => console.log(error));
 
