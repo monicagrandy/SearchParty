@@ -7,12 +7,18 @@ module.exports = {
 
     let prettyUser = {hunts: []};
 
-    for (let j = 0; j < huntArray.length; j++) {
+
+    for(let j = 0; j < huntArray.length; j++) {
+
+
+
       let individualHunt = huntArray[j];
 
       let prettyHunt = {stats: {}, tasks: [], chatroom: {}, feedback:{}};
 
+
       for (let i = 0; i < individualHunt.places.length; i++) {
+
         let currObj = individualHunt.places[i];
 
         currObj.location = {};
@@ -23,11 +29,17 @@ module.exports = {
 
       prettyHunt.chatroom.messages = individualHunt.messages;
       prettyHunt.chatroom.chatID = individualHunt.chatData.chatID;
+
+
       prettyHunt.stats = individualHunt.huntData;
-      
-      if (individualHunt.feedback) {
+      if(!individualHunt.feedback){
+        prettyHunt.feedback.value = 'nada';
+      } else {
         prettyHunt.feedback.value = individualHunt.feedback.value;
       }
+
+      prettyHunt.stats = individualHunt.huntData;
+
 
       for (let z = 0; z < individualHunt.tasks.length; z++) {
         if (individualHunt.urls[z]) {
@@ -35,6 +47,7 @@ module.exports = {
         } else {
           prettyHunt.tasks.push({task: individualHunt.tasks[z], place: individualHunt.places[z]});
         }
+
       }
 
       prettyUser.hunts.push(prettyHunt);
