@@ -35,26 +35,27 @@ export class ProfileService {
   }
 
   addedHunts(username) {
-    console.log('called addedHunts');
+    console.log('called addedHunts post req');
+    console.log('inside addedHunts post promise');
+    let dataToSend = { username: username };
+    console.log('this is the data to send ', dataToSend);
     let httpPostPromise = new Promise((resolve, reject) => {
-      console.log('inside post promise - addedHunts');
-      let dataToSend = { username: username };
-
-      this._http.post(this.ADDEDHUNTS_URL, JSON.stringify(dataToSend), { headers: this.contentHeader})
-      .map(res => res.json())
-      .subscribe(
-        data => {
-          console.log('data from addedHunts: ', data);
-          resolve(data)
-        },
-        err => {
-          this.logError(err);
-          reject(err);
-        },
-        () => console.log('data recieved from addedHunts')
-        )
-      })
-    return httpPostPromise
+      this._http.post(this.ADDEDHUNTS_URL, JSON.stringify(dataToSend), {headers: this.contentHeader})
+        .map(res => res.json())
+        .subscribe(
+          data => {
+            console.log('data from promise: ', data);
+            resolve(data);
+          },
+          err => {
+            console.log(err);
+            this.logError(err);
+            reject(err);
+          },
+          () => console.log('data recieved')
+          )  
+    });
+    return httpPostPromise;
   }
 
   logError(err) {
