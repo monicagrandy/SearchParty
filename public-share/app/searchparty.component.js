@@ -39,6 +39,9 @@ System.register(['angular2/core', 'angular2/router', 'ng2-material/all', './sear
                     this._params = _params;
                     this.googleMaps = googleMaps;
                     this._searchPartyService = _searchPartyService;
+                    // modal: ModalComponent;
+                    this.items = ['item1', 'item2', 'item3'];
+                    this.animationsEnabled = true;
                     this.map = null;
                     this.huntID = _params.get('huntID');
                     this.allTasks = [];
@@ -49,11 +52,10 @@ System.register(['angular2/core', 'angular2/router', 'ng2-material/all', './sear
                         _this.socket.emit('huntChatRoom', _this.huntID);
                     });
                     this.socket.on('taskChange', function (location, task, room, lat, lng, num) {
-                        console.log('{{}{}}{}{}}{} recieving taskChange {}{}{}{}');
                         _this.allTasks.unshift([[location], [task]]);
                         _this.allPlaces.push(location);
-                        _this.socket.emit('chat_message', '::TASK HAS CHANGED::', 'SearchPartyAdmin', null, _this.huntID);
-                        // this.getHuntData();
+                        _this.socket.emit('chat_message', '::TASK HAS CHANGED::', 'SearchPartyAdmin', (Date.now() / 1000), _this.huntID);
+                        _this.getHuntData();
                     });
                 }
                 SearchPartyComponent.prototype.getHuntData = function (id) {

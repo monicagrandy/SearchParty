@@ -66,6 +66,7 @@ export class Chat {
         console.log(this.messages);
         datetime = moment.unix(datetime).fromNow();
         this.messages.push([username, msg, datetime]);
+        console.log('Messages Array::', messages);
       });
    });
 
