@@ -1,22 +1,28 @@
-<h2>Where you've been:</h2>
 
-  <div id="map"></div>
+<h2 layout="row">Where you've been:</h2>
+<div layout="row">
+  <div class="left" flex="66">
 
-  <div *ngFor="#obj of huntTasks">
-    <strong>Location</strong>
-    <p>{{obj.place.name}}</p>
-    <strong>Challenge</strong>
-    <p>{{obj.task.content}}</p>
-    <img *ngIf="obj.image" src="{{obj.image.url}}">
+     <div id="map"></div>
+     <div *ngFor="#obj of huntTasks" layout="row">
+        <strong flex>Location
+           <p>{{obj.place.name}}</p>
+        </strong>
+        <strong flex>Challenge
+           <p>{{obj.task.content}}</p>
+        </strong>
+        <strong flex>Distance Travelled:</strong>
+        <p>{{totalDist}} miles</p>
+     </div>
+     <img *ngIf="obj.image" src="{{obj.image.url}}"></img>
+  <div class="right" flex="33">
+
+     <my-chat></my-chat>
+
   </div>
 
-  <div>
-    <h2>Distance Travelled:</h2>
-    <p>{{totalDist}} miles</p>
-  </div>
-
-  <h2>Hunt Chat:</h2>
-  <my-chat></my-chat>
+  <!-- <h2>Hunt Chat:</h2>
+  <my-chat></my-chat> -->
     <!--<div *ngFor="#obj of huntChats">
       <p>{{obj.username}} said at {{obj.datetime}}</p>
       <p>{{obj.text}}</p>

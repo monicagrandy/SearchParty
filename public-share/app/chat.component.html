@@ -1,8 +1,8 @@
-<div>
+<div layout = "column">
   <ul id="messages"></ul>
     <ul>
       <li *ngFor="#message of messages">
-         <h2>{{message[0]}}: {{message[1]}}</h2>
+         <p>{{message[0]}}: {{message[1]}}</p>
          <p>{{message[2]}}</p>
       </li>
       <p *ngIf="otherUserTyping">{{otherUsername}} is typing...</p>
