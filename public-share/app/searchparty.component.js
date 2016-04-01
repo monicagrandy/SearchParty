@@ -44,6 +44,7 @@ System.register(['angular2/core', 'angular2/router', 'ng2-material/all', './sear
                     this.allTasks = [];
                     this.allPlaces = [];
                     this.getHuntData(this.huntID);
+                    var socket = io.connect('http://localhost:8000');
                     this.socket = socket;
                     socket.on('taskChange', function (location, task, distance) {
                         _this.getHuntData(_this.huntID);

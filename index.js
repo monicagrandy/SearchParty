@@ -93,6 +93,7 @@ io.on('connection', (socket) => {
   });
 
   socket.on('taskChange', (location, task, distance, map) =>{
+     console.log(':::ALERT::: Task Change Detected. WAKKA WAKKA');
      io.to(room).emit('taskChange', location, task, distance, map);
  });
 

@@ -32,6 +32,7 @@ export class SearchPartyComponent {
     this.allTasks = []
     this.allPlaces = []
     this.getHuntData(this.huntID);
+    let socket = io.connect('http://localhost:8000');
     this.socket = socket;
     socket.on('taskChange', (location, task, distance) => {
       this.getHuntData(this.huntID);
