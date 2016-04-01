@@ -39,6 +39,9 @@ System.register(['angular2/core', 'angular2/router', 'ng2-material/all', './sear
                     this._params = _params;
                     this.googleMaps = googleMaps;
                     this._searchPartyService = _searchPartyService;
+                    // modal: ModalComponent;
+                    this.items = ['item1', 'item2', 'item3'];
+                    this.animationsEnabled = true;
                     this.map = null;
                     this.huntID = _params.get('huntID');
                     this.allTasks = [];

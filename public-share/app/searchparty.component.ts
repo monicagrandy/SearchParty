@@ -14,7 +14,11 @@ import {ChatComponent} from './chat.component';
   providers: [MATERIAL_PROVIDERS, SearchPartyService, GoogleMapService]
 })
 export class SearchPartyComponent {
-
+  // modal: ModalComponent;
+  items: string[] = ['item1', 'item2', 'item3'];
+  modalSelected: string;
+  selected: string;
+  animationsEnabled: boolean = true;
   map = null;
   huntID: any;
   error: any;
@@ -78,7 +82,12 @@ export class SearchPartyComponent {
       });
       console.log(' this is this.allPlaces ', previousPlaces);
       console.log('this is previous tasks ', previousTasks);
+<<<<<<< HEAD
       
+=======
+
+
+>>>>>>> 55a0b42f8c3c2dffec930fe5e481b7f06fa47c52
       setTimeout(() => {
         console.log('set time out is done updating map');
         this.googleMaps.finalMapMaker(previousPlaces, previousTasks)
@@ -87,7 +96,11 @@ export class SearchPartyComponent {
             });
 
         this.totalDist = this.googleMaps.calcDistance(previousPlaces);
+<<<<<<< HEAD
         console.log(this.totalDist);
+=======
+        console.log(this.totalDist)
+>>>>>>> 55a0b42f8c3c2dffec930fe5e481b7f06fa47c52
       }, 2000);
       
     })
