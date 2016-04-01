@@ -55,7 +55,7 @@ System.register(['angular2/core', 'angular2/router', 'ng2-material/all', './sear
                         _this.allTasks.unshift([[location], [task]]);
                         _this.allPlaces.push(location);
                         _this.socket.emit('chat_message', '::TASK HAS CHANGED::', 'SearchPartyAdmin', null, _this.huntID);
-                        _this.showMap();
+                        _this.getHuntData();
                     });
                 }
                 SearchPartyComponent.prototype.getHuntData = function (id) {

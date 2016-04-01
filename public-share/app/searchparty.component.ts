@@ -51,7 +51,7 @@ export class SearchPartyComponent {
       this.allTasks.unshift([[location], [task]]);
       this.allPlaces.push(location);
       this.socket.emit('chat_message', '::TASK HAS CHANGED::', 'SearchPartyAdmin', null, this.huntID);
-      this.showMap();
+      this.getHuntData();
    });
 }
 
