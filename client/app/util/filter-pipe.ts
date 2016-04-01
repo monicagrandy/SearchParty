@@ -3,20 +3,25 @@ import {Pipe, PipeTransform} from 'angular2/core';
 @Pipe(
   {name: 'HuntFilterPipe'}
 )
-export class HuntFilterPipe {
-  transform(value, args) {
-    // let filter = args;
-    console.log("hunts??", value);
-    // console.log("filter", filter);
+export class HuntFilterPipe implements PipeTransform{
+  transform(value:any, args) {
 
     return value.filter(hunt => {
-      console.log("does this hunt have feedback", hunt[args]);
-      if (!hunt[args]) {
-        return true;
-      } else {
-        return false;
+
+      let prop = hunt;
+
+      for(let i = 0; i < args.length; i++) {
+        if(prop[args[i]]) {
+          prop = prop[args[i]];
+        }
+        else {
+          return true;
+        }
       }
+      return false;
     })
 
   }
 }
+
+// Kyle 'The Fox' Kodani

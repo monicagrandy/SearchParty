@@ -16,9 +16,7 @@ import {HuntFilterPipe} from '../../util/filter-pipe';
 })
 export class ProfilePage {
   local: Storage = new Storage(LocalStorage);
-  ongoingHunts: any;
-  likedHunts: any;
-  dislikedHunts: any;
+  hunts: any;
   token: any;
   friends: any;
   // sample types for hunts and friends
@@ -38,17 +36,8 @@ export class ProfilePage {
 
     this.profileService.getProfile(this.token)
     .then(data => {
-      // this.ongoingHunts = [];
-      for(let i = 0; i < data.hunts.length; i++) {
-        let individualHunt = data.hunts[i];
-        if(!individualHunt.feedback.value) {
-          this.ongoingHunts = individualHunt;
-        } else if(individualHunt.feedback.value === "good") {
-          this.likedHunts.push(individualHunt);
-        } else {
-          this.dislikedHunts.push(individualHunt);
-        }
-      }
+      this.hunts = data.hunts;
+
     })
     .catch(error => console.log(error));
 
