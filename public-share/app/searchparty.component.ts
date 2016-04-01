@@ -33,14 +33,27 @@ export class SearchPartyComponent {
   startLat: number;
   startLng: number;
   content: any;
-   
+  socket: any;
+  tasks: any;
+  chatroom: any;
 
   constructor(private _params: RouteParams, private googleMaps: GoogleMapService, private _searchPartyService: SearchPartyService) {
     this.huntID = _params.get('huntID');
-    this.allTasks = []
-    this.allPlaces = []
-    this.getHuntData(this.huntID)
-  }
+    this.allTasks = [];
+    this.getHuntData(this.huntID);
+    let socket = io.connect('http://localhost:8000');
+    this.socket = socket;
+    this.socket.on("connect", () => {
+      this.socket.emit('huntChatRoom', this.huntID);
+    });
+    this.socket.on('taskChange', (location, task, room, lat, lng, num) => {
+      console.log('{{}{}}{}{}}{} recieving taskChange {}{}{}{}');
+      this.allTasks.unshift([[location], [task]]);
+      this.allPlaces.push(location);
+      this.socket.emit('chat_message', '::TASK HAS CHANGED::', 'SearchPartyAdmin', null, this.huntID);
+      this.getHuntData();
+   });
+}
 
  getHuntData(id){
    this._searchPartyService.getHunt(id)
@@ -50,16 +63,14 @@ export class SearchPartyComponent {
       this.startLat = data.tasks[0].place.lat;
       this.startLng = data.tasks[0].place.lng;
       this.content = '<h4>' + data.tasks[0].place.name + ' < /h4><p>' + data.tasks[0].place.address + '</p > ';
-      if(data.chatroom.messages.length > 0){
+      console.log('data.chatroom.messages:::', data.chatroom.messages);
+      if(data.chatroom.messages){
         this.huntChats = data.chatroom.messages;
       }
       this.huntTasks.forEach((item) => {
-        this.allPlaces.push(item.place);
-        this.allTasks.push(item.task);
-      })
-      console.log("hello")
-      console.log(this.allTasks)
-      console.log(this.allPlaces)
+         // console.log(item);
+         this.allTasks.unshift([[item.place.name], [item.task.content]]);
+      });
       this.showMap()
     })
       .catch(err => console.log(err));

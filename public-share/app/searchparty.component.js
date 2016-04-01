@@ -35,6 +35,7 @@ System.register(['angular2/core', 'angular2/router', 'ng2-material/all', './sear
         execute: function() {
             SearchPartyComponent = (function () {
                 function SearchPartyComponent(_params, googleMaps, _searchPartyService) {
+                    var _this = this;
                     this._params = _params;
                     this.googleMaps = googleMaps;
                     this._searchPartyService = _searchPartyService;
@@ -43,8 +44,19 @@ System.register(['angular2/core', 'angular2/router', 'ng2-material/all', './sear
                     this.map = null;
                     this.huntID = _params.get('huntID');
                     this.allTasks = [];
-                    this.allPlaces = [];
                     this.getHuntData(this.huntID);
+                    var socket = io.connect('http://localhost:8000');
+                    this.socket = socket;
+                    this.socket.on("connect", function () {
+                        _this.socket.emit('huntChatRoom', _this.huntID);
+                    });
+                    this.socket.on('taskChange', function (location, task, room, lat, lng, num) {
+                        console.log('{{}{}}{}{}}{} recieving taskChange {}{}{}{}');
+                        _this.allTasks.unshift([[location], [task]]);
+                        _this.allPlaces.push(location);
+                        _this.socket.emit('chat_message', '::TASK HAS CHANGED::', 'SearchPartyAdmin', null, _this.huntID);
+                        _this.getHuntData();
+                    });
                 }
                 SearchPartyComponent.prototype.getHuntData = function (id) {
                     var _this = this;
@@ -55,16 +67,14 @@ System.register(['angular2/core', 'angular2/router', 'ng2-material/all', './sear
                         _this.startLat = data.tasks[0].place.lat;
                         _this.startLng = data.tasks[0].place.lng;
                         _this.content = '<h4>' + data.tasks[0].place.name + ' < /h4><p>' + data.tasks[0].place.address + '</p > ';
-                        if (data.chatroom.messages.length > 0) {
+                        console.log('data.chatroom.messages:::', data.chatroom.messages);
+                        if (data.chatroom.messages) {
                             _this.huntChats = data.chatroom.messages;
                         }
                         _this.huntTasks.forEach(function (item) {
-                            _this.allPlaces.push(item.place);
-                            _this.allTasks.push(item.task);
+                            // console.log(item);
+                            _this.allTasks.unshift([[item.place.name], [item.task.content]]);
                         });
-                        console.log("hello");
-                        console.log(_this.allTasks);
-                        console.log(_this.allPlaces);
                         _this.showMap();
                     })
                         .catch(function (err) { return console.log(err); });

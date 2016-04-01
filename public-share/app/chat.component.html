@@ -1,19 +1,20 @@
 <div *ngIf="!nameAdded">
   <input #username placeholder="please enter a username" >
   <button (click)="getUsername(username.value)">Submit</button>
-</div>  
-
+</div>
 <div *ngIf="nameAdded">
-  <ul id="messages"></ul>
-    <ul>
-      <li *ngFor="#message of messages">
-         <h2>{{message[0]}}: {{message[1]}}</h2>
-         <p>{{message[2]}}</p>
-      </li>
-      <p *ngIf="otherUserTyping">{{otherUsername}} is typing...</p>
-  </ul>
-  <form action="">
-    <input id="m" autocomplete="off" (keyup)="OnKey($event)" [(ngModel)]="chatBox" placeholder="Message..."/>
-    <button (click)="send(chatBox)" (ngSubmit)="send(chatBox)">Send</button>
-  </form>
+<div layout = "column">
+     <ul id="messages"></ul>
+       <ul>
+         <li *ngFor="#message of messages">
+            <p>{{message[0]}}: {{message[1]}}</p>
+            <p>{{message[2]}}</p>
+         </li>
+         <p *ngIf="otherUserTyping">{{otherUsername}} is typing...</p>
+     </ul>
+     <form action="">
+       <input id="m" autocomplete="off" (keyup)="OnKey($event)" [(ngModel)]="chatBox" placeholder="Message..."/>
+       <button (click)="send(chatBox)" (ngSubmit)="send(chatBox)">Send</button>
+     </form>
+</div>
 </div>
