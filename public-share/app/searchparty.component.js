@@ -44,7 +44,6 @@ System.register(['angular2/core', 'angular2/router', 'ng2-material/all', './sear
                     this.map = null;
                     this.huntID = _params.get('huntID');
                     this.allTasks = [];
-                    this.allPlaces = [];
                     this.getHuntData(this.huntID);
                     var socket = io.connect('http://localhost:8000');
                     this.socket = socket;
@@ -72,12 +71,8 @@ System.register(['angular2/core', 'angular2/router', 'ng2-material/all', './sear
                             _this.huntChats = data.chatroom.messages;
                         }
                         _this.huntTasks.forEach(function (item) {
-                            _this.allPlaces.push(item.place);
-                            _this.allTasks.push(item.task);
+                            _this.allTasks.push([item.place, item.task]);
                         });
-                        console.log("hello");
-                        console.log(_this.allTasks);
-                        console.log(_this.allPlaces);
                         _this.showMap();
                     })
                         .catch(function (err) { return console.log(err); });

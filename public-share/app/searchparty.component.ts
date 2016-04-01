@@ -39,8 +39,7 @@ export class SearchPartyComponent {
 
   constructor(private _params: RouteParams, private googleMaps: GoogleMapService, private _searchPartyService: SearchPartyService) {
     this.huntID = _params.get('huntID');
-    this.allTasks = []
-    this.allPlaces = []
+    this.allTasks = [];
     this.getHuntData(this.huntID);
     let socket = io.connect('http://localhost:8000');
     this.socket = socket;
@@ -69,12 +68,8 @@ export class SearchPartyComponent {
         this.huntChats = data.chatroom.messages;
       }
       this.huntTasks.forEach((item) => {
-        this.allPlaces.push(item.place);
-        this.allTasks.push(item.task);
-      })
-      console.log("hello")
-      console.log(this.allTasks)
-      console.log(this.allPlaces)
+         this.allTasks.push([item.place, item.task]);
+      });
       this.showMap()
     })
       .catch(err => console.log(err));

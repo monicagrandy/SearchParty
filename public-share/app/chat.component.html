@@ -1,13 +1,10 @@
-<<<<<<< HEAD
-<div layout = "column">
-=======
+
 <div *ngIf="!nameAdded">
   <input #username placeholder="please enter a username" >
   <button (click)="getUsername(username.value)">Submit</button>
-</div>  
-
+</div>
 <div *ngIf="nameAdded">
->>>>>>> 33e42742a1ec909201a60206542b1d68317588b2
+   <div layout = "column">
   <ul id="messages"></ul>
     <ul>
       <li *ngFor="#message of messages">
@@ -20,4 +17,5 @@
     <input id="m" autocomplete="off" (keyup)="OnKey($event)" [(ngModel)]="chatBox" placeholder="Message..."/>
     <button (click)="send(chatBox)" (ngSubmit)="send(chatBox)">Send</button>
   </form>
+</div>
 </div>

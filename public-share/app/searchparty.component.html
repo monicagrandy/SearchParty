@@ -4,14 +4,14 @@
   <div class="left" flex="66">
 
      <div id="map"></div>
-     <div *ngFor="#obj of huntTasks" layout="row" class='tasks'>
+     <div *ngFor="#obj of allTasks" layout="row" class='tasks'>
         <strong flex class='tasks'>
            Location
-           <p>{{obj.place.name}}</p>
+           <p>{{obj[0]}}</p>
         </strong>
         <strong flex class='tasks'>
            Challenge
-           <p>{{obj.task.content}}</p>
+           <p>{{obj[1]}}</p>
         </strong>
      </div>
      <strong>

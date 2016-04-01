@@ -263,7 +263,7 @@ takePic() {
 
   shareViaTwitter(message, image) {
     if(window.plugins.socialsharing) {
-      window.plugins.socialsharing.canShareVia("twitter", message, null, image, this.link, result => {
+      window.plugins.socialsharing.canShareVia("twitter", message, (Date.now())/1000, image, this.link, result => {
           window.plugins.socialsharing.shareViaTwitter(message, image, link);
       }, error => {
           console.log(error);
