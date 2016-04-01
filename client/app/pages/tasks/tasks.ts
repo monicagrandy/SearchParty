@@ -83,7 +83,7 @@ export class TaskPage {
     this.platform = platform;
     this.image = null;
     this.tasksLeft = true;
-    let socket = io.connect('http://localhost:8000');
+    let socket = io.connect('https://getsearchparty.com');
     this.socket = socket;
     this.token = localStorage.id_token;
 
@@ -125,7 +125,7 @@ export class TaskPage {
 
     
     // set links for sharing and directions
-    this.link = `http://localhost:8000/share/#/hunt/${this.huntID}`;
+    this.link = `https://getsearchparty.com/share/#/hunt/${this.huntID}`;
     this.directionLink = `https://www.google.com/maps/dir/${this.userLat},${this.userLong}/${this.locAddress}`;
 
     // twitter specific link generation

@@ -37,20 +37,27 @@ export class SearchPartyComponent {
     let socket = io.connect('http://localhost:8000');
     this.socket = socket;
     this.socket.on("connect", () => {
-      this.socket.emit('huntChatRoom', this.huntID);
+      // this.socket.emit('huntChatRoom', this.huntID);
+      this.socket.emit('huntMapRoom', this.huntID);
     });
     this.socket.on('taskChange', (location, task, room, lat, lng, num) => {
       console.log('{{}{}}{}{}}{} recieving taskChange {}{}{}{}');
+      console.log(' this is the task change location change ', location);
       this.allTasks.unshift([[location], [task]]);
-      this.allPlaces.push(location);
+      // this.allPlaces.push(location);
       this.socket.emit('chat_message', '::TASK HAS CHANGED::', 'SearchPartyAdmin', null, this.huntID);
-      // this.getHuntData();
+      this.getHuntData(this.huntID);
    });
-}
+   this.socket.on("location", (data, username) => {
+      // update map which reflected changes
+      console.log('location was updated from socket server ', data, username);
+   });
+ }
 
  getHuntData(id){
    let previousPlaces = [];
    let previousTasks = [];
+   this.allTasks = [];
    this._searchPartyService.getHunt(id)
     .then(data => {
       console.log("data from searchparty service ", data);
@@ -72,28 +79,19 @@ export class SearchPartyComponent {
       console.log(' this is this.allPlaces ', previousPlaces);
       console.log('this is previous tasks ', previousTasks);
       
-      
       setTimeout(() => {
+        console.log('set time out is done updating map');
         this.googleMaps.finalMapMaker(previousPlaces, previousTasks)
             .then(data => {
               let flightPath = data;
             });
 
         this.totalDist = this.googleMaps.calcDistance(previousPlaces);
-        console.log(this.totalDist) 
+        console.log(this.totalDist);
       }, 2000);
+      
     })
       .catch(err => console.log(err));
-}
-
-  showMap() {
-    this.googleMaps.finalMapMaker(this.allPlaces, this.allTasks)
-        .then(data => {
-          let flightPath = data;
-        });
-
-      this.totalDist = this.googleMaps.calcDistance(this.allPlaces);
-      console.log(this.totalDist)
-    }
+  }
 
 }

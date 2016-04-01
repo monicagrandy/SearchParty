@@ -40,7 +40,7 @@ export class TaskService {
   createSocket(huntID, username) {
     // update url later
     console.log('create socket is called ', huntID, username)
-    this.socket = io.connect('http://localhost:8000');
+    this.socket = io.connect('https://getsearchparty.com');
     this.huntID = huntID;
     this.username = username;
     console.log('creating socket');
