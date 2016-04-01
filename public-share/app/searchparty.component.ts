@@ -25,13 +25,18 @@ export class SearchPartyComponent {
   startLat: number;
   startLng: number;
   content: any;
+  socket: any;
 
   constructor(private _params: RouteParams, private googleMaps: GoogleMapService, private _searchPartyService: SearchPartyService) {
     this.huntID = _params.get('huntID');
     this.allTasks = []
     this.allPlaces = []
-    this.getHuntData(this.huntID)
-  }
+    this.getHuntData(this.huntID);
+    this.socket = socket;
+    socket.on('taskChange', (location, task, distance) => {
+      this.getHuntData(this.huntID);
+   })
+}
 
  getHuntData(id){
    this._searchPartyService.getHunt(id)

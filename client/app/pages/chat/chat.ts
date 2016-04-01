@@ -112,6 +112,7 @@ OnKey(event:KeyboardEvent) {
 
 send(message) {
    if (message && message !== "") {
+      clearTimeout(this.timeout);
       this.socket.emit('typing', false, this.username, this.huntID);
       let messageObject = {
         username: this.username,

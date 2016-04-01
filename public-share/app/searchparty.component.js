@@ -35,6 +35,7 @@ System.register(['angular2/core', 'angular2/router', 'ng2-material/all', './sear
         execute: function() {
             SearchPartyComponent = (function () {
                 function SearchPartyComponent(_params, googleMaps, _searchPartyService) {
+                    var _this = this;
                     this._params = _params;
                     this.googleMaps = googleMaps;
                     this._searchPartyService = _searchPartyService;
@@ -43,6 +44,10 @@ System.register(['angular2/core', 'angular2/router', 'ng2-material/all', './sear
                     this.allTasks = [];
                     this.allPlaces = [];
                     this.getHuntData(this.huntID);
+                    this.socket = socket;
+                    socket.on('taskChange', function (location, task, distance) {
+                        _this.getHuntData(_this.huntID);
+                    });
                 }
                 SearchPartyComponent.prototype.getHuntData = function (id) {
                     var _this = this;

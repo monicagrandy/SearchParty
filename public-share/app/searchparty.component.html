@@ -5,16 +5,21 @@
 
      <div id="map"></div>
      <div *ngFor="#obj of huntTasks" layout="row">
-        <strong flex>Location
+        <strong flex>
+           Location
            <p>{{obj.place.name}}</p>
         </strong>
-        <strong flex>Challenge
+        <strong flex>
+           Challenge
            <p>{{obj.task.content}}</p>
         </strong>
-        <strong flex>Distance Travelled:</strong>
-        <p>{{totalDist}} miles</p>
      </div>
-     <img *ngIf="obj.image" src="{{obj.image.url}}"></img>
+     <strong>
+        Distance Travelled:{{totalDist}} miles
+     </strong>
+
+  </div>
+
   <div class="right" flex="33">
 
      <my-chat></my-chat>

@@ -91,4 +91,9 @@ io.on('connection', (socket) => {
      }
       io.to(room).emit('isTyping', bool, username);
   });
+
+  socket.on('taskChange', (location, task, distance, map) =>{
+     io.to(room).emit('taskChange', location, task, distance, map);
+ });
+
 });
