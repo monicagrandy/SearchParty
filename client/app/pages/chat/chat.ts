@@ -31,6 +31,11 @@ export class Chat {
   ADD_MESSAGE_URL: string = 'http://localhost:8000/addChatMessage';
   GET_MESSAGES_URL: string = 'http://localhost:8000/getChatMessages';
   huntID: any;
+  token: any;
+  id_token: any;
+  otherUserTyping: any;
+  otherUsername: any;
+  chatMessages: any;
 
    constructor(
       private http: Http,
@@ -44,18 +49,18 @@ export class Chat {
    }
    this.huntID = navParams.get('huntID');
    let socket = io.connect('http://localhost:8000');
-   this.timeout = undefined;
-   this.timeout2 = undefined;
-   this.typing = false;
    this.otherUserTyping = false;
    this.otherUsername = '';
    this.messages = [];
+   this.timeout;
    this.zone = new NgZone({enableLongStackTrace: false});
    this.chatBox = "";
    this.socket = socket;
+
    this.socket.on("connect", () => {
       this.socket.emit('huntChatRoom', this.huntID);
    });
+
    this.socket.on("chat_message", (msg, username, datetime) => {
       this.zone.run(() => {
         console.log(this.messages);
@@ -65,12 +70,11 @@ export class Chat {
    });
 
    this.socket.on("isTyping", (bool, username) => {
-      if(bool === true) {
+      if(bool === true && username !== this.username) {
          this.otherUsername = username;
          this.otherUserTyping = true;
       } else {
-         clearTimeout(this.timeout);
-         this.timeout = setTimeout(this.timeoutFunction.bind(this), 1500);
+         this.otherUserTyping = false;
       }
    });
 
@@ -88,27 +92,27 @@ export class Chat {
         }
       })
    }).catch(error => console.error(error));
-}
+};
 
-  timeoutFunction() {
-    this.typing = false;
-    this.socket.emit('typing', false);
-  }
+invocation() {
+   this.timeout = setTimeout(
+      () => {
+         this.socket.emit('typing', false, this.username, this.huntID);
+         console.log('false called');
+      }, 1000);
+};
 
-  // OnKey(event:KeyboardEvent) {
-  //   if (event) {
-  //     if (this.typing === false) {
-  //       this.typing = true;
-  //       this.socket.emit('typing', true, this.username, this.huntID);
-  //       clearTimeout(this.timeout);
-  //       this.timeout = setTimeout(this.timeoutFunction.bind(this), 1500);
-  //     }
-  //   }
-  // }
+OnKey(event:KeyboardEvent) {
+   if (event) {
+     this.socket.emit('typing', true, this.username, this.huntID);
+     clearTimeout(this.timeout);
+     this.invocation();
+   }
+};
 
-  send(message) {
-    if (message && message !== "") {
-
+send(message) {
+   if (message && message !== "") {
+      this.socket.emit('typing', false, this.username, this.huntID);
       let messageObject = {
         username: this.username,
         huntID: this.huntID,
@@ -124,7 +128,7 @@ export class Chat {
         console.error(error)
      });
 
-    }
-    this.chatBox = "";
-  }
+   }
+   this.chatBox = "";
+};
 }

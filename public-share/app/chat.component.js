@@ -42,14 +42,12 @@ System.register(['angular2/core', 'ng2-material/all', 'angular2/router', './chat
                     this.GET_MESSAGES_URL = 'http://localhost:8000/getChatMessages';
                     this.huntID = _params.get('huntID');
                     var socket = io.connect('http://localhost:8000');
-                    this.timeout = undefined;
-                    this.typing = false;
-                    this.messages = [];
-                    this.zone = new core_2.NgZone({ enableLongStackTrace: false });
-                    this.chatBox = "";
                     this.otherUserTyping = false;
                     this.otherUsername = '';
-                    this.username = '';
+                    this.messages = [];
+                    this.timeout;
+                    this.zone = new core_2.NgZone({ enableLongStackTrace: false });
+                    this.chatBox = "";
                     this.socket = socket;
                     this.socket.on("connect", function () {
                         _this.socket.emit('huntChatRoom', _this.huntID);
@@ -61,14 +59,13 @@ System.register(['angular2/core', 'ng2-material/all', 'angular2/router', './chat
                             _this.messages.push([username, msg, datetime]);
                         });
                     });
-                    this.socket.on("isTyping", function (bool, username, room) {
-                        if (bool === true) {
+                    this.socket.on("isTyping", function (bool, username) {
+                        if (bool === true && username !== _this.username) {
                             _this.otherUsername = username;
                             _this.otherUserTyping = true;
                         }
                         else {
-                            clearTimeout(_this.timeout);
-                            _this.timeout = setTimeout(_this.timeoutFunction2.bind(_this), 500);
+                            _this.otherUserTyping = false;
                         }
                     });
                     var huntIDObject = { huntID: this.huntID };
@@ -85,33 +82,27 @@ System.register(['angular2/core', 'ng2-material/all', 'angular2/router', './chat
                             }
                         });
                     }).catch(function (error) { return console.error(error); });
-                    //Change this later ethan, jesus dude
+                    //Change this later
                     this.username = window.prompt('Enter a username!', '');
                 }
-                ChatComponent.prototype.timeoutFunction = function () {
-                    this.typing = false;
-                    this.socket.emit('typing', false);
-                };
-                ChatComponent.prototype.timeoutFunction2 = function () {
-                    this.otherUserTyping = false;
-                    this.socket.emit('typing', false);
+                ChatComponent.prototype.invocation = function () {
+                    var _this = this;
+                    this.timeout = setTimeout(function () {
+                        _this.socket.emit('typing', false, _this.username, _this.huntID);
+                    }, 1000);
                 };
                 ChatComponent.prototype.OnKey = function (event) {
-                    console.log('this is the keyup event ', event);
                     if (event) {
-                        console.log('ln 84: ', this.typing);
-                        if (this.typing === false) {
-                            this.typing = true;
-                            console.log('emitting true for typing', this.typing);
-                            this.socket.emit('typing', true, this.huntID);
-                            clearTimeout(this.timeout);
-                            this.timeout = setTimeout(this.timeoutFunction.bind(this), 1500);
-                        }
+                        this.socket.emit('typing', true, this.username, this.huntID);
+                        clearTimeout(this.timeout);
+                        this.invocation();
                     }
                 };
+                ;
                 ChatComponent.prototype.send = function (message) {
                     var _this = this;
                     if (message && message !== "") {
+                        this.socket.emit('typing', false, this.username, this.huntID);
                         var messageObject = {
                             username: this.username,
                             huntID: this.huntID,

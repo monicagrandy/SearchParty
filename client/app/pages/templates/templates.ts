@@ -29,17 +29,15 @@ export class TemplatePage {
       this.userLng = localStorage.userLng;
     } else {
       if (navigator.geolocation) {
-      console.log("getting geolocation")
-      navigator.geolocation.watchPosition((position => {
-        this.userLat = position.coords.latitude;
-        this.userLng = position.coords.longitude;
-        this.local.set('userLat', position.coords.latitude);
-        this.local.set('userLng', position.coords.longitude);
-      }), (error => console.log(error)), {})
+        console.log("getting geolocation")
+        navigator.geolocation.watchPosition((position => {
+          this.userLat = position.coords.latitude;
+          this.userLng = position.coords.longitude;
+          this.local.set('userLat', position.coords.latitude);
+          this.local.set('userLng', position.coords.longitude);
+        }), (error => console.log(error)), {});
+      }
     }
-   }
-
-
 
     this.testData = [
       {type: 'Bar', huntname: 'Bar Hunt', image: 'img/bar.jpg', icon: 'ios-pint'},

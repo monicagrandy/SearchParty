@@ -1,15 +1,20 @@
-import {Pipe} from 'angular2/core';
+import {Pipe, PipeTransform} from 'angular2/core';
 
 @Pipe(
-  {name: 'filterHunt'}
+  {name: 'HuntFilterPipe'}
 )
-export class FilterPipe {
-  transform(value, filters) {
-
-    var filter = function(obj, filters) {
-      return Object.keys(filters).every(prop => obj[prop] === filters[prop])
+export class HuntFilterPipe implements PipeTransform{
+  transform(value:any, args) {
+    if(value) {
+      return value.filter(hunt => {
+        if(hunt.feedback.value == args) {
+          return true;
+        } else {
+          return false;
+        }
+      }
     }
-
-    return value.filter(obj => filter(obj, filters[0]));
   }
 }
+
+// Kyle 'The Fox' Kodani

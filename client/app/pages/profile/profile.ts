@@ -8,12 +8,15 @@ import {FriendPage} from '../friend/friend';
 import {FriendsListPage} from '../friends-list/friends-list';
 import {FilterPipe} from '../../util/filter-pipe';
 import {JwtHelper} from 'angular2-jwt';
+import {HuntFilterPipe} from '../../util/filter-pipe';
+import {TaskPage} from '../tasks/tasks';
+import {TaskService} from '../../services/task/task-service';
 
 @Page({
   templateUrl: 'build/pages/profile/profile.html',
-  providers: [ProfileService, FriendService],
+  providers: [ProfileService, FriendService, TaskService],
   directives: [FORM_DIRECTIVES],
-  pipes: [FilterPipe]
+  pipes: [HuntFilterPipe]
 })
 export class ProfilePage {
   local: Storage = new Storage(LocalStorage);
@@ -33,8 +36,10 @@ export class ProfilePage {
     navParams: NavParams,
     private profileService: ProfileService,
     private auth: AuthService,
-    private friendService: FriendService
-    ) {
+    private friendService: FriendService,
+    private taskService: TaskService
+  ) {
+
     this.token = this.local.get('id_token')._result;
 
     if (this.token) {
@@ -44,12 +49,18 @@ export class ProfilePage {
     console.log('this is the token before it is sent', this.token);
 
     this.profileService.getProfile(this.token)
-      .then(data => {
-        console.log(data.hunts);
-        // this.friends = data.friends;
-        this.hunts = data.hunts;
-      })
-        .catch(error => console.log(error));
+    .then(data => {
+      console.log(data.hunts);
+      // this.friends = data.friends;
+      let huntsWithAtleastOneTask = [];
+      for (let hunt of data.hunts) {
+        if (hunt.tasks.length > 0) {
+          huntsWithAtleastOneTask.push(hunt);
+        }
+      }
+      this.hunts = huntsWithAtleastOneTask;
+    })
+    .catch(error => console.log(error));
 
     this.profileService.addedHunts(this.user)
       .then(data => {
@@ -59,11 +70,11 @@ export class ProfilePage {
       .catch(error => console.log(error));
 
     this.friendService.getFriends(this.token)
-      .then(data => {
-        console.log('friends gotten! ', data);
-        this.friends = data;
-      })
-        .catch(error => console.log(error));
+    .then(data => {
+      console.log('friends gotten! ', data);
+      this.friends = data;
+    })
+    .catch(error => console.log(error));
   }
 
   friendTapped(event, friend) {
@@ -79,10 +90,37 @@ export class ProfilePage {
     });
   }
 
+  onGoingHuntTapped(event, hunt) {
+    console.log('this is the hunt length ', hunt.tasks.length);
+    // format previousTasks and PreviousPlaces
+    let previousPlaces = [];
+    let previousTasks = [];
+
+    for (let task of hunt.tasks) {
+      previousPlaces.push(task.place);
+      previousTasks.push(task.task);
+    }
+
+    let currentChallenge = previousTasks.pop();
+    let currentPlace = previousPlaces.pop();
+
+    this.nav.setRoot(TaskPage, {
+      previousTasks: previousTasks,
+      previousPlaces: previousPlaces,
+      huntID: hunt.stats.huntID,
+      currChallenge: currentChallenge.content,
+      locName: currentPlace.name,
+      locAddress: currentPlace.address,
+      locLat: currentPlace.lat,
+      locLng: currentPlace.lng,
+      resumeHuntKeywordsLeft: hunt.tasks.length
+    });
+  }
+
   addFriend(friend) {
     console.log(friend);
     this.friendService.addFriend(this.token, friend)
-      .then(data => {
+    .then(data => {
         console.log('friend added! ', data);
         // update friendslist after friend is added
         this.friendService.getFriends(this.token)
