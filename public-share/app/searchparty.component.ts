@@ -40,19 +40,16 @@ export class SearchPartyComponent {
     let socket = io.connect('http://localhost:8000');
     this.socket = socket;
     this.socket.on("connect", () => {
-      // this.socket.emit('huntChatRoom', this.huntID);
       this.socket.emit('huntMapRoom', this.huntID);
     });
     this.socket.on('taskChange', (location, task, room, lat, lng, num) => {
       console.log('{{}{}}{}{}}{} recieving taskChange {}{}{}{}');
       console.log(' this is the task change location change ', location);
       this.allTasks.unshift([[location], [task]]);
-      // this.allPlaces.push(location);
       this.socket.emit('chat_message', '::TASK HAS CHANGED::', 'SearchPartyAdmin', null, this.huntID);
       this.getHuntData(this.huntID);
    });
    this.socket.on("location", (data, username) => {
-      // update map which reflected changes
       console.log('location was updated from socket server ', data, username);
    });
  }
@@ -86,11 +83,8 @@ export class SearchPartyComponent {
             });
 
         this.totalDist = this.googleMaps.calcDistance(previousPlaces);
-<<<<<<< HEAD
         console.log(this.totalDist);
-=======
         console.log(this.totalDist)
->>>>>>> 55a0b42f8c3c2dffec930fe5e481b7f06fa47c52
       }, 2000);
 
     })

@@ -19,10 +19,10 @@
 
 <ion-toolbar position="bottom">
   <form ng-submit='submitLogin()'>
-  <ion-input type="text" (keyup)="OnKey($event)" [(ngModel)]="chatBox" placeholder="Message...">
+  <ion-input class="item item-input" type="text" (keyup)="OnKey($event)" [(ngModel)]="chatBox" placeholder="Message...">
   </ion-input>
   <ion-buttons end>
-    <button (click)="send(chatBox)" (ngSubmit)="send(chatBox)">
+    <button class="item item-button-right" (click)="send(chatBox)" (ngSubmit)="send(chatBox)">
       Send
     </button>
   </ion-buttons>
