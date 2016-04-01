@@ -3,7 +3,7 @@ import {Pipe, PipeTransform} from 'angular2/core';
 @Pipe(
   {name: 'HuntFilterPipe'}
 )
-export class HuntFilterPipe implements PipeTransform{
+export class HuntFilterPipe implements PipeTransform {
   transform(value:any, args) {
     if(value) {
       return value.filter(hunt => {
@@ -12,7 +12,7 @@ export class HuntFilterPipe implements PipeTransform{
         } else {
           return false;
         }
-      }
+      });
     }
   }
 }
