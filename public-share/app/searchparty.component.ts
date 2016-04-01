@@ -14,7 +14,6 @@ import {ChatComponent} from './chat.component';
   providers: [MATERIAL_PROVIDERS, SearchPartyService, GoogleMapService]
 })
 export class SearchPartyComponent {
-
   @ViewChild('modal')
   modal: ModalComponent;
   items: string[] = ['item1', 'item2', 'item3'];
@@ -50,7 +49,7 @@ export class SearchPartyComponent {
       console.log('{{}{}}{}{}}{} recieving taskChange {}{}{}{}');
       this.allTasks.unshift([[location], [task]]);
       this.allPlaces.push(location);
-      this.socket.emit('chat_message', '::TASK HAS CHANGED::', 'SearchPartyAdmin', null, this.huntID);
+      this.socket.emit('chat_message', '::TASK HAS CHANGED::', 'SearchPartyAdmin', (Date.now()/1000), this.huntID);
       this.getHuntData();
    });
 }
