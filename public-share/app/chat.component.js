@@ -107,6 +107,7 @@ System.register(['angular2/core', 'ng2-material/all', 'angular2/router', './chat
                 ChatComponent.prototype.send = function (message) {
                     var _this = this;
                     if (message && message !== "") {
+                        clearTimeout(this.timeout);
                         this.socket.emit('typing', false, this.username, this.huntID);
                         var messageObject = {
                             username: this.username,
