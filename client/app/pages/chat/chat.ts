@@ -28,8 +28,8 @@ export class Chat {
   timoutFunction: any;
   jwtHelper: JwtHelper = new JwtHelper();
   typing: boolean;
-  ADD_MESSAGE_URL: string = 'http://localhost:8000/addChatMessage';
-  GET_MESSAGES_URL: string = 'http://localhost:8000/getChatMessages';
+  ADD_MESSAGE_URL: string = 'https://getsearchparty.com/addChatMessage';
+  GET_MESSAGES_URL: string = 'https://getsearchparty.com/getChatMessages';
   huntID: any;
   token: any;
   id_token: any;
@@ -48,7 +48,7 @@ export class Chat {
       this.username = this.jwtHelper.decodeToken(this.token).username;
    }
    this.huntID = navParams.get('huntID');
-   let socket = io.connect('http://localhost:8000');
+   let socket = io.connect('https://getsearchparty.com');
    this.otherUserTyping = false;
    this.otherUsername = '';
    this.messages = [];

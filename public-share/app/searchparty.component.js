@@ -49,19 +49,27 @@ System.register(['angular2/core', 'angular2/router', 'ng2-material/all', './sear
                     var socket = io.connect('http://localhost:8000');
                     this.socket = socket;
                     this.socket.on("connect", function () {
-                        _this.socket.emit('huntChatRoom', _this.huntID);
+                        // this.socket.emit('huntChatRoom', this.huntID);
+                        _this.socket.emit('huntMapRoom', _this.huntID);
                     });
                     this.socket.on('taskChange', function (location, task, room, lat, lng, num) {
+                        console.log('{{}{}}{}{}}{} recieving taskChange {}{}{}{}');
+                        console.log(' this is the task change location change ', location);
                         _this.allTasks.unshift([[location], [task]]);
-                        _this.allPlaces.push(location);
-                        _this.socket.emit('chat_message', '::TASK HAS CHANGED::', 'SearchPartyAdmin', (Date.now() / 1000), _this.huntID);
-                        _this.getHuntData();
+                        // this.allPlaces.push(location);
+                        _this.socket.emit('chat_message', '::TASK HAS CHANGED::', 'SearchPartyAdmin', null, _this.huntID);
+                        _this.getHuntData(_this.huntID);
+                    });
+                    this.socket.on("location", function (data, username) {
+                        // update map which reflected changes
+                        console.log('location was updated from socket server ', data, username);
                     });
                 }
                 SearchPartyComponent.prototype.getHuntData = function (id) {
                     var _this = this;
                     var previousPlaces = [];
                     var previousTasks = [];
+                    this.allTasks = [];
                     this._searchPartyService.getHunt(id)
                         .then(function (data) {
                         console.log("data from searchparty service ", data);
@@ -83,6 +91,7 @@ System.register(['angular2/core', 'angular2/router', 'ng2-material/all', './sear
                         console.log(' this is this.allPlaces ', previousPlaces);
                         console.log('this is previous tasks ', previousTasks);
                         setTimeout(function () {
+                            console.log('set time out is done updating map');
                             _this.googleMaps.finalMapMaker(previousPlaces, previousTasks)
                                 .then(function (data) {
                                 var flightPath = data;
@@ -92,14 +101,6 @@ System.register(['angular2/core', 'angular2/router', 'ng2-material/all', './sear
                         }, 2000);
                     })
                         .catch(function (err) { return console.log(err); });
-                };
-                SearchPartyComponent.prototype.showMap = function () {
-                    this.googleMaps.finalMapMaker(this.allPlaces, this.allTasks)
-                        .then(function (data) {
-                        var flightPath = data;
-                    });
-                    this.totalDist = this.googleMaps.calcDistance(this.allPlaces);
-                    console.log(this.totalDist);
                 };
                 SearchPartyComponent = __decorate([
                     core_1.Component({
