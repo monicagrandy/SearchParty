@@ -59,36 +59,18 @@ export class TaskService {
   
   createWatchLocation() {
     let geo_success = position => {
-      console.log('geo success this is the position ', position);
       this.local.set('userLat', position.coords.latitude);
       this.local.set('userLng', position.coords.longitude);
       console.log('geo success here is the user location ', localStorage.userLat, localStorage.userLng);
-      console.log(' I AM WATCHING YOUR LOCATION ');
       this.resendLocation();
-    }
+    };
     let geo_error = error =>  console.log('there was a geo error ', error);
     let geo_options = { enableHighAccuracy: true };
     navigator.geolocation.watchPosition(geo_success, geo_error, geo_options);
     navigator.geolocation.getCurrentPosition(geo_success, geo_error, geo_options);
   }
   
-  // geo_success(position) {
-  //   console.log('geo success this is the position ', position);
-  //   this.local.set('userLat', position.coords.latitude);
-  //   this.local.set('userLng', position.coords.longitude);
-  //   this.userLat = localStorage.userLat;
-  //   this.userLong = localStorage.userLng;
-  //   console.log('geo success here is the user location ', this.userLat, this.userLong);
-  //   console.log(' I AM WATCHING YOUR LOCATION ');
-  //   this.resendLocation();
-  // }
-
-  // geo_error(error) {
-  //   console.log('there was a geo egrror ', error);
-  // }
-
-  resendLocation(){
-    console.log(' I JUST SENT YOUR LOCATION TO THE SERVER ');
+  resendLocation() {
     let userInfo = { latitude: localStorage.userLat, longitude: localStorage.userLng};
     this.socket.emit('location', userInfo, this.username, this.huntID);
     clearTimeout(this.resendLocationTimeout);
