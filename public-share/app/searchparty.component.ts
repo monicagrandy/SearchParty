@@ -68,7 +68,8 @@ export class SearchPartyComponent {
         this.huntChats = data.chatroom.messages;
       }
       this.huntTasks.forEach((item) => {
-         this.allTasks.push([item.place, item.task]);
+         console.log(item);
+         this.allTasks.push([item.place.name, item.task.content]);
       });
       this.showMap()
     })

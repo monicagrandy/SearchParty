@@ -71,7 +71,8 @@ System.register(['angular2/core', 'angular2/router', 'ng2-material/all', './sear
                             _this.huntChats = data.chatroom.messages;
                         }
                         _this.huntTasks.forEach(function (item) {
-                            _this.allTasks.push([item.place, item.task]);
+                            console.log(item);
+                            _this.allTasks.push([item.place.name, item.task.content]);
                         });
                         _this.showMap();
                     })
