@@ -53,14 +53,16 @@ System.register(['angular2/core', 'angular2/router', 'ng2-material/all', './sear
                         _this.allTasks.unshift([[location], [task]]);
                         _this.allPlaces.push(location);
                         _this.socket.emit('chat_message', '::TASK HAS CHANGED::', 'SearchPartyAdmin', null, _this.huntID);
-                        _this.getHuntData();
+                        // this.getHuntData();
                     });
                 }
                 SearchPartyComponent.prototype.getHuntData = function (id) {
                     var _this = this;
+                    var previousPlaces = [];
+                    var previousTasks = [];
                     this._searchPartyService.getHunt(id)
                         .then(function (data) {
-                        //console.log("promise returned")
+                        console.log("data from searchparty service ", data);
                         _this.huntTasks = data.tasks;
                         _this.startLat = data.tasks[0].place.lat;
                         _this.startLng = data.tasks[0].place.lng;
@@ -70,10 +72,22 @@ System.register(['angular2/core', 'angular2/router', 'ng2-material/all', './sear
                             _this.huntChats = data.chatroom.messages;
                         }
                         _this.huntTasks.forEach(function (item) {
-                            // console.log(item);
+                            console.log(' this is the item ', item);
+                            console.log('this is the this.alltasks ', _this.allTasks);
                             _this.allTasks.unshift([[item.place.name], [item.task.content]]);
+                            previousPlaces.push(item.place);
+                            previousTasks.push(item.task);
                         });
-                        _this.showMap();
+                        console.log(' this is this.allPlaces ', previousPlaces);
+                        console.log('this is previous tasks ', previousTasks);
+                        setTimeout(function () {
+                            _this.googleMaps.finalMapMaker(previousPlaces, previousTasks)
+                                .then(function (data) {
+                                var flightPath = data;
+                            });
+                            _this.totalDist = _this.googleMaps.calcDistance(previousPlaces);
+                            console.log(_this.totalDist);
+                        }, 2000);
                     })
                         .catch(function (err) { return console.log(err); });
                 };
