@@ -6,12 +6,15 @@
 </ion-navbar>
 
 <ion-content>
-  <form #friendAdd="ngForm" (ngSubmit)="addFriend(friendAdd.value)">
+ <form #friendAdd="ngForm" (ngSubmit)="addFriend(friendAdd.value)">
+  <ion-card>
     <ion-item>
-      <!-- <ion-label fixed>Add friend</ion-label> -->
-      <ion-input placeholder="Add friend" type="text" ngControl="username"></ion-input>
-      <ion-icon ios="ios-add" md="md-add" click="addFriend(friendAdd.value)"></ion-icon>
+      <ion-input placeholder="Add friend" [(ngModel)]="friendName" type="text" ngControl="username">
+      </ion-input>
+        <ion-icon (click)="addFriend(friendAdd.value)" name="add" item-right></ion-icon> 
     </ion-item>
+
+   </ion-card> 
   </form>
 
 
