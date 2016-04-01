@@ -8,10 +8,35 @@ var gulp = require('gulp'),
     sass = require('gulp-sass'),
     autoprefixer = require('gulp-autoprefixer'),
     watch = require('gulp-watch'),
+    uglify = require('gulp-uglify'),
     del = require('del');
 
 
 var IONIC_DIR = "node_modules/ionic-angular/"
+
+/******************************************************************************
+ * compress
+ * minify bundled app
+ ******************************************************************************/
+gulp.task('compress', function() {
+  return gulp.src('www/build/js/*.js')
+    .pipe(uglify({
+            mangle: false
+          }))
+    .pipe(gulp.dest('www/build/js/'));
+});
+
+/******************************************************************************
+ * compressBuild
+ * Build & bundle app and then compress it
+ ******************************************************************************/
+gulp.task('compressBuild',['build'], function(done) {
+  return gulp.src('www/build/js/*.js')
+    .pipe(uglify({
+            mangle: false
+          }))
+    .pipe(gulp.dest('www/build/js/'));
+});
 
 
 /******************************************************************************
