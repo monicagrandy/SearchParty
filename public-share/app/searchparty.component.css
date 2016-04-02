@@ -1,29 +1,39 @@
-.title {
-   text-align: center;
-   color: #508f96;
-}
-
-.right {
-   border: solid;
-   background-color: #CFCFCF;
-   /*border-radius: 5px;*/
-   border-color: #8B8682;
-}
-.tasks {
-   border: solid;
-   background-color: #CFCFCF;
-   border-color: #8B8682;
-   color: #8B8682;
-}
-
 .master {
    width: 100%;
    margin: 0 auto;
+   padding: 2%;
    height: 100%;
-   border: solid;
-   background-color: #CFCFCF;
-   border-color: #8B8682;
-   color: black;
+   /*border: solid;*/
+   /*background-color: #CFCFCF;*/
+   /*border-radius: 1px solid #8B8682;*/
+   color: #8B8682;
+}
+
+#map {
+   height: 75%;
+   padding: 2%;
+   margin-top: 2%;
+   opacity: 0.7;
+   border: 2px solid #d51;
+   box-shadow: 5px 5px 2px #8B8682;
+}
+
+.right {
+   /*background-color: #8B8682;*/
+   color: #8B8682;
+   opacity: 0.5;
+   margin-left: 1%;
+   padding: 2%;
+   /*border-radius: 1px solid #8B8682;*/
+}
+.tasks {
+   /*border: solid;*/
+   /*background-color: #CFCFCF;*/
+   line-height: 30px;
+   margin: .5%;
+   padding: .5%;
+   /*border-radius: 1px solid #8B8682;*/
+   color: #8B8682;
 }
 
 div h3 {
