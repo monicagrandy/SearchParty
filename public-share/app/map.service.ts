@@ -5,6 +5,8 @@ import { Injectable } from 'angular2/core';
   export class GoogleMapService {
     finalDist: any;
     map = null;
+    userLocationMarker = null;
+    userLocationLoadedOnce = 0;
     
     constructor(){}
     
@@ -51,12 +53,13 @@ import { Injectable } from 'angular2/core';
     }
 
     addMarker(coords, content, map) {
+            
       let pin = new google.maps.Marker({
         map: map,
         animation: google.maps.Animation.DROP,
         position: coords
       });
-
+      
       let info = content;
       
       return this.addInfoWindow(pin, info)
@@ -66,6 +69,64 @@ import { Injectable } from 'angular2/core';
             reject('error in adding marker');
           });
         });
+    }
+    
+    checkCurrentMarkerIfSame(coords) {
+      if (this.userLocationLoadedOnce > 1) {
+        let pastUserLat = this.userLocationMarker.position.lat();
+        let pastUserLng = this.userLocationMarker.position.lng();
+        if (pastUserLat === coords.lat() && pastUserLng === coords.lng()) {
+          console.log('user coords are the same ');
+          return true;
+        } else {
+          console.log('user coords do not match!');
+          return false;
+        }  
+      } else {
+        this.userLocationLoadedOnce++;
+      }
+    }
+    
+    deleteCurrentMarker() {
+      console.log('deleting current marker');
+      this.userLocationMarker.setMap(null);
+    }
+    
+    addCurrentMarker(coords, content, map) {
+      let circle = {
+          path: "M-20,0a20,20 0 1,0 40,0a20,20 0 1,0 -40,0",
+          fillColor: '#5577F6',
+          fillOpacity: .6,
+          anchor: new google.maps.Point(0,0),
+          strokeColor: 'white',
+          strokeWeight: 2,
+          scale: 0.5
+         }
+         
+      if (this.checkCurrentMarkerIfSame(coords)) {
+        return new Promise((resolve, reject) => {
+          resolve('not adding a new marker');
+        });
+      } else {
+        let pin = new google.maps.Marker({
+          map: map,
+          position: coords,
+          icon: circle
+        });
+        let info = content;
+        if (this.userLocationMarker) {
+          this.deleteCurrentMarker();
+        }
+        console.log('adding new a current marker');
+        this.userLocationMarker = pin;
+        return this.addInfoWindow(pin, info)
+          .then(data => {
+            return new Promise((resolve, reject) => {
+              resolve(this.map);
+              reject('error in adding marker');
+            });
+          });
+      } 
     }
 
     addInfoWindow(marker, content){
@@ -124,4 +185,5 @@ import { Injectable } from 'angular2/core';
       });
       return finalMapMakerPromise;
     }
+    
   }

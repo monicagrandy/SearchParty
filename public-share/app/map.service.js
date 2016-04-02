@@ -21,6 +21,8 @@ System.register(['angular2/core'], function(exports_1, context_1) {
             GoogleMapService = (function () {
                 function GoogleMapService() {
                     this.map = null;
+                    this.userLocationMarker = null;
+                    this.userLocationLoadedOnce = 0;
                 }
                 GoogleMapService.prototype.calcDistance = function (previousPlaces) {
                     var coordArray = [];
@@ -78,6 +80,64 @@ System.register(['angular2/core'], function(exports_1, context_1) {
                             reject('error in adding marker');
                         });
                     });
+                };
+                GoogleMapService.prototype.checkCurrentMarkerIfSame = function (coords) {
+                    if (this.userLocationLoadedOnce > 1) {
+                        var pastUserLat = this.userLocationMarker.position.lat();
+                        var pastUserLng = this.userLocationMarker.position.lng();
+                        if (pastUserLat === coords.lat() && pastUserLng === coords.lng()) {
+                            console.log('user coords are the same ');
+                            return true;
+                        }
+                        else {
+                            console.log('user coords do not match!');
+                            return false;
+                        }
+                    }
+                    else {
+                        this.userLocationLoadedOnce++;
+                    }
+                };
+                GoogleMapService.prototype.deleteCurrentMarker = function () {
+                    console.log('deleting current marker');
+                    this.userLocationMarker.setMap(null);
+                };
+                GoogleMapService.prototype.addCurrentMarker = function (coords, content, map) {
+                    var _this = this;
+                    var circle = {
+                        path: "M-20,0a20,20 0 1,0 40,0a20,20 0 1,0 -40,0",
+                        fillColor: '#5577F6',
+                        fillOpacity: .6,
+                        anchor: new google.maps.Point(0, 0),
+                        strokeColor: 'white',
+                        strokeWeight: 2,
+                        scale: 0.5
+                    };
+                    if (this.checkCurrentMarkerIfSame(coords)) {
+                        return new Promise(function (resolve, reject) {
+                            resolve('not adding a new marker');
+                        });
+                    }
+                    else {
+                        var pin = new google.maps.Marker({
+                            map: map,
+                            position: coords,
+                            icon: circle
+                        });
+                        var info = content;
+                        if (this.userLocationMarker) {
+                            this.deleteCurrentMarker();
+                        }
+                        console.log('adding new a current marker');
+                        this.userLocationMarker = pin;
+                        return this.addInfoWindow(pin, info)
+                            .then(function (data) {
+                            return new Promise(function (resolve, reject) {
+                                resolve(_this.map);
+                                reject('error in adding marker');
+                            });
+                        });
+                    }
                 };
                 GoogleMapService.prototype.addInfoWindow = function (marker, content) {
                     var _this = this;

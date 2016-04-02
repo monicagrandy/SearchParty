@@ -53,7 +53,7 @@ export class SearchPartyComponent {
    });
    this.socket.on("location", (data, username) => {
      let coords = new google.maps.LatLng(data.latitude, data.longitude);
-     this.googleMaps.addMarker(coords, 'user location', this.map)
+     this.googleMaps.addCurrentMarker(coords, 'user location', this.map)
        .then(map => this.map = map);
      console.log('location was updated from socket server ', data, username);
    });

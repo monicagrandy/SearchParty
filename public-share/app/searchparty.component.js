@@ -60,7 +60,7 @@ System.register(['angular2/core', 'angular2/router', 'ng2-material/all', './sear
                     });
                     this.socket.on("location", function (data, username) {
                         var coords = new google.maps.LatLng(data.latitude, data.longitude);
-                        _this.googleMaps.addMarker(coords, 'user location', _this.map)
+                        _this.googleMaps.addCurrentMarker(coords, 'user location', _this.map)
                             .then(function (map) { return _this.map = map; });
                         console.log('location was updated from socket server ', data, username);
                     });
