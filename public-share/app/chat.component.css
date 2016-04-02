@@ -41,8 +41,8 @@ div button {width: 100%;
    padding:0px;
    margin:0px;
    border:solid;
-   border-color: black;
-   background-color: gray;
+   border-color: white;
+   background-color: #01579b;
    position: relative;
    word-wrap: break-word;
 }

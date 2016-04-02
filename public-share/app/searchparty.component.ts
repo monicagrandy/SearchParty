@@ -52,7 +52,10 @@ export class SearchPartyComponent {
       this.getHuntData(this.huntID);
    });
    this.socket.on("location", (data, username) => {
-      console.log('location was updated from socket server ', data, username);
+     let coords = new google.maps.LatLng(data.latitude, data.longitude);
+     this.googleMaps.addMarker(coords, 'user location', this.map)
+       .then(map => this.map = map);
+     console.log('location was updated from socket server ', data, username);
    });
  }
 
@@ -83,9 +86,9 @@ export class SearchPartyComponent {
             .then(data => {
               let flightPath = data;
             });
-
+            
         this.totalDist = this.googleMaps.calcDistance(previousPlaces);
-        console.log(this.totalDist)
+        console.log(this.totalDist);
       }, 2000);
 
     })
