@@ -8,15 +8,24 @@
 <ion-content>
    <ion-list>
       <ion-label>Number of tasks</ion-label>
-      <ion-select [(ngModel)]="taskNumber">
+      <ion-select [(ngModel)]="taskNumber" item-right>
          <ion-option value="1">1</ion-option>
          <ion-option value="3">3</ion-option>
          <ion-option value="5">5</ion-option>
          <ion-option value="10">10</ion-option>
+      </ion-select>
    </ion-list>
+
    <ion-card>
       <form #huntName="ngForm" (ngSubmit)="nameHunt(huntName.value)">
+         <ion-label>Name of Hunt:</ion-label>
          <ion-input placeholder="Super Awesome Adventure!" [(ngModel)]="name" type="text"></ion-input>
+      </form>
    </ion-card>
-   <button block>Start</button>
+   <button block (click)="nameHunt(huntName.value)">Start Hunt!</button>
+   <ion-card *ngIf="requiredInfo">
+      <ion-card>
+         Please enter the number of tasks you would like and the name of the hunt.
+      </ion-card>
+   </ion-card>
 </ion-content>
