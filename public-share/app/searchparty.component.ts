@@ -87,8 +87,10 @@ export class SearchPartyComponent {
               let flightPath = data;
             });
             
-        this.totalDist = this.googleMaps.calcDistance(previousPlaces);
-        console.log(this.totalDist);
+        if (previousPlaces.length > 1) {
+          this.totalDist = this.googleMaps.calcDistance(previousPlaces);
+          console.log(this.totalDist);
+        }    
       }, 2000);
 
     })

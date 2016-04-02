@@ -93,8 +93,10 @@ System.register(['angular2/core', 'angular2/router', 'ng2-material/all', './sear
                                 .then(function (data) {
                                 var flightPath = data;
                             });
-                            _this.totalDist = _this.googleMaps.calcDistance(previousPlaces);
-                            console.log(_this.totalDist);
+                            if (previousPlaces.length > 1) {
+                                _this.totalDist = _this.googleMaps.calcDistance(previousPlaces);
+                                console.log(_this.totalDist);
+                            }
                         }, 2000);
                     })
                         .catch(function (err) { return console.log(err); });
