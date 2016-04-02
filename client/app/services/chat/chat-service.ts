@@ -1,11 +1,14 @@
 import {Injectable} from 'angular2/core';
 import {Http, Headers} from 'angular2/http';
+import {Storage, LocalStorage} from 'ionic-angular';
 import 'rxjs/add/operator/map';  // we need to import this now
 
 @Injectable()
 export class ChatService {
-  constructor(private _http:Http) {}
+  local: Storage = new Storage(LocalStorage);
   contentHeader: Headers = new Headers({'Content-Type': 'application/json'});
+  
+  constructor(private _http:Http) {}
 
   postData(data, url) {
     console.log("called post req");

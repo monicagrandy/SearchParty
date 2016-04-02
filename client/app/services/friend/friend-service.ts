@@ -1,17 +1,19 @@
 import {Injectable} from 'angular2/core';
 import {Http, Headers} from 'angular2/http';
-import {ConnectionBackend, HTTP_PROVIDERS} from 'angular2/http';
+import {UrlService} from '../url/url-service';
 import 'rxjs/add/operator/map';
+import {Storage, LocalStorage} from 'ionic-angular';
 
 @Injectable()
 export class FriendService {
-  ADDFRIEND_URL: string = 'https://getsearchparty.com/addFriend'; 
-  GETFRIENDS_URL: string = 'https://getsearchparty.com/getFriends'; 
-  RETRIEVEFRIENDHUNT_URL: string = 'https://getsearchparty.com/getFriendHunt'; 
-  ADDFRIENDTOHUNT_URL: string = 'https://getsearchparty.com/addFriendToHunt'; 
+  local: Storage = new Storage(LocalStorage);
+  ADDFRIEND_URL: string = localStorage.addFriend || 'https://getsearchparty.com/addFriend'; //update this later https://getsearchparty.com/addFriend
+  GETFRIENDS_URL: string = localStorage.getFriends || 'https://getsearchparty.com/getFriends'; //update this later https://getsearchparty.com/getFriends
+  RETRIEVEFRIENDHUNT_URL: string = localStorage.getFriendHunt || 'https://getsearchparty.com/getFriendHunt'; //update this later https://getsearchparty.com/getFriendHunt
+  ADDFRIENDTOHUNT_URL: string = localStorage.addFriendToHunt || 'https://getsearchparty.com/addFriendToHunt'; //update this later https://getsearchparty.com/getFriendHunt
   contentHeader: Headers = new Headers({'Content-Type': 'application/json'});
 
-  constructor(private _http:Http) {}
+  constructor(private _http:Http, urlService: UrlService) {}
 
   addFriend(userToken, friend) {
     console.log('called post req');

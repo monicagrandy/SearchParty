@@ -100,11 +100,7 @@ export class TaskPage {
     this.resumeHuntKeywordsLeft = navParams.get('resumeHuntKeywordsLeft');
 
     this.previousTasks = navParams.get('previousTasks');
-    if (this.previousTasks.length < 2 ) {
-      this.previousPlaces = [];
-      let keyword = this.keywords.unshift()
-      this.sendData(keyword);
-    } else {
+    if (this.previousTasks.length > 1) {
       console.log('resuming hunt!');
       console.log('this is the previous place ', this.previousPlaces);
       console.log('this is the previous task ', this.previousTasks);
@@ -148,7 +144,7 @@ takePic() {
         huntID: this.huntID,
         image: this.imgData
        }
-      this._taskService.postData(JSON.stringify(dataObj), this.UPLOAD_URL)
+      this._taskService.postData(JSON.stringify(dataObj), 'upload')
         .then(result => {
           console.log("image sent to server")
         })
@@ -175,7 +171,7 @@ takePic() {
       console.log(this.previousTasks);
       console.log(this.previousPlaces);
       this.tasksLeft = false;
-      this.searchComplete();
+      setTimeout(() => this.searchComplete(), 2000);
     }
   }
 
@@ -184,7 +180,7 @@ takePic() {
     let dataObj = {
       huntID: this.huntID
     }
-    this._taskService.postData(JSON.stringify(dataObj), this.HUNT_URL)
+    this._taskService.postData(JSON.stringify(dataObj), 'hunt')
         .then(result => {
          this.finalData = result.tasks
           console.log("+++line 179 in tasks.js data: ", result)
@@ -221,7 +217,7 @@ takePic() {
           feedback: this.feedback
     };
 
-    this._taskService.postData(JSON.stringify(userFeedback), this.FEEDBACK_URL)
+    this._taskService.postData(JSON.stringify(userFeedback), 'feedback')
       .then(result => {
         this.nav.setRoot(TemplatePage);
         console.log(result);
@@ -279,7 +275,7 @@ takePic() {
       }
     };
 
-    this._taskService.postData(JSON.stringify(dataObj), this.TASKS_URL)
+    this._taskService.postData(JSON.stringify(dataObj), 'tasks')
       .then(result => {
         this.locName = result.businesses.name;
         this.currChallenge = result.tasks.content;
