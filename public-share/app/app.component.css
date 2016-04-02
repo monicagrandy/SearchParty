@@ -2,6 +2,8 @@
     height: 300px;
 }
 
-body {
-   background-color: #01579b;
+.title {
+  text-align: center;
+  color: #ff1b1c;
 }
+
