@@ -1,14 +1,15 @@
-<div *ngIf="!nameAdded">
-  <input #username placeholder="please enter a username" >
-  <button (click)="getUsername(username.value)">Start</button>
+<div *ngIf="!nameAdded" layout="column">
+  <strong flex="5">Please input a username</strong>
+  <input #username placeholder="username" flex="5">
+  <button flex="5" (click)="getUsername(username.value)">Start</button>
 </div>
 <div *ngIf="nameAdded">
    <div layout = "column">
       <div *ngFor="#message of messages">
-         <p>{{message[0]}}: {{message[1]}}</p>
+         <h2>{{message[0]}}: {{message[1]}}</h2>
          <p>{{message[2]}}</p>
          <p *ngIf="otherUserTyping">{{otherUsername}} is typing...</p>
-        <form action="">
+        <form action="" flex>
           <input id="m" autocomplete="off" (keyup)="OnKey($event)" [(ngModel)]="chatBox" placeholder="Message..."/>
           <button (click)="send(chatBox)" (ngSubmit)="send(chatBox)">Send</button>
         </form>
