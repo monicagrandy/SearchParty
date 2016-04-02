@@ -5,7 +5,7 @@ import 'rxjs/add/operator/map';
 
 @Injectable()
 export class ProfileService {
-  PROFILE_URL: string = 'https://getsearchparty.com/userProfile'; //update this later
+  PROFILE_URL: string = 'https://getsearchparty.com/userProfile'; 
   ADDEDHUNTS_URL: string = 'https://getsearchparty.com/getAddedHunts';
   contentHeader: Headers = new Headers({'Content-Type': 'application/json'});
 
