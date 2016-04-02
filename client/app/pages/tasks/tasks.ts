@@ -9,8 +9,6 @@ import {TemplatePage} from '../templates/templates';
 import {Chat} from '../chat/chat';
 import 'rxjs/add/operator/map';
 
-//declare var Camera:any;
-
 @Page({
   templateUrl: 'build/pages/tasks/tasks.html',
   providers: [
@@ -25,13 +23,13 @@ export class TaskPage {
   title = 'Current Task';
   map = null;
   local: LocalStorage;
-  locAddress: string; //set this to whatever is in local storage
+  locAddress: string; 
   currChallenge: string;
   userLat: any;
   userLong: any;
-  locLat: any; //set this to whatever is in local storage
-  locLng: any; //set this to whatever is in local storage
-  locName: string; //set this to whatever is in local storage
+  locLat: any; 
+  locLng: any; 
+  locName: string; 
   completeToggle = false;
   keywords = ['Bar', 'Bar', 'Bar', 'Bar', 'Bar', 'Bar','Bar','Bar', 'Bar'];
   keywordsLength: number;
