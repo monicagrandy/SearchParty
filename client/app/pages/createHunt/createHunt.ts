@@ -29,7 +29,7 @@ export class CreateHuntPage {
   nameHunt: any;
   name: string;
   requiredInfo: boolean;
-  
+
   constructor(private nav: NavController, navParams: NavParams, private templateService: TemplateService) {
     this.selectedItem = navParams.get('item');
     this.taskNumber;
@@ -50,16 +50,16 @@ export class CreateHuntPage {
       }
     }
 }
-   nameHunt(event, name) {
+   nameHunt(name) {
       if(name && this.taskNumber) {
          // this.name = name;
          // this.taskNumber = num;
          console.log('Event: ', event);
          console.log("name:" + name);
-         this.itemTapped(name, taskNumber);
+         this.itemTapped(name, this.taskNumber);
       } else {
          console.log('Name: ', name);
-         console.log('Num: ', num);
+         console.log('Num: ', this.taskNumber);
          this.requiredInfo = true;
       }
    }
