@@ -40,7 +40,10 @@ import { Injectable } from 'angular2/core';
         this.map = new google.maps.Map(document.getElementById('map'), mapOptions);
         // console.log('this is loadMap\'s map ', this.map);
         if (content !== null) {
-          this.addMarker(latLng, content, this.map);
+          this.addMarker(latLng, content, this.map)
+            .then(data => {
+              resolve(this.map);
+            })
         }
         resolve(this.map);
       });
@@ -55,7 +58,14 @@ import { Injectable } from 'angular2/core';
       });
 
       let info = content;
-      this.addInfoWindow(pin, info);
+      
+      return this.addInfoWindow(pin, info)
+        .then(data => {
+          return new Promise((resolve, reject) => {
+            resolve(this.map);
+            reject('error in adding marker');
+          });
+        });
     }
 
     addInfoWindow(marker, content){
@@ -63,10 +73,13 @@ import { Injectable } from 'angular2/core';
       let infoWindow = new google.maps.InfoWindow({
         content: content
       });
-
-      google.maps.event.addListener(marker, 'click', function(){
-        infoWindow.open(this.map, marker);
-      });
+      
+      return new Promise((resolve, reject) => {
+        resolve(google.maps.event.addListener(marker, 'click', () => {
+          infoWindow.open(this.map, marker);
+        }));
+        reject('there was an error when adding info window');
+      })
     }
     
     finalMapMaker(previousPlaces, previousTasks) {

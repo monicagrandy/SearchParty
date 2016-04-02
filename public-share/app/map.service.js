@@ -54,28 +54,42 @@ System.register(['angular2/core'], function(exports_1, context_1) {
                         _this.map = new google.maps.Map(document.getElementById('map'), mapOptions);
                         // console.log('this is loadMap\'s map ', this.map);
                         if (content !== null) {
-                            _this.addMarker(latLng, content, _this.map);
+                            _this.addMarker(latLng, content, _this.map)
+                                .then(function (data) {
+                                resolve(_this.map);
+                            });
                         }
                         resolve(_this.map);
                     });
                     return loadMapPromise;
                 };
                 GoogleMapService.prototype.addMarker = function (coords, content, map) {
+                    var _this = this;
                     var pin = new google.maps.Marker({
                         map: map,
                         animation: google.maps.Animation.DROP,
                         position: coords
                     });
                     var info = content;
-                    this.addInfoWindow(pin, info);
+                    return this.addInfoWindow(pin, info)
+                        .then(function (data) {
+                        return new Promise(function (resolve, reject) {
+                            resolve(_this.map);
+                            reject('error in adding marker');
+                        });
+                    });
                 };
                 GoogleMapService.prototype.addInfoWindow = function (marker, content) {
+                    var _this = this;
                     console.log(content);
                     var infoWindow = new google.maps.InfoWindow({
                         content: content
                     });
-                    google.maps.event.addListener(marker, 'click', function () {
-                        infoWindow.open(this.map, marker);
+                    return new Promise(function (resolve, reject) {
+                        resolve(google.maps.event.addListener(marker, 'click', function () {
+                            infoWindow.open(_this.map, marker);
+                        }));
+                        reject('there was an error when adding info window');
                     });
                 };
                 GoogleMapService.prototype.finalMapMaker = function (previousPlaces, previousTasks) {
