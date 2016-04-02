@@ -9,8 +9,6 @@ import {TemplatePage} from '../templates/templates';
 import {Chat} from '../chat/chat';
 import 'rxjs/add/operator/map';
 
-//declare var Camera:any;
-
 @Page({
   templateUrl: 'build/pages/tasks/tasks.html',
   providers: [
@@ -25,13 +23,13 @@ export class TaskPage {
   title = 'Current Task';
   map = null;
   local: LocalStorage;
-  locAddress: string; //set this to whatever is in local storage
+  locAddress: string;
   currChallenge: string;
   userLat: any;
   userLong: any;
-  locLat: any; //set this to whatever is in local storage
-  locLng: any; //set this to whatever is in local storage
-  locName: string; //set this to whatever is in local storage
+  locLat: any;
+  locLng: any;
+  locName: string;
   completeToggle = false;
   keywords = ['Bar', 'Bar', 'Bar', 'Bar', 'Bar', 'Bar','Bar','Bar', 'Bar'];
   keywordsLength: number;
@@ -90,8 +88,6 @@ export class TaskPage {
     if (this.token) {
       this.user = this.jwtHelper.decodeToken(this.token).username;
     }
-    
-    // general grab params setup
     this.locAddress = navParams.get('locAddress');
     this.userLat = localStorage.userLat;
     this.userLong = localStorage.userLng;
@@ -103,8 +99,6 @@ export class TaskPage {
     this.previousPlaces = navParams.get('previousPlaces');
     this.resumeHuntKeywordsLeft = navParams.get('resumeHuntKeywordsLeft');
 
-    // run through previousTasks from navParams and splice out
-    // keywords to set proper length if coming back from a resuming hunt
     this.previousTasks = navParams.get('previousTasks');
     if (this.previousTasks.length > 1) {
       console.log('resuming hunt!');
@@ -113,25 +107,17 @@ export class TaskPage {
       this.keywords.splice(0, this.resumeHuntKeywordsLeft);
     }
 
-    // socket setup
+
     this._taskService.createSocket(this.huntID, this.user);
-        
     // geowatching setup
     this._taskService.createWatchLocation();
-
-    
-    // set links for sharing and directions
     this.link = `https://getsearchparty.com/share/#/hunt/${this.huntID}`;
     this.directionLink = `https://www.google.com/maps/dir/${this.userLat},${this.userLong}/${this.locAddress}`;
-
-    // twitter specific link generation
     this.text = encodeURIComponent('I am going on an adventure! Follow me on Search Party!');
     this.hashtags = 'searchparty';
     this.via = 'GetSearchParty';
     this.url = encodeURIComponent(this.link);
     this.encodedTweetLink = `https://twitter.com/intent/tweet?hashtags=${this.hashtags}&url=${this.url}&text=${this.text}&via=${this.via}`;
-    
-    // google map creation
     let content = '<h4>' + this.locName + '</h4><p>' + this.locAddress  + '</p>';
     setTimeout(()=>{ this.googleMaps.loadMap(this.locLat, this.locLng, 15, content, this.map).then(map => this.map = map), 2000 });
   }
@@ -167,7 +153,6 @@ takePic() {
   });
 }
 
-  //this should be triggered when the next button is pushed
   getNewTask(){
     console.log(this.keywordsLength - this.keywords.length)
     this.imgData = ""
@@ -239,7 +224,6 @@ takePic() {
       });
   }
 
-  //use this to check if user is allowed to move on to the next task
   markComplete(){
     console.log(this.completeToggle);
     if (this.completeToggle === false) {
@@ -261,7 +245,7 @@ takePic() {
       window.plugins.socialsharing.canShareVia("twitter", message, (Date.now())/1000, image, this.link, result => {
           window.plugins.socialsharing.shareViaTwitter(message, image, link);
       }, error => {
-          console.log(error);
+          console.error(error);
       });
     }
   }

@@ -88,7 +88,7 @@ export class FriendService {
   }
 
   logError(err) {
-    console.error('There was an error: ' + err);
+    console.log('There was an error: ' + err);
   }
 
   addFriendToHunt(huntID, friendname) {

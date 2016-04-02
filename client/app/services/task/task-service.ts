@@ -78,7 +78,6 @@ export class TaskService {
   
   updateSocketLocation() {
     this.socket.on("location", (data, username) => {
-      // update map which reflected changes
       console.log('location was updated from socket server ', data, username);
     });
   }

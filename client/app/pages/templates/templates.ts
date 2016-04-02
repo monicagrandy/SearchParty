@@ -19,7 +19,6 @@ export class TemplatePage {
   geolocation: {};
 
   constructor(private nav: NavController, navParams: NavParams, private templateService: TemplateService) {
-    // If we navigated to this page, we will have an item available as a nav param
     this.selectedItem = navParams.get('item');
 
     this.loadingImg = 'img/poi.gif';
@@ -35,7 +34,7 @@ export class TemplatePage {
           this.userLng = position.coords.longitude;
           this.local.set('userLat', position.coords.latitude);
           this.local.set('userLng', position.coords.longitude);
-        }), (error => console.log(error)), {});
+        }), (error => console.error(error)), {});
       }
     }
 
@@ -78,7 +77,7 @@ export class TemplatePage {
           previousTasks: [data.tasks]
         });
       })
-        .catch(error => console.log(error));
+        .catch(error => console.error(error));
   }
 
 
