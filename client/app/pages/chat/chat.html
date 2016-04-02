@@ -17,14 +17,11 @@
   </ion-list>
 </ion-content>
 
-<ion-toolbar position="bottom">
-  <form ng-submit='submitLogin()'>
-  <ion-input type="text" (keyup)="OnKey($event)" [(ngModel)]="chatBox" placeholder="Message...">
-  </ion-input>
-  <ion-buttons end>
-    <button (click)="send(chatBox)" (ngSubmit)="send(chatBox)">
-      Send
-    </button>
-  </ion-buttons>
+  <form ngSubmit="send(chatBox)">
+     <ion-card>
+        <ion-item>
+           <ion-input type="text" (keyup)="OnKey($event)" [(ngModel)]="chatBox" placeholder="Message..."></ion-input>
+           <ion-icon name="add" (click)="send(chatBox)" item-right></ion-icon>
+        </ion-item>
+     </ion-card>
   </form>
-</ion-toolbar>

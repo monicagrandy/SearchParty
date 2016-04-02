@@ -19,7 +19,6 @@ export class TemplatePage {
   geolocation: {};
 
   constructor(private nav: NavController, navParams: NavParams, private templateService: TemplateService) {
-    // If we navigated to this page, we will have an item available as a nav param
     this.selectedItem = navParams.get('item');
 
     this.loadingImg = 'img/poi.gif';
