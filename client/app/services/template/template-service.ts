@@ -35,20 +35,21 @@ export class TemplateService {
     return httpGetPromise;
   }
 
-  postData(data, userInfo) {
+  postData(name, keyword, userInfo) {
     console.log('called post req');
     let httpGetPromise = new Promise((resolve, reject) => {
       console.log('inside post promise');
-      console.log('THIS IS THE DATA shold be keyword', data)
+      console.log('THIS IS THE DATA shold be keyword', keyword)
       console.log("THIS IS THE USER LOCATION IN TEMPLATE SERVICE ", userInfo);
       let currentTime = new Date();
 
       let dataToSend = {
-        keyword: data,
+        keyword: keyword,
         geolocation:  {
           lat: userInfo.userLat,
           lng: userInfo.userLng
         },
+        huntID: name,
         token: userInfo.id_token,
         previousPlaces: [],
         previousTasks: [],

@@ -33,7 +33,7 @@ module.exports = {
       })
         .catch(error => console.error(error));
     } else {
-      console.log('this is the huntID in the else statement ', huntID);
+      console.log('this is the huntID in the else statement ', geolocation);
       makeHunt.createHunt(keyword, previousPlaces, previousTasks, huntID, geolocation)
         .then(resultsObj => {
           res.json(resultsObj);

@@ -50,13 +50,10 @@ export class CreateHuntPage {
       }
     }
 }
-   nameHunt(name) {
-      if(name && this.taskNumber) {
-         // this.name = name;
-         // this.taskNumber = num;
-         console.log('Event: ', event);
-         console.log("name:" + name);
-         this.itemTapped(name, this.taskNumber);
+   nameHunt() {
+      if(this.name && this.taskNumber) {
+         console.log("name2: ", this.name);
+         this.itemTapped(this.name, this.taskNumber);
       } else {
          console.log('Name: ', name);
          console.log('Num: ', this.taskNumber);
@@ -68,9 +65,11 @@ export class CreateHuntPage {
      console.log('sending hunt creation info to server...', name);
      this.userInfo = localStorage;
      localStorage.startTimeUnix = Date.now();
-     localStorage.startTime = new Date().toLocaleTimeString()
-     this.templateService.postData(name, this.userInfo)
+     localStorage.startTime = new Date().toLocaleTimeString();
+     console.log('111111');
+     this.templateService.postData(name, 'Bar', this.userInfo)
        .then(data => {
+          console.log('DATA: ', data);
         this.nav.setRoot(TaskPage, {
            locAddress: data.businesses.location.display_address[0] + ', ' + data.businesses.location.display_address[2],
            huntID: data.huntID,
