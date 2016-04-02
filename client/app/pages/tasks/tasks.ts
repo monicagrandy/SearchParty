@@ -171,7 +171,7 @@ takePic() {
       console.log(this.previousTasks);
       console.log(this.previousPlaces);
       this.tasksLeft = false;
-      setTimeout(() => this.searchComplete(), 2000);
+      this.searchComplete();
     }
   }
 
