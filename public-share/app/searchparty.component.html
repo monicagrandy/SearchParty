@@ -1,17 +1,18 @@
-<h2 layout="row">Hunt</h2>
-   <div layout="row">
+<h2>Hunt</h2>
+   <div layout="row" padding-horizontal>
      <div class="left" flex="66">
 
         <div id="map"></div>
         <div *ngFor="#task of allTasks" layout="row" class='tasks'>
-           <strong flex class='tasks'>
-              Location
-              <p>{{task[0]}}</p>
-           </strong>
-           <strong flex class='tasks'>
-              Challenge
-              <p>{{task[1]}}</p>
-           </strong>
+
+              <div flex class='tasks'>
+                 Location
+                 <p>{{task[0]}}</p>
+              </div>
+              <div flex class='tasks'>
+                 Challenge
+                 <p>{{task[1]}}</p>
+              </div>
         </div>
      </div>
 
