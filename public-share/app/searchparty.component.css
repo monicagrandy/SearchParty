@@ -22,7 +22,12 @@ div h3 {
    vertical-align: middle;
    margin: auto;
 }
+
 div p {
    vertical-align: middle;
    margin: auto;
+}
+
+#map {
+  color: black;
 }
