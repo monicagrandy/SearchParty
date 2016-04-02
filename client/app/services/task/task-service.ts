@@ -15,11 +15,11 @@ export class TaskService {
   userLong: string;
   local: Storage = new Storage(LocalStorage);
   contentHeader: Headers = new Headers({'Content-Type': 'application/json'});
-  HUNT_URL: string = 'https://getsearchparty.com/singleHunt';
-  TASKS_URL: string = 'https://getsearchparty.com/tasks';
-  FEEDBACK_URL: string = 'https://getsearchparty.com/feedback';
-  UPLOAD_URL: string = 'https://getsearchparty.com/upload';
-  SOCKET_URL: string = 'https://getsearchparty.com';
+  HUNT_URL: string = localStorage.singleHunt || 'https://getsearchparty.com/singleHunt';
+  TASKS_URL: string = localStorage.tasks || 'https://getsearchparty.com/tasks';
+  FEEDBACK_URL: string = localStorage.feedback || 'https://getsearchparty.com/feedback';
+  UPLOAD_URL: string = localStorage.upload || 'https://getsearchparty.com/upload';
+  SOCKET_URL: string = localStorage.socket || 'https://getsearchparty.com';
   urls: {
     hunt: string;
     tasks: string;
@@ -27,18 +27,7 @@ export class TaskService {
     feedback: string;
   };
   
-  constructor(private _http:Http,  urlservice: UrlService) {
-    urlservice.grabUrls()
-      .then(urls => {
-        console.log('these are the urls fetched ', urls);
-        this.HUNT_URL = urls.singleHunt;
-        this.TASKS_URL = urls.tasks;
-        this.FEEDBACK_URL = urls.feedback;
-        this.UPLOAD_URL = urls.upload;
-        this.SOCKET_URL = urls.socket;
-        console.log('this is now the new tasks_url !', this.TASKS_URL);
-      });
-  }
+  constructor(private _http:Http) {}
   
   postData(data, url) {
     

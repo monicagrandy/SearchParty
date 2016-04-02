@@ -1,25 +1,18 @@
 import {Injectable} from 'angular2/core';
-import {LocalStorage} from 'ionic-angular';
+import {Storage, LocalStorage,} from 'ionic-angular';
 import {Http, Headers} from 'angular2/http';
 import {UrlService} from '../url/url-service';
 import 'rxjs/add/operator/map';
 
 @Injectable()
 export class TemplateService {
+  local: Storage = new Storage(LocalStorage);
   TEMPLATES_URL: string = 'https://getsearchparty.com/templates';
-  TASKS_URL: string = 'https://getsearchparty.com/tasks';
+  TASKS_URL: string = localStorage.tasks || 'https://getsearchparty.com/tasks';
   keyword: string;
   contentHeader: Headers = new Headers({'Content-Type': 'application/json'});
 
-  constructor(private _http:Http, urlservice:UrlService) {
-    urlservice.grabUrls()
-      .then(urls => {
-        console.log('these are the urls fetched ', urls);
-        this.TASKS_URL = urls.tasks;
-        console.log('this is now the new tasks_url !', this.TASKS_URL);
-      })
-        .catch(err => console.log('error fetching urls ', err));
-  }
+  constructor(private _http:Http) {}
 
   // future use function
   getData() {

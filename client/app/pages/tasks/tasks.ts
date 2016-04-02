@@ -114,10 +114,10 @@ export class TaskPage {
     }
 
     // socket setup
-    setTimeout(() => this._taskService.createSocket(this.huntID, this.user), 1000);
+    this._taskService.createSocket(this.huntID, this.user);
         
     // geowatching setup
-    setTimeout(() => this._taskService.createWatchLocation(), 2000);
+    this._taskService.createWatchLocation();
 
     
     // set links for sharing and directions
@@ -186,7 +186,7 @@ takePic() {
       console.log(this.previousTasks);
       console.log(this.previousPlaces);
       this.tasksLeft = false;
-      this.searchComplete();
+      setTimeout(() => this.searchComplete(), 2000);
     }
   }
 

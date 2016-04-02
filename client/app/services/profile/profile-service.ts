@@ -1,12 +1,15 @@
 import {Injectable} from 'angular2/core';
 import {Http, Headers} from 'angular2/http';
+import {Storage, LocalStorage} from 'ionic-angular';
 import {ConnectionBackend, HTTP_PROVIDERS} from 'angular2/http';
+import {UrlService} from '../url/url-service'; 
 import 'rxjs/add/operator/map';
 
 @Injectable()
 export class ProfileService {
-  PROFILE_URL: string = 'https://getsearchparty.com/userProfile'; //update this later
-  ADDEDHUNTS_URL: string = 'https://getsearchparty.com/getAddedHunts';
+  local: Storage = new Storage(LocalStorage);
+  PROFILE_URL: string = localStorage.userProfile || 'https://getsearchparty.com/userProfile'; //update this later
+  ADDEDHUNTS_URL: string = localStorage.getAddedHunts || 'https://getsearchparty.com/getAddedHunts';
   contentHeader: Headers = new Headers({'Content-Type': 'application/json'});
 
   constructor(private _http:Http) {}
