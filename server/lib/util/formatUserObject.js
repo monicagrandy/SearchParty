@@ -13,15 +13,12 @@ module.exports = {
       
       for (let i = 0; i < individualHunt.places.length; i++) {
         let currObj = individualHunt.places[i];
-        // console.log('each place is being put into currentObj ', currObj);
-        // console.log('logging i in formatUserObj ', i);
         currObj.location = {};
         currObj.location.coordinate = {};
         currObj.location.coordinate.latitude = currObj.lat;
         currObj.location.coordinate.longitude = currObj.lng;
       }      
       
-      // console.log('this is the individualhunt.place ', individualHunt.places[0]);
       prettyHunt.chatroom.messages = individualHunt.messages;
       prettyHunt.chatroom.chatID = individualHunt.chatData.chatID;
       prettyHunt.stats = individualHunt.huntData;      
@@ -35,24 +32,13 @@ module.exports = {
       prettyHunt.stats = individualHunt.huntData;
 
       for (let z = 0; z < individualHunt.tasks.length; z++) {
-        if (individualHunt.urls[z]) {
-          prettyHunt.tasks.push({task: individualHunt.tasks[z], place: individualHunt.places[z], image:individualHunt.urls[z]})
-        } else {
-          prettyHunt.tasks.push({task: individualHunt.tasks[z], place: individualHunt.places[z]});
-        }
-
+        prettyHunt.tasks.push({task: individualHunt.tasks[z], place: individualHunt.places[z]});
       }
       
-      // console.log('this is the prettyHunt ', prettyHunt);
-
       prettyUser.hunts.push(prettyHunt);
       
-      // console.log('this is prettyUser after prettyHunt has been added ', prettyUser);
-
     }
     
-    // console.log('this is the prettyUser ', prettyUser);
-
     return prettyUser;
   }
 }
