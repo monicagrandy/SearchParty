@@ -17,11 +17,11 @@
   </ion-list>
 </ion-content>
 
-  <form ngSubmit="send(chatBox)">
-     <ion-card>
+  <form (ngSubmit)="send(chatBox)">
+     <!-- <ion-card> -->
         <ion-item>
            <ion-input type="text" (keyup)="OnKey($event)" [(ngModel)]="chatBox" placeholder="Message..."></ion-input>
-           <ion-icon name="add" (click)="send(chatBox)" item-right></ion-icon>
+           <button (click)="send(chatBox)" item-right>send</button>
         </ion-item>
-     </ion-card>
+     <!-- </ion-card> -->
   </form>
