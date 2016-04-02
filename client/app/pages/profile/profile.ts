@@ -50,7 +50,6 @@ export class ProfilePage {
     this.profileService.getProfile(this.token)
     .then(data => {
       console.log(data.hunts);
-      // this.friends = data.friends;
       let huntsWithAtleastOneTask = [];
       for (let hunt of data.hunts) {
         if (hunt.tasks.length > 0) {
