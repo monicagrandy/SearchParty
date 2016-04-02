@@ -113,24 +113,16 @@ export class TaskPage {
     }
 
     // socket setup
-    this._taskService.createSocket(this.huntID, this.user);
-        
+    this._taskService.createSocket(this.huntID, this.user);    
     // geowatching setup
     this._taskService.createWatchLocation();
-
-    
-    // set links for sharing and directions
     this.link = `https://getsearchparty.com/share/#/hunt/${this.huntID}`;
     this.directionLink = `https://www.google.com/maps/dir/${this.userLat},${this.userLong}/${this.locAddress}`;
-
-    // twitter specific link generation
     this.text = encodeURIComponent('I am going on an adventure! Follow me on Search Party!');
     this.hashtags = 'searchparty';
     this.via = 'GetSearchParty';
     this.url = encodeURIComponent(this.link);
     this.encodedTweetLink = `https://twitter.com/intent/tweet?hashtags=${this.hashtags}&url=${this.url}&text=${this.text}&via=${this.via}`;
-    
-    // google map creation
     let content = '<h4>' + this.locName + '</h4><p>' + this.locAddress  + '</p>';
     setTimeout(()=>{ this.googleMaps.loadMap(this.locLat, this.locLng, 15, content, this.map).then(map => this.map = map), 2000 });
   }
@@ -166,7 +158,6 @@ takePic() {
   });
 }
 
-  //this should be triggered when the next button is pushed
   getNewTask(){
     console.log(this.keywordsLength - this.keywords.length)
     this.imgData = ""
@@ -237,8 +228,7 @@ takePic() {
         console.log(result);
       });
   }
-
-  //use this to check if user is allowed to move on to the next task
+  
   markComplete(){
     console.log(this.completeToggle);
     if (this.completeToggle === false) {
