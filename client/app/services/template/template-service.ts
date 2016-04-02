@@ -13,7 +13,6 @@ export class TemplateService {
 
   constructor(private _http:Http) {}
 
-  // future use function
   getData() {
     console.log('called get req');
     let httpGetPromise = new Promise((resolve, reject) => {
