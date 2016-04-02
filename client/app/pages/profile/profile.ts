@@ -82,6 +82,7 @@ export class ProfilePage {
   }
 
   huntTapped(event, hunt) {
+    console.log('hunt tapped', hunt)
     this.nav.push(PastHuntsPage, {
       previousHuntTasksAndLocations: hunt.tasks,
       huntID: hunt.stats.huntID
