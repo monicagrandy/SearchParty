@@ -3,6 +3,7 @@ const jsonParser = require('body-parser').json({limit: '50mb'});
 const userController = require('../controllers/userController.js');
 const huntController = require('../controllers/huntController.js');
 const chatController = require('../controllers/chatController.js');
+const urlController = require('../controllers/urlController.js');
 
 module.exports = (app, express) => {
 
@@ -25,4 +26,5 @@ module.exports = (app, express) => {
   app.post('/addChatMessage', jsonParser, chatController.insertChatMessage);
   app.post('/getChatMessages', jsonParser, chatController.retrieveChatMessages);
   app.post('/singleHunt', jsonParser, huntController.retrieveSingleHunt);
+  app.get('/urlChecker', jsonParser, urlController.urlChecker);
 }

@@ -39,7 +39,6 @@ System.register(['angular2/core', 'angular2/router', 'ng2-material/all', './sear
                     this._params = _params;
                     this.googleMaps = googleMaps;
                     this._searchPartyService = _searchPartyService;
-                    // modal: ModalComponent;
                     this.items = ['item1', 'item2', 'item3'];
                     this.animationsEnabled = true;
                     this.map = null;
@@ -49,19 +48,17 @@ System.register(['angular2/core', 'angular2/router', 'ng2-material/all', './sear
                     var socket = io.connect('https://getsearchparty.com');
                     this.socket = socket;
                     this.socket.on("connect", function () {
-                        // this.socket.emit('huntChatRoom', this.huntID);
                         _this.socket.emit('huntMapRoom', _this.huntID);
                     });
                     this.socket.on('taskChange', function (location, task, room, lat, lng, num) {
                         console.log('{{}{}}{}{}}{} recieving taskChange {}{}{}{}');
                         console.log(' this is the task change location change ', location);
                         _this.allTasks.unshift([[location], [task]]);
-                        // this.allPlaces.push(location);
                         _this.socket.emit('chat_message', '::TASK HAS CHANGED::', 'SearchPartyAdmin', null, _this.huntID);
+                        _this.socket.emit('chat_message', 'challenge completed!', 'Party Bot', Date.now() / 1000, _this.huntID);
                         _this.getHuntData(_this.huntID);
                     });
                     this.socket.on("location", function (data, username) {
-                        // update map which reflected changes
                         console.log('location was updated from socket server ', data, username);
                     });
                 }
@@ -91,12 +88,12 @@ System.register(['angular2/core', 'angular2/router', 'ng2-material/all', './sear
                         console.log(' this is this.allPlaces ', previousPlaces);
                         console.log('this is previous tasks ', previousTasks);
                         setTimeout(function () {
-                            console.log('set time out is done updating map');
                             _this.googleMaps.finalMapMaker(previousPlaces, previousTasks)
                                 .then(function (data) {
                                 var flightPath = data;
                             });
                             _this.totalDist = _this.googleMaps.calcDistance(previousPlaces);
+                            console.log(_this.totalDist);
                         }, 2000);
                     })
                         .catch(function (err) { return console.log(err); });

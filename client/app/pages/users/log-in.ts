@@ -5,7 +5,6 @@ import {Http, Headers} from 'angular2/http';
 import {FORM_DIRECTIVES} from 'angular2/common';
 import {JwtHelper} from 'angular2-jwt';
 import {AuthService} from '../../services/auth/auth-service';
-//import {MyApp} from '../../app'
 import 'rxjs/add/operator/map';
 
 @Page({
@@ -14,11 +13,9 @@ import 'rxjs/add/operator/map';
 })
 
 export class LogIn {
-  LOGIN_URL: string = 'https://getsearchparty.com/signin'; //update this later
+  LOGIN_URL: string = 'https://getsearchparty.com/signin'; 
   SIGNUP_URL: string = 'https://getsearchparty.com/signup';
-  // When the page loads, we want the Login segment to be selected
   authType: string = 'login';
-  // We need to set the content type for the server
   contentHeader: Headers = new Headers({'Content-Type': 'application/json'});
   error: string;
   jwtHelper: JwtHelper = new JwtHelper();
@@ -27,14 +24,9 @@ export class LogIn {
 
   constructor(private http: Http, private nav: NavController, navParams: NavParams, private auth: AuthService) {
     let token = this.local.get('id_token')._result;
-    //let token = sessionStorage.id_token
     if(token) {
       this.user = this.jwtHelper.decodeToken(token).username;
     }
-    // show auth0 login popup
-    // if(!auth.authenticated()) {
-    //   auth.login();
-    // }
   }
 
   getCoords(){
@@ -45,8 +37,6 @@ export class LogIn {
   }
 
   login(credentials) {
-    //console.log(credentials);
-    //console.log(JSON.stringify(credentials))
       this.http.post(this.LOGIN_URL, JSON.stringify(credentials), { headers: this.contentHeader })
         .map(res => res.json())
         .subscribe(
@@ -77,7 +67,6 @@ export class LogIn {
     }
 
   logout() {
-    //localStorage.id_token = null;
     this.local.remove('id_token');
     this.local.remove('userLat');
     this.local.remove('userLng');
@@ -86,7 +75,6 @@ export class LogIn {
 
   authSuccess(token) {
     this.error = null;
-    //localStorage.id_token = token
     this.local.set('id_token', token);
     this.user = this.jwtHelper.decodeToken(token).username;
     console.log(this.user);

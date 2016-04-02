@@ -22,13 +22,11 @@ export class ProfilePage {
   hunts: any;
   token: any;
   friends: any;
+  friendName: any;
   user: any;
   jwtHelper: JwtHelper = new JwtHelper();
   addedHunts: any;
-  noFriend: false;
-  // sample types for hunts and friends
-  // friends: Array<{username: string, profile_image: string}>;
-  // hunts: Array<{type: string, huntname: string, image: string, icon: string}>;
+  noFriend = false;
 
   constructor(
     private nav: NavController,
@@ -45,12 +43,13 @@ export class ProfilePage {
       this.user = this.jwtHelper.decodeToken(this.token).username;
     }
 
+    this.friendName = "";
+
     console.log('this is the token before it is sent', this.token);
 
     this.profileService.getProfile(this.token)
     .then(data => {
       console.log(data.hunts);
-      // this.friends = data.friends;
       let huntsWithAtleastOneTask = [];
       for (let hunt of data.hunts) {
         if (hunt.tasks.length > 0) {
@@ -121,7 +120,6 @@ export class ProfilePage {
     this.friendService.addFriend(this.token, friend)
     .then(data => {
         console.log('friend added! ', data);
-        // update friendslist after friend is added
         this.friendService.getFriends(this.token)
           .then(data => {
             console.log('friends gotten! ', data);
@@ -136,6 +134,7 @@ export class ProfilePage {
         this.noFriend = true
         console.log(error)
       })
+    this.friendName = "";
     setTimeout(() => { this.noFriend = false }, 1000);
   }
 

@@ -10,27 +10,22 @@ export class FriendPage {
   local: Storage = new Storage(LocalStorage);
   hunts: any;
   friend: any;
-  // sample types for hunts and friends
-  // friends: Array<{username: string, profile_image: string}>;
-  // hunts: Array<{type: string, huntname: string, image: string, icon: string}>;
 
   constructor(
-    private nav: NavController, 
+    private nav: NavController,
     navParams: NavParams,
     private friendService: FriendService
     ) {
     this.friend = navParams.get('friend');
-        
+
     this.friendService.getFriendHunt(this.friend.username)
       .then(data => {
-        console.log(data.hunts);
-        // this.friends = data.friends;
         this.hunts = data.hunts;
       })
-        .catch(error => console.log(error));
+        .catch(error => console.error(error));
         
   }
-  
+
 
   huntTapped(event, hunt) {
     this.nav.push(PastHuntsPage, {

@@ -14,7 +14,6 @@ import {ChatComponent} from './chat.component';
   providers: [MATERIAL_PROVIDERS, SearchPartyService, GoogleMapService]
 })
 export class SearchPartyComponent {
-  // modal: ModalComponent;
   items: string[] = ['item1', 'item2', 'item3'];
   modalSelected: string;
   selected: string;
@@ -41,19 +40,17 @@ export class SearchPartyComponent {
     let socket = io.connect('https://getsearchparty.com');
     this.socket = socket;
     this.socket.on("connect", () => {
-      // this.socket.emit('huntChatRoom', this.huntID);
       this.socket.emit('huntMapRoom', this.huntID);
     });
     this.socket.on('taskChange', (location, task, room, lat, lng, num) => {
       console.log('{{}{}}{}{}}{} recieving taskChange {}{}{}{}');
       console.log(' this is the task change location change ', location);
       this.allTasks.unshift([[location], [task]]);
-      // this.allPlaces.push(location);
       this.socket.emit('chat_message', '::TASK HAS CHANGED::', 'SearchPartyAdmin', null, this.huntID);
+      this.socket.emit('chat_message', 'challenge completed!', 'Party Bot', Date.now()/1000, this.huntID);
       this.getHuntData(this.huntID);
    });
    this.socket.on("location", (data, username) => {
-      // update map which reflected changes
       console.log('location was updated from socket server ', data, username);
    });
  }
@@ -80,19 +77,19 @@ export class SearchPartyComponent {
          previousPlaces.push(item.place);
          previousTasks.push(item.task);
       });
+
       console.log(' this is this.allPlaces ', previousPlaces);
       console.log('this is previous tasks ', previousTasks);
 
       setTimeout(() => {
-        console.log('set time out is done updating map');
         this.googleMaps.finalMapMaker(previousPlaces, previousTasks)
             .then(data => {
               let flightPath = data;
             });
-
         this.totalDist = this.googleMaps.calcDistance(previousPlaces);
+        console.log(this.totalDist);
       }, 2000);
-      
+
     })
       .catch(err => console.log(err));
   }
