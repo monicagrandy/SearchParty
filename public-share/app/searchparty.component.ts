@@ -46,6 +46,7 @@ export class SearchPartyComponent {
       console.log('{{}{}}{}{}}{} recieving taskChange {}{}{}{}');
       console.log(' this is the task change location change ', location);
       this.allTasks.unshift([[location], [task]]);
+      this.socket.emit('chat_message', '::TASK HAS CHANGED::', 'SearchPartyAdmin', null, this.huntID);
       this.socket.emit('chat_message', 'challenge completed!', 'Party Bot', Date.now()/1000, this.huntID);
       this.getHuntData(this.huntID);
    });
@@ -76,10 +77,7 @@ export class SearchPartyComponent {
          previousPlaces.push(item.place);
          previousTasks.push(item.task);
       });
-      console.log(' this is this.allPlaces ', previousPlaces);
-      console.log('this is previous tasks ', previousTasks);
       setTimeout(() => {
-        console.log('set time out is done updating map');
         this.googleMaps.finalMapMaker(previousPlaces, previousTasks)
             .then(data => {
               let flightPath = data;
@@ -88,7 +86,7 @@ export class SearchPartyComponent {
         this.totalDist = this.googleMaps.calcDistance(previousPlaces);
         console.log(this.totalDist)
       }, 2000);
-      
+
     })
       .catch(err => console.log(err));
   }

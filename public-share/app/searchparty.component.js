@@ -54,6 +54,7 @@ System.register(['angular2/core', 'angular2/router', 'ng2-material/all', './sear
                         console.log('{{}{}}{}{}}{} recieving taskChange {}{}{}{}');
                         console.log(' this is the task change location change ', location);
                         _this.allTasks.unshift([[location], [task]]);
+                        _this.socket.emit('chat_message', '::TASK HAS CHANGED::', 'SearchPartyAdmin', null, _this.huntID);
                         _this.socket.emit('chat_message', 'challenge completed!', 'Party Bot', Date.now() / 1000, _this.huntID);
                         _this.getHuntData(_this.huntID);
                     });
@@ -84,10 +85,7 @@ System.register(['angular2/core', 'angular2/router', 'ng2-material/all', './sear
                             previousPlaces.push(item.place);
                             previousTasks.push(item.task);
                         });
-                        console.log(' this is this.allPlaces ', previousPlaces);
-                        console.log('this is previous tasks ', previousTasks);
                         setTimeout(function () {
-                            console.log('set time out is done updating map');
                             _this.googleMaps.finalMapMaker(previousPlaces, previousTasks)
                                 .then(function (data) {
                                 var flightPath = data;

@@ -86,7 +86,7 @@ export class Chat {
         let messagesArray = messagesFromDB.chatMessages;
         for(let i = 0; i < messagesArray.length; i++) {
           let datetime = moment.unix(messagesArray[i].datetime).fromNow();
-          this.messages.push([messagesArray[i].username + ": " + messagesArray[i].text + " @ " + datetime]);
+          this.messages.push([messagesArray[i].username, messagesArray[i].text, datetime]);
         }
       })
    }).catch(error => console.error(error));
