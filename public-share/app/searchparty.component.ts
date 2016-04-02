@@ -40,19 +40,16 @@ export class SearchPartyComponent {
     let socket = io.connect('http://localhost:8000');
     this.socket = socket;
     this.socket.on("connect", () => {
-      // this.socket.emit('huntChatRoom', this.huntID);
       this.socket.emit('huntMapRoom', this.huntID);
     });
     this.socket.on('taskChange', (location, task, room, lat, lng, num) => {
       console.log('{{}{}}{}{}}{} recieving taskChange {}{}{}{}');
       console.log(' this is the task change location change ', location);
       this.allTasks.unshift([[location], [task]]);
-      // this.allPlaces.push(location);
       this.socket.emit('chat_message', 'challenge completed!', 'Party Bot', Date.now()/1000, this.huntID);
       this.getHuntData(this.huntID);
    });
    this.socket.on("location", (data, username) => {
-      // update map which reflected changes
       console.log('location was updated from socket server ', data, username);
    });
  }

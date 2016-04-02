@@ -48,19 +48,16 @@ System.register(['angular2/core', 'angular2/router', 'ng2-material/all', './sear
                     var socket = io.connect('http://localhost:8000');
                     this.socket = socket;
                     this.socket.on("connect", function () {
-                        // this.socket.emit('huntChatRoom', this.huntID);
                         _this.socket.emit('huntMapRoom', _this.huntID);
                     });
                     this.socket.on('taskChange', function (location, task, room, lat, lng, num) {
                         console.log('{{}{}}{}{}}{} recieving taskChange {}{}{}{}');
                         console.log(' this is the task change location change ', location);
                         _this.allTasks.unshift([[location], [task]]);
-                        // this.allPlaces.push(location);
                         _this.socket.emit('chat_message', 'challenge completed!', 'Party Bot', Date.now() / 1000, _this.huntID);
                         _this.getHuntData(_this.huntID);
                     });
                     this.socket.on("location", function (data, username) {
-                        // update map which reflected changes
                         console.log('location was updated from socket server ', data, username);
                     });
                 }
