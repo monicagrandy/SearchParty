@@ -1,9 +1,15 @@
-#map {
-    height: 300px;
+.main {
+  width: 100%;
+  height: 100%;
+  margin: 0 auto;
 }
 
+/*#map {
+    height: 50%;
+}
+*/
 .title {
   text-align: center;
-  color: #ff1b1c;
+  color: #8B8682;
 }
 

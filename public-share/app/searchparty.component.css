@@ -1,22 +1,29 @@
+.title {
+   text-align: center;
+   color: #508f96;
+}
 
 .right {
    border: solid;
-   background-color: #0288d1;
+   background-color: #CFCFCF;
    /*border-radius: 5px;*/
-   border-color: #03a9f4;
+   border-color: #8B8682;
 }
 .tasks {
    border: solid;
-   background-color: #0288d1;
-   border-color: #03a9f4;
-   color: white;
+   background-color: #CFCFCF;
+   border-color: #8B8682;
+   color: #8B8682;
 }
 
 .master {
+   width: 100%;
+   margin: 0 auto;
+   height: 100%;
    border: solid;
-   background-color: #0288d1;
-   border-color: #03a9f4;
-   color: white;
+   background-color: #CFCFCF;
+   border-color: #8B8682;
+   color: black;
 }
 
 div h3 {
