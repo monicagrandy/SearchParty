@@ -27,9 +27,6 @@ export class ProfilePage {
   jwtHelper: JwtHelper = new JwtHelper();
   addedHunts: any;
   noFriend = false;
-  // sample types for hunts and friends
-  // friends: Array<{username: string, profile_image: string}>;
-  // hunts: Array<{type: string, huntname: string, image: string, icon: string}>;
 
   constructor(
     private nav: NavController,
