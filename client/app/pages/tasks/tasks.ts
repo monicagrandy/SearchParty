@@ -89,7 +89,6 @@ export class TaskPage {
       this.user = this.jwtHelper.decodeToken(this.token).username;
     }
     
-    // general grab params setup
     this.locAddress = navParams.get('locAddress');
     this.userLat = localStorage.userLat;
     this.userLong = localStorage.userLng;
@@ -101,8 +100,6 @@ export class TaskPage {
     this.previousPlaces = navParams.get('previousPlaces');
     this.resumeHuntKeywordsLeft = navParams.get('resumeHuntKeywordsLeft');
 
-    // run through previousTasks from navParams and splice out
-    // keywords to set proper length if coming back from a resuming hunt
     this.previousTasks = navParams.get('previousTasks');
     if (this.previousTasks.length < 2 ) {
       this.previousPlaces = [];
