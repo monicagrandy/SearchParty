@@ -1,4 +1,4 @@
-import {App, IonicApp, Platform, MenuController} from 'ionic-angular';
+import {App, IonicApp, Storage, LocalStorage, Platform, MenuController} from 'ionic-angular';
 import {Http} from 'angular2/http';
 import {provide} from 'angular2/core';
 import {AuthHttp, AuthConfig} from 'angular2-jwt';
@@ -9,13 +9,12 @@ import {TaskPage} from './pages/tasks/tasks';
 import {ProfilePage} from './pages/profile/profile';
 import {Chat} from './pages/chat/chat';
 import {enableProdMode} from 'angular2/core';
+import {UrlService} from './services/url/url-service';
 
 enableProdMode();
 
 import * as _ from 'underscore';
 
-// Avoid name not found warnings
-declare var Auth0Lock: any;
 
 @App({
   templateUrl: 'build/app.html',
@@ -27,6 +26,7 @@ declare var Auth0Lock: any;
       },
       deps: [Http]
     }),
+    UrlService,
     AuthService
   ]
 })
@@ -35,12 +35,14 @@ export class MyApp {
   rootPage: any = LogIn;
   pages: Array<{title: string, component: any}>;
   unauthPages: Array<{title: string, component: any}>;
+  local: Storage = new Storage(LocalStorage);
   logout: LogIn;
   constructor(
     private app: IonicApp,
     private platform: Platform,
     private menu: MenuController,
-    private auth: AuthService
+    private auth: AuthService,
+    private urlService: UrlService
     //private location: Location
   ) {
     this.initializeApp();
@@ -62,6 +64,13 @@ export class MyApp {
 
   initializeApp() {
     this.platform.ready().then(() => {
+      
+      this.urlService.grabUrls()
+        .then(urls => {
+          for (let key in urls) {
+            this.local.set(key, urls[key]);
+          }
+        });
 
       // The platform is now ready. Note: if this callback fails to fire, follow
       // the Troubleshooting guide for a number of possible solutions:
@@ -93,5 +102,5 @@ export class MyApp {
     let nav = this.app.getComponent('nav');
       nav.push(page.component);
   }
-  
+
 }

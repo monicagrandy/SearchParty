@@ -27,7 +27,7 @@ module.exports = {
       })
     })
     .catch(error => {
-      console.error("is this it?", error);
+      console.log("is this it?", error);
     })
   }
 }

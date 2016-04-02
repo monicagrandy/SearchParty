@@ -1,19 +1,19 @@
 import {Injectable} from 'angular2/core';
-import {LocalStorage} from 'ionic-angular';
+import {Storage, LocalStorage,} from 'ionic-angular';
 import {Http, Headers} from 'angular2/http';
-import {ConnectionBackend, HTTP_PROVIDERS} from 'angular2/http';
+import {UrlService} from '../url/url-service';
 import 'rxjs/add/operator/map';
 
 @Injectable()
 export class TemplateService {
+  local: Storage = new Storage(LocalStorage);
   TEMPLATES_URL: string = 'https://getsearchparty.com/templates';
-  TASKS_URL: string = 'https://getsearchparty.com/tasks';
+  TASKS_URL: string = localStorage.tasks || 'https://getsearchparty.com/tasks';
   keyword: string;
   contentHeader: Headers = new Headers({'Content-Type': 'application/json'});
 
   constructor(private _http:Http) {}
 
-  // future use function
   getData() {
     console.log('called get req');
     let httpGetPromise = new Promise((resolve, reject) => {
