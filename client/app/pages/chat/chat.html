@@ -18,10 +18,8 @@
 </ion-content>
 
   <form (ngSubmit)="send(chatBox)">
-     <!-- <ion-card> -->
         <ion-item>
            <ion-input type="text" (keyup)="OnKey($event)" [(ngModel)]="chatBox" placeholder="Message..."></ion-input>
            <button (click)="send(chatBox)" item-right>send</button>
         </ion-item>
-     <!-- </ion-card> -->
   </form>
