@@ -120,7 +120,7 @@
           <div id="headline" class="title" data-lb="editable-rich-text editable-optional" data-lb-id="headline" data-lb-name="Banner Headline" data-lb-comment="Enter your text here.">The party is <br>the search</div>
           <p id="subheadline" class="text" data-lb="editable-rich-text editable-optional" data-lb-id="sub-headline" data-lb-name="Banner Subheadline" data-lb-comment="Enter your text here.">A modern scavenger hunt application.<br>Never ask "so what are we doing tonight?" again.</p>
           <div class="button" data-lb-id="optin-form" data-lb="optin-form-trigger" data-lb-name="Button">
-            <a id="optin-button" href="#" onclick="javascript:return false" data-lb="editable-text" data-lb-id="button" data-lb-name="Button Text" data-lb-comment="Edit button text.">Sign up for SearchParty</a>
+            <a id="optin-button" (click)="signUpTapped()">Sign up for SearchParty</a>
           </div>
           <div class="lock">
             <img id="privacy-icon" src="img/lock.png" alt="" data-lb="editable-image max-image-size=18 editable-optional " data-lb-id="privacy-icon" data-lb-name="Privacy Icon" data-lb-comment="Recommended size is 14 x 18 pixels.">
