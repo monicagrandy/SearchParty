@@ -43,18 +43,14 @@ System.register(['angular2/core'], function(exports_1, context_1) {
                     var _this = this;
                     var loadMapPromise = new Promise(function (resolve, reject) {
                         var options = { timeout: 10000, enableHighAccuracy: true };
-                        // console.log('this is the type of lat ', typeof lat);
                         var latLng = new google.maps.LatLng(lat, long);
-                        // console.log('this is the latLng ', latLng);
                         var mapOptions = {
                             center: latLng,
                             zoom: zoom,
                             mapTypeId: google.maps.MapTypeId.ROADMAP
                         };
-                        // console.log('this is the map passed in ', map);
                         _this.map = map;
                         _this.map = new google.maps.Map(document.getElementById('map'), mapOptions);
-                        // console.log('this is loadMap\'s map ', this.map);
                         if (content !== null) {
                             _this.addMarker(latLng, content, _this.map)
                                 .then(function (data) {
@@ -128,8 +124,13 @@ System.register(['angular2/core'], function(exports_1, context_1) {
                         if (this.userLocationMarker) {
                             this.deleteCurrentMarker();
                         }
-                        console.log('adding new a current marker');
                         this.userLocationMarker = pin;
+                        var currentBounds = this.map.getBounds();
+                        if (!this.checkIfUserLocationIsInBounds() && this.userLocationLoadedOnce > 1) {
+                            console.log('user location is not in current bounds! adding it!');
+                            currentBounds.extend(this.userLocationMarker.position);
+                            this.map.fitBounds(currentBounds);
+                        }
                         return this.addInfoWindow(pin, info)
                             .then(function (data) {
                             return new Promise(function (resolve, reject) {
@@ -139,6 +140,14 @@ System.register(['angular2/core'], function(exports_1, context_1) {
                         });
                     }
                 };
+                GoogleMapService.prototype.checkIfUserLocationIsInBounds = function () {
+                    if (this.map.getBounds().contains(this.userLocationMarker.position)) {
+                        return true;
+                    }
+                    else {
+                        return false;
+                    }
+                };
                 GoogleMapService.prototype.addInfoWindow = function (marker, content) {
                     var _this = this;
                     console.log(content);
@@ -146,6 +155,9 @@ System.register(['angular2/core'], function(exports_1, context_1) {
                         content: content
                     });
                     return new Promise(function (resolve, reject) {
+                        google.maps.event.addListener(_this.map, "click", function (event) {
+                            infoWindow.close();
+                        });
                         resolve(google.maps.event.addListener(marker, 'click', function () {
                             infoWindow.open(_this.map, marker);
                         }));
@@ -155,15 +167,10 @@ System.register(['angular2/core'], function(exports_1, context_1) {
                 GoogleMapService.prototype.finalMapMaker = function (previousPlaces, previousTasks) {
                     var _this = this;
                     var finalMapMakerPromise = new Promise(function (resolve, reject) {
-                        // console.log('this is the previousPlaces ', previousPlaces);
-                        // console.log('this is the previousTasks ', previousTasks);
                         var finalLat = parseFloat(previousPlaces[previousPlaces.length - 1].location.coordinate.latitude);
                         var finalLng = parseFloat(previousPlaces[previousPlaces.length - 1].location.coordinate.longitude);
-                        // console.log('this is the finalLat ', typeof finalLat);
-                        // console.log('this is the finalLng ', typeof finalLng);
                         _this.loadMap(finalLat, finalLng, 12, null, _this.map)
                             .then(function (map) {
-                            // console.log('this is the map ', map);
                             var bounds = new google.maps.LatLngBounds();
                             var points = [];
                             for (var i = 0; i < previousPlaces.length; i++) {
@@ -176,11 +183,9 @@ System.register(['angular2/core'], function(exports_1, context_1) {
                                 var info = '<h4>' + currChallenge + '</h4><p>' + name_1 + '</p>';
                                 points.push(new google.maps.LatLng(currLat, currLng));
                                 _this.addMarker(currPos, info, _this.map);
-                                // console.log('finished adding marker ', points);
                                 bounds.extend(currPos);
                                 _this.map.fitBounds(bounds);
                             }
-                            // console.log('this is the map ', this.map);
                             var flightPath = new google.maps.Polyline({
                                 map: _this.map,
                                 path: points,
@@ -188,7 +193,9 @@ System.register(['angular2/core'], function(exports_1, context_1) {
                                 strokeOpacity: 1.0,
                                 strokeWeight: 2
                             });
-                            // console.log('this is the flightpath ', flightPath);
+                            // reset userLocation
+                            _this.userLocationLoadedOnce = 0;
+                            _this.userLocationMarker = null;
                             resolve(flightPath);
                         });
                     });
