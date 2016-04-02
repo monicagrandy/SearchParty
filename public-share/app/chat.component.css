@@ -1,33 +1,34 @@
-#m {
-   border: 0;
-   padding: 10px;
-   font-size: 1.3em;
-   height: 110%;
-};
-
 strong {
-   color: white;
+   color: #8B8682;
    vertical-align: middle;
    margin: auto;
 };
 
-/*#chatSystem {
-   border: solid;
-   border-color:black;
-   border-width: 2px;
-};*/
+.mainChat {
+   width: 100%;
+   margin: 0 auto;
+}
 
-div button {width: 100%;
-   /*background-color: #01579b;*/
-   color:white;
-   border: none;
-   padding: 10px;
-   height: 150%;
-   margin: auto;
+.chatStart {
+   text-align: center;
+   width: 100%;
+   height: 400px;
 }
+
+.username {
+   
+}
+
 .chatInput {
-   position:absolute;
+   /*position:absolute;*/
 }
+
+.msg {
+   text-align: center;
+   width: 100%;
+   height: 400px;
+}
+
 .chatMessMaster {
    float: left;
    padding: 0px;
@@ -37,15 +38,27 @@ div button {width: 100%;
 }
 .chatMess {
    display: block;
-   width: 100%;
-   /*height: 2em;*/
-   padding:0px;
-   margin:0px;
-   /*border:solid;*/
-   /*border-color: white;*/
-   background-color: #01579b;
+   width: 90%;
+   padding:2%;
+   margin:1%;
+   border: 2px solid #d51;
    position: relative;
    word-wrap: break-word;
+}
+
+.msgText {
+   padding:2%;
+   margin: 1%;
+   width: 95%;
+   height: 25%;
+   border: 2px solid #d51;
+}
+
+.sendMsg {
+   padding: 1%;
+   margin: 2%;
+   width: 95%;
+   background-color: #d51;
 }
 /*#messages { list-style-type: none; margin: 0; padding: 0; }
 #messages li { padding: 5px 10px; }
