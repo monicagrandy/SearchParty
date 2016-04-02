@@ -1,5 +1,7 @@
 div input { border: 0; padding: 10px; font-size: 1.3em; height: 110%;}
 strong {color: white; vertical-align: middle; margin: auto;}
+/*.chat {position: absolute;}*/
+#chatSystem {border: solid; border-color: black; border-width: 2px;}
 div button { width: 100%; background-color: #01579b; color:white; border: none; padding: 10px; height: 150%; margin: auto;}
 /*#messages { list-style-type: none; margin: 0; padding: 0; }
 #messages li { padding: 5px 10px; }
