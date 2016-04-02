@@ -1,9 +1,28 @@
 .right {
-   background-color: #ADD8E6;
-   border-radius: 1em;
-   border-color: white;
+   border: solid;
+   background-color: #0288d1;
+   /*border-radius: 5px;*/
+   border-color: #03a9f4;
 }
 .tasks {
-   border: 1em;
-   border-color: #ADD8E6;
+   border: solid;
+   background-color: #0288d1;
+   border-color: #03a9f4;
+   color: white;
+}
+
+.master {
+   border: solid;
+   background-color: #0288d1;
+   border-color: #03a9f4;
+   color: white;
+}
+
+div h3 {
+   vertical-align: middle;
+   margin: auto;
+}
+div p {
+   vertical-align: middle;
+   margin: auto;
 }

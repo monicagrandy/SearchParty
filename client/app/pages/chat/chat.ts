@@ -48,7 +48,7 @@ export class Chat {
       this.username = this.jwtHelper.decodeToken(this.token).username;
    }
    this.huntID = navParams.get('huntID');
-   let socket = io.connect('https://getsearchparty.com');
+   let socket = io.connect('http://localhost:8000');
    this.otherUserTyping = false;
    this.otherUsername = '';
    this.messages = [];
