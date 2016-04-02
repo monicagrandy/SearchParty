@@ -43,6 +43,7 @@ System.register(['angular2/core', 'angular2/router', 'ng2-material/all', './sear
                     this.animationsEnabled = true;
                     this.map = null;
                     this.huntID = _params.get('huntID');
+                    this.username = _params.get('username');
                     this.allTasks = [];
                     this.getHuntData(this.huntID);
                     var socket = io.connect('http://localhost:8000');
@@ -60,7 +61,7 @@ System.register(['angular2/core', 'angular2/router', 'ng2-material/all', './sear
                     });
                     this.socket.on("location", function (data, username) {
                         var coords = new google.maps.LatLng(data.latitude, data.longitude);
-                        setTimeout(function () { return _this.googleMaps.addCurrentMarker(coords, 'user location', _this.map)
+                        setTimeout(function () { return _this.googleMaps.addCurrentMarker(coords, 'user location')
                             .then(function (map) { return _this.map = map; }); }, 2000);
                         console.log('location was updated from socket server ', data, username);
                     });

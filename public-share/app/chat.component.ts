@@ -37,6 +37,7 @@ export class ChatComponent {
   ) {
    this.huntID = _params.get('huntID');
    let socket = io.connect('http://localhost:8000');
+   this.typing = false;
    this.otherUserTyping = false;
    this.otherUsername = '';
    this.messages = [];
@@ -102,7 +103,7 @@ OnKey(event:KeyboardEvent) {
      clearTimeout(this.timeout);
      this.invocation();
    }
-};
+ };
 
 send(message) {
  if (message && message !== "") {

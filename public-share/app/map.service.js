@@ -98,7 +98,7 @@ System.register(['angular2/core'], function(exports_1, context_1) {
                     console.log('deleting current marker');
                     this.userLocationMarker.setMap(null);
                 };
-                GoogleMapService.prototype.addCurrentMarker = function (coords, content, map) {
+                GoogleMapService.prototype.addCurrentMarker = function (coords, content) {
                     var _this = this;
                     var circle = {
                         path: "M-20,0a20,20 0 1,0 40,0a20,20 0 1,0 -40,0",
@@ -116,7 +116,7 @@ System.register(['angular2/core'], function(exports_1, context_1) {
                     }
                     else {
                         var pin = new google.maps.Marker({
-                            map: map,
+                            map: this.map,
                             position: coords,
                             icon: circle
                         });

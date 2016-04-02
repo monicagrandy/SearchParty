@@ -89,7 +89,7 @@ import { Injectable } from 'angular2/core';
       this.userLocationMarker.setMap(null);
     }
     
-    addCurrentMarker(coords, content, map) {
+    addCurrentMarker(coords, content) {
       let circle = {
           path: "M-20,0a20,20 0 1,0 40,0a20,20 0 1,0 -40,0",
           fillColor: '#5577F6',
@@ -106,7 +106,7 @@ import { Injectable } from 'angular2/core';
         });
       } else {
         let pin = new google.maps.Marker({
-          map: map,
+          map: this.map,
           position: coords,
           icon: circle
         });
