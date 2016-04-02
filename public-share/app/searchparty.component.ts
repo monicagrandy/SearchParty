@@ -31,6 +31,7 @@ export class SearchPartyComponent {
   content: any;
   socket: any;
   tasks: any;
+  io: any;
   chatroom: any;
 
   constructor(private _params: RouteParams, private googleMaps: GoogleMapService, private _searchPartyService: SearchPartyService) {

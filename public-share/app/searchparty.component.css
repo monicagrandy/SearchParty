@@ -1,7 +1,8 @@
 .right {
-   background-color: #ADD8E6;
-   border-radius: 1em;
-   border-color: white;
+   border: solid;
+   background-color: teal;
+   border-radius: 5px;
+   border-color: blue;
 }
 .tasks {
    border: 1em;
