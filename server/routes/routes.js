@@ -27,5 +27,5 @@ module.exports = (app, express) => {
   app.post('/getChatMessages', jsonParser, chatController.retrieveChatMessages);
   app.post('/singleHunt', jsonParser, huntController.retrieveSingleHunt);
   app.get('/urlChecker', jsonParser, urlController.urlChecker);
-  app.post('/template', jsonParser, huntController.getTemplateKeywords);
+  app.post('/templates', jsonParser, huntController.getTemplateKeywords);
 }
