@@ -106,11 +106,7 @@ export class TaskPage {
     // run through previousTasks from navParams and splice out
     // keywords to set proper length if coming back from a resuming hunt
     this.previousTasks = navParams.get('previousTasks');
-    if (this.previousTasks.length < 2 ) {
-      this.previousPlaces = [];
-      let keyword = this.keywords.unshift()
-      this.sendData(keyword);
-    } else {
+    if (this.previousTasks.length > 1) {
       console.log('resuming hunt!');
       console.log('this is the previous place ', this.previousPlaces);
       console.log('this is the previous task ', this.previousTasks);
@@ -118,10 +114,10 @@ export class TaskPage {
     }
 
     // socket setup
-    this._taskService.createSocket(this.huntID, this.user);
+    setTimeout(() => this._taskService.createSocket(this.huntID, this.user), 1000);
         
     // geowatching setup
-    this._taskService.createWatchLocation();
+    setTimeout(() => this._taskService.createWatchLocation(), 2000);
 
     
     // set links for sharing and directions
@@ -162,7 +158,7 @@ takePic() {
         huntID: this.huntID,
         image: this.imgData
        }
-      this._taskService.postData(JSON.stringify(dataObj), this.UPLOAD_URL)
+      this._taskService.postData(JSON.stringify(dataObj), 'upload')
         .then(result => {
           console.log("image sent to server")
         })
@@ -199,7 +195,7 @@ takePic() {
     let dataObj = {
       huntID: this.huntID
     }
-    this._taskService.postData(JSON.stringify(dataObj), this.HUNT_URL)
+    this._taskService.postData(JSON.stringify(dataObj), 'hunt')
         .then(result => {
          this.finalData = result.tasks
           console.log("+++line 179 in tasks.js data: ", result)
@@ -236,7 +232,7 @@ takePic() {
           feedback: this.feedback
     };
 
-    this._taskService.postData(JSON.stringify(userFeedback), this.FEEDBACK_URL)
+    this._taskService.postData(JSON.stringify(userFeedback), 'feedback')
       .then(result => {
         this.nav.setRoot(TemplatePage);
         console.log(result);
@@ -295,7 +291,7 @@ takePic() {
       }
     };
 
-    this._taskService.postData(JSON.stringify(dataObj), this.TASKS_URL)
+    this._taskService.postData(JSON.stringify(dataObj), 'tasks')
       .then(result => {
         this.locName = result.businesses.name;
         this.currChallenge = result.tasks.content;

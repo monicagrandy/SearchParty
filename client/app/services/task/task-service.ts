@@ -15,15 +15,51 @@ export class TaskService {
   userLong: string;
   local: Storage = new Storage(LocalStorage);
   contentHeader: Headers = new Headers({'Content-Type': 'application/json'});
+  HUNT_URL: string = 'https://getsearchparty.com/singleHunt';
+  TASKS_URL: string = 'https://getsearchparty.com/tasks';
+  FEEDBACK_URL: string = 'https://getsearchparty.com/feedback';
+  UPLOAD_URL: string = 'https://getsearchparty.com/upload';
+  SOCKET_URL: string = 'https://getsearchparty.com';
+  urls: {
+    hunt: string;
+    tasks: string;
+    upload: string;
+    feedback: string;
+  };
   
-  constructor(private _http:Http) {}
+  constructor(private _http:Http,  urlservice: UrlService) {
+    urlservice.grabUrls()
+      .then(urls => {
+        console.log('these are the urls fetched ', urls);
+        this.HUNT_URL = urls.singleHunt;
+        this.TASKS_URL = urls.tasks;
+        this.FEEDBACK_URL = urls.feedback;
+        this.UPLOAD_URL = urls.upload;
+        this.SOCKET_URL = urls.socket;
+        console.log('this is now the new tasks_url !', this.TASKS_URL);
+      });
+  }
   
   postData(data, url) {
+    
+    this.urls = {
+      hunt: this.HUNT_URL,
+      tasks: this.TASKS_URL, 
+      upload: this.UPLOAD_URL,
+      feedback: this.FEEDBACK_URL
+    };
+    
     console.log("called post req");
+    
+    console.log('this is the url passed in ', url);
+    
+    let urlLookup = this.urls[url];
+    
+    console.log(urlLookup);
 
     let httpPromise = new Promise((resolve, reject) => {
       console.log(data);
-      this._http.post(url, data, { headers: this.contentHeader })
+      this._http.post(urlLookup, data, { headers: this.contentHeader })
         .map(res => res.json())
         .subscribe(
         data => {
@@ -41,7 +77,7 @@ export class TaskService {
   createSocket(huntID, username) {
     // update url later
     console.log('create socket is called ', huntID, username)
-    this.socket = io.connect('https://getsearchparty.com');
+    this.socket = io.connect(this.SOCKET_URL);
     this.huntID = huntID;
     this.username = username;
     console.log('creating socket');
@@ -75,7 +111,7 @@ export class TaskService {
     let userLocation = { latitude: localStorage.userLat, longitude: localStorage.userLng };
     this.socket.emit('location', userLocation, this.username, this.huntID);
     clearTimeout(this.resendLocationTimeout);
-    this.resendLocationTimeout = setTimeout(() => { this.resendLocation() }, 1000*5);
+    this.resendLocationTimeout = setTimeout(() => this.resendLocation(), 1000*5);
   }
 
 }

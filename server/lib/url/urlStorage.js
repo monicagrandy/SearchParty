@@ -17,7 +17,8 @@ module.exports = {
       getAddedHunts: 'http://localhost:8000/getAddedHunts',
       addChatMessage: 'http://localhost:8000/addChatMessage',
       getChatMessages: 'http://localhost:8000/getChatMessages',
-      singleHunt: 'http://localhost:8000/singleHunt'
+      singleHunt: 'http://localhost:8000/singleHunt',
+      socket: 'http://localhost:8000'
     }
   }
 }
