@@ -1,24 +1,22 @@
 <div class="chatStart" *ngIf="!nameAdded" layout="column" >
-  <strong flex="5">Enter your name to start chatting</strong>
-  <input class="username" #username placeholder="name" flex="5">
-  <button flex="5" (click)="getUsername(username.value)">Start</button>
+  <strong class="prompt" flex="5">Enter your name to start chatting</strong>
+  <input  #username placeholder="name" flex="5">
+  <button class="userNameBtn" flex="5" (click)="getUsername(username.value)">Enter Chat</button>
 </div>
 
 <div class="mainChat" *ngIf="nameAdded" layout="column">
-
-   <div flex="65" class="chatMessMaster" layout="column">
-      <span *ngFor="#message of messages" class=chatMess>
-         <p>{{message[0]}}: {{message[1]}}</p>
-         <p>{{message[2]}}</p>
-      </span>
+-
+   <div class="chatMessMaster" layout="column">
+      <div *ngFor="#message of messages" class=chatMess>
+         <p><strong>{{message[0]}}:</strong> {{message[1]}}</p>
+         <p><strong>{{message[2]}}</strong></p>
+      </div>
       <p *ngIf="otherUserTyping">{{otherUsername}} is typing...</p>
    </div>
 
-   <div class="chatInput" flex="20">
-      <form class="msg" action="">
-        <textarea class="msgText" id="m" autocomplete="off" (keyup)="OnKey($event)" [(ngModel)]="chatBox" placeholder="Message..."></textarea>
-        <button class="sendMsg" (click)="send(chatBox)" (ngSubmit)="send(chatBox)">Send</button>
+    <form class="msg" action="">
+      <textarea class="msgText" id="m" autocomplete="off" (keyup)="OnKey($event)" [(ngModel)]="chatBox" placeholder="Message..."></textarea>
+      <button class="sendMsg" (click)="send(chatBox)" (ngSubmit)="send(chatBox)">Send</button>
     </form>
-   </div>
 
 </div>

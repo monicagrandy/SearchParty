@@ -1,36 +1,48 @@
-strong {
+.chatStart {
+   width: 100%
+}
+
+.prompt {
    color: #8B8682;
    vertical-align: middle;
-   margin: auto;
 };
+
+input {
+   width: 95%;
+   padding: 5%;
+   height: 25%;
+   border: 2px solid #d51;
+}
+
+.userNameBtn {
+   background-color: #d51;
+   margin-top: 2%;
+   padding: 5%;
+   font-weight: bold
+}
+
 
 .mainChat {
    width: 100%;
    margin: 0 auto;
+   padding: 1%;
+   margin: 2%;
 }
 
 .chatStart {
    text-align: center;
    width: 100%;
-   height: 400px;
-}
-
-.username {
-   
-}
-
-.chatInput {
-   /*position:absolute;*/
 }
 
 .msg {
    text-align: center;
+   margin-top: 10%;
    width: 100%;
-   height: 400px;
 }
 
 .chatMessMaster {
    float: left;
+   display: block;
    padding: 0px;
    overflow-y: scroll;
    overflow-x: hidden;
@@ -42,7 +54,6 @@ strong {
    padding:2%;
    margin:1%;
    border: 2px solid #d51;
-   position: relative;
    word-wrap: break-word;
 }
 
@@ -50,7 +61,6 @@ strong {
    padding:2%;
    margin: 1%;
    width: 95%;
-   height: 25%;
    border: 2px solid #d51;
 }
 
