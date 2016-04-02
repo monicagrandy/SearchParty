@@ -14,7 +14,6 @@ import {ChatComponent} from './chat.component';
   providers: [MATERIAL_PROVIDERS, SearchPartyService, GoogleMapService]
 })
 export class SearchPartyComponent {
-  // modal: ModalComponent;
   items: string[] = ['item1', 'item2', 'item3'];
   modalSelected: string;
   selected: string;
@@ -49,7 +48,7 @@ export class SearchPartyComponent {
       console.log(' this is the task change location change ', location);
       this.allTasks.unshift([[location], [task]]);
       // this.allPlaces.push(location);
-      this.socket.emit('chat_message', '::TASK HAS CHANGED::', 'SearchPartyAdmin', null, this.huntID);
+      this.socket.emit('chat_message', 'challenge completed!', 'Party Bot', Date.now()/1000, this.huntID);
       this.getHuntData(this.huntID);
    });
    this.socket.on("location", (data, username) => {
@@ -82,12 +81,6 @@ export class SearchPartyComponent {
       });
       console.log(' this is this.allPlaces ', previousPlaces);
       console.log('this is previous tasks ', previousTasks);
-<<<<<<< HEAD
-      
-=======
-
-
->>>>>>> 55a0b42f8c3c2dffec930fe5e481b7f06fa47c52
       setTimeout(() => {
         console.log('set time out is done updating map');
         this.googleMaps.finalMapMaker(previousPlaces, previousTasks)
@@ -96,11 +89,7 @@ export class SearchPartyComponent {
             });
 
         this.totalDist = this.googleMaps.calcDistance(previousPlaces);
-<<<<<<< HEAD
-        console.log(this.totalDist);
-=======
         console.log(this.totalDist)
->>>>>>> 55a0b42f8c3c2dffec930fe5e481b7f06fa47c52
       }, 2000);
       
     })
