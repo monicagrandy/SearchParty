@@ -9,6 +9,7 @@ import {TaskPage} from './pages/tasks/tasks';
 import {ProfilePage} from './pages/profile/profile';
 import {Chat} from './pages/chat/chat';
 import {enableProdMode} from 'angular2/core';
+import {UrlService} from './services/url/url-service';
 
 import * as _ from 'underscore';
 
@@ -25,6 +26,7 @@ declare var Auth0Lock: any;
       },
       deps: [Http]
     }),
+    UrlService,
     AuthService
   ]
 })

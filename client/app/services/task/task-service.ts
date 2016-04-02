@@ -1,6 +1,7 @@
 import {Injectable} from 'angular2/core';
 import {Storage, LocalStorage} from 'ionic-angular';
 import {Http, Headers} from 'angular2/http';
+import {UrlService} from '../url/url-service';
 import 'rxjs/add/operator/map'; 
 
 @Injectable()
