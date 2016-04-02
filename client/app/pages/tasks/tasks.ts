@@ -290,8 +290,8 @@ takePic() {
         this.refreshFeed(this.locName, this.currChallenge, this.huntID, this.locLat, this.locLng, 15);
       });
    }
-   refreshFeed(name, task, room, lat, lng, num) {
-      this.socket.emit('taskChange', name, task, room, lat, lng, num);
+   refreshFeed(name, task, room, lat, lng, zoom) {
+      this.socket.emit('taskChange', name, task, room, lat, lng, zoom);
       console.log('::::EMITTED SOCKET:::::');
    }
 

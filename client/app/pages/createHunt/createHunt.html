@@ -2,7 +2,7 @@
   <button menuToggle>
     <ion-icon name="menu"></ion-icon>
   </button>
-  <ion-title>Hunt Creation</ion-title>
+  <ion-title>Create Hunt</ion-title>
 </ion-navbar>
 
 <ion-content>
@@ -16,8 +16,7 @@
    </ion-list>
    <ion-card>
       <form #huntName="ngForm" (ngSubmit)="nameHunt(huntName.value)">
-         <ion-input placeholder="Super Awesome Adventure!" [(ngModel)]="name" type="text">
-         </ion-input>
+         <ion-input placeholder="Super Awesome Adventure!" [(ngModel)]="name" type="text"></ion-input>
    </ion-card>
-   <button>Start</button>
+   <button block>Start</button>
 </ion-content>
