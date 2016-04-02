@@ -24,7 +24,6 @@ input {
 
 .mainChat {
    width: 100%;
-   margin: 0 auto;
    padding: 1%;
    margin: 2%;
 }
@@ -34,6 +33,11 @@ input {
    width: 100%;
 }
 
+.chatGifContainer {
+   width: 100%;
+   text-align: center;
+}
+
 .msg {
    text-align: center;
    margin-top: 10%;
@@ -41,12 +45,13 @@ input {
 }
 
 .chatMessMaster {
+   width: 100%;
    float: left;
    display: block;
-   padding: 0px;
+   padding: 1%;
    overflow-y: scroll;
    overflow-x: hidden;
-   margin:0px;
+   margin: 1px;
 }
 .chatMess {
    display: block;
@@ -66,7 +71,7 @@ input {
 
 .sendMsg {
    padding: 1%;
-   margin: 2%;
+   margin: 1%;
    width: 95%;
    background-color: #d51;
 }
