@@ -5,10 +5,10 @@ import 'rxjs/add/operator/map';
 
 @Injectable()
 export class FriendService {
-  ADDFRIEND_URL: string = 'https://getsearchparty.com/addFriend'; //update this later https://getsearchparty.com/addFriend
-  GETFRIENDS_URL: string = 'https://getsearchparty.com/getFriends'; //update this later https://getsearchparty.com/getFriends
-  RETRIEVEFRIENDHUNT_URL: string = 'https://getsearchparty.com/getFriendHunt'; //update this later https://getsearchparty.com/getFriendHunt
-  ADDFRIENDTOHUNT_URL: string = 'https://getsearchparty.com/addFriendToHunt'; //update this later https://getsearchparty.com/getFriendHunt
+  ADDFRIEND_URL: string = 'https://getsearchparty.com/addFriend'; 
+  GETFRIENDS_URL: string = 'https://getsearchparty.com/getFriends'; 
+  RETRIEVEFRIENDHUNT_URL: string = 'https://getsearchparty.com/getFriendHunt'; 
+  ADDFRIENDTOHUNT_URL: string = 'https://getsearchparty.com/addFriendToHunt'; 
   contentHeader: Headers = new Headers({'Content-Type': 'application/json'});
 
   constructor(private _http:Http) {}
