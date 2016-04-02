@@ -50,7 +50,7 @@ System.register(['angular2/core', 'angular2/http', 'angular2/router', 'ng2-mater
                     }),
                     router_1.RouteConfig([
                         {
-                            path: 'hunt/:huntID',
+                            path: 'hunt/:username/:huntID',
                             name: 'SearchParty',
                             component: searchparty_component_1.SearchPartyComponent
                         },

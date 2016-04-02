@@ -33,9 +33,11 @@ export class SearchPartyComponent {
   tasks: any;
   io: any;
   chatroom: any;
+  username: any;
 
   constructor(private _params: RouteParams, private googleMaps: GoogleMapService, private _searchPartyService: SearchPartyService) {
     this.huntID = _params.get('huntID');
+    this.username = _params.get('username');
     this.allTasks = [];
     this.getHuntData(this.huntID);
     let socket = io.connect('http://localhost:8000');
@@ -53,8 +55,8 @@ export class SearchPartyComponent {
    });
    this.socket.on("location", (data, username) => {
      let coords = new google.maps.LatLng(data.latitude, data.longitude);
-     this.googleMaps.addMarker(coords, 'user location', this.map)
-       .then(map => this.map = map);
+     setTimeout(() => this.googleMaps.addCurrentMarker(coords, 'user location')
+       .then(map => this.map = map), 2000);
      console.log('location was updated from socket server ', data, username);
    });
  }
@@ -87,8 +89,10 @@ export class SearchPartyComponent {
               let flightPath = data;
             });
             
-        this.totalDist = this.googleMaps.calcDistance(previousPlaces);
-        console.log(this.totalDist);
+        if (previousPlaces.length > 1) {
+          this.totalDist = this.googleMaps.calcDistance(previousPlaces);
+          console.log(this.totalDist);
+        }    
       }, 2000);
 
     })
