@@ -81,7 +81,7 @@ export class TaskPage {
     this.platform = platform;
     this.image = null;
     this.tasksLeft = true;
-    let socket = io.connect('https://getsearchparty.com');
+    let socket = io.connect('http://localhost:8000');
     this.socket = socket;
     this.token = localStorage.id_token;
 
