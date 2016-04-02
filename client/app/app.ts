@@ -11,8 +11,9 @@ import {Chat} from './pages/chat/chat';
 import {enableProdMode} from 'angular2/core';
 import {UrlService} from './services/url/url-service';
 
-import * as _ from 'underscore';
+enableProdMode();
 
+import * as _ from 'underscore';
 
 @App({
   templateUrl: 'build/app.html',

@@ -39,10 +39,10 @@ System.register(['angular2/core', 'ng2-material/all', 'angular2/router', './chat
                     this.dialog = dialog;
                     this.element = element;
                     this.nameAdded = false;
-                    this.ADD_MESSAGE_URL = 'http://localhost:8000/addChatMessage';
-                    this.GET_MESSAGES_URL = 'http://localhost:8000/getChatMessages';
+                    this.ADD_MESSAGE_URL = 'https://getsearchparty.com/addChatMessage';
+                    this.GET_MESSAGES_URL = 'https://getsearchparty.com/getChatMessages';
                     this.huntID = _params.get('huntID');
-                    var socket = io.connect('http://localhost:8000');
+                    var socket = io.connect('https://getsearchparty.com');
                     this.otherUserTyping = false;
                     this.otherUsername = '';
                     this.messages = [];

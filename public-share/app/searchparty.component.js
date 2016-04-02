@@ -45,7 +45,7 @@ System.register(['angular2/core', 'angular2/router', 'ng2-material/all', './sear
                     this.huntID = _params.get('huntID');
                     this.allTasks = [];
                     this.getHuntData(this.huntID);
-                    var socket = io.connect('http://localhost:8000');
+                    var socket = io.connect('https://getsearchparty.com');
                     this.socket = socket;
                     this.socket.on("connect", function () {
                         _this.socket.emit('huntMapRoom', _this.huntID);
@@ -85,6 +85,8 @@ System.register(['angular2/core', 'angular2/router', 'ng2-material/all', './sear
                             previousPlaces.push(item.place);
                             previousTasks.push(item.task);
                         });
+                        console.log(' this is this.allPlaces ', previousPlaces);
+                        console.log('this is previous tasks ', previousTasks);
                         setTimeout(function () {
                             _this.googleMaps.finalMapMaker(previousPlaces, previousTasks)
                                 .then(function (data) {

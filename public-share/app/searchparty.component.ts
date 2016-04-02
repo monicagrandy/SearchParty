@@ -37,7 +37,7 @@ export class SearchPartyComponent {
     this.huntID = _params.get('huntID');
     this.allTasks = [];
     this.getHuntData(this.huntID);
-    let socket = io.connect('http://localhost:8000');
+    let socket = io.connect('https://getsearchparty.com');
     this.socket = socket;
     this.socket.on("connect", () => {
       this.socket.emit('huntMapRoom', this.huntID);
@@ -77,14 +77,17 @@ export class SearchPartyComponent {
          previousPlaces.push(item.place);
          previousTasks.push(item.task);
       });
+
+      console.log(' this is this.allPlaces ', previousPlaces);
+      console.log('this is previous tasks ', previousTasks);
+
       setTimeout(() => {
         this.googleMaps.finalMapMaker(previousPlaces, previousTasks)
             .then(data => {
               let flightPath = data;
             });
-
         this.totalDist = this.googleMaps.calcDistance(previousPlaces);
-        console.log(this.totalDist)
+        console.log(this.totalDist);
       }, 2000);
 
     })
