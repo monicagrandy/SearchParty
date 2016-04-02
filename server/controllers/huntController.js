@@ -95,9 +95,9 @@ module.exports = {
    },
 
    getTemplateKeywords: (req, res) => {
-     let templateName = req.body.templateName;
+     let templateTitle = req.body.templateTitle;
 
-     template.retrieveTemplate(templateName)
+     template.retrieveTemplate(templateTitle)
      .then(templateObject => {
        console.log("template object", templateObject);
        res.json(templateObject);

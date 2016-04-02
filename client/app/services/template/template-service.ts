@@ -14,12 +14,11 @@ export class TemplateService {
 
   constructor(private _http:Http) {}
 
-  getData(templateTitle) {
+  getData() {
     console.log('called get req');
-    let dataToSend = {templateName: templateTitle};
     let httpGetPromise = new Promise((resolve, reject) => {
       console.log('inside get promise');
-      this._http.get(this.TEMPLATES_URL, JSON.stringify(dataToSend), {headers: this.contentHeader})
+      this._http.get(this.TEMPLATES_URL)
         .map(res => res.json())
         .subscribe(
           data => {

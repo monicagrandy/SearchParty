@@ -64,7 +64,7 @@ export class TemplatePage {
     localStorage.startTimeUnix = Date.now();
     localStorage.startTime = new Date().toLocaleTimeString()
     console.log('sending userInfo... ', this.userInfo);
-    this.templateService.postData(item.title)
+    this.templateService.postData(item.title, this.userInfo)
       .then(data => {
         this.nav.setRoot(TaskPage, {
           locAddress: data.businesses.location.display_address[0] + ', ' + data.businesses.location.display_address[2],
