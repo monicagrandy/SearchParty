@@ -81,7 +81,7 @@ export class TaskPage {
     this.platform = platform;
     this.image = null;
     this.tasksLeft = true;
-    let socket = io.connect('https://getsearchparty.com');
+    let socket = io.connect('http://localhost:8000');
     this.socket = socket;
     this.token = localStorage.id_token;
 
@@ -111,7 +111,7 @@ export class TaskPage {
     this._taskService.createSocket(this.huntID, this.user);
     // geowatching setup
     this._taskService.createWatchLocation();
-    this.link = `https://getsearchparty.com/share/#/hunt/${this.huntID}`;
+    this.link = `https://getsearchparty.com/share/#/hunt/${this.user}/${this.huntID}`;
     this.directionLink = `https://www.google.com/maps/dir/${this.userLat},${this.userLong}/${this.locAddress}`;
     this.text = encodeURIComponent('I am going on an adventure! Follow me on Search Party!');
     this.hashtags = 'searchparty';
@@ -171,7 +171,7 @@ takePic() {
       console.log(this.previousTasks);
       console.log(this.previousPlaces);
       this.tasksLeft = false;
-      setTimeout(() => this.searchComplete(), 2000);
+      this.searchComplete();
     }
   }
 
