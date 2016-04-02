@@ -5,11 +5,11 @@
 </div>
 <div *ngIf="nameAdded" layout="column">
 
-   <div flex="80" class=chatMess>
-      <div *ngFor="#message of messages">
-         <h5>{{message[0]}}: {{message[1]}}</h5>
+   <div flex="65" class="chatMessMaster" layout="column">
+      <span *ngFor="#message of messages" class=chatMess>
+         <p>{{message[0]}}: {{message[1]}}</p>
          <p>{{message[2]}}</p>
-      </div>
+      </span>
       <p *ngIf="otherUserTyping">{{otherUsername}} is typing...</p>
    </div>
 
