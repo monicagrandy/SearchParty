@@ -6,7 +6,7 @@
 </ion-navbar>
 
 
-<ion-content class="loadingContent" *ngIf="!userLat && !userLng"> 
+<ion-content class="loadingContent" *ngIf="!userLat && !userLng">
   <img class="loadingGif" src="{{loadingImg}}">
   <h1 class="loadingText">The party is the search...</h1>
   <h5 class="footerText">Brought to you by English Muffin LLC</h5>
@@ -14,8 +14,8 @@
 
 <ion-content class="has-header cards-bg" *ngIf="userLat && userLng" >
 
-  <ion-card class="adv-map" *ngFor="#item of items" (click)="itemTapped($event, item)">
-  
+  <ion-card class="adv-map" *ngFor="#item of items" (click)="navCreateHunt($event, item)">
+
     <div style="position: relative">
       <img src="{{item.image}}">
       <button fab fab-right fab-top class="fab-map">
