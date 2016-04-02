@@ -46,12 +46,8 @@ export class SearchPartyComponent {
       console.log('{{}{}}{}{}}{} recieving taskChange {}{}{}{}');
       console.log(' this is the task change location change ', location);
       this.allTasks.unshift([[location], [task]]);
-<<<<<<< HEAD
       this.socket.emit('chat_message', '::TASK HAS CHANGED::', 'SearchPartyAdmin', null, this.huntID);
-=======
-      // this.allPlaces.push(location);
       this.socket.emit('chat_message', 'challenge completed!', 'Party Bot', Date.now()/1000, this.huntID);
->>>>>>> d89b075d2f88864e0da55168ff80f50edea12199
       this.getHuntData(this.huntID);
    });
    this.socket.on("location", (data, username) => {
@@ -81,11 +77,6 @@ export class SearchPartyComponent {
          previousPlaces.push(item.place);
          previousTasks.push(item.task);
       });
-<<<<<<< HEAD
-=======
-      console.log(' this is this.allPlaces ', previousPlaces);
-      console.log('this is previous tasks ', previousTasks);
->>>>>>> d89b075d2f88864e0da55168ff80f50edea12199
       setTimeout(() => {
         this.googleMaps.finalMapMaker(previousPlaces, previousTasks)
             .then(data => {
@@ -93,10 +84,6 @@ export class SearchPartyComponent {
             });
 
         this.totalDist = this.googleMaps.calcDistance(previousPlaces);
-<<<<<<< HEAD
-        console.log(this.totalDist);
-=======
->>>>>>> d89b075d2f88864e0da55168ff80f50edea12199
         console.log(this.totalDist)
       }, 2000);
 

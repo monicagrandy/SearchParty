@@ -55,6 +55,7 @@ System.register(['angular2/core', 'angular2/router', 'ng2-material/all', './sear
                         console.log(' this is the task change location change ', location);
                         _this.allTasks.unshift([[location], [task]]);
                         _this.socket.emit('chat_message', '::TASK HAS CHANGED::', 'SearchPartyAdmin', null, _this.huntID);
+                        _this.socket.emit('chat_message', 'challenge completed!', 'Party Bot', Date.now() / 1000, _this.huntID);
                         _this.getHuntData(_this.huntID);
                     });
                     this.socket.on("location", function (data, username) {
@@ -90,7 +91,6 @@ System.register(['angular2/core', 'angular2/router', 'ng2-material/all', './sear
                                 var flightPath = data;
                             });
                             _this.totalDist = _this.googleMaps.calcDistance(previousPlaces);
-                            console.log(_this.totalDist);
                             console.log(_this.totalDist);
                         }, 2000);
                     })
