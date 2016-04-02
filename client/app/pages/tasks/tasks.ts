@@ -23,13 +23,13 @@ export class TaskPage {
   title = 'Current Task';
   map = null;
   local: LocalStorage;
-  locAddress: string; 
+  locAddress: string;
   currChallenge: string;
   userLat: any;
   userLong: any;
-  locLat: any; 
-  locLng: any; 
-  locName: string; 
+  locLat: any;
+  locLng: any;
+  locName: string;
   completeToggle = false;
   keywords = ['Bar', 'Bar', 'Bar', 'Bar', 'Bar', 'Bar','Bar','Bar', 'Bar'];
   keywordsLength: number;
@@ -88,7 +88,6 @@ export class TaskPage {
     if (this.token) {
       this.user = this.jwtHelper.decodeToken(this.token).username;
     }
-    
     this.locAddress = navParams.get('locAddress');
     this.userLat = localStorage.userLat;
     this.userLong = localStorage.userLng;
@@ -112,8 +111,8 @@ export class TaskPage {
       this.keywords.splice(0, this.resumeHuntKeywordsLeft);
     }
 
-    // socket setup
-    this._taskService.createSocket(this.huntID, this.user);    
+
+    this._taskService.createSocket(this.huntID, this.user);
     // geowatching setup
     this._taskService.createWatchLocation();
     this.link = `https://getsearchparty.com/share/#/hunt/${this.huntID}`;
@@ -228,7 +227,7 @@ takePic() {
         console.log(result);
       });
   }
-  
+
   markComplete(){
     console.log(this.completeToggle);
     if (this.completeToggle === false) {
@@ -250,7 +249,7 @@ takePic() {
       window.plugins.socialsharing.canShareVia("twitter", message, (Date.now())/1000, image, this.link, result => {
           window.plugins.socialsharing.shareViaTwitter(message, image, link);
       }, error => {
-          console.log(error);
+          console.error(error);
       });
     }
   }

@@ -91,5 +91,5 @@ export class MyApp {
     let nav = this.app.getComponent('nav');
       nav.push(page.component);
   }
-  
+
 }

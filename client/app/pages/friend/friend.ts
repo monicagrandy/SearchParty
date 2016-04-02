@@ -12,20 +12,20 @@ export class FriendPage {
   friend: any;
 
   constructor(
-    private nav: NavController, 
+    private nav: NavController,
     navParams: NavParams,
     private friendService: FriendService
     ) {
     this.friend = navParams.get('friend');
-        
+
     this.friendService.getFriendHunt(this.friend.username)
       .then(data => {
         this.hunts = data.hunts;
       })
-        .catch(error => console.log(error));
+        .catch(error => console.error(error));
         
   }
-  
+
 
   huntTapped(event, hunt) {
     this.nav.push(PastHuntsPage, {
