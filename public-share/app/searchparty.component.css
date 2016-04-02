@@ -13,6 +13,7 @@
    opacity: 0.7;
    border: 2px solid #d51;
    box-shadow: 5px 5px 2px #8B8682;
+   color: #8B8682;
 }
 
 .right {
@@ -28,4 +29,3 @@
    padding: .5%;
    color: #8B8682;
 }
-
