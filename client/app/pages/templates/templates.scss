@@ -11,6 +11,10 @@ button[fab].fab-map {
   font-weight: bold;
 }
 
+.huntName {
+  font-size: 5em;
+}
+
 #map {
   height: 300px;
 }
@@ -25,7 +29,6 @@ button[fab].fab-map {
 }
 
 .loadingText {
-  font-family: 'Indie Flower', times;
   color: #8B8682;
   //margin-top: 25%;
 }
