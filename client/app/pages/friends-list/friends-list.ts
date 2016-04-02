@@ -30,7 +30,7 @@ export class FriendsListPage {
       console.log('friends gotten! ', data);
       this.friends = data;
     })
-    .catch(error => console.log(error));
+    .catch(error => console.error(error));
   }
 
   friendTappedToHunt(event, friend) {
@@ -39,6 +39,6 @@ export class FriendsListPage {
     .then(data => {
       console.log("this friend was added to your hunt", data);
     })
-    .catch(error => console.log(error));
+    .catch(error => console.error(error));
   }
 }
