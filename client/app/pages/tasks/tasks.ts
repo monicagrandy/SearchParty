@@ -31,7 +31,7 @@ export class TaskPage {
   locLng: any;
   locName: string;
   completeToggle = false;
-  keywords = ['Bar', 'Bar', 'Bar', 'Bar', 'Bar', 'Bar','Bar','Bar', 'Bar'];
+  keyword: any;
   keywordsLength: number;
   tasksLeft: any;
   endHunt: boolean;
@@ -65,6 +65,7 @@ export class TaskPage {
   resumeHuntKeywordsLeft: number;
   socket: any;
   io: any;
+  taskNumber: any;
   huntName: any;
 
   constructor(
@@ -75,8 +76,11 @@ export class TaskPage {
     private googleMaps: GoogleMapService,
     _zone: NgZone
     ) {
+    this.keyword = navParams.get('keywordArray');
+    this.taskNumber = navParams.get('taskNumber');
+    this.keywordsLength = this.keyword.length;
+    this.username = localStorage.
     this.showURL = false;
-    this.keywordsLength = this.keywords.length;
     this._zone = _zone;
     this.platform = platform;
     this.image = null;
@@ -99,13 +103,12 @@ export class TaskPage {
     this.huntName = localStorage.huntName || navParams.get('huntName');
     this.previousPlaces = navParams.get('previousPlaces');
     this.resumeHuntKeywordsLeft = navParams.get('resumeHuntKeywordsLeft');
-
     this.previousTasks = navParams.get('previousTasks');
     if (this.previousTasks.length > 1) {
       console.log('resuming hunt!');
       console.log('this is the previous place ', this.previousPlaces);
       console.log('this is the previous task ', this.previousTasks);
-      this.keywords.splice(0, this.resumeHuntKeywordsLeft);
+      this.keyword.splice(0, this.resumeHuntKeywordsLeft);
     }
 
     this._taskService.createSocket(this.huntID, this.user);
@@ -122,7 +125,6 @@ export class TaskPage {
     setTimeout(()=>{ this.googleMaps.loadMap(this.locLat, this.locLng, 15, content, this.map).then(map => this.map = map), 2000 });
   }
 
-
   takePic() {
     console.log('taking picture')
     let options = {
@@ -138,7 +140,7 @@ export class TaskPage {
     Camera.getPicture(options).then((data) => {
       this.imgData = 'data:image/jpeg;base64,' + data;
         this._zone.run(() => this.image = this.imgData);
-        let count = this.keywordsLength - this.keywords.length
+        let count = this.keywordsLength - this.keyword.length;
         let dataObj = {
           count: count,
           huntID: this.huntID,
@@ -154,16 +156,16 @@ export class TaskPage {
   }
 
   getNewTask(){
-    console.log(this.keywordsLength - this.keywords.length)
+    console.log(this.keywordsLength - this.keyword.length)
     this.imgData = ""
     this.showURL = false;
     console.log('getting ready to send new task!')
-    console.log(this.keywords);
+    console.log(this.keyword);
     console.log('this is the huntID in the tasks! ');
     console.log(this.huntID);
 
-    if (this.keywords.length > 0) {
-      let keyword = this.keywords.shift();
+    if (this.keyword.length > 0) {
+      let keyword = this.keyword.shift();
       console.log('this is the huntID before it is sent! ', this.huntID);
       this.sendData(keyword);
     } else {
