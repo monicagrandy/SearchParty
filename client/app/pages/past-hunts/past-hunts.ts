@@ -30,11 +30,13 @@ export class PastHuntsPage {
   startLat: number;
   startLng: number;
   content: any;
+  huntName: any;
   HUNT_URL: string = 'https://getsearchparty.com/singleHunt';
 
 
   constructor(private nav: NavController, navParams: NavParams, private googleMaps: GoogleMapService, private _taskService: TaskService) {
     this.huntID = navParams.get('huntID');
+    this.huntName = navParams.get('huntName');
     this.allTasks = [];
     this.allPlaces = [];
     this.getHuntData();

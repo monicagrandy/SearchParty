@@ -85,7 +85,8 @@ export class ProfilePage {
     console.log('hunt tapped', hunt)
     this.nav.push(PastHuntsPage, {
       previousHuntTasksAndLocations: hunt.tasks,
-      huntID: hunt.stats.huntID
+      huntID: hunt.stats.huntID,
+      huntName: hunt.stats.huntname || 'Fun',
     });
   }
 
@@ -107,6 +108,7 @@ export class ProfilePage {
       previousTasks: previousTasks,
       previousPlaces: previousPlaces,
       huntID: hunt.stats.huntID,
+      huntName: hunt.stats.huntname || 'Fun',
       currChallenge: currentChallenge.content,
       locName: currentPlace.name,
       locAddress: currentPlace.address,

@@ -108,7 +108,6 @@ export class TaskPage {
       this.keywords.splice(0, this.resumeHuntKeywordsLeft);
     }
 
-
     this._taskService.createSocket(this.huntID, this.user);
     // geowatching setup
     this._taskService.createWatchLocation();
@@ -124,35 +123,35 @@ export class TaskPage {
   }
 
 
-takePic() {
-  console.log('taking picture')
-  let options = {
-      destinationType: 0,
-      sourceType: 1,
-      encodingType: 0,
-      targetWidth: 1024,
-      targetHeight: 1024,
-      quality:100,
-      allowEdit: false,
-      saveToPhotoAlbum: false
-  };
-  Camera.getPicture(options).then((data) => {
-    this.imgData = 'data:image/jpeg;base64,' + data;
-      this._zone.run(() => this.image = this.imgData);
-      let count = this.keywordsLength - this.keywords.length
-      let dataObj = {
-        count: count,
-        huntID: this.huntID,
-        image: this.imgData
-       }
-      this._taskService.postData(JSON.stringify(dataObj), 'upload')
-        .then(result => {
-          console.log("image sent to server")
-        })
-  }, (error) => {
-      alert(error);
-  });
-}
+  takePic() {
+    console.log('taking picture')
+    let options = {
+        destinationType: 0,
+        sourceType: 1,
+        encodingType: 0,
+        targetWidth: 1024,
+        targetHeight: 1024,
+        quality:100,
+        allowEdit: false,
+        saveToPhotoAlbum: false
+    };
+    Camera.getPicture(options).then((data) => {
+      this.imgData = 'data:image/jpeg;base64,' + data;
+        this._zone.run(() => this.image = this.imgData);
+        let count = this.keywordsLength - this.keywords.length
+        let dataObj = {
+          count: count,
+          huntID: this.huntID,
+          image: this.imgData
+        }
+        this._taskService.postData(JSON.stringify(dataObj), 'upload')
+          .then(result => {
+            console.log("image sent to server")
+          })
+    }, (error) => {
+        alert(error);
+    });
+  }
 
   getNewTask(){
     console.log(this.keywordsLength - this.keywords.length)
