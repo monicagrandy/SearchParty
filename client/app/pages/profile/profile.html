@@ -47,7 +47,12 @@
       <button ion-item *ngFor="#hunt of addedHunts">
           <div (click)="onGoingHuntTapped($event, hunt)">
             <ion-icon name="search" item-left></ion-icon>
-            {{hunt.stats.huntID}}
+            <span *ngIf="!hunt.stats.huntname">
+              {{hunt.stats.huntID}}
+            </span>
+            <span *ngIf="hunt.stats.huntname">
+              {{hunt.stats.huntname}}
+            </span>
           </div>
           <ion-icon name="person-add" item-right (click)="addFriendToHuntTapped($event, hunt)"></ion-icon>
       </button>
@@ -63,7 +68,12 @@
       <button ion-item *ngFor="#hunt of hunts | HuntFilterPipe:'nada'" >
         <ion-icon name="search" item-left></ion-icon>
         <div (click)="onGoingHuntTapped($event, hunt)">
-          {{hunt.stats.huntID}}
+          <span *ngIf="!hunt.stats.huntname">
+            {{hunt.stats.huntID}}
+          </span>
+          <span *ngIf="hunt.stats.huntname">
+            {{hunt.stats.huntname}}
+          </span>
         </div>
         <ion-icon name="person-add" item-right (click)="addFriendToHuntTapped($event, hunt)"></ion-icon>
       </button>
@@ -79,7 +89,12 @@
       <button ion-item *ngFor="#hunt of hunts | HuntFilterPipe:'good'" >
         <ion-icon name="search" item-left></ion-icon>
         <div (click)="huntTapped($event, hunt)">
-          {{hunt.stats.huntID}}
+          <span *ngIf="!hunt.stats.huntname">
+            {{hunt.stats.huntID}}
+          </span>
+          <span *ngIf="hunt.stats.huntname">
+            {{hunt.stats.huntname}}
+          </span>
         </div>
       </button>
     </ion-list>
@@ -93,9 +108,13 @@
       <button ion-item *ngFor="#hunt of hunts | HuntFilterPipe:'bad'" >
         <ion-icon name="search" item-left></ion-icon>
         <div (click)="huntTapped($event, hunt)">
-          {{hunt.stats.huntID}}
+          <span *ngIf="!hunt.stats.huntname">
+            {{hunt.stats.huntID}}
+          </span>
+          <span *ngIf="hunt.stats.huntname">
+            {{hunt.stats.huntname}}
+          </span>
         </div>
-
       </button>
     </ion-list>
   </ion-card>

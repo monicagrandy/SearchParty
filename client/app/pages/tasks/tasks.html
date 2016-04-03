@@ -2,7 +2,7 @@
   <button menuToggle *ngIf="!selectedItem">
     <ion-icon name="menu"></ion-icon>
   </button>
-  <ion-title *ngIf="tasksLeft">Current {{huntID}} Task</ion-title>
+  <ion-title *ngIf="tasksLeft">Current {{huntName}} Task</ion-title>
   <ion-title *ngIf="!tasksLeft">You're Done!</ion-title>
   <ion-buttons end>
     <button (click)="chat($event)">
