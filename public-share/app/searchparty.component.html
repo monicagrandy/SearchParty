@@ -1,26 +1,27 @@
-<h2 layout="row">Hunt</h2>
-   <div layout="row">
-     <div class="left" flex="66">
+<h2 class="title">{{username}}'s Search Party</h2> 
+<div layout="row" class='master'>
+  <div class="left" flex="66">
+    <div id="map"></div>
+    <div *ngFor="#task of allTasks" layout="row" class='tasks'>
 
-        <div id="map"></div>
-        <div *ngFor="#task of allTasks" layout="row" class='tasks'>
-           <strong flex class='tasks'>
-              Location
-              <p>{{task[0]}}</p>
-           </strong>
-           <strong flex class='tasks'>
-              Challenge
-              <p>{{task[1]}}</p>
-           </strong>
-        </div>
-     </div>
+          <div flex class='tasks' layout='column'>
+              <h3 flex>Location</h3>
+              <p flex>{{task[0]}}</p>
+          </div>
+          <div flex class='tasks' layout='column'>
+              <h3 flex>Challenge</h3>
+              <p flex>{{task[1]}}</p>
+          </div>
 
-     <div class="right" flex="33">
+    </div>
+  </div>
 
-        <my-chat></my-chat>
+  <div class="right" flex="33">
+    <my-chat></my-chat>
+  </div>
 
-     </div>
+  <div *ngIf="error">
+    <p>{{error}}</p>
+  </div>
+</div>
 
-   <div *ngIf="error">
-     <p>{{error}}</p>
-   </div>

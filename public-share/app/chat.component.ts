@@ -76,7 +76,7 @@ export class ChatComponent {
           let datetime = moment.unix(messagesArray[i].datetime).fromNow();
           console.log('THIS IS BEING PUSHED TO MESSAGES ARRAY');
           console.log(messagesArray[i].username, messagesArray[i].text, datetime);
-          this.messages.push([messagesArray[i].username + ": " + messagesArray[i].text + " @ " + datetime]);
+          this.messages.push([messagesArray[i].username, messagesArray[i].text, datetime]);
         }
       })
    }).catch(error => console.error(error));
@@ -102,7 +102,7 @@ OnKey(event:KeyboardEvent) {
      clearTimeout(this.timeout);
      this.invocation();
    }
-};
+ };
 
 send(message) {
  if (message && message !== "") {

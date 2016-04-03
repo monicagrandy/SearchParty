@@ -79,7 +79,7 @@ System.register(['angular2/core', 'ng2-material/all', 'angular2/router', './chat
                                 var datetime = moment.unix(messagesArray[i].datetime).fromNow();
                                 console.log('THIS IS BEING PUSHED TO MESSAGES ARRAY');
                                 console.log(messagesArray[i].username, messagesArray[i].text, datetime);
-                                _this.messages.push([messagesArray[i].username + ": " + messagesArray[i].text + " @ " + datetime]);
+                                _this.messages.push([messagesArray[i].username, messagesArray[i].text, datetime]);
                             }
                         });
                     }).catch(function (error) { return console.error(error); });

@@ -66,7 +66,7 @@ export class Chat {
         console.log(this.messages);
         datetime = moment.unix(datetime).fromNow();
         this.messages.push([username, msg, datetime]);
-        console.log('Messages Array::', messages);
+        console.log('Messages Array::', this.messages);
       });
    });
 
@@ -84,7 +84,7 @@ export class Chat {
    .then(messagesFromDB => {
       this.zone.run(() => {
         let messagesArray = messagesFromDB.chatMessages;
-        for(let i = 0; i < messagesArray.length; i++) {
+        for (let i = 0; i < messagesArray.length; i++) {
           let datetime = moment.unix(messagesArray[i].datetime).fromNow();
           this.messages.push([messagesArray[i].username, messagesArray[i].text, datetime]);
         }

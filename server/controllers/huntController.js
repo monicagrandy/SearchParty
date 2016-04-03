@@ -9,6 +9,7 @@ const createNewHunt = require('../lib/hunt/createNewHuntID.js');
 const createFeedback = require('../lib/hunt/createFeedback.js');
 const imageHandling = require('../lib/image/imagePromises.js');
 const singleHunt = require('../lib/hunt/returnSingleHunt.js');
+const template = require('../lib/hunt/getHuntTemplate.js');
 
 module.exports = {
   huntMaker: (req, res) => {
@@ -33,7 +34,7 @@ module.exports = {
       })
         .catch(error => console.error(error));
     } else {
-      console.log('this is the huntID in the else statement ', huntID);
+      console.log('this is the huntID in the else statement ', geolocation);
       makeHunt.createHunt(keyword, previousPlaces, previousTasks, huntID, geolocation)
         .then(resultsObj => {
           res.json(resultsObj);
@@ -89,6 +90,17 @@ module.exports = {
      .then(huntData => {
        console.log("hunt data retrieved", huntData);
        res.json(huntData);
+     })
+     .catch(error => console.error(error));
+   },
+
+   getTemplateKeywords: (req, res) => {
+     let templateTitle = req.body.templateTitle;
+
+     template.retrieveTemplate(templateTitle)
+     .then(templateObject => {
+       console.log("template object", templateObject);
+       res.json(templateObject);
      })
      .catch(error => console.error(error));
    }

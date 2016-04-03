@@ -19,7 +19,7 @@ import * as _ from 'underscore';
 })
 @RouteConfig([
   {
-    path: 'hunt/:huntID',
+    path: 'hunt/:username/:huntID',
     name: 'SearchParty',
     component: SearchPartyComponent
   },
