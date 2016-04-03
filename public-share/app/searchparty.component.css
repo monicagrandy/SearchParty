@@ -1,6 +1,8 @@
 .title {
+   opacity: 0.8;
    text-align: center;
    color: black;
+   margin: 1%;
 }
 
 .master {
@@ -19,11 +21,13 @@
 }
 
 .right {
+   opacity: 0.8;
    color: black;
    margin-left: 1%;
 }
 
 .tasks {
+   opacity: 0.8;
    line-height: 20px;
    margin: .5%;
    padding: .5%;

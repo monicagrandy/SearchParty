@@ -20,6 +20,7 @@ input {
    padding: 5%;
    font-weight: bold;
    color: white;
+   box-shadow: 2px 2px 1px #8B8682;
 }
 
 
@@ -69,6 +70,7 @@ input {
    margin:1%;
    border: 2px solid #387EF5;
    word-wrap: break-word;
+   box-shadow: 2px 2px 1px #8B8682;
 }
 
 .msgText {
@@ -76,6 +78,7 @@ input {
    margin: 1%;
    width: 95%;
    border: 2px solid #387EF5;
+   box-shadow: 2px 2px 1px #8B8682;
 }
 
 .sendMsg {
@@ -84,5 +87,6 @@ input {
    margin: 1%;
    width: 95%;
    background-color: #387EF5;
+   box-shadow: 2px 2px 1px #8B8682;
 }
 
