@@ -28,6 +28,14 @@ textarea {
   border-radius: 50%;
 }
 
+#banner-image {
+  width: 300px;
+}
+
+#optin-button {
+  background-color: #32db64;
+}
+
 body {
     font-size: 1em;
     line-height: 1.4;
@@ -95,7 +103,7 @@ a {color:#217DD1;}
 .main-page b {font-weight:700;}
 .header-bg { width:100%; padding:37px 0 34px; background-color:#fffefe; text-align:center;}
 
-.banner {width:100%; background-color:#1a7abc; padding:54px 0 66px; border-top:1px solid #94c1e0; display:inline-block; position:relative; float:left;}
+.banner {width:100%; background-color:#222; padding:54px 0 66px; border-top:1px solid #94c1e0; display:inline-block; position:relative; float:left;}
 .banner:after { top: 100%; left: 50%; border: solid transparent; content: " "; height: 0; width: 0; position: absolute; pointer-events: none; border-color: rgba(0, 122, 187, -10); border-top-color: #1A7ABC; border-width: 18px 36px; margin-left: -40px; z-index:9; }
 .banner-center {width:815px; margin:0 auto;text-align: center;}
 .banner-left, .banner-right{vertical-align: top;}
@@ -106,8 +114,8 @@ a {color:#217DD1;}
 .banner-right .text {margin:6px 0 0 0; padding:0px; font-size:18px; font-family: 'Open Sans', sans-serif; line-height:24px; color:#feffff; text-align:center;}
 .banner-right .text a{color: #feffff;}
 .button {width:100%; margin:26px 0 4px 0px;display:inline-block;position: relative;z-index: 99;}
-.button a{ display:block;font-size:28px; font-weight:700; text-transform:uppercase; color:#fffeff; background-color:#faab1f; border-bottom:3px solid #e59520; border-radius:4px; padding:7px 10px 7px; text-align:center; text-decoration:none; text-shadow: 0px 2px 1px #A65600;}
-.button a:hover {background-color:#ffcc01; border-bottom:3px solid #faab1f;}
+.button a{ display:block;font-size:28px; font-weight:700; text-transform:uppercase; color:#fffeff; background-color:#faab1f; border-radius:4px; padding:7px 10px 7px; text-align:center; text-decoration:none;}
+.button a:hover {background-color:#387ef5;}
 .banner-right .button a {width:93%;}
 .banner-right .button a p {margin:0px; padding:0px;}
 .banner-right .lock {width:100%; text-align:center;margin-top:15px;}
@@ -204,13 +212,13 @@ a {color:#217DD1;}
   bottom: 0;
 }
 
-.footer {width:100%; background-color:#0e588a; padding:40px 0 50px;;}
+.footer {width:100%; background-color:#387ef5; padding:40px 0 50px;;}
 .footer-center {width:674px; margin:0 auto; text-align:center;}
-.footer-center .name {margin:0 0 15px; padding:20px 0px 10px; color:#1e90de;}
-.footer-center .name a{color:#1e90de;}
+.footer-center .name {margin:0 0 15px; padding:20px 0px 10px; color:#222;}
+.footer-center .name a{color:#222;}
 .footer-center .name b {font-weight:700;}
-.footer-center .copyright-text {color:#1b8edc; font-size:13px; border-top:1px solid #1879bc; margin:0px; padding-top:20px;}
-.footer-center .copyright-text a{color:#1b8edc;}
+.footer-center .copyright-text {color:#222; font-size:13px; border-top:1px solid #1879bc; margin:0px; padding-top:20px;}
+.footer-center .copyright-text a{color:#222;}
 
 @media only screen and (max-width: 1020px) {
 	.customers-center {width:100%;}
