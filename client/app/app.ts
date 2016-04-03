@@ -63,13 +63,13 @@ export class MyApp {
 
   initializeApp() {
     this.platform.ready().then(() => {
-      
-      this.urlService.grabUrls()
-        .then(urls => {
-          for (let key in urls) {
-            this.local.set(key, urls[key]);
-          }
-        });
+      //comment out urlservice for dpeloyment
+      // this.urlService.grabUrls()
+      //   .then(urls => {
+      //     for (let key in urls) {
+      //       this.local.set(key, urls[key]);
+      //     }
+      //   });
 
       // The platform is now ready. Note: if this callback fails to fire, follow
       // the Troubleshooting guide for a number of possible solutions:

@@ -26,11 +26,11 @@ export class FriendPage {
         
   }
 
-
   huntTapped(event, hunt) {
     this.nav.push(PastHuntsPage, {
       previousHuntTasksAndLocations: hunt.tasks,
-      huntID: hunt.stats.huntID
+      huntID: hunt.stats.huntID,
+      huntName: hunt.stats.huntname || 'Fun'
     });
   }
 

@@ -13,7 +13,12 @@
     <ion-list>
       <button ion-item *ngFor="#hunt of hunts" (click)="huntTapped($event, hunt)">
         <ion-icon name="search" item-left></ion-icon>
-        {{hunt.stats.huntID}}
+        <span *ngIf="!hunt.stats.huntname">
+          {{hunt.stats.huntID}}
+        </span>
+        <span *ngIf="hunt.stats.huntname">
+          {{hunt.stats.huntname}}
+        </span>
       </button>
     </ion-list>
   </ion-card>

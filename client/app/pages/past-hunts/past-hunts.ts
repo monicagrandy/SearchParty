@@ -30,11 +30,11 @@ export class PastHuntsPage {
   startLat: number;
   startLng: number;
   content: any;
-  HUNT_URL: string = 'https://getsearchparty.com/singleHunt';
-
+  huntName: any;
 
   constructor(private nav: NavController, navParams: NavParams, private googleMaps: GoogleMapService, private _taskService: TaskService) {
     this.huntID = navParams.get('huntID');
+    this.huntName = navParams.get('huntName');
     this.allTasks = [];
     this.allPlaces = [];
     this.getHuntData();
@@ -69,9 +69,11 @@ export class PastHuntsPage {
       .then(data => {
         let flightPath = data;
       });
-
-    this.totalDist = this.googleMaps.calcDistance(this.allPlaces);
-    console.log(this.totalDist)
+    
+    if (this.allPlaces.length > 1) {
+      this.totalDist = this.googleMaps.calcDistance(this.allPlaces);
+      console.log(this.totalDist);
+    }   
   }
   
 }

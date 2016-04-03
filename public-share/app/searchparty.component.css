@@ -1,31 +1,35 @@
+.title {
+   opacity: 0.8;
+   text-align: center;
+   color: black;
+   margin: 1%;
+}
+
 .master {
    width: 100%;
    margin: 0 auto;
    padding: 2%;
    height: 100%;
-   color: #8B8682;
 }
 
 #map {
    height: 75%;
    padding: 2%;
-   margin-top: 4%;
    opacity: 0.7;
-   border: 2px solid #d51;
+   border: 2px solid #387EF5;
    box-shadow: 5px 5px 2px #8B8682;
-   color: #8B8682;
 }
 
 .right {
-   color: #8B8682;
-   opacity: 0.6;
+   opacity: 0.8;
+   color: black;
    margin-left: 1%;
-   /*padding: 2%;*/
 }
 
 .tasks {
+   opacity: 0.8;
    line-height: 20px;
    margin: .5%;
    padding: .5%;
-   color: #8B8682;
+   color: black;
 }

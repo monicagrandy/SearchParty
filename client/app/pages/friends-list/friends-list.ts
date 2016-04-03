@@ -14,6 +14,7 @@ export class FriendsListPage {
   local: Storage = new Storage(LocalStorage);
   token: any;
   friends: any;
+  huntID: any;
 
   constructor(
     private nav: NavController,

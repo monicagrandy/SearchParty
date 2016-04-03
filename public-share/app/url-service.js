@@ -1,4 +1,4 @@
-System.register(['angular2/core', 'angular2/http', 'rxjs/add/operator/map'], function(exports_1, context_1) {
+System.register(['angular2/core', 'angular2/http'], function(exports_1, context_1) {
     "use strict";
     var __moduleName = context_1 && context_1.id;
     var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
@@ -11,7 +11,7 @@ System.register(['angular2/core', 'angular2/http', 'rxjs/add/operator/map'], fun
         if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
     };
     var core_1, http_1;
-    var SearchPartyService;
+    var UrlService;
     return {
         setters:[
             function (core_1_1) {
@@ -19,44 +19,39 @@ System.register(['angular2/core', 'angular2/http', 'rxjs/add/operator/map'], fun
             },
             function (http_1_1) {
                 http_1 = http_1_1;
-            },
-            function (_1) {}],
+            }],
         execute: function() {
-            SearchPartyService = (function () {
-                function SearchPartyService(_http) {
+            UrlService = (function () {
+                function UrlService(_http) {
                     this._http = _http;
-                    this.URL = 'http://localhost:8000/singleHunt'; //update this later
                     this.contentHeader = new http_1.Headers({ 'Content-Type': 'application/json' });
+                    // change this URL when deploying
+                    this.manualUrlToChange = 'http://localhost:8000/urlChecker';
                 }
-                SearchPartyService.prototype.getHunt = function (huntID) {
+                UrlService.prototype.grabUrls = function () {
                     var _this = this;
-                    console.log('called post req');
-                    var httpPostPromise = new Promise(function (resolve, reject) {
-                        console.log('inside post promise');
-                        var dataToSend = { huntID: huntID };
-                        _this._http.post(_this.URL, JSON.stringify(dataToSend), { headers: _this.contentHeader })
+                    console.log('called get req');
+                    var httpGetPromise = new Promise(function (resolve, reject) {
+                        console.log('inside get promise');
+                        _this._http.get(_this.manualUrlToChange)
                             .map(function (res) { return res.json(); })
                             .subscribe(function (data) {
                             console.log('data from promise: ', data);
                             resolve(data);
                         }, function (err) {
-                            _this.logError(err);
                             reject(err);
                         }, function () { return console.log('data recieved'); });
                     });
-                    return httpPostPromise;
+                    return httpGetPromise;
                 };
-                SearchPartyService.prototype.logError = function (err) {
-                    console.error('There was an error: ' + err);
-                };
-                SearchPartyService = __decorate([
+                UrlService = __decorate([
                     core_1.Injectable(), 
                     __metadata('design:paramtypes', [http_1.Http])
-                ], SearchPartyService);
-                return SearchPartyService;
+                ], UrlService);
+                return UrlService;
             }());
-            exports_1("SearchPartyService", SearchPartyService);
+            exports_1("UrlService", UrlService);
         }
     }
 });
-//# sourceMappingURL=searchparty.service.js.map
+//# sourceMappingURL=url-service.js.map

@@ -5,7 +5,7 @@ import 'rxjs/add/operator/map';
 
 @Injectable()
 export class SearchPartyService {
-  URL: string = 'https://getsearchparty.com/singleHunt'; //update this later
+  URL: string = 'http://localhost:8000/singleHunt'; //update this later
   contentHeader: Headers = new Headers({'Content-Type': 'application/json'});
   
   constructor(private _http:Http) {}
