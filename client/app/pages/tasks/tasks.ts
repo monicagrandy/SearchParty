@@ -31,8 +31,8 @@ export class TaskPage {
   locLng: any;
   locName: string;
   completeToggle = false;
-  // keywords = (navParams.get('taskNumber'))
-  // ['Bar', 'Bar', 'Bar', 'Bar', 'Bar', 'Bar','Bar','Bar', 'Bar'];
+  keywords = (navParams.get('taskNumber'))
+  ['Bar', 'Bar', 'Bar', 'Bar', 'Bar', 'Bar','Bar','Bar', 'Bar'];
   keywordsLength: number;
   tasksLeft: any;
   endHunt: boolean;
