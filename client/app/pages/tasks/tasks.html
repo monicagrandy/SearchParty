@@ -2,7 +2,7 @@
   <button menuToggle *ngIf="!selectedItem">
     <ion-icon name="menu"></ion-icon>
   </button>
-  <ion-title *ngIf="tasksLeft">Current {{huntName}} Task</ion-title>
+  <ion-title *ngIf="tasksLeft">"{{huntName}}" Hunt</ion-title>
   <ion-title *ngIf="!tasksLeft">You're Done!</ion-title>
   <ion-buttons end>
     <button (click)="chat($event)">
@@ -15,7 +15,7 @@
   <ion-card class="adv-map">
     <div style="position: relative">
       <ion-item *ngIf="tasksLeft">
-        <h2>{{locName}}</h2> 
+        <h2>{{locName}}</h2>
         <h2><a href={{directionLink}} target="_blank">{{locAddress}}</a></h2>
       </ion-item>
       <ion-item *ngIf="!tasksLeft">
@@ -26,7 +26,7 @@
     <ion-item *ngIf="tasksLeft">
       <ion-icon subtle large item-left name='ios-pint'></ion-icon>
       <h3>Current challenge</h3>
-      <p>{{currChallenge}}</p> 
+      <p>{{currChallenge}}</p>
     </ion-item>
     <ion-item *ngIf="tasksLeft">
       <ion-label>Mark Complete</ion-label>
@@ -34,7 +34,7 @@
     </ion-item>
     <ion-item *ngIf="completeToggle && tasksLeft">
       <button primary clear item-right (click)="takePic()">Take Photo<ion-icon name="camera"></ion-icon></button>
-      <button primary clear item-right (click)="getNewTask()">  
+      <button primary clear item-right (click)="getNewTask()">
         Next Task<ion-icon name="arrow-forward"></ion-icon>
       </button>
     </ion-item>
@@ -49,14 +49,14 @@
       <h3>Started hunt at:</h3>
       <p>{{startTime}}</p>
     </ion-item>
-    <ion-item>     
+    <ion-item>
       <h3>Ended hunt at:</h3>
-      <p>{{endTime}}</p> 
+      <p>{{endTime}}</p>
     </ion-item>
     <ion-item>
       <h3>Distance travelled:</h3>
       <p>{{finalDist}} miles</p>
-    </ion-item>   
+    </ion-item>
   </ion-card>
 
   <ion-card *ngIf="!tasksLeft">
@@ -80,12 +80,12 @@
           <ion-icon name="thumbs-up"></ion-icon>
         </button>
       </ion-item>
-      <ion-item>  
+      <ion-item>
         <button id="badReview" (click)="sendFeedback(2)">
           <ion-icon name="thumbs-down"></ion-icon>
         </button>
       </ion-item>
-    </ion-list>  
+    </ion-list>
   </ion-card>
 
     <ion-card *ngIf="!showMobileSharing">

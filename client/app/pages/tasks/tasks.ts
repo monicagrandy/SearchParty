@@ -79,6 +79,7 @@ export class TaskPage {
     this.keyword = navParams.get('keywordArray');
     this.taskNumber = navParams.get('taskNumber');
     this.keywordsLength = this.keyword.length;
+    this.username = localStorage.
     this.showURL = false;
     this._zone = _zone;
     this.platform = platform;
@@ -139,7 +140,7 @@ export class TaskPage {
     Camera.getPicture(options).then((data) => {
       this.imgData = 'data:image/jpeg;base64,' + data;
         this._zone.run(() => this.image = this.imgData);
-        let count = this.keywordsLength - this.keyword.length
+        let count = this.keywordsLength - this.keyword.length;
         let dataObj = {
           count: count,
           huntID: this.huntID,
