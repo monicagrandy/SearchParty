@@ -50,14 +50,28 @@ System.register(['angular2/core', 'ng2-material/all', 'angular2/router', './chat
                     this.zone = new core_2.NgZone({ enableLongStackTrace: false });
                     this.chatBox = "";
                     this.socket = socket;
+                    setInterval(function () {
+                        _this.messages.forEach(function (msg) {
+                            if (msg[3]) {
+                                msg[2] = moment.unix(msg[3]).fromNow();
+                            }
+                        });
+                    }, 5000);
                     this.socket.on("connect", function () {
                         _this.socket.emit('huntChatRoom', _this.huntID);
                     });
                     this.socket.on("chat_message", function (msg, username, datetime) {
                         _this.zone.run(function () {
                             console.log(_this.messages);
+                            _this.currTime = datetime;
+                            console.log("+++line 63", datetime);
                             datetime = moment.unix(datetime).fromNow();
-                            _this.messages.push([username, msg, datetime]);
+                            _this.messages.push([username, msg, datetime, _this.currTime]);
+                            _this.messages.forEach(function (msg) {
+                                if (msg[3]) {
+                                    msg[2] = moment.unix(msg[3]).fromNow();
+                                }
+                            });
                         });
                     });
                     this.socket.on("isTyping", function (bool, username) {

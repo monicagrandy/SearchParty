@@ -22,6 +22,7 @@ export class ChatComponent {
     huntIDObject: any;
     messages: any;
     zone: any;
+    currTime: any;
     chatBox: any;
     socket: any;
     username: any;
@@ -45,6 +46,14 @@ export class ChatComponent {
    this.chatBox = "";
    this.socket = socket;
 
+   setInterval(() => {
+     this.messages.forEach((msg) => {
+       if(msg[3]){
+         msg[2] = moment.unix(msg[3]).fromNow()
+       }
+     })
+   }, 5000)
+
    this.socket.on("connect", () => {
       this.socket.emit('huntChatRoom', this.huntID);
    });
@@ -52,10 +61,18 @@ export class ChatComponent {
    this.socket.on("chat_message", (msg, username, datetime) => {
       this.zone.run(() => {
         console.log(this.messages);
+        this.currTime = datetime
+        console.log("+++line 63", datetime)
         datetime = moment.unix(datetime).fromNow();
-        this.messages.push([username, msg, datetime]);
+        this.messages.push([username, msg, datetime, this.currTime]);
+        this.messages.forEach((msg) => {
+          if (msg[3]) {
+            msg[2] = moment.unix(msg[3]).fromNow()
+          }
+        })
       });
    });
+
 
    this.socket.on("isTyping", (bool, username) => {
       if(bool === true && username !== this.username) {
@@ -72,7 +89,7 @@ export class ChatComponent {
       this.zone.run(() => {
         console.log("messages from DB", messagesFromDB);
         let messagesArray = messagesFromDB.chatMessages;
-        for(let i = 0; i < messagesArray.length; i++) {
+        for (let i = 0; i < messagesArray.length; i++) {
           let datetime = moment.unix(messagesArray[i].datetime).fromNow();
           console.log('THIS IS BEING PUSHED TO MESSAGES ARRAY');
           console.log(messagesArray[i].username, messagesArray[i].text, datetime);
