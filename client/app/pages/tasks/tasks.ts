@@ -65,7 +65,7 @@ export class TaskPage {
   resumeHuntKeywordsLeft: number;
   socket: any;
   io: any;
-
+  huntName: any;
 
   constructor(
     platform: Platform,
@@ -96,6 +96,7 @@ export class TaskPage {
     this.locLat = localStorage.locLat || navParams.get('locLat');
     this.locLng = localStorage.locLng || navParams.get('locLng');
     this.locName = localStorage.locName || navParams.get('locName');
+    this.huntName = localStorage.huntName || navParams.get('huntName');
     this.previousPlaces = navParams.get('previousPlaces');
     this.resumeHuntKeywordsLeft = navParams.get('resumeHuntKeywordsLeft');
 
@@ -272,7 +273,8 @@ takePic() {
       geolocation: {
         lat: this.locLat,
         lng: this.locLng
-      }
+      },
+      huntName: this.huntName
     };
 
     this._taskService.postData(JSON.stringify(dataObj), 'tasks')

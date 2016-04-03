@@ -26,7 +26,6 @@ export class CreateHuntPage {
   huntID: any;
   selectedItem: any;
   taskNumber: number;
-  nameHunt: any;
   name: string;
   requiredInfo: boolean;
 
@@ -49,7 +48,8 @@ export class CreateHuntPage {
         }), (error => console.error(error)), {});
       }
     }
-}
+  }
+  
    nameHunt() {
       if(this.name && this.taskNumber) {
          console.log("name2: ", this.name);
@@ -73,6 +73,7 @@ export class CreateHuntPage {
         this.nav.setRoot(TaskPage, {
            locAddress: data.businesses.location.display_address[0] + ', ' + data.businesses.location.display_address[2],
            huntID: data.huntID,
+           huntName: data.huntName,
            currChallenge: data.tasks.content,
            locLat: data.businesses.location.coordinate.latitude,
            locLng: data.businesses.location.coordinate.longitude,

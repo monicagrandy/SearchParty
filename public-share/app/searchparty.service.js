@@ -25,7 +25,7 @@ System.register(['angular2/core', 'angular2/http', 'rxjs/add/operator/map'], fun
             SearchPartyService = (function () {
                 function SearchPartyService(_http) {
                     this._http = _http;
-                    this.URL = 'https://getsearchparty.com/singleHunt'; //update this later
+                    this.URL = 'http://localhost:8000/singleHunt'; //update this later
                     this.contentHeader = new http_1.Headers({ 'Content-Type': 'application/json' });
                 }
                 SearchPartyService.prototype.getHunt = function (huntID) {

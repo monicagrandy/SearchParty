@@ -62,6 +62,7 @@ export class TemplatePage {
          console.log('routing to CreteHuntPages');
          this.nav.setRoot(CreateHuntPage, {});
    }
+  }
 
   // itemTapped(event, item) {
   //   console.log('sending item.type... ', item);
