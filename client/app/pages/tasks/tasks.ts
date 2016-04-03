@@ -31,7 +31,8 @@ export class TaskPage {
   locLng: any;
   locName: string;
   completeToggle = false;
-  keywords = ['Bar', 'Bar', 'Bar', 'Bar', 'Bar', 'Bar','Bar','Bar', 'Bar'];
+  // keywords = (navParams.get('taskNumber'))
+  // ['Bar', 'Bar', 'Bar', 'Bar', 'Bar', 'Bar','Bar','Bar', 'Bar'];
   keywordsLength: number;
   tasksLeft: any;
   endHunt: boolean;
@@ -65,6 +66,7 @@ export class TaskPage {
   resumeHuntKeywordsLeft: number;
   socket: any;
   io: any;
+  taskNumber: any;
 
 
   constructor(
@@ -75,8 +77,10 @@ export class TaskPage {
     private googleMaps: GoogleMapService,
     _zone: NgZone
     ) {
-    this.showURL = false;
+      this.taskNumber = navParams.get('taskNumber');
     this.keywordsLength = this.keywords.length;
+
+    this.showURL = false;
     this._zone = _zone;
     this.platform = platform;
     this.image = null;

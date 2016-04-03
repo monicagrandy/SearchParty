@@ -29,9 +29,10 @@ export class CreateHuntPage {
   nameHunt: any;
   name: string;
   requiredInfo: boolean;
+  keyword: string;
 
   constructor(private nav: NavController, navParams: NavParams, private templateService: TemplateService) {
-    this.selectedItem = navParams.get('item');
+    this.keyword = navParams.get('title');
     this.taskNumber;
     this.name;
     this.requiredInfo = false;
@@ -40,7 +41,6 @@ export class CreateHuntPage {
       this.userLng = localStorage.userLng;
     } else {
       if (navigator.geolocation) {
-        console.log("getting geolocation")
         navigator.geolocation.watchPosition((position => {
           this.userLat = position.coords.latitude;
           this.userLng = position.coords.longitude;
@@ -52,11 +52,8 @@ export class CreateHuntPage {
 }
    nameHunt() {
       if(this.name && this.taskNumber) {
-         console.log("name2: ", this.name);
          this.itemTapped(this.name, this.taskNumber);
       } else {
-         console.log('Name: ', name);
-         console.log('Num: ', this.taskNumber);
          this.requiredInfo = true;
       }
    }
@@ -66,20 +63,29 @@ export class CreateHuntPage {
      this.userInfo = localStorage;
      localStorage.startTimeUnix = Date.now();
      localStorage.startTime = new Date().toLocaleTimeString();
-     console.log('111111');
+     let count = 1;
+     let keywordArray = [];
+     while(count < this.taskNumber) {
+        keywordArray.push(this.keyword);
+        count++;
+     }
+
      this.templateService.postData(name, 'Bar', this.userInfo)
        .then(data => {
-          console.log('DATA: ', data);
         this.nav.setRoot(TaskPage, {
            locAddress: data.businesses.location.display_address[0] + ', ' + data.businesses.location.display_address[2],
            huntID: data.huntID,
+           taskNumber: this.taskNumber,
            currChallenge: data.tasks.content,
            locLat: data.businesses.location.coordinate.latitude,
            locLng: data.businesses.location.coordinate.longitude,
            locName: data.businesses.name,
            previousPlaces: [data.businesses],
-           previousTasks: [data.tasks]
+           previousTasks: [data.tasks],
+           keywordArray: keywordArray
         });
+
+
        })
         .catch(error => console.error(error));
    }
