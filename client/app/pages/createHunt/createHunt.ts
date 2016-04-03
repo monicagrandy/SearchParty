@@ -29,6 +29,7 @@ export class CreateHuntPage {
   name: string;
   requiredInfo: boolean;
   keyword: string;
+  keywordArray: [];
 
   constructor(private nav: NavController, navParams: NavParams, private templateService: TemplateService) {
     this.keyword = navParams.get('title');
@@ -63,11 +64,10 @@ export class CreateHuntPage {
      this.userInfo = localStorage;
      localStorage.startTimeUnix = Date.now();
      localStorage.startTime = new Date().toLocaleTimeString();
-     let count = 1;
      let keywordArray = [];
-     while(count < this.taskNumber) {
+     for(let i = 0; i < this.taskNumber; i++) {
+        console.log('keyword pushed');
         keywordArray.push(this.keyword);
-        count++;
      }
 
      this.templateService.postData(name, 'Bar', this.userInfo)
