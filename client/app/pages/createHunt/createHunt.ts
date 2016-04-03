@@ -65,7 +65,7 @@ export class CreateHuntPage {
      localStorage.startTimeUnix = Date.now();
      localStorage.startTime = new Date().toLocaleTimeString();
      let keywordArray = [];
-     for(let i = 0; i < this.taskNumber; i++) {
+     for(let i = 1; i < this.taskNumber; i++) {
         console.log('keyword pushed');
         keywordArray.push(this.keyword);
      }
