@@ -6,14 +6,16 @@
 </ion-navbar>
 
 
-<ion-content class="loadingContent" *ngIf="!userLat && !userLng"> 
-  <img class="loadingImg" src="{{loadingImg}}">
+<ion-content class="loadingContent" *ngIf="!userLat && !userLng">
+  <img class="loadingGif" src="{{loadingImg}}">
+  <h1 class="loadingText">The party is the search...</h1>
+  <h5 class="footerText">Brought to you by English Muffin LLC</h5>
 </ion-content>
 
 <ion-content class="has-header cards-bg" *ngIf="userLat && userLng" >
 
-  <ion-card class="adv-map" *ngFor="#item of items" (click)="itemTapped($event, item)">
-  
+  <ion-card class="adv-map" *ngFor="#item of items" (click)="navCreateHunt($event, item)">
+
     <div style="position: relative">
       <img src="{{item.image}}">
       <button fab fab-right fab-top class="fab-map">
@@ -24,14 +26,14 @@
       <ion-icon subtle large item-left name='{{item.icon}}'></ion-icon>
       <h1>{{item.huntname}}</h1>
     </ion-item>
-    <ion-item actions>
+    <!-- <ion-item actions>
       <span item-left secondary class="item-bold">18 min</span>
       <span item-left subtle>(2.6 mi)</span>
       <button primary clear item-right>
         <ion-icon name='navigate'></ion-icon>
         Start
       </button>
-    </ion-item>
+    </ion-item> -->
   </ion-card>
 
   <div *ngIf="selectedItem" padding>

@@ -11,6 +11,10 @@ button[fab].fab-map {
   font-weight: bold;
 }
 
+.huntName {
+  font-size: 5em;
+}
+
 #map {
   height: 300px;
 }
@@ -18,5 +22,21 @@ button[fab].fab-map {
 .loadingContent{
   width: 100%;
   text-align: center;
+}
+
+.loadingGif {
+  margin: 30%
+}
+
+.loadingText {
+  color: #8B8682;
+  //margin-top: 25%;
+}
+
+.footerText {
+  color: #CFCFCF;
+  position: fixed;
+  bottom: 0;
+  width: 100%;
 }
 

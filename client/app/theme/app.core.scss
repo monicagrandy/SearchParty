@@ -7,8 +7,23 @@
 // By default each design mode includes these shared imports.
 // App Shared Sass variables belong in app.variables.scss.
 
+@import url(https://fonts.googleapis.com/css?family=Fauna+One);
+
+@import url(https://fonts.googleapis.com/css?family=Indie+Flower);
+
 @import "../pages/users/log-in";
 
 @import "../pages/templates/templates";
 
-@import "../pages/tasks/tasks"
+@import "../pages/tasks/tasks";
+
+@import "../pages/chat/chat";
+
+@import "../pages/friend/friend";
+
+@import "../pages/friends-list/friend-list";
+
+@import "../pages/past-hunts/past-hunts";
+
+@import "../pages/profile/profile";
+
