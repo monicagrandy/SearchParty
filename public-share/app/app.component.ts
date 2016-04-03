@@ -31,12 +31,12 @@ export class AppComponent {
 
   constructor(private urlService: UrlService) {
     // comment urlService for deployment
-    this.urlService.grabUrls()
-      .then(urls => {
-        for (let key in urls) {
-          localStorage.setItem(key, urls[key]);
-        }
-      });
+    // this.urlService.grabUrls()
+    //   .then(urls => {
+    //     for (let key in urls) {
+    //       localStorage.setItem(key, urls[key]);
+    //     }
+    //   });
   }
 
 }
