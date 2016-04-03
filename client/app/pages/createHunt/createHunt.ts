@@ -26,7 +26,6 @@ export class CreateHuntPage {
   huntID: any;
   selectedItem: any;
   taskNumber: number;
-  nameHunt: any;
   name: string;
   requiredInfo: boolean;
   keyword: string;
@@ -49,7 +48,8 @@ export class CreateHuntPage {
         }), (error => console.error(error)), {});
       }
     }
-}
+  }
+
    nameHunt() {
       if(this.name && this.taskNumber) {
          this.itemTapped(this.name, this.taskNumber);
@@ -76,6 +76,7 @@ export class CreateHuntPage {
            locAddress: data.businesses.location.display_address[0] + ', ' + data.businesses.location.display_address[2],
            huntID: data.huntID,
            taskNumber: this.taskNumber,
+           huntName: data.huntName,
            currChallenge: data.tasks.content,
            locLat: data.businesses.location.coordinate.latitude,
            locLng: data.businesses.location.coordinate.longitude,

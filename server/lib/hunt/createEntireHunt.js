@@ -8,7 +8,7 @@ const filter = require('../util/filterResults.js');
 const random = require('../util/randomSelect.js');
 
 module.exports = {
-  createHunt: (keyword, previousPlaces, previousTasks, huntID, geolocation) => {
+  createHunt: (keyword, previousPlaces, previousTasks, huntID, geolocation, huntName) => {
 
     let randomTask;
     let randomPlace;
@@ -38,7 +38,8 @@ module.exports = {
               let objectToSend = {
                 businesses: randomPlace,
                 tasks: randomTask,
-                huntID: huntID
+                huntID: huntID,
+                huntName: huntName
               };
               console.log("object to send", objectToSend);
               resolve(objectToSend);

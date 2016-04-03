@@ -49,7 +49,7 @@ export class TemplateService {
           lat: userInfo.userLat,
           lng: userInfo.userLng
         },
-        huntID: name,
+        huntName: name,
         token: userInfo.id_token,
         previousPlaces: [],
         previousTasks: [],
