@@ -90,43 +90,43 @@ export class Chat {
         }
       })
    }).catch(error => console.error(error));
-};
+  };
 
-invocation() {
-   this.timeout = setTimeout(
-      () => {
-         this.socket.emit('typing', false, this.username, this.huntID);
-      }, 1000);
-};
+  invocation() {
+    this.timeout = setTimeout(
+        () => {
+          this.socket.emit('typing', false, this.username, this.huntID);
+        }, 1000);
+  };
 
-OnKey(event:KeyboardEvent) {
-   if (event) {
-     this.socket.emit('typing', true, this.username, this.huntID);
-     clearTimeout(this.timeout);
-     this.invocation();
-   }
-};
-
-send(message) {
-   if (message && message !== "") {
+  OnKey(event:KeyboardEvent) {
+    if (event) {
+      this.socket.emit('typing', true, this.username, this.huntID);
       clearTimeout(this.timeout);
-      this.socket.emit('typing', false, this.username, this.huntID);
-      let messageObject = {
-        username: this.username,
-        huntID: this.huntID,
-        message: message
-      };
+      this.invocation();
+    }
+  };
 
-      this._chatService.postData(JSON.stringify(messageObject), this.ADD_MESSAGE_URL)
-      .then(messageAdded => {
-        messageAdded = messageAdded[0];
-        console.log("message  added", messageAdded);
-        this.socket.emit("chat_message", messageAdded.text, messageAdded.username, messageAdded.datetime, this.huntID);
-     }).catch(error => {
-        console.error(error)
-     });
+  send(message) {
+    if (message && message !== "") {
+        clearTimeout(this.timeout);
+        this.socket.emit('typing', false, this.username, this.huntID);
+        let messageObject = {
+          username: this.username,
+          huntID: this.huntID,
+          message: message
+        };
 
-   }
-   this.chatBox = "";
-};
+        this._chatService.postData(JSON.stringify(messageObject), this.ADD_MESSAGE_URL)
+        .then(messageAdded => {
+          messageAdded = messageAdded[0];
+          console.log("message  added", messageAdded);
+          this.socket.emit("chat_message", messageAdded.text, messageAdded.username, messageAdded.datetime, this.huntID);
+      }).catch(error => {
+          console.error(error)
+      });
+
+    }
+    this.chatBox = "";
+    };
 }
