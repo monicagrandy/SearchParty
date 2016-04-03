@@ -36,7 +36,7 @@ export class ChatComponent {
      public element: ElementRef
   ) {
    this.huntID = _params.get('huntID');
-   let socket = io.connect('https://getsearchparty.com');
+   let socket = io.connect('http://localhost:8000');
    this.otherUserTyping = false;
    this.otherUsername = '';
    this.messages = [];
