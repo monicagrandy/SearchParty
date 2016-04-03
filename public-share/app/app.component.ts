@@ -3,6 +3,7 @@ import {Http, ConnectionBackend, HTTP_PROVIDERS, Headers} from 'angular2/http';
 import {RouteConfig, ROUTER_DIRECTIVES, ROUTER_PROVIDERS} from 'angular2/router';
 import {MATERIAL_DIRECTIVES, MATERIAL_PROVIDERS} from 'ng2-material/all';
 import {SearchPartyComponent} from './searchparty.component';
+import {UrlService} from './url-service';
 import * as _ from 'underscore';
 
 @Component({
@@ -14,7 +15,8 @@ import * as _ from 'underscore';
     Http,
     ConnectionBackend,
     HTTP_PROVIDERS,
-    MATERIAL_PROVIDERS
+    MATERIAL_PROVIDERS,
+    UrlService
   ]
 })
 @RouteConfig([
@@ -27,8 +29,14 @@ import * as _ from 'underscore';
 export class AppComponent {
   title = 'Search Party';
 
-  constructor() {
-    // _.each([1,2,3,], number => console.log(number));
+  constructor(private urlService: UrlService) {
+    // comment urlService for deployment
+    this.urlService.grabUrls()
+      .then(urls => {
+        for (let key in urls) {
+          localStorage.setItem(key, urls[key]);
+        }
+      });
   }
 
 }
