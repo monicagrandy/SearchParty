@@ -79,7 +79,6 @@ export class TaskPage {
     this.keyword = navParams.get('keywordArray');
     this.taskNumber = navParams.get('taskNumber');
     this.keywordsLength = this.keyword.length;
-    this.username = localStorage.
     this.showURL = false;
     this._zone = _zone;
     this.platform = platform;

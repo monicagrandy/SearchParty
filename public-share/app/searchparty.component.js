@@ -52,7 +52,6 @@ System.register(['angular2/core', 'angular2/router', 'ng2-material/all', './sear
                         _this.socket.emit('huntMapRoom', _this.huntID);
                     });
                     this.socket.on('taskChange', function (location, task, room, lat, lng, num) {
-                        console.log('{{}{}}{}{}}{} recieving taskChange {}{}{}{}');
                         console.log(' this is the task change location change ', location);
                         _this.allTasks.unshift([[location], [task]]);
                         _this.socket.emit('chat_message', '::TASK HAS CHANGED::', 'SearchPartyAdmin', null, _this.huntID);
