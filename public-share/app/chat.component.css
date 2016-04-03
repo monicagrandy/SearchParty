@@ -3,7 +3,7 @@
 }
 
 .prompt {
-   color: #8B8682;
+   color: black;
    vertical-align: middle;
 };
 
@@ -11,21 +11,23 @@ input {
    width: 95%;
    padding: 5%;
    height: 25%;
-   border: 2px solid #d51;
+   border: 2px solid #387EF5;
 }
 
 .userNameBtn {
-   background-color: #d51;
+   background-color: #387EF5;
    margin-top: 2%;
    padding: 5%;
-   font-weight: bold
+   font-weight: bold;
+   color: white;
+   box-shadow: 2px 2px 1px #8B8682;
 }
 
 
 .mainChat {
    width: 100%;
    padding: 1%;
-   margin: 2%;
+   /*margin: 2%;*/
 }
 
 .chatStart {
@@ -36,6 +38,12 @@ input {
 .chatGifContainer {
    width: 100%;
    text-align: center;
+   margin: 0;
+   padding: 0;
+}
+
+.chatGif {
+   margin: 0;
 }
 
 .msg {
@@ -46,6 +54,7 @@ input {
 
 .chatMessMaster {
    width: 100%;
+   height: 500px;
    float: left;
    display: block;
    padding: 1%;
@@ -53,28 +62,31 @@ input {
    overflow-x: hidden;
    margin: 1px;
 }
+
 .chatMess {
    display: block;
    width: 90%;
    padding:2%;
    margin:1%;
-   border: 2px solid #d51;
+   border: 2px solid #387EF5;
    word-wrap: break-word;
+   box-shadow: 2px 2px 1px #8B8682;
 }
 
 .msgText {
    padding:2%;
    margin: 1%;
    width: 95%;
-   border: 2px solid #d51;
+   border: 2px solid #387EF5;
+   box-shadow: 2px 2px 1px #8B8682;
 }
 
 .sendMsg {
+   color: white;
    padding: 1%;
    margin: 1%;
    width: 95%;
-   background-color: #d51;
+   background-color: #387EF5;
+   box-shadow: 2px 2px 1px #8B8682;
 }
-/*#messages { list-style-type: none; margin: 0; padding: 0; }
-#messages li { padding: 5px 10px; }
-#messages li:nth-child(odd) { background: #eee; }*/
+
