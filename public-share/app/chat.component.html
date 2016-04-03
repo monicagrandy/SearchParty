@@ -6,7 +6,7 @@
 
 <div class="mainChat" *ngIf="nameAdded" layout="column">
    <div class="chatMessMaster" layout="column">
-      <div scroll-glue *ngFor="#message of messages" class=chatMess>
+      <div scroll-glue *ngFor="#message of messages" class="chatMess">
          <p><strong>{{message[0]}}:</strong> {{message[1]}}</p>
          <p><strong>{{message[2]}}</strong></p>
       </div>
