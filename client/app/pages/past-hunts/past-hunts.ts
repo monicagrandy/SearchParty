@@ -31,8 +31,6 @@ export class PastHuntsPage {
   startLng: number;
   content: any;
   huntName: any;
-  HUNT_URL: string = 'https://getsearchparty.com/singleHunt';
-
 
   constructor(private nav: NavController, navParams: NavParams, private googleMaps: GoogleMapService, private _taskService: TaskService) {
     this.huntID = navParams.get('huntID');
@@ -71,9 +69,11 @@ export class PastHuntsPage {
       .then(data => {
         let flightPath = data;
       });
-
-    this.totalDist = this.googleMaps.calcDistance(this.allPlaces);
-    console.log(this.totalDist)
+    
+    if (this.allPlaces.length > 1) {
+      this.totalDist = this.googleMaps.calcDistance(this.allPlaces);
+      console.log(this.totalDist);
+    }   
   }
   
 }

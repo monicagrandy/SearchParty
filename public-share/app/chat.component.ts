@@ -16,114 +16,59 @@ import * as moment from 'moment';
   providers: [MATERIAL_PROVIDERS, ChatService]
 })
 export class ChatComponent {
-    timeout: any;
-    typing: boolean;
-    huntID: string;
-    huntIDObject: any;
-    messages: any;
-    zone: any;
-    chatBox: any;
-    socket: any;
-    username: any;
-    nameAdded = false;
-    ADD_MESSAGE_URL: string = 'https://getsearchparty.com/addChatMessage';
-    GET_MESSAGES_URL: string = 'https://getsearchparty.com/getChatMessages';
+  messages: any;
+  socket: any;
+  chatBox: any;
+  io: any;
+  username: any;
+  typing: boolean;
+  huntID: any;
+  token: any;
+  id_token: any;
+  otherUserTyping: any;
+  otherUsername: any;
+  nameAdded = false;
 
-  constructor(
-     private _chatService: ChatService,
-     private _params: RouteParams,
-     public dialog: MdDialog,
-     public element: ElementRef
-  ) {
-   this.huntID = _params.get('huntID');
-   let socket = io.connect('https://getsearchparty.com');
-   this.otherUserTyping = false;
-   this.otherUsername = '';
-   this.messages = [];
-   this.timeout;
-   this.zone = new NgZone({enableLongStackTrace: false});
-   this.chatBox = "";
-   this.socket = socket;
+   constructor(
+      navParams: RouteParams,
+      private _chatService: ChatService
+   ) {
+    this.huntID = navParams.get('huntID');
+    this.messages = [];
+    this.chatBox = '';
+    
+    // watch for messages
+    // this._chatService.messageChange.subscribe(messages => console.log('this is the change emitted messages ', messages));
+    
+    // watch for typing
+    this._chatService.otherUsernameChange.subscribe(otherUsername => this.otherUsername = otherUsername);
+    this._chatService.otherUserTypingChange.subscribe(otherUserTyping => this.otherUserTyping = otherUserTyping);
+    
+  }
+  
+  getUsername(username){
+    this.username = username
+    this.nameAdded = true
+    // create socket
+    this._chatService.createSocket(this.huntID, this.username);
+    this._chatService.getMessages()
+      .then(messages => {
+        console.log('this is the data from _chatService getmessages ', messages);
+        this.messages = messages})
+        .catch(error => console.log('there was an error ', error));
+  }
 
-   this.socket.on("connect", () => {
-      this.socket.emit('huntChatRoom', this.huntID);
-   });
+  OnKey(event:KeyboardEvent) {
+    if (event) {
+      this._chatService.userIsTyping();
+    }
+  };
+  
+  send(message) {
+    if (message && message !== '') {
+      this._chatService.send(message);
+    }
+    this.chatBox = '';
+  }
 
-   this.socket.on("chat_message", (msg, username, datetime) => {
-      this.zone.run(() => {
-        console.log(this.messages);
-        datetime = moment.unix(datetime).fromNow();
-        this.messages.push([username, msg, datetime]);
-      });
-   });
-
-   this.socket.on("isTyping", (bool, username) => {
-      if(bool === true && username !== this.username) {
-         this.otherUsername = username;
-         this.otherUserTyping = true;
-      } else {
-         this.otherUserTyping = false;
-      }
-   });
-
-   let huntIDObject = {huntID: this.huntID};
-   this._chatService.postData(JSON.stringify(huntIDObject), this.GET_MESSAGES_URL)
-   .then(messagesFromDB => {
-      this.zone.run(() => {
-        console.log("messages from DB", messagesFromDB);
-        let messagesArray = messagesFromDB.chatMessages;
-        for(let i = 0; i < messagesArray.length; i++) {
-          let datetime = moment.unix(messagesArray[i].datetime).fromNow();
-          console.log('THIS IS BEING PUSHED TO MESSAGES ARRAY');
-          console.log(messagesArray[i].username, messagesArray[i].text, datetime);
-          this.messages.push([messagesArray[i].username, messagesArray[i].text, datetime]);
-        }
-      })
-   }).catch(error => console.error(error));
-   //Change this later
-   // this.username = window.prompt('Enter a username!', '');
-}
-
-getUsername(username){
-  this.username = username
-  this.nameAdded = true
-}
-
-invocation() {
-   this.timeout = setTimeout(
-      () => {
-         this.socket.emit('typing', false, this.username, this.huntID);
-      }, 1000);
-}
-
-OnKey(event:KeyboardEvent) {
-   if (event) {
-     this.socket.emit('typing', true, this.username, this.huntID);
-     clearTimeout(this.timeout);
-     this.invocation();
-   }
- };
-
-send(message) {
- if (message && message !== "") {
-   clearTimeout(this.timeout);
-   this.socket.emit('typing', false, this.username, this.huntID);
-   let messageObject = {
-     username: this.username,
-     huntID: this.huntID,
-     message: message
-   };
-
-   this._chatService.postData(JSON.stringify(messageObject), this.ADD_MESSAGE_URL)
-   .then(messageAdded => {
-     messageAdded = messageAdded[0];
-     console.log("message  added", messageAdded);
-     this.socket.emit("chat_message", messageAdded.text, messageAdded.username, messageAdded.datetime, this.huntID);
-  }).catch(error => {
-     console.error(error)
-  });
-
- }
- this.chatBox = "";
-}
 }
