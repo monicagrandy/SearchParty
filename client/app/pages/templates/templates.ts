@@ -59,9 +59,9 @@ export class TemplatePage {
     }
   }
   navCreateHunt(event, item) {
-         console.log(item.title);
-         this.nav.setRoot(CreateHuntPage, {
-            title: item.title
-         });
+    console.log(item.title);
+    this.nav.setRoot(CreateHuntPage, {
+      title: item.title
+    });
    }
   }
