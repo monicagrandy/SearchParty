@@ -48,10 +48,6 @@ export class TaskPage {
   image: any;
   imgData: string;
   finalDist: any;
-  HUNT_URL: string = 'https://getsearchparty.com/singleHunt';
-  TASKS_URL: string = 'https://getsearchparty.com/tasks';
-  FEEDBACK_URL: string = 'https://getsearchparty.com/feedback';
-  UPLOAD_URL: string = 'https://getsearchparty.com/upload';
   feedback: string;
   link: string;
   directionLink: string;
@@ -76,7 +72,7 @@ export class TaskPage {
     private googleMaps: GoogleMapService,
     _zone: NgZone
     ) {
-    this.keyword = navParams.get('keywordArray');
+    this.keyword = navParams.get('keywordArray') || ['Bar', 'Bar', 'Bar', 'Bar', 'Bar', 'Bar','Bar','Bar', 'Bar'];
     this.taskNumber = navParams.get('taskNumber');
     this.keywordsLength = this.keyword.length;
     this.showURL = false;
@@ -84,8 +80,6 @@ export class TaskPage {
     this.platform = platform;
     this.image = null;
     this.tasksLeft = true;
-    let socket = io.connect('http://localhost:8000');
-    this.socket = socket;
     this.token = localStorage.id_token;
 
     if (this.token) {
@@ -196,8 +190,11 @@ export class TaskPage {
       .then(data => {
         let flightPath = data;
       });
-
-    this.finalDist = this.googleMaps.calcDistance(this.previousPlaces);
+      
+    if (this.previousPlaces.length > 1) {
+      this.finalDist = this.googleMaps.calcDistance(this.previousPlaces);
+      console.log(this.finalDist);
+    }   
   }
 
   sendFeedback(val){
