@@ -12,10 +12,10 @@
   "license": "ISC",
   "dependencies": {
     "angular2": "^2.0.0-beta.9",
-    "angular2-scroll-glue": "^1.0.7",
     "es6-promise": "^3.0.2",
     "es6-shim": "^0.35.0",
     "ng2-material": "^0.2.10",
+    "npm": "^3.8.5",
     "reflect-metadata": "0.1.2",
     "rxjs": "5.0.0-beta.2",
     "systemjs": "0.19.24",

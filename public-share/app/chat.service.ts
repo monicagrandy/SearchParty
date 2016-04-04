@@ -29,17 +29,7 @@ export class ChatService {
    this.otherUsername = '';
    this.timeout;
    this.chatBox = '';
-
-   setInterval(() => {
-     this.messages.forEach(msg => {
-       if (msg[3]) {
-         console.log("updating time for ", msg)
-         msg[2] = moment.unix(msg[3]).fromNow()
-         console.log(msg[2])
-       }
-     })
-   }, 5000);
-}
+  }
 
   createSocket(huntID, username) {
     // update url later
@@ -60,7 +50,6 @@ export class ChatService {
    this.socket.on("chat_message", (msg, username, datetime) => {
       this.zone.run(() => {
         console.log('this is the message received from socket chat update ', msg);
-        datetime = moment.unix(datetime).fromNow();
         this.messages.push([username, msg, datetime]);
         this.updateScroll();
         // this.messageChange.emit(this.messages);
@@ -111,9 +100,7 @@ export class ChatService {
           return new Promise((resolve, reject) => {
             let messagesArray = messagesFromDB.chatMessages;
             for (let i = 0; i < messagesArray.length; i++) {
-              this.currTime = messagesArray[i].datetime;
-              let datetime = moment.unix(messagesArray[i].datetime).fromNow();
-              this.messages.push([messagesArray[i].username, messagesArray[i].text, datetime, this.currTime]);
+              this.messages.push([messagesArray[i].username, messagesArray[i].text, messagesArray[i].datetime]);
               console.log('these are the messages from getMessages() ', this.messages);
             }
             this.messages.forEach((msg) => {
