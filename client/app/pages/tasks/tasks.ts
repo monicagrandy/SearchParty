@@ -286,12 +286,8 @@ export class TaskPage {
         this.markComplete();
         let content = '<h4>' + this.locName + '</h4><p>' + this.locAddress  + '</p>';
         this.map = this.googleMaps.loadMap(this.locLat, this.locLng, 15, content, this.map);
-        this.refreshFeed(this.locName, this.currChallenge, this.huntID, this.locLat, this.locLng, 15);
+        this._taskService.refreshFeed(this.locName, this.currChallenge, this.huntID, this.locLat, this.locLng, 15);
       });
-   }
-   refreshFeed(name, task, room, lat, lng, zoom) {
-      this.socket.emit('taskChange', name, task, room, lat, lng, zoom);
-      console.log('::::EMITTED SOCKET:::::');
    }
 
 }

@@ -50,7 +50,7 @@ import { Injectable } from 'angular2/core';
     }
 
     addMarker(coords, content, map) {
-            
+      console.log('this is the content being added ', content);
       let pin = new google.maps.Marker({
         map: map,
         animation: google.maps.Animation.DROP,
