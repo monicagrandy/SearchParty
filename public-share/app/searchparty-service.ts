@@ -30,6 +30,7 @@ export class SearchPartyService {
   }
   
   updateFeed(data) {
+    this.allTasks = [];
     this.huntTasks = data.tasks;
     this.content = 
       '<h4>' + data.tasks[0].place.name + ' < /h4><p>' + 

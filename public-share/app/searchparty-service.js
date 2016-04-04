@@ -46,6 +46,7 @@ System.register(['angular2/core', './api-service', './map-service', 'rxjs/add/op
                 };
                 SearchPartyService.prototype.updateFeed = function (data) {
                     var _this = this;
+                    this.allTasks = [];
                     this.huntTasks = data.tasks;
                     this.content =
                         '<h4>' + data.tasks[0].place.name + ' < /h4><p>' +
