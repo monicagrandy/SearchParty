@@ -54,7 +54,7 @@ export class TemplateService {
         previousPlaces: [],
         previousTasks: [],
         date: currentTime,
-        numberOfTasks: taskNumber
+        taskNumber: taskNumber
       };
 
       console.log("THIS IS THE COMBO DATA BEFORE SENT ", dataToSend);
