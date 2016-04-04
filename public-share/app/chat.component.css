@@ -53,6 +53,7 @@ input {
 }
 
 .chatMessMaster {
+   padding-top: 0%;
    width: 100%;
    height: 500px;
    float: left;
@@ -62,6 +63,7 @@ input {
    overflow-x: hidden;
    margin: 1px;
    border: 2px solid #387EF5;
+   box-shadow: 2px 2px 1px #8B8682;
 }
 
 .chatMess {
@@ -70,7 +72,6 @@ input {
    padding:2%;
    margin:1%;
    border: 2px solid #387EF5;
-   word-wrap: break-word;
    box-shadow: 2px 2px 1px #8B8682;
 }
 
@@ -90,6 +91,9 @@ input {
    background-color: #387EF5;
    box-shadow: 2px 2px 1px #8B8682;
 }
+#signinGuest {
+   box-shadow: 2px 2px 1px #8B8682;
+}
 
 #username {
    font-size: 1em;
@@ -102,6 +106,7 @@ input {
    font-size: 1em;
    margin: 0px;
    padding: 0px;
+   word-wrap: break-word;
 }
 
 #time {
