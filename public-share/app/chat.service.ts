@@ -37,9 +37,9 @@ export class ChatService {
          msg[2] = moment.unix(msg[3]).fromNow()
          console.log(msg[2])
        }
-     });
-    }, 5000);
-  }
+     })
+   }, 5000);
+}
 
   createSocket(huntID, username) {
     // update url later
