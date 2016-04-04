@@ -6,6 +6,7 @@ import {ConnectionBackend, HTTP_PROVIDERS} from 'angular2/http';
 import {AuthService} from '../../services/auth/auth-service'
 import {ChatService} from '../../services/chat/chat-service';
 import * as moment from 'moment';
+import {FromUnixPipe} from '../../util/am-from-unix-pipe';
 
 @Page({
   templateUrl: 'build/pages/chat/chat.html',
@@ -14,6 +15,7 @@ import * as moment from 'moment';
     HTTP_PROVIDERS,
     ChatService
   ],
+  pipes [FromUnixPipe],
   directives: [FORM_DIRECTIVES]
 })
 export class Chat {
