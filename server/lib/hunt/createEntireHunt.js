@@ -40,7 +40,7 @@ module.exports = {
                 tasks: randomTask,
                 huntID: huntID,
                 huntName: huntName,
-                taskNumber: taskNumber
+                taskNumber: data.tasknumber
               };
               console.log("object to send", objectToSend);
               resolve(objectToSend);

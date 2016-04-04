@@ -190,11 +190,11 @@ export class TaskPage {
       .then(data => {
         let flightPath = data;
       });
-      
+
     if (this.previousPlaces.length > 1) {
       this.finalDist = this.googleMaps.calcDistance(this.previousPlaces);
       console.log(this.finalDist);
-    }   
+    }
   }
 
   sendFeedback(val){
