@@ -27,7 +27,6 @@ export class SocketService {
   updateTask() {
     this.socket.on('taskChange', (location, task, room, lat, lng, num) => {
       console.log(' this is the task change location change ', location);
-      this.socket.emit('chat_message', '::TASK HAS CHANGED::', 'SearchPartyAdmin', null, this.huntID);
       this.socket.emit('chat_message', 'challenge completed!', 'Party Bot', Date.now()/1000, this.huntID);
       console.log('task change socket is calling the searchParty Service to update the feed!');
       this._searchPartyService.getHunt(this.huntID);
