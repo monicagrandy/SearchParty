@@ -14,15 +14,15 @@ export class ChatService {
   chatBox: any;
   SOCKET_URL: string = localStorage.socket || 'https://getsearchparty.com';
   ADD_MESSAGE_URL: string = localStorage.addChatMessage || 'https://getsearchparty.com/addChatMessage';
-  GET_MESSAGES_URL: string = localStorage.getChatMessages || 'https://getsearchparty.com/getChatMessages'; 
+  GET_MESSAGES_URL: string = localStorage.getChatMessages || 'https://getsearchparty.com/getChatMessages';
   contentHeader: Headers = new Headers({'Content-Type': 'application/json'});
   urls: any;
   messages: any;
-  
+
   @Output() messageChange = new EventEmitter();
   @Output() otherUsernameChange = new EventEmitter();
   @Output() otherUserTypingChange = new EventEmitter();
-  
+
   constructor(private _http:Http) {
    this.messages = [];
    this.otherUserTyping = false;
@@ -30,7 +30,7 @@ export class ChatService {
    this.timeout;
    this.chatBox = '';
   }
-  
+
   createSocket(huntID, username) {
     // update url later
     console.log('create socket is called ', huntID, username)
@@ -45,21 +45,31 @@ export class ChatService {
     this.updateSocketChatMessage();
     this.updateSocketChatIsTyping();
   }
-  
+
   updateSocketChatMessage() {
    this.socket.on("chat_message", (msg, username, datetime) => {
       this.zone.run(() => {
         console.log('this is the message received from socket chat update ', msg);
         datetime = moment.unix(datetime).fromNow();
         this.messages.push([username, msg, datetime]);
+        this.updateScroll();
         // this.messageChange.emit(this.messages);
       });
-    }); 
+    });
   }
-  
+
+  updateScroll() {
+     setTimeout(() => {
+        let chatContainer = document.querySelectorAll(".chatMessMaster")[0];
+       console.log('scrollHeight: ', chatContainer.scrollHeight);
+       console.log('clientHeight: ', chatContainer.clientHeight);
+       chatContainer.scrollTop = chatContainer.scrollHeight - chatContainer.clientHeight;
+    }, 1);
+};
+
   updateSocketChatIsTyping() {
     this.socket.on("isTyping", (bool, username) => {
-      if (bool === true && username !== this.username) { 
+      if (bool === true && username !== this.username) {
         this.otherUsername = username;
         this.otherUsernameChange.emit(this.otherUsername);
         this.otherUserTyping = true;
@@ -68,21 +78,21 @@ export class ChatService {
         this.otherUserTyping = false;
         this.otherUserTypingChange.emit(false);
       }
-    });  
+    });
   }
-  
+
   invocation() {
     this.timeout = setTimeout(() => {
       this.socket.emit('typing', false, this.username, this.huntID);
     }, 1000);
   };
-  
+
   userIsTyping() {
     this.socket.emit('typing', true, this.username, this.huntID);
     clearTimeout(this.timeout);
-    this.invocation();    
+    this.invocation();
   }
-  
+
   getMessages() {
     let huntIDObject = {huntID: this.huntID};
     return this.postData(JSON.stringify(huntIDObject), 'getMessages')
@@ -96,14 +106,15 @@ export class ChatService {
               console.log('these are the messages from getMessages() ', this.messages);
             }
             resolve(this.messages);
-            reject('error getting messages');           
+            this.updateScroll();
+            reject('error getting messages');
           });
 
         })
       })
-      .catch(error => console.error(error));    
+      .catch(error => console.error(error));
     }
-  
+
   send(message) {
     clearTimeout(this.timeout);
     this.socket.emit('typing', false, this.username, this.huntID);
@@ -125,12 +136,12 @@ export class ChatService {
 
   postData(data, urlName) {
     console.log("called post req");
-    
+
     this.urls = {
       addMessage: this.ADD_MESSAGE_URL,
-      getMessages: this.GET_MESSAGES_URL 
+      getMessages: this.GET_MESSAGES_URL
     };
-    
+
     let url = this.urls[urlName];
 
     let httpPromise = new Promise((resolve, reject) => {

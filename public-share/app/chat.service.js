@@ -63,10 +63,20 @@ System.register(['angular2/core', 'angular2/http', 'moment'], function(exports_1
                             console.log('this is the message received from socket chat update ', msg);
                             datetime = moment.unix(datetime).fromNow();
                             _this.messages.push([username, msg, datetime]);
+                            _this.updateScroll();
                             // this.messageChange.emit(this.messages);
                         });
                     });
                 };
+                ChatService.prototype.updateScroll = function () {
+                    setTimeout(function () {
+                        var chatContainer = document.querySelectorAll(".chatMessMaster")[0];
+                        console.log('scrollHeight: ', chatContainer.scrollHeight);
+                        console.log('clientHeight: ', chatContainer.clientHeight);
+                        chatContainer.scrollTop = chatContainer.scrollHeight - chatContainer.clientHeight;
+                    }, 1);
+                };
+                ;
                 ChatService.prototype.updateSocketChatIsTyping = function () {
                     var _this = this;
                     this.socket.on("isTyping", function (bool, username) {
@@ -108,6 +118,7 @@ System.register(['angular2/core', 'angular2/http', 'moment'], function(exports_1
                                     console.log('these are the messages from getMessages() ', _this.messages);
                                 }
                                 resolve(_this.messages);
+                                _this.updateScroll();
                                 reject('error getting messages');
                             });
                         });
