@@ -47,12 +47,12 @@ System.register(['angular2/core', 'angular2/http', 'angular2/router', 'ng2-mater
                     this._urlService = _urlService;
                     this.title = 'Search Party';
                     // comment urlService for deployment
-                    this._urlService.grabUrls()
-                        .then(function (urls) {
-                        for (var key in urls) {
-                            localStorage.setItem(key, urls[key]);
-                        }
-                    });
+                    // this.urlService.grabUrls()
+                    //   .then(urls => {
+                    //     for (let key in urls) {
+                    //       localStorage.setItem(key, urls[key]);
+                    //     }
+                    //   });
                 }
                 AppComponent = __decorate([
                     core_1.Component({
