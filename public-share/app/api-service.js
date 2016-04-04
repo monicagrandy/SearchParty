@@ -11,7 +11,7 @@ System.register(['angular2/core', 'angular2/http', 'rxjs/add/operator/map'], fun
         if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
     };
     var core_1, http_1;
-    var SearchPartyService;
+    var APIService;
     return {
         setters:[
             function (core_1_1) {
@@ -22,19 +22,25 @@ System.register(['angular2/core', 'angular2/http', 'rxjs/add/operator/map'], fun
             },
             function (_1) {}],
         execute: function() {
-            SearchPartyService = (function () {
-                function SearchPartyService(_http) {
+            APIService = (function () {
+                function APIService(_http) {
                     this._http = _http;
-                    this.URL = localStorage.singleHunt || 'https://getsearchparty.com/singleHunt'; //update this later
+                    this.SINGLE_HUNT_URL = localStorage.singleHunt || 'https://getsearchparty.com/singleHunt'; //update this later
+                    this.ADD_MESSAGE_URL = localStorage.addChatMessage || 'https://getsearchparty.com/addChatMessage';
+                    this.GET_MESSAGES_URL = localStorage.getChatMessages || 'https://getsearchparty.com/getChatMessages';
                     this.contentHeader = new http_1.Headers({ 'Content-Type': 'application/json' });
                 }
-                SearchPartyService.prototype.getHunt = function (huntID) {
+                APIService.prototype.getData = function (dataObj, urlName) {
                     var _this = this;
-                    console.log('called post req');
+                    var urls = {
+                        singleHunt: this.SINGLE_HUNT_URL,
+                        addChatMessage: this.ADD_MESSAGE_URL,
+                        getChatMessages: this.GET_MESSAGES_URL
+                    };
+                    var url = urls[urlName];
                     var httpPostPromise = new Promise(function (resolve, reject) {
                         console.log('inside post promise');
-                        var dataToSend = { huntID: huntID };
-                        _this._http.post(_this.URL, JSON.stringify(dataToSend), { headers: _this.contentHeader })
+                        _this._http.post(url, JSON.stringify(dataObj), { headers: _this.contentHeader })
                             .map(function (res) { return res.json(); })
                             .subscribe(function (data) {
                             console.log('data from promise: ', data);
@@ -46,17 +52,17 @@ System.register(['angular2/core', 'angular2/http', 'rxjs/add/operator/map'], fun
                     });
                     return httpPostPromise;
                 };
-                SearchPartyService.prototype.logError = function (err) {
+                APIService.prototype.logError = function (err) {
                     console.error('There was an error: ' + err);
                 };
-                SearchPartyService = __decorate([
+                APIService = __decorate([
                     core_1.Injectable(), 
                     __metadata('design:paramtypes', [http_1.Http])
-                ], SearchPartyService);
-                return SearchPartyService;
+                ], APIService);
+                return APIService;
             }());
-            exports_1("SearchPartyService", SearchPartyService);
+            exports_1("APIService", APIService);
         }
     }
 });
-//# sourceMappingURL=searchparty.service.js.map
+//# sourceMappingURL=api-service.js.map

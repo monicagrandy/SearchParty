@@ -1,4 +1,4 @@
-System.register(['angular2/core', 'angular2/router', 'ng2-material/all', './searchparty.service', './map.service', './chat.component'], function(exports_1, context_1) {
+System.register(['angular2/core', 'angular2/router', 'ng2-material/all', './searchparty-service', './chat.component', './map.component', './socket-service'], function(exports_1, context_1) {
     "use strict";
     var __moduleName = context_1 && context_1.id;
     var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
@@ -10,7 +10,7 @@ System.register(['angular2/core', 'angular2/router', 'ng2-material/all', './sear
     var __metadata = (this && this.__metadata) || function (k, v) {
         if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
     };
-    var core_1, router_1, all_1, searchparty_service_1, map_service_1, chat_component_1;
+    var core_1, router_1, all_1, searchparty_service_1, chat_component_1, map_component_1, socket_service_1;
     var SearchPartyComponent;
     return {
         setters:[
@@ -26,93 +26,49 @@ System.register(['angular2/core', 'angular2/router', 'ng2-material/all', './sear
             function (searchparty_service_1_1) {
                 searchparty_service_1 = searchparty_service_1_1;
             },
-            function (map_service_1_1) {
-                map_service_1 = map_service_1_1;
-            },
             function (chat_component_1_1) {
                 chat_component_1 = chat_component_1_1;
+            },
+            function (map_component_1_1) {
+                map_component_1 = map_component_1_1;
+            },
+            function (socket_service_1_1) {
+                socket_service_1 = socket_service_1_1;
             }],
         execute: function() {
             SearchPartyComponent = (function () {
-                function SearchPartyComponent(_params, googleMaps, _searchPartyService) {
+                function SearchPartyComponent(_params, _searchPartyService, _socketService) {
                     var _this = this;
                     this._params = _params;
-                    this.googleMaps = googleMaps;
                     this._searchPartyService = _searchPartyService;
-                    this.items = ['item1', 'item2', 'item3'];
-                    this.animationsEnabled = true;
-                    this.map = null;
+                    this._socketService = _socketService;
                     this.huntID = _params.get('huntID');
                     this.username = _params.get('username');
-                    this.allTasks = [];
+                    this._socketService.createSocket(this.huntID);
                     this.getHuntData(this.huntID);
-                    var socket = io.connect('https://getsearchparty.com');
-                    this.socket = socket;
-                    this.socket.on("connect", function () {
-                        _this.socket.emit('huntMapRoom', _this.huntID);
-                    });
-                    this.socket.on('taskChange', function (location, task, room, lat, lng, num) {
-                        console.log('{{}{}}{}{}}{} recieving taskChange {}{}{}{}');
-                        console.log(' this is the task change location change ', location);
-                        _this.allTasks.unshift([[location], [task]]);
-                        _this.socket.emit('chat_message', '::TASK HAS CHANGED::', 'SearchPartyAdmin', null, _this.huntID);
-                        _this.socket.emit('chat_message', 'challenge completed!', 'Party Bot', Date.now() / 1000, _this.huntID);
-                        _this.getHuntData(_this.huntID);
-                    });
-                    this.socket.on("location", function (data, username) {
-                        var coords = new google.maps.LatLng(data.latitude, data.longitude);
-                        setTimeout(function () { return _this.googleMaps.addCurrentMarker(coords, 'user location')
-                            .then(function (map) { return _this.map = map; }); }, 2000);
-                        console.log('location was updated from socket server ', data, username);
-                    });
+                    this._searchPartyService.taskChange.subscribe(function (tasks) { return _this.allTasks = tasks; });
                 }
                 SearchPartyComponent.prototype.getHuntData = function (id) {
-                    var _this = this;
-                    var previousPlaces = [];
-                    var previousTasks = [];
-                    this.allTasks = [];
-                    this._searchPartyService.getHunt(id)
-                        .then(function (data) {
-                        console.log("data from searchparty service ", data);
-                        _this.huntTasks = data.tasks;
-                        _this.startLat = data.tasks[0].place.lat;
-                        _this.startLng = data.tasks[0].place.lng;
-                        _this.content = '<h4>' + data.tasks[0].place.name + ' < /h4><p>' + data.tasks[0].place.address + '</p > ';
-                        console.log('data.chatroom.messages:::', data.chatroom.messages);
-                        if (data.chatroom.messages) {
-                            _this.huntChats = data.chatroom.messages;
-                        }
-                        _this.huntTasks.forEach(function (item) {
-                            console.log(' this is the item ', item);
-                            console.log('this is the this.alltasks ', _this.allTasks);
-                            _this.allTasks.unshift([[item.place.name], [item.task.content]]);
-                            previousPlaces.push(item.place);
-                            previousTasks.push(item.task);
-                        });
-                        console.log(' this is this.allPlaces ', previousPlaces);
-                        console.log('this is previous tasks ', previousTasks);
-                        setTimeout(function () {
-                            _this.googleMaps.finalMapMaker(previousPlaces, previousTasks)
-                                .then(function (data) {
-                                var flightPath = data;
-                            });
-                            if (previousPlaces.length > 1) {
-                                _this.totalDist = _this.googleMaps.calcDistance(previousPlaces);
-                                console.log(_this.totalDist);
-                            }
-                        }, 2000);
-                    })
-                        .catch(function (err) { return console.log(err); });
+                    this._searchPartyService.getHunt(id);
                 };
                 SearchPartyComponent = __decorate([
                     core_1.Component({
                         selector: 'my-searchparty',
                         templateUrl: './share/app/searchparty.component.html',
                         styleUrls: ['./share/app/searchparty.component.css'],
-                        directives: [router_1.ROUTER_DIRECTIVES, all_1.MATERIAL_DIRECTIVES, chat_component_1.ChatComponent],
-                        providers: [all_1.MATERIAL_PROVIDERS, searchparty_service_1.SearchPartyService, map_service_1.GoogleMapService]
+                        directives: [
+                            router_1.ROUTER_DIRECTIVES,
+                            all_1.MATERIAL_DIRECTIVES,
+                            chat_component_1.ChatComponent,
+                            map_component_1.MapComponent
+                        ],
+                        providers: [
+                            all_1.MATERIAL_PROVIDERS,
+                            searchparty_service_1.SearchPartyService,
+                            socket_service_1.SocketService
+                        ]
                     }), 
-                    __metadata('design:paramtypes', [router_1.RouteParams, map_service_1.GoogleMapService, searchparty_service_1.SearchPartyService])
+                    __metadata('design:paramtypes', [router_1.RouteParams, searchparty_service_1.SearchPartyService, socket_service_1.SocketService])
                 ], SearchPartyComponent);
                 return SearchPartyComponent;
             }());

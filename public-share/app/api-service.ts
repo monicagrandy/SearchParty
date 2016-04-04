@@ -1,23 +1,29 @@
 import {Injectable} from 'angular2/core';
 import {Http, Headers} from 'angular2/http';
-import {ConnectionBackend, HTTP_PROVIDERS} from 'angular2/http';
 import 'rxjs/add/operator/map';
 
 @Injectable()
-export class SearchPartyService {
-  URL: string = localStorage.singleHunt || 'https://getsearchparty.com/singleHunt'; //update this later
+export class APIService {
+  SINGLE_HUNT_URL: string = localStorage.singleHunt || 'https://getsearchparty.com/singleHunt'; //update this later
+  ADD_MESSAGE_URL: string = localStorage.addChatMessage || 'https://getsearchparty.com/addChatMessage';
+  GET_MESSAGES_URL: string = localStorage.getChatMessages || 'https://getsearchparty.com/getChatMessages';
   contentHeader: Headers = new Headers({'Content-Type': 'application/json'});
   
   constructor(private _http:Http) {}
-
-  getHunt(huntID) {
-    console.log('called post req');
+  
+  getData(dataObj, urlName) {
+    
+    let urls = {
+      singleHunt: this.SINGLE_HUNT_URL,
+      addChatMessage: this.ADD_MESSAGE_URL,
+      getChatMessages: this.GET_MESSAGES_URL
+    }
+    
+    let url = urls[urlName];
     
     let httpPostPromise = new Promise((resolve, reject) => {
       console.log('inside post promise');
-      let dataToSend = { huntID: huntID };
-
-      this._http.post(this.URL, JSON.stringify(dataToSend), {headers: this.contentHeader})
+      this._http.post(url, JSON.stringify(dataObj), {headers: this.contentHeader})
         .map(res => res.json())
         .subscribe(
           data => {
@@ -32,9 +38,9 @@ export class SearchPartyService {
           )
         });
         
-    return httpPostPromise;
+    return httpPostPromise; 
   }
-  
+
   logError(err) {
     console.error('There was an error: ' + err);
   }

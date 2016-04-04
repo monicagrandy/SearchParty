@@ -11,6 +11,7 @@ export class ChatService {
   username: string;
   otherUserTyping: boolean;
   otherUsername: string;
+  currTime: any;
   timeout: any;
   zone = new NgZone({enableLongStackTrace: false});
   chatBox: any;
@@ -31,6 +32,26 @@ export class ChatService {
    this.otherUsername = '';
    this.timeout;
    this.chatBox = '';
+
+   setInterval(() => {
+     this.messages.forEach((msg) => {
+       if (msg[3]) {
+         console.log("updating time for ", msg)
+         msg[2] = moment.unix(msg[3]).fromNow()
+         console.log(msg[2])
+       }
+     })
+   }, 5000);  
+  }
+
+  updateTime() {
+    this.messages.forEach((msg) => {
+      if (msg[3]) {
+        console.log("updating time for ", msg)
+        msg[2] = moment.unix(msg[3]).fromNow()
+        console.log(msg[2])
+      }
+    })
   }
   
   createSocket(huntID, username) {
@@ -93,10 +114,17 @@ export class ChatService {
           return new Promise((resolve, reject) => {
             let messagesArray = messagesFromDB.chatMessages;
             for (let i = 0; i < messagesArray.length; i++) {
+              this.currTime = messagesArray[i].datetime;
               let datetime = moment.unix(messagesArray[i].datetime).fromNow();
-              this.messages.push([messagesArray[i].username, messagesArray[i].text, datetime]);
+              this.messages.push([messagesArray[i].username, messagesArray[i].text, datetime, this.currTime]]);
               console.log('these are the messages from getMessages() ', this.messages);
             }
+            this.messages.forEach((msg) => {
+              if (msg[3]) {
+                console.log("line 111 upating time")
+                msg[2] = moment.unix(msg[3]).fromNow()
+              }
+            })
             resolve(this.messages);
             reject('error getting messages');           
           });

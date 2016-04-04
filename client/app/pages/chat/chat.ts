@@ -54,6 +54,8 @@ export class Chat {
     this._chatService.otherUsernameChange.subscribe(otherUsername => this.otherUsername = otherUsername);
     this._chatService.otherUserTypingChange.subscribe(otherUserTyping => this.otherUserTyping = otherUserTyping);
     
+    this._chatService.updateTime();
+
     this._chatService.getMessages()
       .then(messages => {
         console.log('this is the data from _chatService getmessages ', messages);
