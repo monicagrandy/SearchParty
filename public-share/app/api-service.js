@@ -33,7 +33,7 @@ System.register(['angular2/core', 'angular2/http', 'rxjs/add/operator/map'], fun
                 APIService.prototype.getData = function (dataObj, urlName) {
                     var _this = this;
                     var urls = {
-                        hunt: this.SINGLE_HUNT_URL,
+                        singleHunt: this.SINGLE_HUNT_URL,
                         addChatMessage: this.ADD_MESSAGE_URL,
                         getChatMessages: this.GET_MESSAGES_URL
                     };

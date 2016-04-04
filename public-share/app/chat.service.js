@@ -118,7 +118,7 @@ System.register(['angular2/core', 'angular2/http', './api-service', 'moment'], f
                 ChatService.prototype.getMessages = function () {
                     var _this = this;
                     var huntIDObject = { huntID: this.huntID };
-                    return this._apiService.getData(JSON.stringify(huntIDObject), 'getMessages')
+                    return this._apiService.getData(huntIDObject, 'getChatMessages')
                         .then(function (messagesFromDB) {
                         return _this.zone.run(function () {
                             return new Promise(function (resolve, reject) {
@@ -152,7 +152,7 @@ System.register(['angular2/core', 'angular2/http', './api-service', 'moment'], f
                         huntID: this.huntID,
                         message: message
                     };
-                    this._apiService.getData(JSON.stringify(messageObject), 'addMessage')
+                    return this._apiService.getData(messageObject, 'addChatMessage')
                         .then(function (messageAdded) {
                         messageAdded = messageAdded[0];
                         console.log('message  added', messageAdded);

@@ -105,7 +105,7 @@ export class ChatService {
 
   getMessages() {
     let huntIDObject = {huntID: this.huntID};
-    return this._apiService.getData(JSON.stringify(huntIDObject), 'getMessages')
+    return this._apiService.getData(huntIDObject, 'getChatMessages')
       .then(messagesFromDB => {
         return this.zone.run(() => {
           return new Promise((resolve, reject) => {
@@ -141,7 +141,7 @@ export class ChatService {
       message: message
     };
 
-    this._apiService.getData(JSON.stringify(messageObject), 'addMessage')
+    return this._apiService.getData(messageObject, 'addChatMessage')
       .then(messageAdded => {
         messageAdded = messageAdded[0];
         console.log('message  added', messageAdded);

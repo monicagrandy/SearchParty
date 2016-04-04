@@ -14,7 +14,7 @@ export class APIService {
   getData(dataObj, urlName) {
     
     let urls = {
-      hunt: this.SINGLE_HUNT_URL,
+      singleHunt: this.SINGLE_HUNT_URL,
       addChatMessage: this.ADD_MESSAGE_URL,
       getChatMessages: this.GET_MESSAGES_URL
     }

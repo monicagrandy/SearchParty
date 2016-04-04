@@ -1,41 +1,67 @@
-import {Injectable} from 'angular2/core';
-import {Http, Headers} from 'angular2/http';
-import {ConnectionBackend, HTTP_PROVIDERS} from 'angular2/http';
+import {Injectable, Output, Input, EventEmitter} from 'angular2/core';
+import {APIService} from './api-service';
+import {GoogleMapService} from './map.service';
 import 'rxjs/add/operator/map';
 
 @Injectable()
 export class SearchPartyService {
-  URL: string = localStorage.singleHunt || 'https://getsearchparty.com/singleHunt'; //update this later
-  contentHeader: Headers = new Headers({'Content-Type': 'application/json'});
+  huntTasks = [];
+  content: any;
+  huntChats: any;
+  allTasks = [];
+  previousPlaces = [];
+  previousTasks = [];
+  totalDist: any;
   
-  constructor(private _http:Http) {}
+  @Output() taskChange = new EventEmitter();
+  @Output() totalDistChange = new EventEmitter(); 
+  
+  constructor(
+    private _apiService:APIService,
+    private _googleMaps:GoogleMapService
+    ) {}
 
   getHunt(huntID) {
-    console.log('called post req');
-    
-    let httpPostPromise = new Promise((resolve, reject) => {
-      console.log('inside post promise');
-      let dataToSend = { huntID: huntID };
-
-      this._http.post(this.URL, JSON.stringify(dataToSend), {headers: this.contentHeader})
-        .map(res => res.json())
-        .subscribe(
-          data => {
-            console.log('data from promise: ', data);
-            resolve(data);
-          },
-          err => {
-            this.logError(err);
-            reject(err);
-          },
-          () => console.log('data recieved')
-          )
-        });
-        
-    return httpPostPromise;
+    let dataToSend = { huntID: huntID };
+    this._apiService.getData(dataToSend, 'singleHunt')
+      .then(data => {
+        this.updateFeed(data);
+      })
   }
   
-  logError(err) {
-    console.error('There was an error: ' + err);
+  updateFeed(data) {
+    this.huntTasks = data.tasks;
+    this.content = 
+      '<h4>' + data.tasks[0].place.name + ' < /h4><p>' + 
+      data.tasks[0].place.address + '</p > ';
+    
+    if (data.chatroom.messages) {
+      this.huntChats = data.chatroom.messages;
+    }
+    
+    this.huntTasks.forEach(item => {
+      this.allTasks.unshift([[item.place.name], [item.task.content]]);
+      this.previousPlaces.push(item.place);
+      this.previousTasks.push(item.task);
+    });
+    
+    this.updateMap();
+    console.log('this is the huntTasks to be emitted ', this.allTasks);
+    this.taskChange.emit(this.allTasks);
   }
+  
+  updateMap() {
+    setTimeout(() => {
+      this._googleMaps.finalMapMaker(this.previousPlaces, this.previousTasks)
+          .then(data => {
+            let flightPath = data;
+          });
+
+      if (this.previousPlaces.length > 1) {
+        this.totalDist = this._googleMaps.calcDistance(this.previousPlaces);
+        console.log('total dist to be emitted ', this.totalDist);
+        this.totalDistChange.emit(this.totalDist);
+      }
+    }, 2000);    
+  }  
 }  

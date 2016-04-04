@@ -63,6 +63,7 @@ System.register(['angular2/core'], function(exports_1, context_1) {
                 };
                 GoogleMapService.prototype.addMarker = function (coords, content, map) {
                     var _this = this;
+                    console.log('this is the content being added ', content);
                     var pin = new google.maps.Marker({
                         map: map,
                         animation: google.maps.Animation.DROP,
