@@ -6,6 +6,7 @@ import {ConnectionBackend, HTTP_PROVIDERS} from 'angular2/http';
 import {AuthService} from '../../services/auth/auth-service'
 import {ChatService} from '../../services/chat/chat-service';
 import * as moment from 'moment';
+import {FromUnixPipe} from '../../util/format-unix-pipe';
 
 @Page({
   templateUrl: 'build/pages/chat/chat.html',
@@ -14,6 +15,7 @@ import * as moment from 'moment';
     HTTP_PROVIDERS,
     ChatService
   ],
+  pipes [FromUnixPipe],
   directives: [FORM_DIRECTIVES]
 })
 export class Chat {
@@ -54,8 +56,6 @@ export class Chat {
     this._chatService.otherUsernameChange.subscribe(otherUsername => this.otherUsername = otherUsername);
     this._chatService.otherUserTypingChange.subscribe(otherUserTyping => this.otherUserTyping = otherUserTyping);
     
-    this._chatService.updateTime();
-
     this._chatService.getMessages()
       .then(messages => {
         console.log('this is the data from _chatService getmessages ', messages);
