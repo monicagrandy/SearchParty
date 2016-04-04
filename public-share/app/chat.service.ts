@@ -116,7 +116,6 @@ export class ChatService {
             resolve(this.messages);
             reject('error getting messages');           
           });
-
         })
       })
       .catch(error => console.error(error));    
