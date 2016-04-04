@@ -16,7 +16,7 @@ module.exports = {
     //TODO: add extra hunt parameters, such as end time and distance traveled, leave blank for now
     const initializeHuntQuery =
     `MATCH (user:User{username:"${username}"})
-    CREATE (user)-[:PARTICIPATED_IN]->(hunt:Hunt{huntID:"${huntID}", starttime:${huntStartTime}, huntname:"${huntName}", tasknumber:${taskNumber}})-[:HAS_CHAT]->(:Chatroom{chatID:"${chatID}"}) RETURN hunt`;
+    CREATE (user)-[:PARTICIPATED_IN]->(hunt:Hunt{huntID:"${huntID}", starttime:${huntStartTime}, huntname:"${huntName}", tasknumber:${taskNumber}, totalnumberoftasks:${taskNumber}})-[:HAS_CHAT]->(:Chatroom{chatID:"${chatID}"}) RETURN hunt`;
 
 
     return neo4jPromise.databaseQueryPromise(initializeHuntQuery);

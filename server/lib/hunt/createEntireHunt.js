@@ -35,6 +35,7 @@ module.exports = {
           console.log("data at the end of the promised land", data);
           return new Promise((resolve, reject) => {
             if(data) {
+              let data = data[0];
               let objectToSend = {
                 businesses: randomPlace,
                 tasks: randomTask,
