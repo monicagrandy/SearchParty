@@ -13,10 +13,10 @@ module.exports = {
     let chatID = "c" + shortid();
     let huntStartTime = Date.now();
     let huntName = nameOfHunt;
-//TODO: add extra hunt parameters, such as end time and distance traveled, leave blank for now
+    //TODO: add extra hunt parameters, such as end time and distance traveled, leave blank for now
     const initializeHuntQuery =
     `MATCH (user:User{username:"${username}"})
-CREATE (user)-[:PARTICIPATED_IN]->(hunt:Hunt{huntID:"${huntID}", starttime:${huntStartTime}, huntname:"${huntName}"})-[:HAS_CHAT]->(:Chatroom{chatID:"${chatID}"}) RETURN hunt`;
+    CREATE (user)-[:PARTICIPATED_IN]->(hunt:Hunt{huntID:"${huntID}", starttime:${huntStartTime}, huntname:"${huntName}"})-[:HAS_CHAT]->(:Chatroom{chatID:"${chatID}"}) RETURN hunt`;
 
 
     return neo4jPromise.databaseQueryPromise(initializeHuntQuery);

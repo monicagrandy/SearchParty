@@ -70,12 +70,12 @@ export class CreateHuntPage {
         keywordArray.push(this.keyword);
      }
 
-     this.templateService.postData(name, 'Bar', this.userInfo)
+     this.templateService.postData(name, 'Bar', this.userInfo, this.taskNumber)
        .then(data => {
         this.nav.setRoot(TaskPage, {
            locAddress: data.businesses.location.display_address[0] + ', ' + data.businesses.location.display_address[2],
            huntID: data.huntID,
-           taskNumber: this.taskNumber,
+           taskNumber: data.taskNumber,
            huntName: data.huntName,
            currChallenge: data.tasks.content,
            locLat: data.businesses.location.coordinate.latitude,

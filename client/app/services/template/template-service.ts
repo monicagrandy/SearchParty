@@ -35,7 +35,7 @@ export class TemplateService {
     return httpGetPromise;
   }
 
-  postData(name, keyword, userInfo) {
+  postData(name, keyword, userInfo, taskNumber) {
     console.log('called post req');
     let httpGetPromise = new Promise((resolve, reject) => {
       console.log('inside post promise');
@@ -53,7 +53,8 @@ export class TemplateService {
         token: userInfo.id_token,
         previousPlaces: [],
         previousTasks: [],
-        date: currentTime
+        date: currentTime,
+        numberOfTasks: taskNumber
       };
 
       console.log("THIS IS THE COMBO DATA BEFORE SENT ", dataToSend);
