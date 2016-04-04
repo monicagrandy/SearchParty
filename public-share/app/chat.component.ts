@@ -4,14 +4,16 @@ import {DOM} from "angular2/src/platform/dom/dom_adapter";
 import {MdDialogConfig, MdDialogBasic, MdDialogRef} from "ng2-material/components/dialog/dialog";
 import {Media} from "ng2-material/core/util/media";
 import {RouteParams} from 'angular2/router';
-import {ChatService} from './chat.service';
+import {ChatService} from './chat-service';
 import {NgZone} from "angular2/core";
 import * as moment from 'moment';
+import {FromUnixPipe} from './format-unix.pipe';
 
 @Component({
   selector: 'my-chat',
   templateUrl: './share/app/chat.component.html',
   styleUrls: ['./share/app/chat.component.css'],
+  pipes: [FromUnixPipe],
   directives: [MATERIAL_DIRECTIVES],
   providers: [MATERIAL_PROVIDERS, ChatService]
 })

@@ -29,7 +29,6 @@ System.register(['angular2/core', 'angular2/http', './api-service', 'moment'], f
         execute: function() {
             ChatService = (function () {
                 function ChatService(_http, _apiService) {
-                    var _this = this;
                     this._http = _http;
                     this._apiService = _apiService;
                     this.zone = new core_1.NgZone({ enableLongStackTrace: false });
@@ -43,15 +42,6 @@ System.register(['angular2/core', 'angular2/http', './api-service', 'moment'], f
                     this.otherUsername = '';
                     this.timeout;
                     this.chatBox = '';
-                    setInterval(function () {
-                        _this.messages.forEach(function (msg) {
-                            if (msg[3]) {
-                                console.log("updating time for ", msg);
-                                msg[2] = moment.unix(msg[3]).fromNow();
-                                console.log(msg[2]);
-                            }
-                        });
-                    }, 5000);
                 }
                 ChatService.prototype.createSocket = function (huntID, username) {
                     var _this = this;
@@ -73,7 +63,6 @@ System.register(['angular2/core', 'angular2/http', './api-service', 'moment'], f
                     this.socket.on("chat_message", function (msg, username, datetime) {
                         _this.zone.run(function () {
                             console.log('this is the message received from socket chat update ', msg);
-                            datetime = moment.unix(datetime).fromNow();
                             _this.messages.push([username, msg, datetime]);
                             _this.updateScroll();
                             // this.messageChange.emit(this.messages);
@@ -124,9 +113,7 @@ System.register(['angular2/core', 'angular2/http', './api-service', 'moment'], f
                             return new Promise(function (resolve, reject) {
                                 var messagesArray = messagesFromDB.chatMessages;
                                 for (var i = 0; i < messagesArray.length; i++) {
-                                    _this.currTime = messagesArray[i].datetime;
-                                    var datetime = moment.unix(messagesArray[i].datetime).fromNow();
-                                    _this.messages.push([messagesArray[i].username, messagesArray[i].text, datetime, _this.currTime]);
+                                    _this.messages.push([messagesArray[i].username, messagesArray[i].text, messagesArray[i].datetime]);
                                     console.log('these are the messages from getMessages() ', _this.messages);
                                 }
                                 _this.messages.forEach(function (msg) {
@@ -182,4 +169,4 @@ System.register(['angular2/core', 'angular2/http', './api-service', 'moment'], f
         }
     }
 });
-//# sourceMappingURL=chat.service.js.map
+//# sourceMappingURL=chat-service.js.map
