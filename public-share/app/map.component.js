@@ -1,4 +1,4 @@
-System.register(['angular2/core', 'angular2/router', 'ng2-material/all', './searchparty.service', './map.service', './chat.component'], function(exports_1, context_1) {
+System.register(['angular2/core', 'angular2/router', 'ng2-material/all', './searchparty-service', './map-service', './chat.component'], function(exports_1, context_1) {
     "use strict";
     var __moduleName = context_1 && context_1.id;
     var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
@@ -39,9 +39,6 @@ System.register(['angular2/core', 'angular2/router', 'ng2-material/all', './sear
                     this._googleMaps = _googleMaps;
                     this._searchPartyService = _searchPartyService;
                     this.map = null;
-                    this.huntID = _params.get('huntID');
-                    this.username = _params.get('username');
-                    this.allTasks = [];
                     // this._searchPartyService.getHunt(this.huntID);
                     // let socket = io.connect(this.SOCKET_URL);
                     // this.socket = socket;

@@ -212,4 +212,4 @@ System.register(['angular2/core'], function(exports_1, context_1) {
         }
     }
 });
-//# sourceMappingURL=map.service.js.map
+//# sourceMappingURL=map-service.js.map

@@ -101,6 +101,11 @@ export class TaskService {
     clearTimeout(this.resendLocationTimeout);
     this.resendLocationTimeout = setTimeout(() => this.resendLocation(), 1000*5);
   }
+  
+  refreshFeed(name, task, room, lat, lng, zoom) {
+    this.socket.emit('taskChange', name, task, room, lat, lng, zoom);
+    console.log('::::EMITTED SOCKET:::::');
+  }
 
 }
 

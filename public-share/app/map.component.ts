@@ -1,8 +1,8 @@
 import {Component, OnInit} from 'angular2/core';
 import {RouteConfig, Router, ROUTER_DIRECTIVES, ROUTER_PROVIDERS, RouteParams} from 'angular2/router';
 import {MATERIAL_DIRECTIVES, MATERIAL_PROVIDERS} from 'ng2-material/all';
-import {SearchPartyService} from './searchparty.service';
-import {GoogleMapService} from './map.service';
+import {SearchPartyService} from './searchparty-service';
+import {GoogleMapService} from './map-service';
 import {ChatComponent} from './chat.component';
 
 
@@ -15,23 +15,12 @@ import {ChatComponent} from './chat.component';
 })
 export class MapComponent {
   map = null;
-  huntID: any;
-  allTasks: any;
-  totalDist: number;
-  socket: any;
-  tasks: any;
-  io: any;
-  chatroom: any;
-  username: any;
 
   constructor(
     private _params: RouteParams, 
     private _googleMaps: GoogleMapService, 
     private _searchPartyService: SearchPartyService
     ) {
-    this.huntID = _params.get('huntID');
-    this.username = _params.get('username');
-    this.allTasks = [];
     // this._searchPartyService.getHunt(this.huntID);
     // let socket = io.connect(this.SOCKET_URL);
     // this.socket = socket;

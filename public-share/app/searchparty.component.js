@@ -1,4 +1,4 @@
-System.register(['angular2/core', 'angular2/router', 'ng2-material/all', './searchparty.service', './map.service', './chat.component', './map.component'], function(exports_1, context_1) {
+System.register(['angular2/core', 'angular2/router', 'ng2-material/all', './searchparty-service', './chat.component', './map.component', './socket-service'], function(exports_1, context_1) {
     "use strict";
     var __moduleName = context_1 && context_1.id;
     var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
@@ -10,7 +10,7 @@ System.register(['angular2/core', 'angular2/router', 'ng2-material/all', './sear
     var __metadata = (this && this.__metadata) || function (k, v) {
         if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
     };
-    var core_1, router_1, all_1, searchparty_service_1, map_service_1, chat_component_1, map_component_1;
+    var core_1, router_1, all_1, searchparty_service_1, chat_component_1, map_component_1, socket_service_1;
     var SearchPartyComponent;
     return {
         setters:[
@@ -26,24 +26,25 @@ System.register(['angular2/core', 'angular2/router', 'ng2-material/all', './sear
             function (searchparty_service_1_1) {
                 searchparty_service_1 = searchparty_service_1_1;
             },
-            function (map_service_1_1) {
-                map_service_1 = map_service_1_1;
-            },
             function (chat_component_1_1) {
                 chat_component_1 = chat_component_1_1;
             },
             function (map_component_1_1) {
                 map_component_1 = map_component_1_1;
+            },
+            function (socket_service_1_1) {
+                socket_service_1 = socket_service_1_1;
             }],
         execute: function() {
             SearchPartyComponent = (function () {
-                function SearchPartyComponent(_params, _googleMaps, _searchPartyService) {
+                function SearchPartyComponent(_params, _searchPartyService, _socketService) {
                     var _this = this;
                     this._params = _params;
-                    this._googleMaps = _googleMaps;
                     this._searchPartyService = _searchPartyService;
+                    this._socketService = _socketService;
                     this.huntID = _params.get('huntID');
                     this.username = _params.get('username');
+                    this._socketService.createSocket(this.huntID);
                     this.getHuntData(this.huntID);
                     this._searchPartyService.taskChange.subscribe(function (tasks) { return _this.allTasks = tasks; });
                 }
@@ -64,10 +65,10 @@ System.register(['angular2/core', 'angular2/router', 'ng2-material/all', './sear
                         providers: [
                             all_1.MATERIAL_PROVIDERS,
                             searchparty_service_1.SearchPartyService,
-                            map_service_1.GoogleMapService
+                            socket_service_1.SocketService
                         ]
                     }), 
-                    __metadata('design:paramtypes', [router_1.RouteParams, map_service_1.GoogleMapService, searchparty_service_1.SearchPartyService])
+                    __metadata('design:paramtypes', [router_1.RouteParams, searchparty_service_1.SearchPartyService, socket_service_1.SocketService])
                 ], SearchPartyComponent);
                 return SearchPartyComponent;
             }());

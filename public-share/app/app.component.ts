@@ -5,7 +5,8 @@ import {MATERIAL_DIRECTIVES, MATERIAL_PROVIDERS} from 'ng2-material/all';
 import {SearchPartyComponent} from './searchparty.component';
 import {UrlService} from './url-service';
 import {APIService} from './api-service';
-import {GoogleMapService} from './map.service';
+import {GoogleMapService} from './map-service';
+import {SocketService} from './socket-service';
 import * as _ from 'underscore';
 
 @Component({
@@ -20,7 +21,8 @@ import * as _ from 'underscore';
     MATERIAL_PROVIDERS,
     UrlService,
     APIService,
-    GoogleMapService
+    GoogleMapService,
+    SocketService
   ]
 })
 @RouteConfig([

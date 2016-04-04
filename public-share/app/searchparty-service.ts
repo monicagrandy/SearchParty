@@ -1,6 +1,6 @@
 import {Injectable, Output, Input, EventEmitter} from 'angular2/core';
 import {APIService} from './api-service';
-import {GoogleMapService} from './map.service';
+import {GoogleMapService} from './map-service';
 import 'rxjs/add/operator/map';
 
 @Injectable()
