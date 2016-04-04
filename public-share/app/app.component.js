@@ -1,4 +1,4 @@
-System.register(['angular2/core', 'angular2/http', 'angular2/router', 'ng2-material/all', './searchparty.component', './url-service'], function(exports_1, context_1) {
+System.register(['angular2/core', 'angular2/http', 'angular2/router', 'ng2-material/all', './searchparty.component', './url-service', './api-service'], function(exports_1, context_1) {
     "use strict";
     var __moduleName = context_1 && context_1.id;
     var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
@@ -10,7 +10,7 @@ System.register(['angular2/core', 'angular2/http', 'angular2/router', 'ng2-mater
     var __metadata = (this && this.__metadata) || function (k, v) {
         if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
     };
-    var core_1, http_1, router_1, all_1, searchparty_component_1, url_service_1;
+    var core_1, http_1, router_1, all_1, searchparty_component_1, url_service_1, api_service_1;
     var AppComponent;
     return {
         setters:[
@@ -31,14 +31,17 @@ System.register(['angular2/core', 'angular2/http', 'angular2/router', 'ng2-mater
             },
             function (url_service_1_1) {
                 url_service_1 = url_service_1_1;
+            },
+            function (api_service_1_1) {
+                api_service_1 = api_service_1_1;
             }],
         execute: function() {
             AppComponent = (function () {
-                function AppComponent(urlService) {
-                    this.urlService = urlService;
+                function AppComponent(_urlService) {
+                    this._urlService = _urlService;
                     this.title = 'Search Party';
                     // comment urlService for deployment
-                    this.urlService.grabUrls()
+                    this._urlService.grabUrls()
                         .then(function (urls) {
                         for (var key in urls) {
                             localStorage.setItem(key, urls[key]);
@@ -56,7 +59,8 @@ System.register(['angular2/core', 'angular2/http', 'angular2/router', 'ng2-mater
                             http_1.ConnectionBackend,
                             http_1.HTTP_PROVIDERS,
                             all_1.MATERIAL_PROVIDERS,
-                            url_service_1.UrlService
+                            url_service_1.UrlService,
+                            api_service_1.APIService
                         ]
                     }),
                     router_1.RouteConfig([

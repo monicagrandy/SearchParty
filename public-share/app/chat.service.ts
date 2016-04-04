@@ -1,5 +1,6 @@
 import {Injectable, NgZone, Output, Input, EventEmitter} from 'angular2/core';
 import {Http, Headers} from 'angular2/http';
+import {APIService} from './api-service';
 import * as moment from 'moment';
 
 @Injectable()
@@ -14,8 +15,6 @@ export class ChatService {
   zone = new NgZone({enableLongStackTrace: false});
   chatBox: any;
   SOCKET_URL: string = localStorage.socket || 'https://getsearchparty.com';
-  ADD_MESSAGE_URL: string = localStorage.addChatMessage || 'https://getsearchparty.com/addChatMessage';
-  GET_MESSAGES_URL: string = localStorage.getChatMessages || 'https://getsearchparty.com/getChatMessages';
   contentHeader: Headers = new Headers({'Content-Type': 'application/json'});
   urls: any;
   messages: any;
@@ -24,23 +23,23 @@ export class ChatService {
   @Output() otherUsernameChange = new EventEmitter();
   @Output() otherUserTypingChange = new EventEmitter();
 
-  constructor(private _http:Http) {
+  constructor(private _http:Http, private _apiService:APIService) {
    this.messages = [];
    this.otherUserTyping = false;
    this.otherUsername = '';
    this.timeout;
    this.chatBox = '';
-  }
 
    setInterval(() => {
-     this.messages.forEach((msg) => {
-       if(msg[3]){
+     this.messages.forEach(msg => {
+       if (msg[3]) {
          console.log("updating time for ", msg)
          msg[2] = moment.unix(msg[3]).fromNow()
          console.log(msg[2])
        }
-     })
+     });
     }, 5000);
+  }
 
   createSocket(huntID, username) {
     // update url later
@@ -71,12 +70,12 @@ export class ChatService {
 
   updateScroll() {
      setTimeout(() => {
-        let chatContainer = document.querySelectorAll(".chatMessMaster")[0];
+       let chatContainer = document.querySelectorAll(".chatMessMaster")[0];
        console.log('scrollHeight: ', chatContainer.scrollHeight);
        console.log('clientHeight: ', chatContainer.clientHeight);
        chatContainer.scrollTop = chatContainer.scrollHeight - chatContainer.clientHeight;
     }, 1);
-};
+  }
 
   updateSocketChatIsTyping() {
     this.socket.on("isTyping", (bool, username) => {
@@ -106,7 +105,7 @@ export class ChatService {
 
   getMessages() {
     let huntIDObject = {huntID: this.huntID};
-    return this.postData(JSON.stringify(huntIDObject), 'getMessages')
+    return this._apiService.getData(JSON.stringify(huntIDObject), 'getMessages')
       .then(messagesFromDB => {
         return this.zone.run(() => {
           return new Promise((resolve, reject) => {
@@ -142,7 +141,7 @@ export class ChatService {
       message: message
     };
 
-    this.postData(JSON.stringify(messageObject), 'addMessage')
+    this._apiService.getData(JSON.stringify(messageObject), 'addMessage')
       .then(messageAdded => {
         messageAdded = messageAdded[0];
         console.log('message  added', messageAdded);
@@ -150,32 +149,5 @@ export class ChatService {
       })
         .catch(error => console.error(error));
     }
-
-  postData(data, urlName) {
-    console.log("called post req");
-
-    this.urls = {
-      addMessage: this.ADD_MESSAGE_URL,
-      getMessages: this.GET_MESSAGES_URL
-    };
-
-    let url = this.urls[urlName];
-
-    let httpPromise = new Promise((resolve, reject) => {
-      console.log("data inside chat Promise", data);
-      this._http.post(url, data, { headers: this.contentHeader })
-        .map(res => res.json())
-        .subscribe(
-        data => {
-          console.log("data from promise: ", data);
-          resolve(data);
-        },
-        err => reject(err),
-        () => console.log('data recieved')
-        )
-    })
-
-    return httpPromise;
-  }
 
 }

@@ -4,6 +4,7 @@ import {RouteConfig, ROUTER_DIRECTIVES, ROUTER_PROVIDERS} from 'angular2/router'
 import {MATERIAL_DIRECTIVES, MATERIAL_PROVIDERS} from 'ng2-material/all';
 import {SearchPartyComponent} from './searchparty.component';
 import {UrlService} from './url-service';
+import {APIService} from './api-service';
 import * as _ from 'underscore';
 
 @Component({
@@ -16,7 +17,8 @@ import * as _ from 'underscore';
     ConnectionBackend,
     HTTP_PROVIDERS,
     MATERIAL_PROVIDERS,
-    UrlService
+    UrlService,
+    APIService
   ]
 })
 @RouteConfig([
@@ -29,9 +31,9 @@ import * as _ from 'underscore';
 export class AppComponent {
   title = 'Search Party';
 
-  constructor(private urlService: UrlService) {
+  constructor(private _urlService: UrlService) {
     // comment urlService for deployment
-    this.urlService.grabUrls()
+    this._urlService.grabUrls()
       .then(urls => {
         for (let key in urls) {
           localStorage.setItem(key, urls[key]);
