@@ -10,6 +10,7 @@ export class ChatService {
   otherUserTyping: boolean;
   otherUsername: string;
   timeout: any;
+  currTime: any;
   zone = new NgZone({enableLongStackTrace: false});
   chatBox: any;
   SOCKET_URL: string = localStorage.socket || 'https://getsearchparty.com';
@@ -30,6 +31,16 @@ export class ChatService {
    this.timeout;
    this.chatBox = '';
   }
+
+   setInterval(() => {
+     this.messages.forEach((msg) => {
+       if(msg[3]){
+         console.log("updating time for ", msg)
+         msg[2] = moment.unix(msg[3]).fromNow()
+         console.log(msg[2])
+       }
+     })
+    }, 5000);
 
   createSocket(huntID, username) {
     // update url later
@@ -101,15 +112,21 @@ export class ChatService {
           return new Promise((resolve, reject) => {
             let messagesArray = messagesFromDB.chatMessages;
             for (let i = 0; i < messagesArray.length; i++) {
+              this.currTime = messagesArray[i].datetime;
               let datetime = moment.unix(messagesArray[i].datetime).fromNow();
-              this.messages.push([messagesArray[i].username, messagesArray[i].text, datetime]);
+              this.messages.push([messagesArray[i].username, messagesArray[i].text, datetime, this.currTime]);
               console.log('these are the messages from getMessages() ', this.messages);
             }
+            this.messages.forEach((msg) => {
+              if(msg[3]){
+                console.log("line 111 upating time")
+                msg[2] = moment.unix(msg[3]).fromNow()
+              }
+            })
             resolve(this.messages);
             this.updateScroll();
             reject('error getting messages');
           });
-
         })
       })
       .catch(error => console.error(error));
