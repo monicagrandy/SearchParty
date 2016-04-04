@@ -5,11 +5,11 @@
   <ion-title>Hunt Chat</ion-title>
 </ion-navbar>
 
-<ion-content>
+<ion-content class="chat">
   <ion-list>
       <ion-item *ngFor="#message of messages">
           <h2>{{message[0]}}: {{message[1]}}</h2>
-          <p>{{message[2] | amFromUnix}}</p>
+          <p>{{message[2] | formatUnix}}</p>
       </ion-item>
       <ion-item *ngIf="otherUserTyping">
          <p>{{otherUsername}} is typing...</p>

@@ -11,7 +11,7 @@ System.register(['angular2/core', 'moment'], function(exports_1, context_1) {
         if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
     };
     var core_1, moment;
-    var FromUnixPipe;
+    var momentConstructor, FromUnixPipe;
     return {
         setters:[
             function (core_1_1) {
@@ -21,18 +21,19 @@ System.register(['angular2/core', 'moment'], function(exports_1, context_1) {
                 moment = moment_1;
             }],
         execute: function() {
+            // under systemjs, moment is actually exported as the default export, so we account for that
+            momentConstructor = moment.default || moment;
             FromUnixPipe = (function () {
-                function FromUnixPipe() {
+                function FromUnixPipe(_changeDetectorRef) {
+                    this._changeDetectorRef = _changeDetectorRef;
                 }
                 FromUnixPipe.prototype.transform = function (value, args) {
-                    console.log('this pie is going to return ', moment.unix(value).fromNow());
-                    return moment.unix(value).fromNow();
+                    var momentInstance = momentConstructor(value);
+                    return momentConstructor.unix(value).format('hh:mmA');
                 };
                 FromUnixPipe = __decorate([
-                    core_1.Pipe({
-                        name: 'amFromUnix'
-                    }), 
-                    __metadata('design:paramtypes', [])
+                    core_1.Pipe({ name: 'formatUnix', pure: false }), 
+                    __metadata('design:paramtypes', [core_1.ChangeDetectorRef])
                 ], FromUnixPipe);
                 return FromUnixPipe;
             }());
@@ -40,4 +41,4 @@ System.register(['angular2/core', 'moment'], function(exports_1, context_1) {
         }
     }
 });
-//# sourceMappingURL=amfromunix.pipe.js.map
+//# sourceMappingURL=format-unix.pipe.js.map

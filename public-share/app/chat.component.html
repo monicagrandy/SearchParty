@@ -9,7 +9,7 @@
       <!-- <span *ngFor="#message of messages" class="chatMess"> -->
          <span *ngFor="#message of messages">
             <span id="username"><strong>{{message[0]}}</strong></span><span id="chatMessage">: {{message[1]}}</span>
-            <p id="time">{{ message[2] | amFromUnix }}</p>
+            <p id="time">{{ message[2] | formatUnix }}</p>
          </span>
       <!-- </span> -->
       <p *ngIf="otherUserTyping">{{otherUsername}} is typing...</p>

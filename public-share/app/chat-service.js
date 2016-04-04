@@ -169,4 +169,4 @@ System.register(['angular2/core', 'angular2/http', './api-service', 'moment'], f
         }
     }
 });
-//# sourceMappingURL=chat.service.js.map
+//# sourceMappingURL=chat-service.js.map

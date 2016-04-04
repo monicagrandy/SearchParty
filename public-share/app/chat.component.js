@@ -1,4 +1,4 @@
-System.register(['angular2/core', 'ng2-material/all', 'angular2/router', './chat.service', './amfromunix.pipe'], function(exports_1, context_1) {
+System.register(['angular2/core', 'ng2-material/all', 'angular2/router', './chat-service', './format-unix.pipe'], function(exports_1, context_1) {
     "use strict";
     var __moduleName = context_1 && context_1.id;
     var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
@@ -10,7 +10,7 @@ System.register(['angular2/core', 'ng2-material/all', 'angular2/router', './chat
     var __metadata = (this && this.__metadata) || function (k, v) {
         if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
     };
-    var core_1, all_1, router_1, chat_service_1, amfromunix_pipe_1;
+    var core_1, all_1, router_1, chat_service_1, format_unix_pipe_1;
     var ChatComponent;
     return {
         setters:[
@@ -26,8 +26,8 @@ System.register(['angular2/core', 'ng2-material/all', 'angular2/router', './chat
             function (chat_service_1_1) {
                 chat_service_1 = chat_service_1_1;
             },
-            function (amfromunix_pipe_1_1) {
-                amfromunix_pipe_1 = amfromunix_pipe_1_1;
+            function (format_unix_pipe_1_1) {
+                format_unix_pipe_1 = format_unix_pipe_1_1;
             }],
         execute: function() {
             ChatComponent = (function () {
@@ -74,7 +74,7 @@ System.register(['angular2/core', 'ng2-material/all', 'angular2/router', './chat
                         selector: 'my-chat',
                         templateUrl: './share/app/chat.component.html',
                         styleUrls: ['./share/app/chat.component.css'],
-                        pipes: [amfromunix_pipe_1.FromUnixPipe],
+                        pipes: [format_unix_pipe_1.FromUnixPipe],
                         directives: [all_1.MATERIAL_DIRECTIVES],
                         providers: [all_1.MATERIAL_PROVIDERS, chat_service_1.ChatService]
                     }), 

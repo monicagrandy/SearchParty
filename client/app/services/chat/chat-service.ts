@@ -31,17 +31,7 @@ export class ChatService {
    this.otherUserTyping = false;
    this.otherUsername = '';
    this.timeout;
-   this.chatBox = ''; 
-  }
-
-  updateTime() {
-    this.messages.forEach((msg) => {
-      if (msg[3]) {
-        console.log("updating time for ", msg)
-        msg[2] = moment.unix(msg[3]).fromNow()
-        console.log(msg[2])
-      }
-    })
+   this.chatBox = '';
   }
   
   createSocket(huntID, username) {
