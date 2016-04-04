@@ -30,7 +30,6 @@ export class ChatService {
    this.otherUsername = '';
    this.timeout;
    this.chatBox = '';
-  }
 
    setInterval(() => {
      this.messages.forEach((msg) => {
@@ -40,7 +39,10 @@ export class ChatService {
          console.log(msg[2])
        }
      })
-    }, 5000);
+   }, 5000);
+}
+
+
 
   createSocket(huntID, username) {
     // update url later

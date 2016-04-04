@@ -61,6 +61,7 @@ input {
    overflow-y: scroll;
    overflow-x: hidden;
    margin: 1px;
+   border: 2px solid #387EF5;
 }
 
 .chatMess {
@@ -89,4 +90,3 @@ input {
    background-color: #387EF5;
    box-shadow: 2px 2px 1px #8B8682;
 }
-
