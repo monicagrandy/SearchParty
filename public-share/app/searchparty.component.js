@@ -44,9 +44,6 @@ System.register(['angular2/core', 'angular2/router', 'ng2-material/all', './sear
                     this._searchPartyService = _searchPartyService;
                     this.huntID = _params.get('huntID');
                     this.username = _params.get('username');
-                    this.allTasks = [];
-                    this.previousPlaces = [];
-                    this.previousTasks = [];
                     this.getHuntData(this.huntID);
                     this._searchPartyService.taskChange.subscribe(function (tasks) { return _this.allTasks = tasks; });
                 }

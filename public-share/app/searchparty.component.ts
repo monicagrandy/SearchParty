@@ -24,22 +24,9 @@ import {MapComponent} from './map.component';
 })
 export class SearchPartyComponent {
   huntID: any;
-  error: any;
-  huntTasks: any;
-  huntChats: any;
-  allPlaces: any;
   allTasks: any;
   totalDist: number;
-  startLat: number;
-  startLng: number;
-  content: any;
-  socket: any;
-  tasks: any;
-  io: any;
-  chatroom: any;
   username: any;
-  previousPlaces: any;
-  previousTasks: any;
 
   constructor(
     private _params: RouteParams, 
@@ -48,9 +35,6 @@ export class SearchPartyComponent {
     ) {
     this.huntID = _params.get('huntID');
     this.username = _params.get('username');
-    this.allTasks = [];
-    this.previousPlaces = [];
-    this.previousTasks = [];
     this.getHuntData(this.huntID);
     this._searchPartyService.taskChange.subscribe(tasks => this.allTasks = tasks);
   }
