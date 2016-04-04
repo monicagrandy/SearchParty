@@ -7,10 +7,10 @@
 <div class="mainChat" *ngIf="nameAdded" layout="column">
    <div class="chatMessMaster" layout="column">
       <!-- <span *ngFor="#message of messages" class="chatMess"> -->
-         <p *ngFor="#message of messages">
-            <h2>{{message[0]}}</h2>:{{message[1]}}
-            <p>{{message[2]}}</p>
-         </p>
+         <span *ngFor="#message of messages">
+            <span id="username"><strong>{{message[0]}}</strong></span><span id="chatMessage">: {{message[1]}}</span>
+            <p id="time">{{message[2]}}</p>
+         </span>
       <!-- </span> -->
       <p *ngIf="otherUserTyping">{{otherUsername}} is typing...</p>
    </div>

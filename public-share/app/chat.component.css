@@ -90,3 +90,23 @@ input {
    background-color: #387EF5;
    box-shadow: 2px 2px 1px #8B8682;
 }
+
+#username {
+   font-size: 1em;
+   color: #387EF5;
+   margin: 0px;
+   padding: 0px;
+}
+
+#chatMessage {
+   font-size: 1em;
+   margin: 0px;
+   padding: 0px;
+}
+
+#time {
+      color: #387EF5;
+   font-size: .5em;
+   margin: 0px;
+   padding: 0px;
+}
