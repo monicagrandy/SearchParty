@@ -46,7 +46,6 @@ export class SearchPartyComponent {
       this.socket.emit('huntMapRoom', this.huntID);
     });
     this.socket.on('taskChange', (location, task, room, lat, lng, num) => {
-      console.log('{{}{}}{}{}}{} recieving taskChange {}{}{}{}');
       console.log(' this is the task change location change ', location);
       this.allTasks.unshift([[location], [task]]);
       this.socket.emit('chat_message', '::TASK HAS CHANGED::', 'SearchPartyAdmin', null, this.huntID);
@@ -92,11 +91,11 @@ export class SearchPartyComponent {
             .then(data => {
               let flightPath = data;
             });
-            
+
         if (previousPlaces.length > 1) {
           this.totalDist = this.googleMaps.calcDistance(previousPlaces);
           console.log(this.totalDist);
-        }    
+        }
       }, 2000);
 
     })
