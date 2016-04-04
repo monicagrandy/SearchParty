@@ -6,16 +6,18 @@
 
 <div class="mainChat" *ngIf="nameAdded" layout="column">
    <div class="chatMessMaster" layout="column">
-      <div scroll-glue *ngFor="#message of messages" class=chatMess>
-         <p><strong>{{message[0]}}:</strong> {{message[1]}}</p>
+      <div *ngFor="#message of messages" class=chatMess>
+         <p id="{{message[0]}}"><strong>{{message[0]}}:</strong> {{message[1]}}</p>
          <p><strong>{{message[2]}}</strong></p>
       </div>
       <p *ngIf="otherUserTyping">{{otherUsername}} is typing...</p>
    </div>
 
+  <div class="chatInput">  
     <form class="msg" action="">
-      <textarea class="msgText" id="m" autocomplete="off" (keyup)="OnKey($event)" [(ngModel)]="chatBox" placeholder="Message..."></textarea>
-      <button class="sendMsg" (click)="send(chatBox)" (ngSubmit)="send(chatBox)">Send</button>
+      <textarea class="msgText" autocomplete="off" (keyup)="OnKey($event)" [(ngModel)]="chatBox" placeholder="Message..."></textarea>
+      <button class="sendMsg" (click)="send(chatBox)" (ngSubmit)="send(chatBox)"><a href="#{{message[0]}"></a>Send</button>
     </form>
+  </div>  
 
 </div>

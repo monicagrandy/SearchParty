@@ -26,6 +26,7 @@ System.register(['angular2/core', 'angular2/http', 'moment'], function(exports_1
         execute: function() {
             ChatService = (function () {
                 function ChatService(_http) {
+                    var _this = this;
                     this._http = _http;
                     this.zone = new core_1.NgZone({ enableLongStackTrace: false });
                     this.SOCKET_URL = localStorage.socket || 'https://getsearchparty.com';
@@ -40,6 +41,15 @@ System.register(['angular2/core', 'angular2/http', 'moment'], function(exports_1
                     this.otherUsername = '';
                     this.timeout;
                     this.chatBox = '';
+                    setInterval(function () {
+                        _this.messages.forEach(function (msg) {
+                            if (msg[3]) {
+                                console.log("updating time for ", msg);
+                                msg[2] = moment.unix(msg[3]).fromNow();
+                                console.log(msg[2]);
+                            }
+                        });
+                    }, 5000);
                 }
                 ChatService.prototype.createSocket = function (huntID, username) {
                     var _this = this;
@@ -103,10 +113,17 @@ System.register(['angular2/core', 'angular2/http', 'moment'], function(exports_1
                             return new Promise(function (resolve, reject) {
                                 var messagesArray = messagesFromDB.chatMessages;
                                 for (var i = 0; i < messagesArray.length; i++) {
+                                    _this.currTime = messagesArray[i].datetime;
                                     var datetime = moment.unix(messagesArray[i].datetime).fromNow();
-                                    _this.messages.push([messagesArray[i].username, messagesArray[i].text, datetime]);
+                                    _this.messages.push([messagesArray[i].username, messagesArray[i].text, datetime, _this.currTime]);
                                     console.log('these are the messages from getMessages() ', _this.messages);
                                 }
+                                _this.messages.forEach(function (msg) {
+                                    if (msg[3]) {
+                                        console.log("line 111 upating time");
+                                        msg[2] = moment.unix(msg[3]).fromNow();
+                                    }
+                                });
                                 resolve(_this.messages);
                                 reject('error getting messages');
                             });

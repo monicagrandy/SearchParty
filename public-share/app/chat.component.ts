@@ -29,24 +29,24 @@ export class ChatComponent {
   otherUsername: any;
   nameAdded = false;
 
-   constructor(
-      navParams: RouteParams,
-      private _chatService: ChatService
-   ) {
+  constructor(
+    navParams: RouteParams,
+    private _chatService: ChatService
+  ) {
     this.huntID = navParams.get('huntID');
     this.messages = [];
     this.chatBox = '';
-    
+
     // watch for messages
     // this._chatService.messageChange.subscribe(messages => console.log('this is the change emitted messages ', messages));
-    
+
     // watch for typing
     this._chatService.otherUsernameChange.subscribe(otherUsername => this.otherUsername = otherUsername);
     this._chatService.otherUserTypingChange.subscribe(otherUserTyping => this.otherUserTyping = otherUserTyping);
-    
+
   }
-  
-  getUsername(username){
+
+  getUsername(username) {
     this.username = username
     this.nameAdded = true
     // create socket
@@ -54,16 +54,17 @@ export class ChatComponent {
     this._chatService.getMessages()
       .then(messages => {
         console.log('this is the data from _chatService getmessages ', messages);
-        this.messages = messages})
-        .catch(error => console.log('there was an error ', error));
+        this.messages = messages
+      })
+      .catch(error => console.log('there was an error ', error));
   }
 
-  OnKey(event:KeyboardEvent) {
+  OnKey(event: KeyboardEvent) {
     if (event) {
       this._chatService.userIsTyping();
     }
   };
-  
+
   send(message) {
     if (message && message !== '') {
       this._chatService.send(message);
