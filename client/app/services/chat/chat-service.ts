@@ -96,12 +96,6 @@ export class ChatService {
               this.messages.push([messagesArray[i].username, messagesArray[i].text, messagesArray[i].datetime]);
               console.log('these are the messages from getMessages() ', this.messages);
             }
-            this.messages.forEach((msg) => {
-              if (msg[3]) {
-                console.log("line 111 upating time")
-                msg[2] = moment.unix(msg[3]).fromNow()
-              }
-            })
             resolve(this.messages);
             reject('error getting messages');           
           });
