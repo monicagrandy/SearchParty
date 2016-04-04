@@ -44,7 +44,6 @@ System.register(['angular2/core', './searchparty-service', './map-service'], fun
                     var _this = this;
                     this.socket.on('taskChange', function (location, task, room, lat, lng, num) {
                         console.log(' this is the task change location change ', location);
-                        _this.socket.emit('chat_message', '::TASK HAS CHANGED::', 'SearchPartyAdmin', null, _this.huntID);
                         _this.socket.emit('chat_message', 'challenge completed!', 'Party Bot', Date.now() / 1000, _this.huntID);
                         console.log('task change socket is calling the searchParty Service to update the feed!');
                         _this._searchPartyService.getHunt(_this.huntID);
