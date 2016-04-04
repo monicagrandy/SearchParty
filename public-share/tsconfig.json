@@ -1,19 +1,29 @@
 {
   "compilerOptions": {
+    "outDir": "dist/app", // <--- newly added configuration parameter
     "target": "es5",
     "module": "system",
-    "moduleResolution": "node",
     "sourceMap": true,
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
+    "moduleResolution": "node",
     "removeComments": false,
-    "noImplicitAny": false
+    "noImplicitAny": true,
+    "suppressImplicitAnyIndexErrors": true
   },
+  "filesGlob": [
+    "**/*.ts",
+    "!node_modules/**/*"
+  ],
   "exclude": [
     "node_modules",
     "typings/browser",
     "typings/browser.d.ts",
     "typings/main",
     "typings/main.d.ts"
-  ]
+  ],
+  "compileOnSave": false,
+  "atom": {
+    "rewriteTsconfig": false
+  }
 }
