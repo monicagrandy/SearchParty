@@ -37,7 +37,10 @@ export class SearchPartyComponent {
     this.username = _params.get('username');
     this._socketService.createSocket(this.huntID);
     this.getHuntData(this.huntID);
-    this._searchPartyService.taskChange.subscribe(tasks => this.allTasks = tasks);
+    this._searchPartyService.taskChange.subscribe((tasks) => { 
+      console.log(tasks)
+      this.allTasks = tasks });
+
   }
   
   getHuntData(id) {

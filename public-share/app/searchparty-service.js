@@ -55,7 +55,12 @@ System.register(['angular2/core', './api-service', './map-service', 'rxjs/add/op
                         this.huntChats = data.chatroom.messages;
                     }
                     this.huntTasks.forEach(function (item) {
-                        _this.allTasks.unshift([[item.place.name], [item.task.content]]);
+                        if (item.image) {
+                            _this.allTasks.unshift([[item.place.name], [item.task.content], [item.image.url]]);
+                        }
+                        else {
+                            _this.allTasks.unshift([[item.place.name], [item.task.content]]);
+                        }
                         _this.previousPlaces.push(item.place);
                         _this.previousTasks.push(item.task);
                     });
