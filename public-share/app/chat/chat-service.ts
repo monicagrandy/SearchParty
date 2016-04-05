@@ -31,8 +31,7 @@ export class ChatService {
    this.timeout;
    this.chatBox = '';
    
-   this.runMomentUpdate = this.momentUpdate();
-          
+   this.runMomentUpdate = this.momentUpdate();      
   }
   
   momentUpdate() {
