@@ -1,0 +1,25 @@
+<div class="chatStart" *ngIf="!nameAdded" layout="column">
+  <strong class="prompt" flex="5">Enter your name to start chatting!</strong>
+  <input  #username placeholder="name" flex="5" id='signinGuest'>
+  <button class="userNameBtn" flex="5" (click)="getUsername(username.value)">Enter Chat</button>
+</div>
+
+<div class="mainChat" *ngIf="nameAdded" layout="column">
+   <div class="chatMessMaster" layout="column">
+      <!-- <span *ngFor="#message of messages" class="chatMess"> -->
+         <span *ngFor="#message of messages">
+            <span id="username"><strong>{{message[0]}}</strong></span><span id="chatMessage">: {{message[1]}}</span>
+            <p id="time">{{ message[2] | formatUnix }}</p>
+         </span>
+      <!-- </span> -->
+      <p *ngIf="otherUserTyping">{{otherUsername}} is typing...</p>
+   </div>
+
+  <div class="chatInput">
+    <form class="msg" action="">
+      <textarea class="msgText" autocomplete="off" (keyup)="OnKey($event)" [(ngModel)]="chatBox" placeholder="Message..."></textarea>
+      <button class="sendMsg" (click)="send(chatBox)" (ngSubmit)="send(chatBox)"><a href="#{{message[0]}"></a>Send</button>
+    </form>
+  </div>
+
+</div>

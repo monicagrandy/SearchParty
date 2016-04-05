@@ -4,52 +4,124 @@ const typescript = require('gulp-typescript');
 const tscConfig = require('./tsconfig.json');
 const sourcemaps = require('gulp-sourcemaps');
 const tslint = require('gulp-tslint');
+const webpack = require('webpack');
+const uglify = require('gulp-uglify');
 
-// clean the contents of the distribution directory
-gulp.task('clean', () => {
-  return del('dist/**/*');
+
+/******************************************************************************
+ * compress
+ * minify bundled app
+ ******************************************************************************/
+gulp.task('compress', function() {
+  return gulp.src('dist/*.js')
+    .pipe(uglify({
+            mangle: false
+          }))
+    .pipe(gulp.dest('dist'));
 });
 
-// TypeScript compile
-gulp.task('compile', ['clean'], () => {
-  return gulp
-    .src(tscConfig.files)
-    .pipe(sourcemaps.init())          // <--- sourcemaps
-    .pipe(typescript(tscConfig.compilerOptions))
-    .pipe(sourcemaps.write('.'))      // <--- sourcemaps
-    .pipe(gulp.dest('dist/app'));
+/******************************************************************************
+ * compressBuild
+ * Build & bundle app and then compress it
+ ******************************************************************************/
+gulp.task('compressBuild',['build'], function(done) {
+  return gulp.src('dist/*.js')
+    .pipe(uglify({
+            mangle: false
+          }))
+    .pipe(gulp.dest('dist'));
 });
 
-// copy dependencies
-gulp.task('copy:libs', ['clean'], () => {
-  return gulp.src([
-    'node_modules/es6-shim/es6-shim.min.js',
-    'node_modules/systemjs/dist/system-polyfills.js',
-    'node_modules/angular2/es6/dev/src/testing/shims_for_IE.js',
-    'node_modules/angular2/bundles/angular2-polyfills.js',
-    'node_modules/systemjs/dist/system.src.js',
-    'node_modules/rxjs/bundles/Rx.js',
-    'node_modules/angular2/bundles/angular2.dev.js',
-    'node_modules/angular2/bundles/router.dev.js',
-    'node_modules/angular2/bundles/http.dev.js',
-    'node_modules/underscore/underscore.js',
-    'node_modules/moment/moment.js',
-    'node_modules/ng2-material/dist/ng2-material.js',
-    ])
-    .pipe(gulp.dest('dist/lib'))
+
+/******************************************************************************
+ * watch
+ * Build the app and watch for source file changes.
+ ******************************************************************************/
+gulp.task('serve:before', ['watch']);
+
+gulp.task('watch', ['copy.css', 'copy.html'], function(done) {
+  watch('app/**/*.css', function(){
+    gulp.start('copy.css');
+  });
+  watch('/app/**/*.html', function(){
+    gulp.start('copy.html');
+  });
+  bundle(true, done);
 });
 
-// copy static assets - i.e. non TypeScript compiled source
-gulp.task('copy:assets', ['clean'], () => {
-  return gulp.src(['app/**/*', 'index.html', 'styles.css', '!app/**/*.ts'], { base : './share' })
+
+/******************************************************************************
+ * build
+ * Build the app once, without watching for source file changes.
+ ******************************************************************************/
+gulp.task('build', ['copy.css', 'copy.html'], function(done) {
+  bundle(false, done);
+});
+
+
+/******************************************************************************
+ * sass
+ * Convert Sass files to a single bundled CSS file. Uses auto-prefixer
+ * to automatically add required vendor prefixes when needed.
+ ******************************************************************************/
+gulp.task('copy.css', function(){
+  return gulp.src('app/**/*.css')
     .pipe(gulp.dest('dist'))
 });
 
-gulp.task('tslint', () => {
-  return gulp.src('app/**/*.ts')
-    .pipe(tslint())
-    .pipe(tslint.report('verbose'));
+
+/******************************************************************************
+ * copy.html
+ * Copy html files to build directory.
+ ******************************************************************************/
+gulp.task('copy.html', function(){
+  return gulp.src('app/**/*.html')
+    .pipe(gulp.dest('dist'));
 });
 
-gulp.task('build', ['tslint', 'compile', 'copy:libs', 'copy:assets']);
-gulp.task('default', ['build']);
+
+/******************************************************************************
+ * clean
+ * Delete previous build files.
+ ******************************************************************************/
+gulp.task('clean', function(done) {
+  del(['dist'], done);
+});
+
+
+/******************************************************************************
+ * Bundle
+ * Transpiles source files and bundles them into build directory using webpack.
+ ******************************************************************************/
+function bundle(watch, cb) {
+  // prevent gulp calling done callback more than once when watching
+  var firstTime = true;
+
+  // load webpack config
+  var config = require('./webpack.config.js');
+
+  // https://github.com/webpack/docs/wiki/node.js-api#statstojsonoptions
+  var statsOptions = {
+    'colors': true,
+    'modules': false,
+    'chunks': false,
+    'exclude': ['node_modules']
+  }
+
+  var compiler = webpack(config);
+  if (watch) {
+    compiler.watch(null, compileHandler);
+  } else {
+    compiler.run(compileHandler);
+  }
+
+  function compileHandler(err, stats){
+    if (firstTime) {
+      firstTime = false;
+      cb();
+    }
+
+    // print build stats and errors
+    console.log(stats.toString(statsOptions));
+  }
+}
