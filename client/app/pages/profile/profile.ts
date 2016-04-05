@@ -10,10 +10,11 @@ import {JwtHelper} from 'angular2-jwt';
 import {HuntFilterPipe} from '../../util/filter-pipe';
 import {TaskPage} from '../tasks/tasks';
 import {TaskService} from '../../services/task/task-service';
+import {TemplateService} from '../../services/template/template-service';
 
 @Page({
   templateUrl: 'build/pages/profile/profile.html',
-  providers: [ProfileService, FriendService, TaskService],
+  providers: [ProfileService, FriendService, TaskService, TemplateService],
   directives: [FORM_DIRECTIVES],
   pipes: [HuntFilterPipe]
 })
@@ -34,7 +35,8 @@ export class ProfilePage {
     private profileService: ProfileService,
     private auth: AuthService,
     private friendService: FriendService,
-    private taskService: TaskService
+    private taskService: TaskService,
+    private templateService: TemplateService
   ) {
 
     this.token = this.local.get('id_token')._result;
@@ -103,6 +105,22 @@ export class ProfilePage {
 
     let currentChallenge = previousTasks.pop();
     let currentPlace = previousPlaces.pop();
+    
+        this.templateService.getData()
+    .then(templates => {
+      console.log("Templates", templates);
+      this.templates = templates;
+      for (let hunt of this.templates) {
+        console.log("hunt", hunt);
+        this.items.push({
+          title: hunt.template.type,
+          image: hunt.template.image,
+          huntname: hunt.template.huntname,
+          icon: hunt.template.icon,
+          keywords: hunt.keywords
+        })
+      }
+    });
 
     this.nav.setRoot(TaskPage, {
       previousTasks: previousTasks,

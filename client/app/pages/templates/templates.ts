@@ -10,7 +10,7 @@ import {TemplateService} from '../../services/template/template-service';
 export class TemplatePage {
   selectedItem: any;
   testData: Array<{type: string, huntname: string, image: string, icon: string}>;
-  items: Array<{title: string, image: string, huntname: string, icon: string}>;
+  items: Array<{title: string, image: string, huntname: string, icon: string, keywords: Array<[{}]>}>;
   local: Storage = new Storage(LocalStorage);
   loadComplete: boolean;
   loadingImg: any;
@@ -18,6 +18,7 @@ export class TemplatePage {
   userLat: number;
   userInfo: {};
   geolocation: {};
+  templates: any;
 
   constructor(private nav: NavController, navParams: NavParams, private templateService: TemplateService) {
     this.selectedItem = navParams.get('item');
@@ -53,7 +54,8 @@ export class TemplatePage {
     this.templateService.getData()
     .then(templates => {
       console.log("Templates", templates);
-      for (let hunt of templates) {
+      this.templates = templates;
+      for (let hunt of this.templates) {
         console.log("hunt", hunt);
         this.items.push({
           title: hunt.template.type,
@@ -61,15 +63,16 @@ export class TemplatePage {
           huntname: hunt.template.huntname,
           icon: hunt.template.icon,
           keywords: hunt.keywords
-        });
-      });
-
-    }
-    navCreateHunt(event, item) {
-      console.log(item.title);
-      this.nav.setRoot(CreateHuntPage, {
-        title: item.title,
-        keywordsArray: item.keywords
-      });
-    }
+        })
+      }
+    });
   }
+  
+  navCreateHunt(event, item) {
+    console.log(item.title);
+    this.nav.setRoot(CreateHuntPage, {
+      title: item.title,
+      keywordsArray: item.keywords
+    });
+  }
+}
