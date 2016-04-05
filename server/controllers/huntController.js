@@ -21,10 +21,11 @@ module.exports = {
     let previousPlaces = req.body.previousPlaces;
     let previousTasks = req.body.previousTasks;
     let taskNumber = req.body.taskNumber;
+    let templateName = req.body.templateName;
     let huntData;
     console.log("+++++before if/else statement", huntID);
     if(!huntID) {
-      createNewHunt.initializeHunt(username, huntName, taskNumber)
+      createNewHunt.initializeHunt(username, huntName, taskNumber, templateName)
       .then(hunt => {
         console.log("inside initalizeHunt", hunt);
         makeHunt.createHunt(keyword, previousPlaces, previousTasks, hunt[0].huntID, geolocation, hunt[0].huntname)

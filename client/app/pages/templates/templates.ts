@@ -39,29 +39,37 @@ export class TemplatePage {
       }
     }
 
-    this.testData = [
-      {type: 'Bar', huntname: 'Bar Hunt', image: 'img/bar.jpg', icon: 'ios-pint'},
-      {type: 'Beach', huntname: 'Beach Hunt', image: 'img/beach.jpg', icon: 'ios-water'},
-      {type: 'Brunch', huntname: 'Brunch Hunt', image: 'img/brunch.jpg', icon: 'ios-restaurant'},
-      {type: 'Coffee', huntname: 'Coffee Hunt', image: 'img/coffee.jpg', icon: 'cafe'},
-      {type: 'Park', huntname: 'Park Hunt', image: 'img/park.jpg', icon: 'leaf'},
-      {type: 'Ramen', huntname: 'Ramen Hunt', image: 'img/ramen.jpg', icon: 'ios-egg'}
-      ];
+    // this.testData = [
+    //   {type: 'Bar', huntname: 'Bar Hunt', image: 'img/bar.jpg', icon: 'ios-pint'},
+    //   {type: 'Beach', huntname: 'Beach Hunt', image: 'img/beach.jpg', icon: 'ios-water'},
+    //   {type: 'Brunch', huntname: 'Brunch Hunt', image: 'img/brunch.jpg', icon: 'ios-restaurant'},
+    //   {type: 'Coffee', huntname: 'Coffee Hunt', image: 'img/coffee.jpg', icon: 'cafe'},
+    //   {type: 'Park', huntname: 'Park Hunt', image: 'img/park.jpg', icon: 'leaf'},
+    //   {type: 'Ramen', huntname: 'Ramen Hunt', image: 'img/ramen.jpg', icon: 'ios-egg'}
+    // ];
 
     this.items = [];
-    for (let hunt of this.testData) {
-      this.items.push({
-        title: hunt.type,
-        image: hunt.image,
-        huntname: hunt.huntname,
-        icon: hunt.icon
+
+    this.templateService.getData()
+    .then(templates => {
+      console.log("Templates", templates);
+      for (let hunt of templates) {
+        console.log("hunt", hunt);
+        this.items.push({
+          title: hunt.template.type,
+          image: hunt.template.image,
+          huntname: hunt.template.huntname,
+          icon: hunt.template.icon,
+          keywords: hunt.keywords
+        });
+      });
+
+    }
+    navCreateHunt(event, item) {
+      console.log(item.title);
+      this.nav.setRoot(CreateHuntPage, {
+        title: item.title,
+        keywordsArray: item.keywords
       });
     }
-  }
-  navCreateHunt(event, item) {
-    console.log(item.title);
-    this.nav.setRoot(CreateHuntPage, {
-      title: item.title
-    });
-   }
   }

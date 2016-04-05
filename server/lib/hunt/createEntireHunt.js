@@ -35,13 +35,14 @@ module.exports = {
           console.log("data at the end of the promised land", data);
           return new Promise((resolve, reject) => {
             if(data) {
-              let data = data[0];
+              // let data = data;
               let objectToSend = {
                 businesses: randomPlace,
                 tasks: randomTask,
                 huntID: huntID,
                 huntName: huntName,
-                taskNumber: data.tasknumber
+                taskNumber: data[0].tasknumber,
+                totalNumberOfTasks: data[0].totalnumberoftasks
               };
               console.log("object to send", objectToSend);
               resolve(objectToSend);

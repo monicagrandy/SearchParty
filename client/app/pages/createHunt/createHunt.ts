@@ -29,10 +29,11 @@ export class CreateHuntPage {
   name: string;
   requiredInfo: boolean;
   keyword: string;
-  keywordArray: [];
+  keywordsArray: [];
 
   constructor(private nav: NavController, navParams: NavParams, private templateService: TemplateService) {
-    this.keyword = navParams.get('title');
+    this.template = navParams.get('title');
+    this.keywordsArray = navParams.get('keywordsArray');
     this.taskNumber;
     this.name;
     this.requiredInfo = false;
@@ -64,13 +65,16 @@ export class CreateHuntPage {
      this.userInfo = localStorage;
      localStorage.startTimeUnix = Date.now();
      localStorage.startTime = new Date().toLocaleTimeString();
-     let keywordArray = [];
-     for(let i = 1; i < this.taskNumber; i++) {
-        console.log('keyword pushed');
-        keywordArray.push(this.keyword);
-     }
+     this.taskNumber = taskNumber;
+    //  let keywordArray = [];
+    //  for(let i = 1; i < this.taskNumber; i++) {
+    //     console.log('keyword pushed');
+    //     keywordArray.push(this.keyword);
+    //  }
+    this.keywordsArray.splice(0, this.keywordsArray.length - taskNumber);
+    console.log('this is the keywordsArray after splicing ', this.keywordsArray);
 
-     this.templateService.postData(name, this.keyword, this.userInfo, this.taskNumber)
+     this.templateService.postData(name, this.keywordsArray[0].name, this.userInfo, this.taskNumber, this.template)
        .then(data => {
         this.nav.setRoot(TaskPage, {
            locAddress: data.businesses.location.display_address[0] + ', ' + data.businesses.location.display_address[2],
@@ -83,7 +87,9 @@ export class CreateHuntPage {
            locName: data.businesses.name,
            previousPlaces: [data.businesses],
            previousTasks: [data.tasks],
-           keywordArray: keywordArray
+           keywordsArray: this.keywordsArray
+           taskNumber: data.taskNumber,
+           totalNumberOfTasks: data.totalNumberOfTasks
         });
 
 

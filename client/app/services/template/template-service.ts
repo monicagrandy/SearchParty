@@ -7,7 +7,7 @@ import 'rxjs/add/operator/map';
 @Injectable()
 export class TemplateService {
   local: Storage = new Storage(LocalStorage);
-  TEMPLATES_URL: string = 'https://getsearchparty.com/templates';
+  TEMPLATES_URL: string = 'http://localhost:8000/templates';
   TASKS_URL: string = localStorage.tasks || 'https://getsearchparty.com/tasks';
   keyword: string;
   contentHeader: Headers = new Headers({'Content-Type': 'application/json'});
@@ -35,7 +35,7 @@ export class TemplateService {
     return httpGetPromise;
   }
 
-  postData(name, keyword, userInfo, taskNumber) {
+  postData(name, keyword, userInfo, taskNumber, templateName) {
     console.log('called post req');
     let httpGetPromise = new Promise((resolve, reject) => {
       console.log('inside post promise');
@@ -54,6 +54,7 @@ export class TemplateService {
         previousPlaces: [],
         previousTasks: [],
         date: currentTime,
+        templateName: templateName,
         taskNumber: taskNumber
       };
 
