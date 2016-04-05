@@ -69,9 +69,9 @@ export class TemplatePage {
   }
   
   navCreateHunt(event, item) {
-    console.log(item.title);
+    console.log(item.huntname);
     this.nav.setRoot(CreateHuntPage, {
-      title: item.title,
+      templateName: item.huntname,
       keywordsArray: item.keywords
     });
   }

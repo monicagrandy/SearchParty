@@ -28,6 +28,7 @@ export class ProfilePage {
   jwtHelper: JwtHelper = new JwtHelper();
   addedHunts: any;
   noFriend = false;
+  keywordsArray: any;
 
   constructor(
     private nav: NavController,
@@ -97,43 +98,50 @@ export class ProfilePage {
     // format previousTasks and PreviousPlaces
     let previousPlaces = [];
     let previousTasks = [];
+    
 
     for (let task of hunt.tasks) {
+      console.log('this is the hunt.tasks ', hunt.tasks);
+      console.log('this is the task from hunt.tasks ', task);
       previousPlaces.push(task.place);
       previousTasks.push(task.task);
     }
-
-    let currentChallenge = previousTasks.pop();
-    let currentPlace = previousPlaces.pop();
     
-        this.templateService.getData()
-    .then(templates => {
-      console.log("Templates", templates);
-      this.templates = templates;
-      for (let hunt of this.templates) {
-        console.log("hunt", hunt);
-        this.items.push({
-          title: hunt.template.type,
-          image: hunt.template.image,
-          huntname: hunt.template.huntname,
-          icon: hunt.template.icon,
-          keywords: hunt.keywords
-        })
-      }
-    });
-
-    this.nav.setRoot(TaskPage, {
-      previousTasks: previousTasks,
-      previousPlaces: previousPlaces,
-      huntID: hunt.stats.huntID,
-      huntName: hunt.stats.huntname || 'Fun',
-      currChallenge: currentChallenge.content,
-      locName: currentPlace.name,
-      locAddress: currentPlace.address,
-      locLat: currentPlace.lat,
-      locLng: currentPlace.lng,
-      resumeHuntKeywordsLeft: hunt.tasks.length
-    });
+    console.log('this is the previous places  ++++', previousPlaces);
+    
+    let currentChallenge = previousTasks[previousTasks.length - 1];
+    let currentPlace = previousPlaces[previousPlaces.length - 1];
+    
+    let data = {
+      templateName: hunt.stats.templatename
+    };
+    
+    console.log('this is the data being sent to template service ', data);
+    
+    this.templateService.postTemplateData(data, 'template')
+      .then(template => { 
+        console.log('this is the data from posttemplate ', template);
+        this.keywordsArray = template.keywords;
+        // take away from the end based on number of tasks originally selected
+        this.keywordsArray.splice(hunt.stats.totalnumberoftasks, this.keywordsArray.length - hunt.stats.totalnumberoftasks);
+        // take away from the beginning based on number of tasks already completed
+        this.keywordsArray.splice(0, hunt.stats.tasknumber);
+        console.log('this is they keywordsArray', this.keywordsArray);
+        this.nav.setRoot(TaskPage, {
+          locAddress: currentPlace.address,
+          huntID: hunt.stats.huntID,
+          taskNumber: hunt.stats.tasknumber,
+          huntName: hunt.stats.huntname || 'Fun',
+          currChallenge: currentChallenge.content,
+          locLat: currentPlace.lat,
+          locLng: currentPlace.lng,
+          locName: currentPlace.name,
+          previousPlaces: previousPlaces,
+          previousTasks: previousTasks,
+          keywordsArray: this.keywordsArray,
+          totalNumberOfTasks: hunt.stats.totalnumberoftasks
+        });
+      });
   }
 
   addFriend(friend) {

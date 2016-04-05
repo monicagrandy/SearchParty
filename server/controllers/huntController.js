@@ -98,7 +98,7 @@ module.exports = {
    },
 
    retrieveTemplates: (req, res) => {
-     template.retrieveTemplates(templateTitle)
+     template.retrieveAllTemplates()
      .then(templateObject => {
        console.log("template object", templateObject);
        res.json(templateObject);
@@ -107,12 +107,12 @@ module.exports = {
    },
    
    retrieveSingleTemplate: (req, res) => {
-     let templateTitle = req.body.templateTitle;
+     let templateTitle = req.body.templateName;
      
      template.retrieveSingleTemplate(templateTitle)
      .then(templateObject => {
        console.log('template object', templateObject);
-       res.json(templateObject);
+       res.json(templateObject[0]);
      })
      .catch(error => console.error(error));
    }
