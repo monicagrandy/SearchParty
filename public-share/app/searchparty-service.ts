@@ -41,8 +41,13 @@ export class SearchPartyService {
     }
     
     this.huntTasks.forEach(item => {
-      this.allTasks.unshift([[item.place.name], [item.task.content]]);
-      this.previousPlaces.push(item.place);
+      if (item.image) {
+        this.allTasks.unshift([[item.place.name], [item.task.content], [item.image.url]]);
+      }
+      else {
+        this.allTasks.unshift([[item.place.name], [item.task.content]);
+      }
+      this.previousPlaces.push(item.place); 
       this.previousTasks.push(item.task);
     });
     
