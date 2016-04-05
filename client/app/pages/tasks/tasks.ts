@@ -31,7 +31,6 @@ export class TaskPage {
   locLng: any;
   locName: string;
   completeToggle = false;
-  keyword: any;
   keywordsLength: number;
   tasksLeft: any;
   endHunt: boolean;
@@ -63,6 +62,8 @@ export class TaskPage {
   io: any;
   taskNumber: any;
   huntName: any;
+  keywordsArray: any;
+  totalNumberOfTasks: any;
 
   constructor(
     platform: Platform,
@@ -73,7 +74,6 @@ export class TaskPage {
     _zone: NgZone
   ) {
     this.keywordsArray = navParams.get('keywordsArray')
-    console.log(this.key)
     // this.taskNumber = navParams.get('taskNumber');
     // this.keywordsLength = this.keyword.length;
     this.showURL = false;
@@ -97,10 +97,11 @@ export class TaskPage {
     this.huntName = localStorage.huntName || navParams.get('huntName');
     this.previousPlaces = navParams.get('previousPlaces');
     this.previousTasks = navParams.get('previousTasks');
-    this.previousTasks = navParams.get('previousTasks');
     this.taskNumber = navParams.get('taskNumber');
     this.totalNumberOfTasks = navParams.get('totalNumberOfTasks');
-
+    
+    console.log('this is the previous places ', this.previousPlaces);
+    
     this._taskService.createSocket(this.huntID, this.user);
     // geowatching setup
     this._taskService.createWatchLocation();
@@ -157,7 +158,7 @@ export class TaskPage {
     this.imgData = ""
     this.showURL = false;
     console.log('getting ready to send new task!')
-    console.log(this.keyword);
+    console.log(this.keywordsArray);
     console.log('this is the huntID in the tasks! ');
     console.log(this.huntID);
 

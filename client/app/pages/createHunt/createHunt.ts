@@ -29,10 +29,11 @@ export class CreateHuntPage {
   name: string;
   requiredInfo: boolean;
   keyword: string;
-  keywordsArray: [];
+  keywordsArray = [];
+  template: any;
 
   constructor(private nav: NavController, navParams: NavParams, private templateService: TemplateService) {
-    this.template = navParams.get('title');
+    this.template = navParams.get('templateName');
     this.keywordsArray = navParams.get('keywordsArray');
     this.taskNumber;
     this.name;
@@ -71,7 +72,7 @@ export class CreateHuntPage {
     //     console.log('keyword pushed');
     //     keywordArray.push(this.keyword);
     //  }
-    this.keywordsArray.splice(0, this.keywordsArray.length - taskNumber);
+    this.keywordsArray.splice(this.taskNumber, this.keywordsArray.length);
     console.log('this is the keywordsArray after splicing ', this.keywordsArray);
 
      this.templateService.postData(name, this.keywordsArray[0].name, this.userInfo, this.taskNumber, this.template)
@@ -87,8 +88,7 @@ export class CreateHuntPage {
            locName: data.businesses.name,
            previousPlaces: [data.businesses],
            previousTasks: [data.tasks],
-           keywordsArray: this.keywordsArray
-           taskNumber: data.taskNumber,
+           keywordsArray: this.keywordsArray,
            totalNumberOfTasks: data.totalNumberOfTasks
         });
 

@@ -97,13 +97,22 @@ module.exports = {
      .catch(error => console.error(error));
    },
 
-   getTemplateKeywords: (req, res) => {
-     let templateTitle = req.body.templateTitle;
-
-     template.retrieveTemplate(templateTitle)
+   retrieveTemplates: (req, res) => {
+     template.retrieveAllTemplates()
      .then(templateObject => {
        console.log("template object", templateObject);
        res.json(templateObject);
+     })
+     .catch(error => console.error(error));
+   },
+   
+   retrieveSingleTemplate: (req, res) => {
+     let templateTitle = req.body.templateName;
+     
+     template.retrieveSingleTemplate(templateTitle)
+     .then(templateObject => {
+       console.log('template object', templateObject);
+       res.json(templateObject[0]);
      })
      .catch(error => console.error(error));
    }

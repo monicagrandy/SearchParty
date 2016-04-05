@@ -10,10 +10,11 @@ import {JwtHelper} from 'angular2-jwt';
 import {HuntFilterPipe} from '../../util/filter-pipe';
 import {TaskPage} from '../tasks/tasks';
 import {TaskService} from '../../services/task/task-service';
+import {TemplateService} from '../../services/template/template-service';
 
 @Page({
   templateUrl: 'build/pages/profile/profile.html',
-  providers: [ProfileService, FriendService, TaskService],
+  providers: [ProfileService, FriendService, TaskService, TemplateService],
   directives: [FORM_DIRECTIVES],
   pipes: [HuntFilterPipe]
 })
@@ -27,6 +28,7 @@ export class ProfilePage {
   jwtHelper: JwtHelper = new JwtHelper();
   addedHunts: any;
   noFriend = false;
+  keywordsArray: any;
 
   constructor(
     private nav: NavController,
@@ -34,7 +36,8 @@ export class ProfilePage {
     private profileService: ProfileService,
     private auth: AuthService,
     private friendService: FriendService,
-    private taskService: TaskService
+    private taskService: TaskService,
+    private templateService: TemplateService
   ) {
 
     this.token = this.local.get('id_token')._result;
@@ -95,27 +98,50 @@ export class ProfilePage {
     // format previousTasks and PreviousPlaces
     let previousPlaces = [];
     let previousTasks = [];
+    
 
     for (let task of hunt.tasks) {
+      console.log('this is the hunt.tasks ', hunt.tasks);
+      console.log('this is the task from hunt.tasks ', task);
       previousPlaces.push(task.place);
       previousTasks.push(task.task);
     }
-
-    let currentChallenge = previousTasks.pop();
-    let currentPlace = previousPlaces.pop();
-
-    this.nav.setRoot(TaskPage, {
-      previousTasks: previousTasks,
-      previousPlaces: previousPlaces,
-      huntID: hunt.stats.huntID,
-      huntName: hunt.stats.huntname || 'Fun',
-      currChallenge: currentChallenge.content,
-      locName: currentPlace.name,
-      locAddress: currentPlace.address,
-      locLat: currentPlace.lat,
-      locLng: currentPlace.lng,
-      resumeHuntKeywordsLeft: hunt.tasks.length
-    });
+    
+    console.log('this is the previous places  ++++', previousPlaces);
+    
+    let currentChallenge = previousTasks[previousTasks.length - 1];
+    let currentPlace = previousPlaces[previousPlaces.length - 1];
+    
+    let data = {
+      templateName: hunt.stats.templatename
+    };
+    
+    console.log('this is the data being sent to template service ', data);
+    
+    this.templateService.postTemplateData(data, 'template')
+      .then(template => { 
+        console.log('this is the data from posttemplate ', template);
+        this.keywordsArray = template.keywords;
+        // take away from the end based on number of tasks originally selected
+        this.keywordsArray.splice(hunt.stats.totalnumberoftasks, this.keywordsArray.length - hunt.stats.totalnumberoftasks);
+        // take away from the beginning based on number of tasks already completed
+        this.keywordsArray.splice(0, hunt.stats.tasknumber);
+        console.log('this is they keywordsArray', this.keywordsArray);
+        this.nav.setRoot(TaskPage, {
+          locAddress: currentPlace.address,
+          huntID: hunt.stats.huntID,
+          taskNumber: hunt.stats.tasknumber,
+          huntName: hunt.stats.huntname || 'Fun',
+          currChallenge: currentChallenge.content,
+          locLat: currentPlace.lat,
+          locLng: currentPlace.lng,
+          locName: currentPlace.name,
+          previousPlaces: previousPlaces,
+          previousTasks: previousTasks,
+          keywordsArray: this.keywordsArray,
+          totalNumberOfTasks: hunt.stats.totalnumberoftasks
+        });
+      });
   }
 
   addFriend(friend) {
