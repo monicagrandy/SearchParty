@@ -18,6 +18,7 @@ export class ChatService {
   contentHeader: Headers = new Headers({'Content-Type': 'application/json'});
   urls: any;
   messages: any;
+  runMomentUpdate: any;
 
   @Output() messageChange = new EventEmitter();
   @Output() otherUsernameChange = new EventEmitter();
@@ -29,6 +30,24 @@ export class ChatService {
    this.otherUsername = '';
    this.timeout;
    this.chatBox = '';
+   
+   this.runMomentUpdate = this.momentUpdate();
+          
+  }
+  
+  momentUpdate() {
+    console.log('starting moment update!!');
+    let messages = this.messages;
+    console.log('these are the messages in momentUpdate ', messages);
+    setInterval(() => {
+     messages.forEach((msg) => {
+       if(msg[3]){
+         console.log("updating time for ", msg)
+         msg[2] = moment.unix(msg[3]).fromNow()
+         console.log(msg[2])
+       }
+     })
+    }, 60000);
   }
 
   createSocket(huntID, username) {
@@ -50,8 +69,15 @@ export class ChatService {
    this.socket.on("chat_message", (msg, username, datetime) => {
       this.zone.run(() => {
         console.log('this is the message received from socket chat update ', msg);
-        this.messages.push([username, msg, datetime]);
+        this.currTime = datetime;
+        datetime = moment.unix(datetime).fromNow();
+        this.messages.push([username, msg, datetime, this.currTime]);
         this.updateScroll();
+        console.log('this is the new this.messages with pushed in data ', this.messages);
+        console.log('killing setInterval');
+        clearInterval(this.runMomentUpdate);
+        console.log('running interval again');
+        this.momentUpdate();
         // this.messageChange.emit(this.messages);
       });
     });
@@ -100,7 +126,9 @@ export class ChatService {
           return new Promise((resolve, reject) => {
             let messagesArray = messagesFromDB.chatMessages;
             for (let i = 0; i < messagesArray.length; i++) {
-              this.messages.push([messagesArray[i].username, messagesArray[i].text, messagesArray[i].datetime]);
+              this.currTime = messagesArray[i].datetime;
+              let datetime = moment.unix(messagesArray[i].datetime).fromNow();
+              this.messages.push([messagesArray[i].username, messagesArray[i].text, datetime, this.currTime]);
               console.log('these are the messages from getMessages() ', this.messages);
             }
             this.messages.forEach((msg) => {
