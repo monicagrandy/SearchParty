@@ -17,23 +17,23 @@ module.exports = {
     prettyHunt.chatroom.messages = huntArray.messages;
     prettyHunt.chatroom.chatID = huntArray.chatData.chatID;
     prettyHunt.stats = huntArray.huntData;
-    
+
     let taskAndImageMatchUp = {};
-    
+
     for (let i = 0; i < huntArray.tasks.length; i++) {
       taskAndImageMatchUp[i] = [huntArray.tasks[i], null];
     }
-    
-    // match up tasks and images using an object   
+
+    // match up tasks and images using an object
     for (let k = 0; k < huntArray.urls.length; k++) {
       let grabLastNumberFromImageUrlString = huntArray.urls[k].url.charAt(huntArray.urls[k].url.length - 1);
       taskAndImageMatchUp[grabLastNumberFromImageUrlString][1] = huntArray.urls[k];
     }
-    
+
     for (let i = 0; i < huntArray.tasks.length; i++) {
       prettyHunt.tasks.push({task: taskAndImageMatchUp[i][0], place: huntArray.places[i], image: taskAndImageMatchUp[i][1]});
     }
-    
+
     return prettyHunt;
   }
 }
