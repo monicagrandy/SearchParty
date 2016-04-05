@@ -71,10 +71,11 @@ export class TaskPage {
     private _taskService: TaskService,
     private googleMaps: GoogleMapService,
     _zone: NgZone
-    ) {
-    this.keyword = navParams.get('keywordArray') || ['Bar', 'Bar', 'Bar', 'Bar', 'Bar', 'Bar','Bar','Bar', 'Bar'];
-    this.taskNumber = navParams.get('taskNumber');
-    this.keywordsLength = this.keyword.length;
+  ) {
+    this.keywordsArray = navParams.get('keywordsArray')
+    console.log(this.key)
+    // this.taskNumber = navParams.get('taskNumber');
+    // this.keywordsLength = this.keyword.length;
     this.showURL = false;
     this._zone = _zone;
     this.platform = platform;
@@ -95,14 +96,10 @@ export class TaskPage {
     this.locName = localStorage.locName || navParams.get('locName');
     this.huntName = localStorage.huntName || navParams.get('huntName');
     this.previousPlaces = navParams.get('previousPlaces');
-    this.resumeHuntKeywordsLeft = navParams.get('resumeHuntKeywordsLeft');
     this.previousTasks = navParams.get('previousTasks');
-    if (this.previousTasks.length > 1) {
-      console.log('resuming hunt!');
-      console.log('this is the previous place ', this.previousPlaces);
-      console.log('this is the previous task ', this.previousTasks);
-      this.keyword.splice(0, this.resumeHuntKeywordsLeft);
-    }
+    this.previousTasks = navParams.get('previousTasks');
+    this.taskNumber = navParams.get('taskNumber');
+    this.totalNumberOfTasks = navParams.get('totalNumberOfTasks');
 
     this._taskService.createSocket(this.huntID, this.user);
     // geowatching setup
@@ -121,35 +118,42 @@ export class TaskPage {
   takePic() {
     console.log('taking picture')
     let options = {
-        destinationType: 0,
-        sourceType: 1,
-        encodingType: 0,
-        targetWidth: 1024,
-        targetHeight: 1024,
-        quality:100,
-        allowEdit: false,
-        saveToPhotoAlbum: false
+      destinationType: 0,
+      sourceType: 1,
+      encodingType: 0,
+      targetWidth: 1024,
+      targetHeight: 1024,
+      quality:100,
+      allowEdit: false,
+      saveToPhotoAlbum: false
     };
     Camera.getPicture(options).then((data) => {
       this.imgData = 'data:image/jpeg;base64,' + data;
-        this._zone.run(() => this.image = this.imgData);
-        let count = this.keywordsLength - this.keyword.length;
+      this._zone.run(() => this.image = this.imgData);
+
+      let dataObj = {
+        huntID: this.huntID
+      }
+      this._taskService.postData(JSON.stringify(dataObj), 'hunt')
+      .then(entireHuntData => {
+        let currentTaskNumber = entireHuntData.huntData.tasknumber;
         let dataObj = {
-          count: count,
+          count: currentTaskNumber,
           huntID: this.huntID,
           image: this.imgData
-        }
+        };
         this._taskService.postData(JSON.stringify(dataObj), 'upload')
-          .then(result => {
-            console.log("image sent to server")
-          })
+        .then(result => {
+          console.log("image sent to server");
+        }).catch(error => console.error(error));
+      })
     }, (error) => {
-        alert(error);
+      alert(error);
     });
   }
 
   getNewTask(){
-    console.log(this.keywordsLength - this.keyword.length)
+    // console.log(this.keywordsLength - this.keyword.length)
     this.imgData = ""
     this.showURL = false;
     console.log('getting ready to send new task!')
@@ -157,10 +161,13 @@ export class TaskPage {
     console.log('this is the huntID in the tasks! ');
     console.log(this.huntID);
 
-    if (this.keyword.length > 0) {
-      let keyword = this.keyword.shift();
+    console.log(this.taskNumber);
+    console.log(this.totalNumberOfTasks);
+
+    if (this.taskNumber !== this.totalNumberOfTasks) {
+      let keyword = this.keywordsArray.shift();
       console.log('this is the huntID before it is sent! ', this.huntID);
-      this.sendData(keyword);
+      this.sendData(keyword.name);
     } else {
       console.log('no more tasks!');
       console.log(this.previousTasks);
@@ -176,10 +183,10 @@ export class TaskPage {
       huntID: this.huntID
     }
     this._taskService.postData(JSON.stringify(dataObj), 'hunt')
-        .then(result => {
-         this.finalData = result.tasks
-          console.log("+++line 179 in tasks.js data: ", result)
-      })
+    .then(result => {
+      this.finalData = result.tasks
+      console.log("+++line 179 in tasks.js data: ", result)
+    })
     this.endTime = new Date().toLocaleTimeString();
     this.endTimeUnix = Date.now();
     localStorage.endTime = this.endTime;
@@ -187,14 +194,14 @@ export class TaskPage {
     this.startTimeUnix = localStorage.startTimeUnix;
 
     this.googleMaps.finalMapMaker(this.previousPlaces, this.previousTasks)
-      .then(data => {
-        let flightPath = data;
-      });
-      
+    .then(data => {
+      let flightPath = data;
+    });
+
     if (this.previousPlaces.length > 1) {
       this.finalDist = this.googleMaps.calcDistance(this.previousPlaces);
       console.log(this.finalDist);
-    }   
+    }
   }
 
   sendFeedback(val){
@@ -208,18 +215,18 @@ export class TaskPage {
       this.feedback = "bad";
     }
     let userFeedback = {
-          token: localStorage.id_token,
-          huntID: this.huntID,
-          endTime: this.endTimeUnix,
-          distance: this.finalDist,
-          feedback: this.feedback
+      token: localStorage.id_token,
+      huntID: this.huntID,
+      endTime: this.endTimeUnix,
+      distance: this.finalDist,
+      feedback: this.feedback
     };
 
     this._taskService.postData(JSON.stringify(userFeedback), 'feedback')
-      .then(result => {
-        this.nav.setRoot(TemplatePage);
-        console.log(result);
-      });
+    .then(result => {
+      this.nav.setRoot(TemplatePage);
+      console.log(result);
+    });
   }
 
   markComplete(){
@@ -241,9 +248,9 @@ export class TaskPage {
   shareViaTwitter(message, image) {
     if(window.plugins.socialsharing) {
       window.plugins.socialsharing.canShareVia("twitter", message, (Date.now())/1000, image, this.link, result => {
-          window.plugins.socialsharing.shareViaTwitter(message, image, link);
+        window.plugins.socialsharing.shareViaTwitter(message, image, link);
       }, error => {
-          console.error(error);
+        console.error(error);
       });
     }
   }
@@ -275,19 +282,21 @@ export class TaskPage {
     };
 
     this._taskService.postData(JSON.stringify(dataObj), 'tasks')
-      .then(result => {
-        this.locName = result.businesses.name;
-        this.currChallenge = result.tasks.content;
-        this.previousPlaces.push(result.businesses);
-        this.locAddress = result.businesses.location.display_address[0] + ', ' + result.businesses.location.display_address[2];
-        this.previousTasks.push(result.tasks);
-        this.locLat = result.businesses.location.coordinate.latitude;
-        this.locLng = result.businesses.location.coordinate.longitude;
-        this.markComplete();
-        let content = '<h4>' + this.locName + '</h4><p>' + this.locAddress  + '</p>';
-        this.map = this.googleMaps.loadMap(this.locLat, this.locLng, 15, content, this.map);
-        this._taskService.refreshFeed(this.locName, this.currChallenge, this.huntID, this.locLat, this.locLng, 15);
-      });
-   }
+    .then(result => {
+      this.locName = result.businesses.name;
+      this.currChallenge = result.tasks.content;
+      this.previousPlaces.push(result.businesses);
+      this.locAddress = result.businesses.location.display_address[0] + ', ' + result.businesses.location.display_address[2];
+      this.previousTasks.push(result.tasks);
+      this.locLat = result.businesses.location.coordinate.latitude;
+      this.locLng = result.businesses.location.coordinate.longitude;
+      this.taskNumber = result.taskNumber;
+      this.totalNumberOfTasks = result.totalNumberOfTasks;
+      this.markComplete();
+      let content = '<h4>' + this.locName + '</h4><p>' + this.locAddress  + '</p>';
+      this.map = this.googleMaps.loadMap(this.locLat, this.locLng, 15, content, this.map);
+      this._taskService.refreshFeed(this.locName, this.currChallenge, this.huntID, this.locLat, this.locLng, 15);
+    });
+  }
 
 }

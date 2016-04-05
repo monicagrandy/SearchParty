@@ -46,7 +46,10 @@ System.register(['angular2/core', 'angular2/router', 'ng2-material/all', './sear
                     this.username = _params.get('username');
                     this._socketService.createSocket(this.huntID);
                     this.getHuntData(this.huntID);
-                    this._searchPartyService.taskChange.subscribe(function (tasks) { return _this.allTasks = tasks; });
+                    this._searchPartyService.taskChange.subscribe(function (tasks) {
+                        console.log(tasks);
+                        _this.allTasks = tasks;
+                    });
                 }
                 SearchPartyComponent.prototype.getHuntData = function (id) {
                     this._searchPartyService.getHunt(id);

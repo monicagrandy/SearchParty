@@ -1,4 +1,4 @@
-System.register(['angular2/core', 'angular2/http', './api-service', 'moment'], function(exports_1, context_1) {
+System.register(['angular2/core', 'angular2/http', './api-service'], function(exports_1, context_1) {
     "use strict";
     var __moduleName = context_1 && context_1.id;
     var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
@@ -10,7 +10,7 @@ System.register(['angular2/core', 'angular2/http', './api-service', 'moment'], f
     var __metadata = (this && this.__metadata) || function (k, v) {
         if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
     };
-    var core_1, http_1, api_service_1, moment;
+    var core_1, http_1, api_service_1;
     var ChatService;
     return {
         setters:[
@@ -22,9 +22,6 @@ System.register(['angular2/core', 'angular2/http', './api-service', 'moment'], f
             },
             function (api_service_1_1) {
                 api_service_1 = api_service_1_1;
-            },
-            function (moment_1) {
-                moment = moment_1;
             }],
         execute: function() {
             ChatService = (function () {
@@ -116,12 +113,6 @@ System.register(['angular2/core', 'angular2/http', './api-service', 'moment'], f
                                     _this.messages.push([messagesArray[i].username, messagesArray[i].text, messagesArray[i].datetime]);
                                     console.log('these are the messages from getMessages() ', _this.messages);
                                 }
-                                _this.messages.forEach(function (msg) {
-                                    if (msg[3]) {
-                                        console.log("line 111 upating time");
-                                        msg[2] = moment.unix(msg[3]).fromNow();
-                                    }
-                                });
                                 resolve(_this.messages);
                                 _this.updateScroll();
                                 reject('error getting messages');
