@@ -1,8 +1,8 @@
-<div class="chatStart" *ngIf="!nameAdded" layout="column">
+<form class="chatStart" (ngSubmit)="getUsername(username)" *ngIf="!nameAdded" layout="column">
   <strong class="prompt" flex="5">Enter your name to start chatting!</strong>
-  <input  #username placeholder="name" flex="5" id='signinGuest'>
-  <button class="userNameBtn" flex="5" (click)="getUsername(username.value)">Enter Chat</button>
-</div>
+  <input [(ngModel)]="username" placeholder="name" flex="5" id='signinGuest'>
+  <button class="userNameBtn" flex="5" type="submit">Enter Chat</button>
+</form>
 
 <div class="mainChat" *ngIf="nameAdded" layout="column">
    <div class="chatMessMaster" layout="column">
