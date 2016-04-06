@@ -11,7 +11,7 @@ module.exports = {
       signin: 'http://localhost:8000/signin',
       userProfile: 'http://localhost:8000/userProfile',
       addFriend: 'http://localhost:8000/addFriend',
-      addFriends: 'http://localhost:8000/addFriends',
+      getFriends: 'http://localhost:8000/getFriends',
       addFriendToHunt: 'http://localhost:8000/addFriendToHunt',
       getFriendHunt: 'http://localhost:8000/getFriendHunt',
       getAddedHunts: 'http://localhost:8000/getAddedHunts',
@@ -19,8 +19,9 @@ module.exports = {
       getChatMessages: 'http://localhost:8000/getChatMessages',
       singleHunt: 'http://localhost:8000/singleHunt',
       templates: 'http://localhost:8000/templates',
-      singleTemplate: 'https://localhost:8000/singleTemplate',
+      singleTemplate: 'http://localhost:8000/singleTemplate',
+      urlChecker: 'http://localhost:8000/urlChecker',
       socket: 'http://localhost:8000'
-    }
+    };
   }
 }

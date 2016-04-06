@@ -3,13 +3,13 @@ import {Http} from 'angular2/http';
 import {provide} from 'angular2/core';
 import {AuthHttp, AuthConfig} from 'angular2-jwt';
 import {AuthService} from './services/auth/auth-service';
+import {UrlService} from './services/url/url-service';
+import {APIService} from './services/api/api-service';
 import {LogIn} from './pages/users/log-in';
 import {TemplatePage} from './pages/templates/templates';
 import {TaskPage} from './pages/tasks/tasks';
 import {ProfilePage} from './pages/profile/profile';
-import {Chat} from './pages/chat/chat';
 import {enableProdMode} from 'angular2/core';
-import {UrlService} from './services/url/url-service';
 
 enableProdMode();
 
@@ -26,7 +26,8 @@ import * as _ from 'underscore';
       deps: [Http]
     }),
     UrlService,
-    AuthService
+    AuthService,
+    APIService
   ]
 })
 export class MyApp {
