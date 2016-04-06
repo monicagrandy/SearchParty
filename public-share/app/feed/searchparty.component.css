@@ -4,6 +4,10 @@
 }
 
 .title {
+   opacity: 0.8;
+}
+
+.title {
    display: inline;
 }
 
