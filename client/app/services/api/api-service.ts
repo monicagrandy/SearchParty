@@ -1,8 +1,10 @@
+import {Storage, LocalStorage} from 'ionic-angular';
 import {Injectable} from 'angular2/core';
 import {Http, Headers} from 'angular2/http';
 
 @Injectable()
 export class APIService {
+  local: Storage = new Storage(LocalStorage);
   SINGLE_HUNT_URL: string = localStorage.singleHunt || 'https://getsearchparty.com/singleHunt';
   ADD_MESSAGE_URL: string = localStorage.addChatMessage || 'https://getsearchparty.com/addChatMessage';
   GET_MESSAGES_URL: string = localStorage.getChatMessages || 'https://getsearchparty.com/getChatMessages';
@@ -22,30 +24,28 @@ export class APIService {
   SIGNUP_URL: string = localStorage.signup || 'https://getsearchparty.com/signup';
   URL_CHECKER_URL: string = localStorage.urlChecker || 'https://getsearchparty.com/urlChecker';
   contentHeader: Headers = new Headers({'Content-Type': 'application/json'});
-  urls: any;
+  urls = {
+    singleHunt: this.SINGLE_HUNT_URL,
+    addChatMessage: this.ADD_MESSAGE_URL,
+    getChatMessages: this.GET_MESSAGES_URL,
+    feedback: this.FEEDBACK_URL,
+    tasks: this.TASKS_URL,
+    upload: this.UPLOAD_URL,
+    getPics: this.GET_PICS_URL,
+    userProfile: this.USER_PROFILE_URL,
+    addFriend: this.ADD_FRIEND_URL,
+    getFriends: this.GET_FRIENDS_URL,
+    addFriendToHunt: this.ADD_FRIEND_TO_HUNT_URL,
+    getFriendHunt: this.GET_FRIEND_HUNT_URL,
+    getAddedHunts: this.GET_ADDED_HUNTS_URL,
+    templates: this.TEMPLATES_URL,
+    singleTemplate: this.SINGLE_TEMPLATE_URL,
+    signin: this.SIGNIN_URL,
+    signup: this.SIGNUP_URL,
+    urlChecker: this.URL_CHECKER_URL  
+  };
   
-  constructor(private _http:Http) {
-    this.urls = {
-      singleHunt: this.SINGLE_HUNT_URL,
-      addChatMessage: this.ADD_MESSAGE_URL,
-      getChatMessages: this.GET_MESSAGES_URL,
-      feedback: this.FEEDBACK_URL,
-      tasks: this.TASKS_URL,
-      upload: this.UPLOAD_URL,
-      getPics: this.GET_PICS_URL,
-      userProfile: this.USER_PROFILE_URL,
-      addFriend: this.ADD_FRIEND_URL,
-      getFriends: this.GET_FRIENDS_URL,
-      addFriendToHunt: this.ADD_FRIEND_TO_HUNT_URL,
-      getFriendHunt: this.GET_FRIEND_HUNT_URL,
-      getAddedHunts: this.GET_ADDED_HUNTS_URL,
-      templates: this.TEMPLATES_URL,
-      singleTemplate: this.SINGLE_TEMPLATE_URL,
-      signin: this.SIGNIN_URL,
-      signup: this.SIGNUP_URL,
-      urlChecker: this.URL_CHECKER_URL
-    }
-  }
+  constructor(private _http:Http) {}
   
   getData(urlName) {
     
@@ -74,7 +74,15 @@ export class APIService {
   
   postData(dataObj, urlName) {
     
+    console.log('this is the urlName ', urlName);
+    
+    console.log('this is the urls ', this.urls);
+    
     let url = this.urls[urlName];
+    
+    console.log('this should be the url from access ', this.urls[urlName]);
+    
+    console.log('this is the url ', url);
     
     let httpPostPromise = new Promise((resolve, reject) => {
       console.log('inside post promise');

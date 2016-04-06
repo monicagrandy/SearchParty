@@ -68,6 +68,7 @@ export class MyApp {
       this.urlService.grabUrls()
         .then(urls => {
           for (let key in urls) {
+            console.log('this is the key ', key);
             this.local.set(key, urls[key]);
           }
         });

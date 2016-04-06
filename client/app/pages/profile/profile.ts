@@ -118,7 +118,7 @@ export class ProfilePage {
     
     console.log('this is the data being sent to template service ', data);
     
-    this.templateService.postData(data, 'template')
+    this.templateService.postData(data, 'singleTemplate')
       .then(template => { 
         console.log('this is the data from posttemplate ', template);
         this.keywordsArray = template.keywords;

@@ -135,7 +135,7 @@ export class TaskPage {
       let dataObj = {
         huntID: this.huntID
       }
-      this._taskService.postData(dataObj, 'hunt')
+      this._taskService.postData(dataObj, 'singleHunt')
       .then(entireHuntData => {
         let currentTaskNumber = entireHuntData.huntData.tasknumber;
         let dataObj = {
@@ -183,7 +183,7 @@ export class TaskPage {
     let dataObj = {
       huntID: this.huntID
     }
-    this._taskService.postData((dataObj), 'hunt')
+    this._taskService.postData(dataObj, 'singleHunt')
     .then(result => {
       this.finalData = result.tasks
       console.log("+++line 179 in tasks.js data: ", result)
