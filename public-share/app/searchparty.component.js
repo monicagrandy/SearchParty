@@ -50,9 +50,10 @@ var SearchPartyComponent = (function () {
                 socket_service_1.SocketService
             ]
         }), 
-        __metadata('design:paramtypes', [router_1.RouteParams, searchparty_service_1.SearchPartyService, socket_service_1.SocketService])
+        __metadata('design:paramtypes', [router_1.RouteParams, (typeof (_a = typeof searchparty_service_1.SearchPartyService !== 'undefined' && searchparty_service_1.SearchPartyService) === 'function' && _a) || Object, (typeof (_b = typeof socket_service_1.SocketService !== 'undefined' && socket_service_1.SocketService) === 'function' && _b) || Object])
     ], SearchPartyComponent);
     return SearchPartyComponent;
+    var _a, _b;
 }());
 exports.SearchPartyComponent = SearchPartyComponent;
 //# sourceMappingURL=searchparty.component.js.map
