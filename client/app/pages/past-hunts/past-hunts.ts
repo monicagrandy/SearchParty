@@ -1,18 +1,10 @@
 import {Page, NavController, NavParams} from 'ionic-angular';
 import {GoogleMapService} from '../../services/map/map-service';
 import {TaskService} from '../../services/task/task-service';
-import {ConnectionBackend, HTTP_PROVIDERS} from 'angular2/http';
-import 'rxjs/add/operator/map';
-
 
 @Page({
   templateUrl: 'build/pages/past-hunts/past-hunts.html',
-  providers: [
-    GoogleMapService,
-    TaskService,
-    ConnectionBackend,
-    HTTP_PROVIDERS,
-  ]
+  providers: [TaskService]
 })
 export class PastHuntsPage {
   map = null;
@@ -32,7 +24,12 @@ export class PastHuntsPage {
   content: any;
   huntName: any;
 
-  constructor(private nav: NavController, navParams: NavParams, private googleMaps: GoogleMapService, private _taskService: TaskService) {
+  constructor(
+    private nav: NavController, 
+    navParams: NavParams, 
+    private _googleMaps: GoogleMapService, 
+    private _taskService: TaskService
+    ) {
     this.huntID = navParams.get('huntID');
     this.huntName = navParams.get('huntName');
     this.allTasks = [];
@@ -42,12 +39,12 @@ export class PastHuntsPage {
 
   getHuntData() {
     let dataObj = {
-        huntID: this.huntID
-    }
-    console.log('getting hunt data')
+      huntID: this.huntID
+    };
+    console.log('getting hunt data');
     this._taskService.postData(dataObj, 'singleHunt')
       .then(data => {
-        console.log("promise returned")
+        console.log("promise returned");
         this.huntTasks = data.tasks;
         this.startLat = data.tasks[0].place.lat;
         this.startLng = data.tasks[0].place.lng;
@@ -55,23 +52,20 @@ export class PastHuntsPage {
         if (data.chatroom.messages.length > 0) {
           this.huntChats = data.chatroom.messages;
         }
-        this.huntTasks.forEach((item) => {
+        this.huntTasks.forEach(item => {
           this.allPlaces.push(item.place);
           this.allTasks.push(item.task);
         })
-        setTimeout(() => { this.showMap() }, 1000)
+        setTimeout(() => { this.showMap() });
       })
       .catch(err => console.log(err));
   }
 
   showMap() {
-    this.googleMaps.finalMapMaker(this.allPlaces, this.allTasks)
-      .then(data => {
-        let flightPath = data;
-      });
+    this._taskService.showMap(this.allPlaces, this.allTasks);
     
     if (this.allPlaces.length > 1) {
-      this.totalDist = this.googleMaps.calcDistance(this.allPlaces);
+      this.totalDist = this._taskService.calDist(this.allPlaces);
       console.log(this.totalDist);
     }   
   }

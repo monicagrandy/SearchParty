@@ -24,7 +24,7 @@ import { Injectable } from 'angular2/core';
       return this.finalDist;
     }
 
-    loadMap(lat, long, zoom, content, map){
+    loadMap(lat, long, zoom, content){
       let loadMapPromise = new Promise((resolve, reject) => {
         let options = { timeout: 10000, enableHighAccuracy: true };
         let latLng = new google.maps.LatLng(lat, long);
@@ -33,7 +33,6 @@ import { Injectable } from 'angular2/core';
           zoom: zoom,
           mapTypeId: google.maps.MapTypeId.ROADMAP
         };
-        this.map = map;
         this.map = new google.maps.Map(document.getElementById('map'), mapOptions);
         if (content !== null) {
           this.addMarker(latLng, content, this.map);
@@ -69,7 +68,7 @@ import { Injectable } from 'angular2/core';
       let finalMapMakerPromise = new Promise((resolve, reject) => {
         let finalLat = parseFloat(previousPlaces[previousPlaces.length - 1].location.coordinate.latitude);
         let finalLng = parseFloat(previousPlaces[previousPlaces.length - 1].location.coordinate.longitude);
-        this.loadMap(finalLat, finalLng, 12, null, this.map)
+        this.loadMap(finalLat, finalLng, 12, null)
           .then(map => {
             let bounds = new google.maps.LatLngBounds();
             let points = [];

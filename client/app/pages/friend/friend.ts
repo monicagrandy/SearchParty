@@ -14,12 +14,12 @@ export class FriendPage {
   constructor(
     private nav: NavController,
     navParams: NavParams,
-    private friendService: FriendService
+    private _friendService: FriendService
     ) {
     this.friend = navParams.get('friend');
-    let data = { username: this.friend.username };
+    let data = {username: this.friend.username};
     
-    this.friendService.postData(data, 'getFriendHunt')
+    this._friendService.postData(data, 'getFriendHunt')
       .then(data => {
         this.hunts = data.hunts;
       })

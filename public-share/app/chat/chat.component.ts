@@ -51,7 +51,7 @@ export class ChatComponent {
     this._chatService.getMessages()
       .then(messages => {
         console.log('this is the data from _chatService getmessages ', messages);
-        this.messages = messages
+        this.messages = messages;
       })
       .catch(error => console.log('there was an error ', error));
   }
@@ -59,9 +59,9 @@ export class ChatComponent {
   OnKey(event: KeyboardEvent, msg) {
     console.log("typing!")
     if(event.keyCode === 13){
-      console.log("enter key hit")
-      console.log("msg = ", msg)
-      this.send(msg)
+      console.log("enter key hit");
+      console.log("msg = ", msg);
+      this.send(msg);
     }
     if (event) {
       this._chatService.userIsTyping();

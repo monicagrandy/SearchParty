@@ -20,7 +20,11 @@ export class TemplatePage {
   geolocation: {};
   templates: any;
 
-  constructor(private nav: NavController, navParams: NavParams, private templateService: TemplateService) {
+  constructor(
+    private nav: NavController, 
+    navParams: NavParams, 
+    private _templateService: TemplateService
+    ) {
     this.selectedItem = navParams.get('item');
 
     this.loadingImg = 'img/poi.gif';
@@ -51,7 +55,7 @@ export class TemplatePage {
 
     this.items = [];
 
-    this.templateService.getData()
+    this._templateService.getData()
     .then(templates => {
       console.log("Templates", templates);
       this.templates = templates;

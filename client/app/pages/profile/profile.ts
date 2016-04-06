@@ -31,9 +31,9 @@ export class ProfilePage {
   constructor(
     private nav: NavController,
     navParams: NavParams,
-    private profileService: ProfileService,
-    private friendService: FriendService,
-    private templateService: TemplateService
+    private _profileService: ProfileService,
+    private _friendService: FriendService,
+    private _templateService: TemplateService
   ) {
 
     this.token = this.local.get('id_token')._result;
@@ -48,7 +48,7 @@ export class ProfilePage {
     
     let tokenData = { token: this.token };
     
-    this.profileService.postData(tokenData, 'userProfile')
+    this._profileService.postData(tokenData, 'userProfile')
       .then(data => {
         console.log(data.hunts);
         let huntsWithAtleastOneTask = [];
@@ -63,14 +63,14 @@ export class ProfilePage {
         
     let userData = { username: this.user };
     
-    this.profileService.postData(userData, 'getAddedHunts')
+    this._profileService.postData(userData, 'getAddedHunts')
       .then(data => {
         console.log("these are the added hunts in profile.ts", data)
         this.addedHunts = data.hunts;
       })    
         .catch(error => console.log(error));
 
-    this.friendService.postData(tokenData, 'getFriends')
+    this._friendService.postData(tokenData, 'getFriends')
       .then(data => {
         console.log('friends gotten! ', data);
         this.friends = data;
@@ -118,7 +118,7 @@ export class ProfilePage {
     
     console.log('this is the data being sent to template service ', data);
     
-    this.templateService.postData(data, 'singleTemplate')
+    this._templateService.postData(data, 'singleTemplate')
       .then(template => { 
         console.log('this is the data from posttemplate ', template);
         this.keywordsArray = template.keywords;
@@ -147,11 +147,11 @@ export class ProfilePage {
   addFriend(friend) {
     console.log(friend);
     let dataToSend = { token: this.token, friendusername: friend.username };
-    this.friendService.postData(dataToSend, 'addFriend')
+    this._friendService.postData(dataToSend, 'addFriend')
       .then(data => {
           console.log('friend added! ', data);
           let tokenData = { token: this.token };
-          this.friendService.postData(tokenData, 'getFriends')
+          this._friendService.postData(tokenData, 'getFriends')
             .then(data => {
               console.log('friends gotten! ', data);
               this.friends = data;
