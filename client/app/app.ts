@@ -64,7 +64,7 @@ export class MyApp {
 
   initializeApp() {
     this.platform.ready().then(() => {
-      //comment out urlservice for dpeloyment
+      //comment out urlservice for deployment
       this.urlService.grabUrls()
         .then(urls => {
           for (let key in urls) {

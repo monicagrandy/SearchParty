@@ -117,7 +117,7 @@ export class TaskPage {
   }
 
   takePic() {
-    console.log('taking picture')
+    console.log('taking picture');
     let options = {
       destinationType: 0,
       sourceType: 1,
@@ -238,22 +238,6 @@ export class TaskPage {
       this.completeToggle = false;
     }
     return this.completeToggle;
-  }
-
-  share(message, subject, file) {
-    if(window.plugins.socialsharing) {
-      window.plugins.socialsharing.share(message, subject, file, this.link);
-    }
-  }
-
-  shareViaTwitter(message, image) {
-    if(window.plugins.socialsharing) {
-      window.plugins.socialsharing.canShareVia("twitter", message, (Date.now())/1000, image, this.link, result => {
-        window.plugins.socialsharing.shareViaTwitter(message, image, link);
-      }, error => {
-        console.error(error);
-      });
-    }
   }
 
   shareWeb(text) {
