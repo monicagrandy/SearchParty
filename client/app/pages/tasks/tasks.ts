@@ -135,7 +135,7 @@ export class TaskPage {
       let dataObj = {
         huntID: this.huntID
       }
-      this._taskService.postData(JSON.stringify(dataObj), 'hunt')
+      this._taskService.postData(dataObj, 'hunt')
       .then(entireHuntData => {
         let currentTaskNumber = entireHuntData.huntData.tasknumber;
         let dataObj = {
@@ -143,7 +143,7 @@ export class TaskPage {
           huntID: this.huntID,
           image: this.imgData
         };
-        this._taskService.postData(JSON.stringify(dataObj), 'upload')
+        this._taskService.postData(dataObj, 'upload')
         .then(result => {
           console.log("image sent to server");
         }).catch(error => console.error(error));
@@ -153,7 +153,7 @@ export class TaskPage {
     });
   }
 
-  getNewTask(){
+  getNewTask() {
     // console.log(this.keywordsLength - this.keyword.length)
     this.imgData = ""
     this.showURL = false;
@@ -178,12 +178,12 @@ export class TaskPage {
     }
   }
 
-  searchComplete(){
+  searchComplete() {
     console.log(this.previousTasks);
     let dataObj = {
       huntID: this.huntID
     }
-    this._taskService.postData(JSON.stringify(dataObj), 'hunt')
+    this._taskService.postData((dataObj), 'hunt')
     .then(result => {
       this.finalData = result.tasks
       console.log("+++line 179 in tasks.js data: ", result)
@@ -205,7 +205,7 @@ export class TaskPage {
     }
   }
 
-  sendFeedback(val){
+  sendFeedback(val) {
     if (val === 1) {
       console.log('sending good feedback!');
       this.feedback = "good";
@@ -223,14 +223,14 @@ export class TaskPage {
       feedback: this.feedback
     };
 
-    this._taskService.postData(JSON.stringify(userFeedback), 'feedback')
+    this._taskService.postData(userFeedback, 'feedback')
     .then(result => {
       this.nav.setRoot(TemplatePage);
       console.log(result);
     });
   }
 
-  markComplete(){
+  markComplete() {
     console.log(this.completeToggle);
     if (this.completeToggle === false) {
       this.completeToggle = true;
@@ -282,7 +282,7 @@ export class TaskPage {
       huntName: this.huntName
     };
 
-    this._taskService.postData(JSON.stringify(dataObj), 'tasks')
+    this._taskService.postData(dataObj, 'tasks')
     .then(result => {
       this.locName = result.businesses.name;
       this.currChallenge = result.tasks.content;
