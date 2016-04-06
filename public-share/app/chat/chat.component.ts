@@ -56,7 +56,13 @@ export class ChatComponent {
       .catch(error => console.log('there was an error ', error));
   }
 
-  OnKey(event: KeyboardEvent) {
+  OnKey(event: KeyboardEvent, msg) {
+    console.log("typing!")
+    if(event.keyCode === 13){
+      console.log("enter key hit")
+      console.log("msg = ", msg)
+      this.send(msg)
+    }
     if (event) {
       this._chatService.userIsTyping();
     }
