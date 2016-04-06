@@ -6,6 +6,7 @@ import {FORM_DIRECTIVES} from 'angular2/common';
 import {JwtHelper} from 'angular2-jwt';
 import {AuthService} from '../../services/auth/auth-service';
 import 'rxjs/add/operator/map';
+import {APIService} from '../../services/api/api-service';
 
 @Page({
   templateUrl: 'build/pages/users/log-in.html',
@@ -22,7 +23,7 @@ export class LogIn {
   local: Storage = new Storage(LocalStorage);
   user: string;
 
-  constructor(private http: Http, private nav: NavController, navParams: NavParams, private auth: AuthService) {
+  constructor(private http: Http, private nav: NavController, navParams: NavParams, private auth: AuthService, private apiService:APIService) {
     let token = this.local.get('id_token')._result;
     if(token) {
       this.user = this.jwtHelper.decodeToken(token).username;
@@ -37,34 +38,32 @@ export class LogIn {
   }
 
   login(credentials) {
-      this.http.post(this.LOGIN_URL, JSON.stringify(credentials), { headers: this.contentHeader })
-        .map(res => res.json())
-        .subscribe(
-          data => {
+    this.apiService.postData(credentials, 'signin')
+      .then(data => {
+             this.getCoords()
+            this.loadTemplates();
+            this.authSuccess(data.token);
+            console.log('success');
+      })
+        .catch(error => {
+          this.error = error;
+          console.log(this.error);
+        });
+  }
+
+  signup(credentials) {
+    this.apiService.postData(credentials, 'signup')
+      .then(data => {
             this.getCoords()
             this.loadTemplates();
             this.authSuccess(data.token);
             console.log('success');
-                },
-          err => {
-            this.error = err;
-            console.log(this.error);
-          }
-        );
-    }
-
-  signup(credentials) {
-     this.http.post(this.SIGNUP_URL, JSON.stringify(credentials), { headers: this.contentHeader })
-        .map(res => res.json())
-        .subscribe(
-          data => {
-                   this.getCoords();
-                   this.authSuccess(data.token);
-                   this.loadTemplates();
-                 },
-          err => this.error = err
-        );
-    }
+      })
+        .catch(error => {
+          this.error = error;
+          console.log(this.error);
+        });
+  }
 
   logout() {
     this.local.remove('id_token');

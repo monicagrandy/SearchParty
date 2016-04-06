@@ -45,7 +45,7 @@ export class PastHuntsPage {
         huntID: this.huntID
     }
     console.log('getting hunt data')
-    this._taskService.postData(JSON.stringify(dataObj), 'hunt')
+    this._taskService.postData(dataObj, 'singleHunt')
       .then(data => {
         console.log("promise returned")
         this.huntTasks = data.tasks;
