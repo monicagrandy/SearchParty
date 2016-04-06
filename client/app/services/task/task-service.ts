@@ -1,6 +1,8 @@
 import {Injectable} from 'angular2/core';
 import {Storage, LocalStorage} from 'ionic-angular';
 import {APIService} from '../api/api-service';
+import {NgZone} from 'angular2/core';
+import {Camera} from 'ionic-native';
 
 @Injectable()
 export class TaskService {
@@ -12,8 +14,10 @@ export class TaskService {
   userLong: string;
   local: Storage = new Storage(LocalStorage);
   SOCKET_URL: string = localStorage.socket || 'https://getsearchparty.com';
+  imgData: any;
+  image: any;
   
-  constructor(private _apiService:APIService) {}
+  constructor(private _apiService:APIService, private _zone: NgZone) {}
   
   postData(data, urlName) {
     return this._apiService.postData(data, urlName);
@@ -62,6 +66,47 @@ export class TaskService {
     this.socket.emit('taskChange', name, task, room, lat, lng, zoom);
     console.log('::::EMITTED SOCKET:::::');
   }
+  
+  takePic() {
+    console.log('taking picture');
+    let options = {
+      destinationType: 0,
+      sourceType: 1,
+      encodingType: 0,
+      targetWidth: 1024,
+      targetHeight: 1024,
+      quality:100,
+      allowEdit: false,
+      saveToPhotoAlbum: false
+    };
+    Camera.getPicture(options)
+      .then((data) => {
+        this.imgData = 'data:image/jpeg;base64,' + data;
+        this._zone.run(() => this.image = this.imgData);
+
+        let dataObj = {
+          huntID: this.huntID
+        };
+        
+        this.postData(dataObj, 'singleHunt')
+          .then(entireHuntData => {
+            let currentTaskNumber = entireHuntData.huntData.tasknumber;
+            let dataObj = {
+              count: currentTaskNumber,
+              huntID: this.huntID,
+              image: this.imgData
+            };
+            this.postData(dataObj, 'upload')
+              .then(result => {
+                console.log("image sent to server");
+              })
+                .catch(error => console.error(error));
+            });
+      }, (error) => {
+        alert(error);
+      });    
+  }
+
 
 }
 

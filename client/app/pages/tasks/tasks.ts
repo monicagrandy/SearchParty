@@ -68,14 +68,11 @@ export class TaskPage {
   constructor(
     platform: Platform,
     private nav: NavController,
-    navParams: NavParams,
+    private _navParams: NavParams,
     private _taskService: TaskService,
     private googleMaps: GoogleMapService,
     _zone: NgZone
   ) {
-    this.keywordsArray = navParams.get('keywordsArray')
-    // this.taskNumber = navParams.get('taskNumber');
-    // this.keywordsLength = this.keyword.length;
     this.showURL = false;
     this._zone = _zone;
     this.platform = platform;
@@ -86,71 +83,58 @@ export class TaskPage {
     if (this.token) {
       this.user = this.jwtHelper.decodeToken(this.token).username;
     }
-    this.locAddress = navParams.get('locAddress');
-    this.userLat = localStorage.userLat;
-    this.userLong = localStorage.userLng;
-    this.huntID = navParams.get('huntID');
-    this.currChallenge =  localStorage.currChallenge || navParams.get('currChallenge');
-    this.locLat = localStorage.locLat || navParams.get('locLat');
-    this.locLng = localStorage.locLng || navParams.get('locLng');
-    this.locName = localStorage.locName || navParams.get('locName');
-    this.huntName = localStorage.huntName || navParams.get('huntName');
-    this.previousPlaces = navParams.get('previousPlaces');
-    this.previousTasks = navParams.get('previousTasks');
-    this.taskNumber = navParams.get('taskNumber');
-    this.totalNumberOfTasks = navParams.get('totalNumberOfTasks');
     
+    this.grabParamters();
+    this.buildTwitterLink();
+    
+    this.directionLink = `https://www.google.com/maps/dir/${this.userLat},${this.userLong}/${this.locAddress}`;
+
     console.log('this is the previous places ', this.previousPlaces);
     
+    // create socket
     this._taskService.createSocket(this.huntID, this.user);
     // geowatching setup
     this._taskService.createWatchLocation();
-    this.link = `https://getsearchparty.com/share/#/hunt/${this.user}/${this.huntID}`;
-    this.directionLink = `https://www.google.com/maps/dir/${this.userLat},${this.userLong}/${this.locAddress}`;
-    this.text = encodeURIComponent('I am going on an adventure! Follow me on Search Party!');
-    this.hashtags = 'searchparty';
-    this.via = 'GetSearchParty';
-    this.url = encodeURIComponent(this.link);
-    this.encodedTweetLink = `https://twitter.com/intent/tweet?hashtags=${this.hashtags}&url=${this.url}&text=${this.text}&via=${this.via}`;
     let content = '<h4>' + this.locName + '</h4><p>' + this.locAddress  + '</p>';
     setTimeout(()=>{ this.googleMaps.loadMap(this.locLat, this.locLng, 15, content, this.map).then(map => this.map = map), 2000 });
   }
 
   takePic() {
-    console.log('taking picture');
-    let options = {
-      destinationType: 0,
-      sourceType: 1,
-      encodingType: 0,
-      targetWidth: 1024,
-      targetHeight: 1024,
-      quality:100,
-      allowEdit: false,
-      saveToPhotoAlbum: false
-    };
-    Camera.getPicture(options).then((data) => {
-      this.imgData = 'data:image/jpeg;base64,' + data;
-      this._zone.run(() => this.image = this.imgData);
+    this._taskService.takePic();
+    // console.log('taking picture');
+    // let options = {
+    //   destinationType: 0,
+    //   sourceType: 1,
+    //   encodingType: 0,
+    //   targetWidth: 1024,
+    //   targetHeight: 1024,
+    //   quality:100,
+    //   allowEdit: false,
+    //   saveToPhotoAlbum: false
+    // };
+    // Camera.getPicture(options).then((data) => {
+    //   this.imgData = 'data:image/jpeg;base64,' + data;
+    //   this._zone.run(() => this.image = this.imgData);
 
-      let dataObj = {
-        huntID: this.huntID
-      }
-      this._taskService.postData(dataObj, 'singleHunt')
-      .then(entireHuntData => {
-        let currentTaskNumber = entireHuntData.huntData.tasknumber;
-        let dataObj = {
-          count: currentTaskNumber,
-          huntID: this.huntID,
-          image: this.imgData
-        };
-        this._taskService.postData(dataObj, 'upload')
-        .then(result => {
-          console.log("image sent to server");
-        }).catch(error => console.error(error));
-      })
-    }, (error) => {
-      alert(error);
-    });
+    //   let dataObj = {
+    //     huntID: this.huntID
+    //   }
+    //   this._taskService.postData(dataObj, 'singleHunt')
+    //   .then(entireHuntData => {
+    //     let currentTaskNumber = entireHuntData.huntData.tasknumber;
+    //     let dataObj = {
+    //       count: currentTaskNumber,
+    //       huntID: this.huntID,
+    //       image: this.imgData
+    //     };
+    //     this._taskService.postData(dataObj, 'upload')
+    //     .then(result => {
+    //       console.log("image sent to server");
+    //     }).catch(error => console.error(error));
+    //   })
+    // }, (error) => {
+    //   alert(error);
+    // });
   }
 
   getNewTask() {
@@ -282,6 +266,32 @@ export class TaskPage {
       this.map = this.googleMaps.loadMap(this.locLat, this.locLng, 15, content, this.map);
       this._taskService.refreshFeed(this.locName, this.currChallenge, this.huntID, this.locLat, this.locLng, 15);
     });
+  }
+  
+  grabParamters() {
+    this.keywordsArray = this._navParams.get('keywordsArray')
+    this.locAddress = this._navParams.get('locAddress');
+    this.userLat = localStorage.userLat;
+    this.userLong = localStorage.userLng;
+    this.huntID = this._navParams.get('huntID');
+    this.currChallenge =  localStorage.currChallenge || this._navParams.get('currChallenge');
+    this.locLat = localStorage.locLat || this._navParams.get('locLat');
+    this.locLng = localStorage.locLng || this._navParams.get('locLng');
+    this.locName = localStorage.locName || this._navParams.get('locName');
+    this.huntName = localStorage.huntName || this._navParams.get('huntName');
+    this.previousPlaces = this._navParams.get('previousPlaces');
+    this.previousTasks = this._navParams.get('previousTasks');
+    this.taskNumber = this._navParams.get('taskNumber');
+    this.totalNumberOfTasks = this._navParams.get('totalNumberOfTasks');
+  }
+  
+  buildTwitterLink() {
+    this.link = `https://getsearchparty.com/share/#/hunt/${this.user}/${this.huntID}`;
+    this.text = encodeURIComponent('I am going on an adventure! Follow me on Search Party!');
+    this.hashtags = 'searchparty';
+    this.via = 'GetSearchParty';
+    this.url = encodeURIComponent(this.link);
+    this.encodedTweetLink = `https://twitter.com/intent/tweet?hashtags=${this.hashtags}&url=${this.url}&text=${this.text}&via=${this.via}`;
   }
 
 }
