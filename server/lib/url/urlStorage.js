@@ -18,6 +18,8 @@ module.exports = {
       addChatMessage: 'http://localhost:8000/addChatMessage',
       getChatMessages: 'http://localhost:8000/getChatMessages',
       singleHunt: 'http://localhost:8000/singleHunt',
+      templates: 'http://localhost:8000/templates',
+      singleTemplate: 'https://localhost:8000/singleTemplate',
       socket: 'http://localhost:8000'
     }
   }
