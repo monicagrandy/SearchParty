@@ -1,24 +1,19 @@
 import {Page, Platform, NavController, NavParams, LocalStorage} from 'ionic-angular';
 import {TaskService} from '../../services/task/task-service';
 import {GoogleMapService} from '../../services/map/map-service';
-import {ConnectionBackend, HTTP_PROVIDERS} from 'angular2/http';
 import {JwtHelper} from 'angular2-jwt';
 import {NgZone} from 'angular2/core';
 import {Camera} from 'ionic-native';
 import {TemplatePage} from '../templates/templates';
 import {Chat} from '../chat/chat';
-import 'rxjs/add/operator/map';
 
 @Page({
   templateUrl: 'build/pages/tasks/tasks.html',
   providers: [
-    ConnectionBackend,
-    HTTP_PROVIDERS,
     TaskService,
     GoogleMapService
   ]
 })
-
 export class TaskPage {
   title = 'Current Task';
   map = null;
@@ -42,7 +37,6 @@ export class TaskPage {
   previousPlaces: any;
   previousTasks: any;
   huntID: any;
-  _zone: any;
   platform: any;
   image: any;
   imgData: string;
@@ -64,17 +58,18 @@ export class TaskPage {
   huntName: any;
   keywordsArray: any;
   totalNumberOfTasks: any;
+  endTimeUnix: number;
+  startTimeUnix: number;
 
   constructor(
     platform: Platform,
     private nav: NavController,
     private _navParams: NavParams,
     private _taskService: TaskService,
-    private googleMaps: GoogleMapService,
-    _zone: NgZone
+    private _googleMaps: GoogleMapService,
+    private _zone: NgZone
   ) {
     this.showURL = false;
-    this._zone = _zone;
     this.platform = platform;
     this.image = null;
     this.tasksLeft = true;
@@ -87,20 +82,21 @@ export class TaskPage {
     this.grabParamters();
     this.buildTwitterLink();
     
-    this.directionLink = `https://www.google.com/maps/dir/${this.userLat},${this.userLong}/${this.locAddress}`;
-
-    console.log('this is the previous places ', this.previousPlaces);
-    
     // create socket
     this._taskService.createSocket(this.huntID, this.user);
     // geowatching setup
     this._taskService.createWatchLocation();
+    
     let content = '<h4>' + this.locName + '</h4><p>' + this.locAddress  + '</p>';
-    setTimeout(()=>{ this.googleMaps.loadMap(this.locLat, this.locLng, 15, content, this.map).then(map => this.map = map), 2000 });
+    this.directionLink = `https://www.google.com/maps/dir/${this.userLat},${this.userLong}/${this.locAddress}`;
+    setTimeout(() => {
+      this._googleMaps.loadMap(this.locLat, this.locLng, 15, content)
+        .then(map => console.log('map created'))});
   }
 
   takePic() {
-    this._taskService.takePic();
+    this._taskService.takePic()
+      .then(image => this.imgData = image);
     // console.log('taking picture');
     // let options = {
     //   destinationType: 0,
@@ -138,55 +134,31 @@ export class TaskPage {
   }
 
   getNewTask() {
-    // console.log(this.keywordsLength - this.keyword.length)
     this.imgData = ""
     this.showURL = false;
-    console.log('getting ready to send new task!')
-    console.log(this.keywordsArray);
-    console.log('this is the huntID in the tasks! ');
-    console.log(this.huntID);
-
-    console.log(this.taskNumber);
-    console.log(this.totalNumberOfTasks);
 
     if (this.taskNumber !== this.totalNumberOfTasks) {
       let keyword = this.keywordsArray.shift();
-      console.log('this is the huntID before it is sent! ', this.huntID);
       this.sendData(keyword.name);
     } else {
-      console.log('no more tasks!');
-      console.log(this.previousTasks);
-      console.log(this.previousPlaces);
       this.tasksLeft = false;
       this.searchComplete();
     }
   }
 
   searchComplete() {
-    console.log(this.previousTasks);
-    let dataObj = {
-      huntID: this.huntID
-    }
-    this._taskService.postData(dataObj, 'singleHunt')
-    .then(result => {
-      this.finalData = result.tasks
-      console.log("+++line 179 in tasks.js data: ", result)
-    })
-    this.endTime = new Date().toLocaleTimeString();
-    this.endTimeUnix = Date.now();
-    localStorage.endTime = this.endTime;
-    this.startTime = localStorage.startTime;
-    this.startTimeUnix = localStorage.startTimeUnix;
-
-    this.googleMaps.finalMapMaker(this.previousPlaces, this.previousTasks)
-    .then(data => {
-      let flightPath = data;
-    });
-
-    if (this.previousPlaces.length > 1) {
-      this.finalDist = this.googleMaps.calcDistance(this.previousPlaces);
-      console.log(this.finalDist);
-    }
+    this._taskService.searchComplete(this.previousPlaces, this.previousTasks)
+      .then(result => {
+        this.endTime = new Date().toLocaleTimeString();
+        this.endTimeUnix = Date.now();
+        localStorage.endTime = this.endTime;
+        this.startTime = localStorage.startTime;
+        this.startTimeUnix = localStorage.startTimeUnix;
+        this.finalData = result.finalData;
+        this.finalDist = result.finalDist;
+      })
+        .catch(error => console.log(error));
+    
   }
 
   sendFeedback(val) {
@@ -199,6 +171,7 @@ export class TaskPage {
       console.log('sending bad feedback!');
       this.feedback = "bad";
     }
+    
     let userFeedback = {
       token: localStorage.id_token,
       huntID: this.huntID,
@@ -208,10 +181,10 @@ export class TaskPage {
     };
 
     this._taskService.postData(userFeedback, 'feedback')
-    .then(result => {
-      this.nav.setRoot(TemplatePage);
-      console.log(result);
-    });
+      .then(result => {
+        this.nav.setRoot(TemplatePage);
+        console.log(result);
+      });
   }
 
   markComplete() {
@@ -225,7 +198,7 @@ export class TaskPage {
   }
 
   shareWeb(text) {
-    this.showURL = true
+    this.showURL = true;
     console.log(this.link);
     return this.showURL;
   }
@@ -237,35 +210,19 @@ export class TaskPage {
   }
 
   sendData(keyword) {
-    let dataObj = {
-      previousPlaces: this.previousPlaces,
-      previousTasks: this.previousTasks,
-      keyword: keyword,
-      token: localStorage.id_token,
-      huntID: this.huntID,
-      geolocation: {
-        lat: this.locLat,
-        lng: this.locLng
-      },
-      huntName: this.huntName
-    };
-
-    this._taskService.postData(dataObj, 'tasks')
-    .then(result => {
-      this.locName = result.businesses.name;
-      this.currChallenge = result.tasks.content;
-      this.previousPlaces.push(result.businesses);
-      this.locAddress = result.businesses.location.display_address[0] + ', ' + result.businesses.location.display_address[2];
-      this.previousTasks.push(result.tasks);
-      this.locLat = result.businesses.location.coordinate.latitude;
-      this.locLng = result.businesses.location.coordinate.longitude;
-      this.taskNumber = result.taskNumber;
-      this.totalNumberOfTasks = result.totalNumberOfTasks;
-      this.markComplete();
-      let content = '<h4>' + this.locName + '</h4><p>' + this.locAddress  + '</p>';
-      this.map = this.googleMaps.loadMap(this.locLat, this.locLng, 15, content, this.map);
-      this._taskService.refreshFeed(this.locName, this.currChallenge, this.huntID, this.locLat, this.locLng, 15);
-    });
+    this._taskService.getNewTask(keyword, this.previousPlaces, this.previousTasks, this.locLat, this.locLng, this.huntName)
+      .then(result => {
+        this.locName = result.locName;
+        this.currChallenge = result.currChallenge;
+        this.previousPlaces = result.previousPlaces;
+        this.locAddress = result.locAddress;
+        this.previousTasks = result.previousTasks;
+        this.locLat = result.locLat;
+        this.locLng = result.locLng;
+        this.taskNumber = result.taskNumber;
+        this.totalNumberOfTasks = result.totalNumberOfTasks;        
+        this.markComplete();
+      });
   }
   
   grabParamters() {

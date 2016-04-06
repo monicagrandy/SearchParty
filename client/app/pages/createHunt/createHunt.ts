@@ -28,25 +28,18 @@ export class CreateHuntPage {
   keywordsArray = [];
   template: any;
 
-  constructor(private nav: NavController, navParams: NavParams, private templateService: TemplateService) {
+  constructor(
+    private nav: NavController, 
+    navParams: NavParams, 
+    private _templateService: TemplateService
+    ) {
     this.template = navParams.get('templateName');
     this.keywordsArray = navParams.get('keywordsArray');
     this.taskNumber;
     this.name;
     this.requiredInfo = false;
-    if (localStorage.userLat && localStorage.userLng) {
-      this.userLat = localStorage.userLat;
-      this.userLng = localStorage.userLng;
-    } else {
-      if (navigator.geolocation) {
-        navigator.geolocation.watchPosition((position => {
-          this.userLat = position.coords.latitude;
-          this.userLng = position.coords.longitude;
-          this.local.set('userLat', position.coords.latitude);
-          this.local.set('userLng', position.coords.longitude);
-        }), (error => console.error(error)), {});
-      }
-    }
+    this.userLat = localStorage.userLat;
+    this.userLng = localStorage.userLng;
   }
   
   nameHunt() {
@@ -83,7 +76,7 @@ export class CreateHuntPage {
       taskNumber: this.taskNumber
     };
      
-    this.templateService.postData(dataToSend, 'tasks')
+    this._templateService.postData(dataToSend, 'tasks')
       .then(data => {
         this.nav.setRoot(TaskPage, {
           locAddress: data.businesses.location.display_address[0] + ', ' + data.businesses.location.display_address[2],
