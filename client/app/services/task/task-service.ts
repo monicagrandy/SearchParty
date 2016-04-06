@@ -1,66 +1,22 @@
 import {Injectable} from 'angular2/core';
 import {Storage, LocalStorage} from 'ionic-angular';
-import {Http, Headers} from 'angular2/http';
-import {UrlService} from '../url/url-service';
-import 'rxjs/add/operator/map'; 
+import {APIService} from '../api/api-service';
 
 @Injectable()
 export class TaskService {
   resendLocationTimeout = null;
-  userInfo = null;
   socket: any;
   huntID: string;
   username: string;
   userLat: string;
   userLong: string;
   local: Storage = new Storage(LocalStorage);
-  contentHeader: Headers = new Headers({'Content-Type': 'application/json'});
-  HUNT_URL: string = localStorage.singleHunt || 'https://getsearchparty.com/singleHunt';
-  TASKS_URL: string = localStorage.tasks || 'https://getsearchparty.com/tasks';
-  FEEDBACK_URL: string = localStorage.feedback || 'https://getsearchparty.com/feedback';
-  UPLOAD_URL: string = localStorage.upload || 'https://getsearchparty.com/upload';
   SOCKET_URL: string = localStorage.socket || 'https://getsearchparty.com';
-  urls: {
-    hunt: string;
-    tasks: string;
-    upload: string;
-    feedback: string;
-  };
   
-  constructor(private _http:Http) {}
+  constructor(private _apiService:APIService) {}
   
-  postData(data, url) {
-    
-    this.urls = {
-      hunt: this.HUNT_URL,
-      tasks: this.TASKS_URL, 
-      upload: this.UPLOAD_URL,
-      feedback: this.FEEDBACK_URL
-    };
-    
-    console.log("called post req");
-    
-    console.log('this is the url passed in ', url);
-    
-    let urlLookup = this.urls[url];
-    
-    console.log(urlLookup);
-
-    let httpPromise = new Promise((resolve, reject) => {
-      console.log(data);
-      this._http.post(urlLookup, data, { headers: this.contentHeader })
-        .map(res => res.json())
-        .subscribe(
-        data => {
-          console.log("data from promise: ", data);
-          resolve(data);
-        },
-        err => reject(err),
-        () => console.log('data recieved')
-        )
-    })
-
-    return httpPromise;
+  postData(data, urlName) {
+    return this._apiService.postData(data, urlName);
   }
   
   createSocket(huntID, username) {

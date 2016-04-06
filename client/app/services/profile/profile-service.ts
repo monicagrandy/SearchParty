@@ -1,67 +1,16 @@
 import {Injectable} from 'angular2/core';
-import {Http, Headers} from 'angular2/http';
 import {Storage, LocalStorage} from 'ionic-angular';
-import {ConnectionBackend, HTTP_PROVIDERS} from 'angular2/http';
-import {UrlService} from '../url/url-service'; 
-import 'rxjs/add/operator/map';
+import {APIService} from '../api/api-service';
 
 @Injectable()
 export class ProfileService {
   local: Storage = new Storage(LocalStorage);
-  PROFILE_URL: string = localStorage.userProfile || 'https://getsearchparty.com/userProfile'; //update this later
-  ADDEDHUNTS_URL: string = localStorage.getAddedHunts || 'https://getsearchparty.com/getAddedHunts';
-  contentHeader: Headers = new Headers({'Content-Type': 'application/json'});
 
-  constructor(private _http:Http) {}
+  constructor(private _apiService:APIService) {}
 
-  getProfile(token) {
+  postData(data, urlName) {
     console.log('called post req');
-    let httpPostPromise = new Promise((resolve, reject) => {
-      console.log('inside post promise');
-      let dataToSend = { token: token };
-
-      this._http.post(this.PROFILE_URL, JSON.stringify(dataToSend), {headers: this.contentHeader})
-        .map(res => res.json())
-        .subscribe(
-          data => {
-            console.log('data from promise: ', data);
-            resolve(data);
-          },
-          err => {
-            this.logError(err);
-            reject(err);
-          },
-          () => console.log('data recieved')
-          )
-        })
-    return httpPostPromise;
+    return this._apiService.postData(data, urlName);
   }
 
-  addedHunts(username) {
-    console.log('called addedHunts post req');
-    console.log('inside addedHunts post promise');
-    let dataToSend = { username: username };
-    console.log('this is the data to send ', dataToSend);
-    let httpPostPromise = new Promise((resolve, reject) => {
-      this._http.post(this.ADDEDHUNTS_URL, JSON.stringify(dataToSend), {headers: this.contentHeader})
-        .map(res => res.json())
-        .subscribe(
-          data => {
-            console.log('data from promise: ', data);
-            resolve(data);
-          },
-          err => {
-            console.log(err);
-            this.logError(err);
-            reject(err);
-          },
-          () => console.log('data recieved')
-          )  
-    });
-    return httpPostPromise;
-  }
-
-  logError(err) {
-    console.error('There was an error: ' + err);
-  }
 }
