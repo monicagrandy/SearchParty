@@ -57,7 +57,13 @@ System.register(['angular2/core', 'ng2-material/all', 'angular2/router', './chat
                     })
                         .catch(function (error) { return console.log('there was an error ', error); });
                 };
-                ChatComponent.prototype.OnKey = function (event) {
+                ChatComponent.prototype.OnKey = function (event, msg) {
+                    console.log("typing!");
+                    if (event.keyCode === 13) {
+                        console.log("enter key hit");
+                        console.log("msg = ", msg);
+                        this.send(msg);
+                    }
                     if (event) {
                         this._chatService.userIsTyping();
                     }

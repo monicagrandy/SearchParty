@@ -16,10 +16,18 @@
    </div>
 
   <div class="chatInput">
-    <form class="msg" action="">
-      <textarea class="msgText" autocomplete="off" (keyup)="OnKey($event)" [(ngModel)]="chatBox" placeholder="Message..."></textarea>
-      <button class="sendMsg" (click)="send(chatBox)" (ngSubmit)="send(chatBox)"><a href="#{{message[0]}"></a>Send</button>
+    <form class="msg" (ngSubmit)="send(chatBox)">
+        <textarea type="text" class="msgText" autocomplete="off" [(ngModel)]="chatBox" (keyup)="OnKey($event, chatBox)" placeholder="Message..."></textarea>
+        <button class="sendMsg" type="submit">Send</button>
     </form>
   </div>
 
 </div>
+
+
+  <!-- <form (ngSubmit)="send(chatBox)">
+        <ion-item>
+           <ion-input type="text" (keyup)="OnKey($event)" [(ngModel)]="chatBox" placeholder="Message..."></ion-input>
+           <button (click)="send(chatBox)" item-right>send</button>
+        </ion-item>
+  </form> -->
