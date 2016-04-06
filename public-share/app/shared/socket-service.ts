@@ -1,6 +1,6 @@
 import {Injectable} from 'angular2/core';
-import {SearchPartyService} from './searchparty-service';
-import {GoogleMapService} from './map-service';
+import {SearchPartyService} from '../feed/searchparty-service';
+import {GoogleMapService} from '../map/map-service';
 
 
 @Injectable()

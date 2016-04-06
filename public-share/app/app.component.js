@@ -12,11 +12,11 @@ var core_1 = require('angular2/core');
 var http_1 = require('angular2/http');
 var router_1 = require('angular2/router');
 var all_1 = require('ng2-material/all');
-var searchparty_component_1 = require('./searchparty.component');
-var url_service_1 = require('./url-service');
-var api_service_1 = require('./api-service');
-var map_service_1 = require('./map-service');
-var socket_service_1 = require('./socket-service');
+var searchparty_component_1 = require('./feed/searchparty.component');
+var url_service_1 = require('./shared/url-service');
+var api_service_1 = require('./shared/api-service');
+var map_service_1 = require('./map/map-service');
+var socket_service_1 = require('./shared/socket-service');
 var AppComponent = (function () {
     function AppComponent(_urlService) {
         this._urlService = _urlService;

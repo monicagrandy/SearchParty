@@ -1,6 +1,11 @@
+<<<<<<< HEAD:public-share/app/searchparty.component.css
 .header {
    width: 100%;
    margin: 2%;
+=======
+
+.title {
+>>>>>>> b4c31a3dd09785f394734e9706db47278f144a45:public-share/app/feed/searchparty.component.css
    opacity: 0.8;
 }
 
@@ -52,4 +57,3 @@
    text-align: center;
    opacity: 1;
 }
-

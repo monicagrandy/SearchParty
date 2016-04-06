@@ -26,20 +26,22 @@ export class FriendsListPage {
     this.token = this.local.get('id_token')._result;
     this.huntID = navParams.get('huntID');
     console.log("hunt ID in friends-list", this.huntID);
-    this.friendService.getFriends(this.token)
-    .then(data => {
-      console.log('friends gotten! ', data);
-      this.friends = data;
-    })
-    .catch(error => console.error(error));
+    let userData = { token: this.token };
+    this.friendService.postData(userData, 'getFriends')
+      .then(data => {
+        console.log('friends gotten! ', data);
+        this.friends = data;
+      })
+        .catch(error => console.error(error));
   }
 
   friendTappedToHunt(event, friend) {
     console.log('friend tapped ', friend);
-    this.friendService.addFriendToHunt(this.huntID, friend)
-    .then(data => {
-      console.log("this friend was added to your hunt", data);
-    })
-    .catch(error => console.error(error));
+    let dataToSend = {huntID: this.huntID, friendUsername: friend.username};
+    this.friendService.postData(dataToSend, 'addFriendToHunt')
+      .then(data => {
+        console.log("this friend was added to your hunt", data);
+      })
+        .catch(error => console.error(error));
   }
 }

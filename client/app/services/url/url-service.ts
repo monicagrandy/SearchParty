@@ -1,5 +1,6 @@
 import {Injectable} from 'angular2/core';
 import {Http, Headers} from 'angular2/http';
+import {APIService} from '../api/api-service';
 
 
 @Injectable()
@@ -17,7 +18,7 @@ export class UrlService {
         .map(res => res.json())
         .subscribe(
           data => {
-            console.log('data from promise: ', data);
+            console.log('data from URL promise: ', data);
             resolve(data);
           },
           err => {

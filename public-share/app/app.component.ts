@@ -2,11 +2,11 @@ import {Component, OnInit, ViewChild} from 'angular2/core';
 import {Http, ConnectionBackend, HTTP_PROVIDERS, Headers} from 'angular2/http';
 import {RouteConfig, ROUTER_DIRECTIVES, ROUTER_PROVIDERS} from 'angular2/router';
 import {MATERIAL_DIRECTIVES, MATERIAL_PROVIDERS} from 'ng2-material/all';
-import {SearchPartyComponent} from './searchparty.component';
-import {UrlService} from './url-service';
-import {APIService} from './api-service';
-import {GoogleMapService} from './map-service';
-import {SocketService} from './socket-service';
+import {SearchPartyComponent} from './feed/searchparty.component';
+import {UrlService} from './shared/url-service';
+import {APIService} from './shared/api-service';
+import {GoogleMapService} from './map/map-service';
+import {SocketService} from './shared/socket-service';
 import * as _ from 'underscore';
 
 @Component({

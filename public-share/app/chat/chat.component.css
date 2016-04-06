@@ -38,6 +38,17 @@ input {
    width: 100%;
 }
 
+.chatGifContainer {
+   width: 100%;
+   text-align: center;
+   margin: 0;
+   padding: 0;
+}
+
+.chatGif {
+   margin: 0;
+}
+
 .msg {
    text-align: center;
    margin-top: 10%;
@@ -47,7 +58,7 @@ input {
 .chatMessMaster {
    padding-top: 0%;
    width: 100%;
-   height: 100%;
+   height: 500px;
    float: left;
    display: block;
    padding: 1%;

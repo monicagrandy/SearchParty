@@ -9,7 +9,7 @@ module.exports = (app, express) => {
 
   app.use(jsonParser);
   app.use('/', express.static('./client/www'));
-  app.use('/share', express.static('./public-share'));
+  app.use('/share', express.static('./public-share/'));
 
   app.post('/feedback', jsonParser, huntController.feedback);
   app.post('/tasks', jsonParser, huntController.huntMaker);
@@ -27,5 +27,6 @@ module.exports = (app, express) => {
   app.post('/getChatMessages', jsonParser, chatController.retrieveChatMessages);
   app.post('/singleHunt', jsonParser, huntController.retrieveSingleHunt);
   app.get('/urlChecker', jsonParser, urlController.urlChecker);
-  app.get('/templates', jsonParser, huntController.getTemplateKeywords);
+  app.get('/templates', jsonParser, huntController.retrieveTemplates);
+  app.post('/singleTemplate', jsonParser, huntController.retrieveSingleTemplate);
 }

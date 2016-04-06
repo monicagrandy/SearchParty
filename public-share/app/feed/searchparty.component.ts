@@ -2,14 +2,15 @@ import {Component, OnInit} from 'angular2/core';
 import {RouteConfig, Router, ROUTER_DIRECTIVES, ROUTER_PROVIDERS, RouteParams} from 'angular2/router';
 import {MATERIAL_DIRECTIVES, MATERIAL_PROVIDERS} from 'ng2-material/all';
 import {SearchPartyService} from './searchparty-service';
-import {ChatComponent} from './chat.component';
-import {MapComponent} from './map.component';
-import {SocketService} from './socket-service';
+import {ChatComponent} from '../chat/chat.component';
+import {MapComponent} from '../map/map.component';
+import {SocketService} from '../shared/socket-service';
+
 
 @Component({
   selector: 'my-searchparty',
-  templateUrl: './share/app/searchparty.component.html',
-  styleUrls: ['./share/app/searchparty.component.css'],
+  templateUrl: './share/app/feed/searchparty.component.html',
+  styleUrls: ['./share/app/feed/searchparty.component.css'],
   directives: [
       ROUTER_DIRECTIVES, 
       MATERIAL_DIRECTIVES, 
@@ -37,10 +38,7 @@ export class SearchPartyComponent {
     this.username = _params.get('username');
     this._socketService.createSocket(this.huntID);
     this.getHuntData(this.huntID);
-    this._searchPartyService.taskChange.subscribe((tasks) => { 
-      console.log(tasks)
-      this.allTasks = tasks });
-
+    this._searchPartyService.taskChange.subscribe(tasks => this.allTasks = tasks);
   }
   
   getHuntData(id) {
