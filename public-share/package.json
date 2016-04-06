@@ -2,12 +2,7 @@
   "name": "SearchPartyShareClient",
   "version": "0.0.1",
   "scripts": {
-    "start": "concurrently \"npm run tsc:w\" \"npm run lite\" ",
-    "tsc": "tsc",
-    "tsc:w": "tsc -w",
-    "lite": "lite-server",
     "typings": "typings",
-    "build": "webpack",
     "postinstall": "typings install"
   },
   "license": "ISC",
