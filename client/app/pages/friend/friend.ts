@@ -17,13 +17,13 @@ export class FriendPage {
     private friendService: FriendService
     ) {
     this.friend = navParams.get('friend');
-
-    this.friendService.getFriendHunt(this.friend.username)
+    let data = { username: this.friend.username };
+    
+    this.friendService.postData(data, 'getFriendHunt')
       .then(data => {
         this.hunts = data.hunts;
       })
         .catch(error => console.error(error));
-        
   }
 
   huntTapped(event, hunt) {

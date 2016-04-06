@@ -7,72 +7,13 @@
     <link rel="stylesheet" href="share/node_modules/ng2-material/dist/ng2-material.css">
     <link rel="stylesheet" href="share/node_modules/ng2-material/dist/font.css">
 
-    <!-- 1. Load libraries -->
-    <!-- IE required polyfills, in this exact order -->
-    <script src="share/node_modules/es6-shim/es6-shim.min.js"></script>
-    <script src="share/node_modules/systemjs/dist/system-polyfills.js"></script>
-    <script src="share/node_modules/angular2/es6/dev/src/testing/shims_for_IE.js"></script>
-    <script src="share/node_modules/angular2/bundles/angular2-polyfills.js"></script>
-    <script src="share/node_modules/systemjs/dist/system.src.js"></script>
-    <script src="share/node_modules/rxjs/bundles/Rx.js"></script>
-    <script src="share/node_modules/angular2/bundles/angular2.dev.js"></script>
-    <script src="share/node_modules/angular2/bundles/router.dev.js"></script>
-    <script src="share/node_modules/angular2/bundles/http.dev.js"></script>
-    <script src="share/node_modules/underscore/underscore.js"></script>
-    <script src="share/node_modules/moment/moment.js"></script>
-    <script src="share/node_modules/ng2-material/dist/ng2-material.js"></script>
+    <script src="https://maps.googleapis.com/maps/api/js?libraries=geometry&sensor=false">></script>
+    <!-- socket.io script -->
+    <script src="https://cdn.socket.io/socket.io-1.4.5.js"></script>
 
-    <script
-  src="https://maps.googleapis.com/maps/api/js?libraries=geometry">
-</script>
-  <!-- socket.io script -->
-  <script src="https://cdn.socket.io/socket.io-1.4.5.js"></script>
-
-    <!-- 2. Configure SystemJS -->
-    <script>
-      System.config({
-        transpiler: 'typescript',
-        //typescript compiler options
-        typescriptOptions: {
-          emitDecoratorMetadata: true
-        },
-        baseURL: 'share/',
-        map: {
-            package: 'public-share/app',
-            'angular2': 'node_modules/angular2',
-            'ng2-material': 'node_modules/ng2-material',
-            'rxjs': 'node_modules/rxjs',
-            'underscore': 'node_modules/underscore/underscore.js',
-            'moment': 'node_modules/moment/moment.js'
-        },
-        packages: {
-          app: {
-            format: 'register',
-            defaultExtension: 'js'
-          },
-          'underscore': {
-            defaultExtension: 'js'
-          },
-          'ng2-material': {
-            defaultExtension: 'js'
-          },
-          'angular2': {
-            defaultExtension: 'js'
-          },
-          'rxjs': {
-            defaultExtension: 'js'
-          },
-          'moment': {
-            defaultExtension: 'js'
-          }
-        }
-      });
-      System.import('app/main')
-            .then(null, console.error.bind(console));
-    </script>
   </head>
 
-  <!-- 3. Display the application -->
+  <!--  Display the application -->
   <body>
     <my-app>
       <div class="loadingContent"> 
@@ -81,5 +22,9 @@
         <h5 class="footerText">Brought to you by English Muffin LLC</h5>
       </div>
     </my-app>
+        <!-- IE required polyfills, in this exact order -->
+    <script src="share/node_modules/angular2/bundles/angular2-polyfills.js"></script>
+    
+    <script src="share/dist/bundle.js"></script>
   </body>
 </html>
