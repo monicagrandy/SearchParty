@@ -7,17 +7,20 @@
    vertical-align: middle;
 };
 
+.getuser {
+   width: 100%;
+}
+
 input {
-   width: 95%;
-   padding: 5%;
-   height: 25%;
+   padding: 2%;
    border: 2px solid #387EF5;
+   box-shadow: 2px 2px 1px #8B8682;
 }
 
 .userNameBtn {
+   display: inline;
    background-color: #387EF5;
-   margin-top: 2%;
-   padding: 5%;
+   margin-top: 1%;
    font-weight: bold;
    color: white;
    box-shadow: 2px 2px 1px #8B8682;
@@ -80,16 +83,8 @@ input {
    background-color: #387EF5;
    box-shadow: 2px 2px 1px #8B8682;
 }
-#signinGuest {
-   box-shadow: 2px 2px 1px #8B8682;
-}
 
-#username {
-   font-size: 1em;
-   color: #387EF5;
-   margin: 0px;
-   padding: 0px;
-}
+
 
 #chatMessage {
    font-size: 1em;
@@ -99,7 +94,7 @@ input {
 }
 
 #time {
-      color: #387EF5;
+   color: #387EF5;
    font-size: .5em;
    margin: 0px;
    padding: 0px;

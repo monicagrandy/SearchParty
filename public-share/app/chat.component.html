@@ -1,7 +1,9 @@
 <form class="chatStart" (ngSubmit)="getUsername(username)" *ngIf="!nameAdded" layout="column">
   <strong class="prompt" flex="5">Enter your name to start chatting!</strong>
-  <input [(ngModel)]="username" placeholder="name" flex="5" id='signinGuest'>
-  <button class="userNameBtn" flex="5" type="submit">Enter Chat</button>
+  <div class="getUser">
+    <span><input [(ngModel)]="username" placeholder="name"></span>
+    <span><button md-raised-button class="md-raised userNameBtn" type="submit">Enter Chat</button></span>
+  </div>
 </form>
 
 <div class="mainChat" *ngIf="nameAdded" layout="column">
@@ -18,7 +20,7 @@
   <div class="chatInput">
     <form class="msg" (ngSubmit)="send(chatBox)">
         <textarea type="text" class="msgText" autocomplete="off" [(ngModel)]="chatBox" (keyup)="OnKey($event, chatBox)" placeholder="Message..."></textarea>
-        <button class="sendMsg" type="submit">Send</button>
+        <button md-raised-button class="md-raised sendMsg" type="submit">Send</button>
     </form>
   </div>
 
