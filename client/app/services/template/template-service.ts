@@ -1,8 +1,7 @@
 import {Injectable} from 'angular2/core';
 import {Storage, LocalStorage,} from 'ionic-angular';
-import {Http, Headers} from 'angular2/http';
 import {UrlService} from '../url/url-service';
-import 'rxjs/add/operator/map';
+import {APIService} from '../api/api-service';
 
 @Injectable()
 export class TemplateService {
@@ -11,9 +10,8 @@ export class TemplateService {
   TEMPLATE_URL: string = localStorage.template || 'http://localhost:8000/singleTemplate'
   TASKS_URL: string = localStorage.tasks || 'https://getsearchparty.com/tasks';
   keyword: string;
-  contentHeader: Headers = new Headers({'Content-Type': 'application/json'});
 
-  constructor(private _http:Http) {}
+  constructor(private _apiService:APIService) {}
 
   getData() {
     console.log('called get req');
