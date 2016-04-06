@@ -13,9 +13,8 @@ import {ROUTER_PROVIDERS, APP_BASE_HREF, LocationStrategy, HashLocationStrategy}
 import 'rxjs/Rx';
 import {enableProdMode} from 'angular2/core';
 
-// enableProdMode();
-
+// g
 bootstrap(AppComponent, [[
-  ROUTER_PROVIDERS, // includes binding to PathLocationStrategy
+  ROUTER_PROVIDERS, 
   provide(LocationStrategy, {useClass: HashLocationStrategy})
 ]]);
