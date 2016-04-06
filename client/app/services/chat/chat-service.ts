@@ -119,6 +119,11 @@ export class ChatService {
               this.messages.push([messagesArray[i].username, messagesArray[i].text, datetime, this.currTime]);
               console.log('these are the messages from getMessages() ', this.messages);
             }
+            this.messages.forEach(() => {
+              if(this.messages[3]){
+                this.messages[2] = moment.unix(this.messages[3].datetime).fromNow()
+              }
+            })
             resolve(this.messages);
             reject('error getting messages');           
           });

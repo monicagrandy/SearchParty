@@ -90,9 +90,10 @@ export class TaskService {
       destinationType: 0,
       sourceType: 1,
       encodingType: 0,
+      mediaType: 2,
       targetWidth: 1024,
       targetHeight: 1024,
-      quality:100,
+      quality: 100,
       allowEdit: false,
       saveToPhotoAlbum: false
     };
