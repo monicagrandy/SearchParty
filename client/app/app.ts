@@ -65,11 +65,10 @@ export class MyApp {
 
   initializeApp() {
     this.platform.ready().then(() => {
-      //comment out urlservice for deployment
+      //comment out urlservice for dpeloyment
       this.urlService.grabUrls()
         .then(urls => {
           for (let key in urls) {
-            console.log('this is the key ', key);
             this.local.set(key, urls[key]);
           }
         });

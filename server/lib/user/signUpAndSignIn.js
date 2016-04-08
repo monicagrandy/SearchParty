@@ -24,7 +24,7 @@ module.exports = {
         .then(userData => {
           console.log("this was just put into the db: ", userData);
           return new Promise((resolve, reject) => {
-            resolve(userData);
+            resolve(userData[0]);
             reject({error: "cannot create user"});
           })
         })
