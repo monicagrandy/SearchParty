@@ -2,3 +2,7 @@ node_modules
 server/config
 npm-debug.log
 .aws
+key.pem
+getsearchparty_com.ca-bundle
+cert.pem
+._*
