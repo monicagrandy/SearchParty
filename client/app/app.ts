@@ -65,6 +65,7 @@ export class MyApp {
 
   initializeApp() {
     this.platform.ready().then(() => {
+<<<<<<< HEAD
       //comment out urlservice for deployment
       // this.urlService.grabUrls()
       //   .then(urls => {
@@ -73,6 +74,15 @@ export class MyApp {
       //       this.local.set(key, urls[key]);
       //     }
       //   });
+=======
+      //comment out urlservice for dpeloyment
+      this.urlService.grabUrls()
+        .then(urls => {
+          for (let key in urls) {
+            this.local.set(key, urls[key]);
+          }
+        });
+>>>>>>> 18330923587dc1d2bd8abdc1f44a0f08bae7c017
 
       // The platform is now ready. Note: if this callback fails to fire, follow
       // the Troubleshooting guide for a number of possible solutions:
