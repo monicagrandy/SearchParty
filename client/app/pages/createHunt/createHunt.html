@@ -24,10 +24,13 @@
          <ion-input placeholder="Super Awesome Adventure!" [(ngModel)]="name" type="text"></ion-input>
       </form>
    </ion-card>
-   <button block (click)="nameHunt()">Start Hunt!</button>
+   <button block (click)="nameHunt()">Start Hunt!</button> 
    <ion-card *ngIf="requiredInfo">
       <ion-card>
          Please enter the number of tasks you would like and the name of the hunt.
       </ion-card>
-   </ion-card>
+  </ion-card>
+  <ion-card>
+    <img class="logo" width="100px" src="img/circleLogo.png">
+  </ion-card>   
 </ion-content>

@@ -99,33 +99,32 @@ export class TaskService {
     };
     return Camera.getPicture(options)
       .then(data => {
-        this.imgData = 'data:image/jpeg;base64,' + data;
-
-        let dataObj = {
-          huntID: this.huntID
-        };
-        
-        this.postData(dataObj, 'singleHunt')
-          .then(entireHuntData => {
-            let currentTaskNumber = entireHuntData.huntData.tasknumber;
-            let dataObj = {
-              count: currentTaskNumber,
-              huntID: this.huntID,
-              image: this.imgData
-            };
-            this.postData(dataObj, 'upload')
-              .then(result => {
-                console.log("image sent to server");
-              })
-                .catch(error => console.error(error));
-            });
-            
         return this._zone.run(() => {
-          return new Promise((resolve, reject) => {
-            resolve(this.imgData);
-            reject('error taking photo');
-          });
-        });
+          this.imgData = 'data:image/jpeg;base64,' + data;
+          let dataObj = {
+            huntID: this.huntID
+          };
+          return this.postData(dataObj, 'singleHunt')
+            .then(result => {
+              console.log('retrieving entire hunt')
+              let currentTaskNumber = result.stats.tasknumber;
+              let dataObj = {
+                huntID: this.huntID,
+                count: currentTaskNumber,
+                image: this.imgData
+              }
+              this.postData(dataObj, 'upload')
+                .then(result => {
+                  console.log("image sent to server");
+                })
+                .catch(error => console.error(error));
+                return new Promise((resolve, reject) => {
+                resolve(this.imgData)
+                reject("error with camera")
+              })
+            })
+          });        
+          
       }, (error) => {
         alert(error);
       });    

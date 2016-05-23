@@ -66,13 +66,13 @@ export class MyApp {
   initializeApp() {
     this.platform.ready().then(() => {
       //comment out urlservice for deployment
-      this.urlService.grabUrls()
-        .then(urls => {
-          for (let key in urls) {
-            console.log('this is the key ', key);
-            this.local.set(key, urls[key]);
-          }
-        });
+      // this.urlService.grabUrls()
+      //   .then(urls => {
+      //     for (let key in urls) {
+      //       console.log('this is the key ', key);
+      //       this.local.set(key, urls[key]);
+      //     }
+      //   });
 
       // The platform is now ready. Note: if this callback fails to fire, follow
       // the Troubleshooting guide for a number of possible solutions:
